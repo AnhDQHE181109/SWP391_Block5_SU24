@@ -72,13 +72,13 @@
     <body>
         <div style="height: 1000px; width: 100%;">
             <div class="colorlib-nav" style="padding:50px;padding-left:200px; background-color:white; width:100%; height:12%; font-size:30px; align-items:center;box-shadow:#0000000f 0px 6px 6px 0px;color:#000c;display:flex;">
-                <div class="ldiv" style="padding-right:7px" id="colorlib-logo"><a href="index.html">Footwear</a></div> Log In
+                <div class="ldiv" style="padding-right:7px" id="colorlib-logo"><a href="index.html">Footwear</a></div> Sign Up
             </div>
             <div style="background-color:#88c8bc; width:100%;height:85%;align-items: center;justify-content: center;display:flex">
                 <div class ="idiv">
                     <div style="background-color:#fff;border-radius:4px;font-size:14px;min-width: 30%;margin-right:50px">
                         <div style="align-items: center; padding: 22px 30px 5px;;font-size:20px; color:black; display:flex">
-                            <p style='padding-left:7.5%'>Log In<p>
+                            <p style='padding-left:7.5%'>Sign Up<p>
                         </div>
 
                         <div style="padding: 0px 30px 30px">
@@ -96,28 +96,35 @@
                                 <% if ("true".equals(request.getAttribute("error_username"))) { %>
                                 <p class="error">Username is required!</p>
                                 <% } %>
-                                <input style='margin:0px 12px 0px 12px; height: 40px; width:85%;' type="text" name="username" placeholder='Username' value="${username != null ? username : ''}"><br>
+                                <input style='margin:0px 12px 0px 12px; height: 40px; width:85%;' type="text" name="username" placeholder='Username' required value="${username != null ? username : ''}"><br>
                                 <% if ("true".equals(request.getAttribute("error_password"))) { %>
-                                <p class="error">Password must be at least 8 characters long, contain at least 1 digit, 1 uppercase character, and have no spaces!</p>
+                                <p class="error">Password must contain at least 1 digit, 1 uppercase character!</p>
+                                <% } %>
+                                <% if ("true".equals(request.getAttribute("error_password_short"))) { %>
+                                <p class="error">Password must be at least 8 characters long!</p>
+                                <% } %>
+                                <% if ("true".equals(request.getAttribute("error_password_invalid"))) { %>
+                                <p class="error">Invalid password!</p>
                                 <% } %>
                                 <% if ("true".equals(request.getAttribute("error_password_dupe"))) { %>
                                 <p class="error">Password doesn't match</p>
                                 <% } %>
-                                <input style='margin:0px 12px 0px 12px; height: 40px; width:85%;' type="password" name="password" placeholder='Password'><br>
-                                <input style='margin:0px 12px 0px 12px; height: 40px; width:85%;' type="password" name="repassword" placeholder='Repeat Password'><br>
+                                <input style='margin:0px 12px 0px 12px; height: 40px; width:85%;' type="password" name="password" required placeholder='Password'><br>
+                                <input style='margin:0px 12px 0px 12px; height: 40px; width:85%;' type="password" name="repassword" required placeholder='Repeat Password'><br>
                                 <% if ("true".equals(request.getAttribute("error_phone_number"))) { %>
                                 <p class="error">Phone number is required and must contain only digits!</p>
                                 <% } %>
-                                <input style='margin:0px 12px 0px 12px; height: 40px; width:85%;' type="text" name="pnum" placeholder='Phone Number' value="${pnum != null ? pnum : ''}"><br>
+                                <input style='margin:0px 12px 0px 12px; height: 40px; width:85%;' type="text" name="pnum" required placeholder='Phone Number' value="${pnum != null ? pnum : ''}"><br>
                                 <% if ("true".equals(request.getAttribute("error_email"))) { %>
                                 <p class="error">Please enter a valid email address!</p>
                                 <% } %>
                                 <% if ("true".equals(request.getAttribute("error_emailtaken"))) { %>
                                 <p class="error">Email already registered to another account!</p>
                                 <% } %>
-                                <input style='margin:0px 12px 0px 12px; height: 40px; width:85%;' type="text" name="email" placeholder='Email' value="${email != null ? email : ''}"><br>
-                                <input style='margin:0px 12px 0px 12px; height: 40px; width:85%;' type="text" name="address" placeholder='Address' value="${adress != null ? address : ''}"><br>
-                                <button name="role" value="1" style='border:0px; text-align:center; background-color: #88c8bc;border-radius: 2px;display:flex;color:white;justify-content:center; width: 85%;' type="submit">LOG IN</button>
+                              
+                                <input style='margin:0px 12px 0px 12px; height: 40px; width:85%;' type="text" name="email" required placeholder='Email' value="${email != null ? email : ''}"><br>
+                                <input style='margin:0px 12px 0px 12px; height: 40px; width:85%;' type="text" name="address" required placeholder='Address' value="${address != null ? address : ''}"><br>
+                                <button name="role" value="1" style='border:0px; text-align:center; background-color: #88c8bc;border-radius: 2px;display:flex;color:white;justify-content:center; width: 85%;' type="submit">SIGN UP</button>
                             </form>
                             <div style="justify-content: space-between;display:flex; width:100%;align-items: center">
                                 <a style='padding-left:7.5%'>Forget password</a> <a href="login-staff.jsp" style='padding-right:7.5%'>Employee Login</a></div>

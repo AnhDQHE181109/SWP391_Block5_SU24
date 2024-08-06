@@ -29,7 +29,8 @@ public class AccountDAO extends MyDAO {
                 String email = rs.getString("Email");
                 String address = rs.getString("Address");
                 int role = rs.getInt("Role");
-                Account account = new Account(accountID, username, hash, phoneNumber, email, address, role);
+                String salt = rs.getString("Salt");
+                Account account = new Account(accountID, username, hash, phoneNumber, email, address, salt, role);
                 accountList.add(account);
             }
         } catch (Exception e) {
@@ -52,7 +53,8 @@ public class AccountDAO extends MyDAO {
                 String phoneNumber = rs.getString("PhoneNumber");
                 String address = rs.getString("Address");
                 int role = rs.getInt("Role");
-                account = new Account(accountID, username, hash, phoneNumber, email, address, role);
+                String salt = rs.getString("Salt");
+                account = new Account(accountID, username, hash, phoneNumber, email, address, salt, role);
             }
         } catch (Exception e) {
             e.printStackTrace();
@@ -131,8 +133,8 @@ public class AccountDAO extends MyDAO {
     }
     
 
-    public boolean addAccount(String username, String hash, String phoneNumber, String email, String address, int role) {
-        String sql = "INSERT INTO Accounts (Username, Hash, PhoneNumber, Email, Address, Role) VALUES (?, ?, ?, ?, ?, ?)";
+    public boolean addAccount(String username, String hash, String phoneNumber, String email, String address, int role, String salt) {
+        String sql = "INSERT INTO Accounts (Username, Hash, PhoneNumber, Email, Address, Role, Salt) VALUES (?, ?, ?, ?, ?, ?, ?)";
         try {
             ps = con.prepareStatement(sql);
             ps.setString(1, username);
@@ -141,6 +143,7 @@ public class AccountDAO extends MyDAO {
             ps.setString(4, email);
             ps.setString(5, address);
             ps.setInt(6, role);
+            ps.setString(7, salt);
             int rowsAffected = ps.executeUpdate();
             return rowsAffected > 0;
         } catch (Exception e) {

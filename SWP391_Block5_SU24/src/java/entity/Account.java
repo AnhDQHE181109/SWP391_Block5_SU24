@@ -15,17 +15,32 @@ public class Account {
     private String phoneNumber;
     private String email;
     private String address;
+    private String salt;
     private int role;
 
-    public Account(int accountID, String username, String hash, String phoneNumber, String email, String address, int role) {
+    public Account(int accountID, String username, String hash, String phoneNumber, String email, String address, String salt, int role) {
         this.accountID = accountID;
         this.username = username;
         this.hash = hash;
         this.phoneNumber = phoneNumber;
         this.email = email;
         this.address = address;
+        this.salt = salt;
         this.role = role;
     }
+
+    public Account() {
+    }
+
+    public String getSalt() {
+        return salt;
+    }
+
+    public void setSalt(String salt) {
+        this.salt = salt;
+    }
+
+    
 
     public int getAccountID() {
         return accountID;
