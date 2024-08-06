@@ -4,18 +4,21 @@
  */
 package Controller;
 
+import Util.EncryptionHelper;
+import Util.Validator;
 import java.io.IOException;
 import java.io.PrintWriter;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import model.AccountDAO;
 
 /**
  *
- * @author asus
+ * @author Long
  */
-public class logincotroller extends HttpServlet {
+public class SignUpController extends HttpServlet {
 
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
@@ -34,10 +37,10 @@ public class logincotroller extends HttpServlet {
             out.println("<!DOCTYPE html>");
             out.println("<html>");
             out.println("<head>");
-            out.println("<title>Servlet logincotroller</title>");            
+            out.println("<title>Servlet SignUpController</title>");
             out.println("</head>");
             out.println("<body>");
-            out.println("<h1>Servlet logincotroller at " + request.getContextPath() + "</h1>");
+            out.println("<h1>Servlet SignUpController at " + request.getContextPath() + "</h1>");
             out.println("</body>");
             out.println("</html>");
         }
@@ -69,7 +72,51 @@ public class logincotroller extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        processRequest(request, response);
+        String username = request.getParameter("username");
+        String password = request.getParameter("password");
+        String pnum = request.getParameter("pnum");
+        String email = request.getParameter("email");
+        String address = request.getParameter("address");
+        String repassword = request.getParameter("repassword");
+        boolean hasErrors = false;
+        AccountDAO adao = new AccountDAO();
+
+        if (username == null || username.isEmpty()) {
+            hasErrors = true;
+            request.setAttribute("error_username", "true");
+        }
+        if (adao.isUsernameTaken(username)) {
+            hasErrors = true;
+            request.setAttribute("error_usernametaken", "true");
+        }
+        if (!repassword.equals(password)) {
+            hasErrors = true;
+            request.setAttribute("error_password_dupe", "true");
+        }
+        if (!Validator.validatePassword(password)) {
+            hasErrors = true;
+            request.setAttribute("error_password", "true");
+        }
+
+        if (adao.isEmailTaken(email)) {
+            hasErrors = true;
+            request.setAttribute("error_emailtaken", "true");
+        }
+        if (hasErrors) {
+            request.setAttribute("username", username);
+            request.setAttribute("pnum", pnum);
+            request.setAttribute("email", email);
+            request.getRequestDispatcher("signup.jsp").forward(request, response);
+        } else {
+            String salt = EncryptionHelper.generateSalt();
+            String hashedPassword = "";
+            try {
+                hashedPassword = EncryptionHelper.hashPassword(password, salt);
+            } catch (Exception e) {
+            }
+            
+            request.getRequestDispatcher("login.jsp").forward(request, response);
+        }
     }
 
     /**
