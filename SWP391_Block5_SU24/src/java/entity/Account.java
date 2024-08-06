@@ -4,14 +4,18 @@
  */
 package entity;
 
-import java.math.BigDecimal;
-
-public class Discount {
-    private int discountId;
-    private int productId;
-    private int colorId;
-    private int sizeId;
-    private BigDecimal discountAmount;
+/**
+ *
+ * @author asus
+ */
+public class Account {
+    private int accountID;
+    private String username;
+    private String hash;
+    private String phoneNumber;
+    private String email;
+    private String address;
+    private int role;
 
     // Getters and setters
 }
