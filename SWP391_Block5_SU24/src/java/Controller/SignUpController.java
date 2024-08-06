@@ -4,21 +4,21 @@
  */
 package Controller;
 
+import Util.EncryptionHelper;
+import Util.Validator;
 import java.io.IOException;
 import java.io.PrintWriter;
 import jakarta.servlet.ServletException;
-import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
-import jakarta.servlet.http.HttpSession;
 import model.AccountDAO;
 
 /**
  *
  * @author Long
  */
-public class LoginController extends HttpServlet {
+public class SignUpController extends HttpServlet {
 
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
@@ -37,10 +37,10 @@ public class LoginController extends HttpServlet {
             out.println("<!DOCTYPE html>");
             out.println("<html>");
             out.println("<head>");
-            out.println("<title>Servlet LoginController</title>");
+            out.println("<title>Servlet SignUpController</title>");
             out.println("</head>");
             out.println("<body>");
-            out.println("<h1>Servlet LoginController at " + request.getContextPath() + "</h1>");
+            out.println("<h1>Servlet SignUpController at " + request.getContextPath() + "</h1>");
             out.println("</body>");
             out.println("</html>");
         }
@@ -74,46 +74,48 @@ public class LoginController extends HttpServlet {
             throws ServletException, IOException {
         String username = request.getParameter("username");
         String password = request.getParameter("password");
-        int role = Integer.parseInt(request.getParameter("role"));
+        String pnum = request.getParameter("pnum");
+        String email = request.getParameter("email");
+        String address = request.getParameter("address");
+        String repassword = request.getParameter("repassword");
+        boolean hasErrors = false;
         AccountDAO adao = new AccountDAO();
-        if (adao.validateAccount(username, password, role) == 1) { //return 1 login successful
-            Cookie loginCookie = new Cookie("user", username);
-            loginCookie.setMaxAge(30 * 60);
-            response.addCookie(loginCookie);
-            HttpSession session = request.getSession();
-            session.setAttribute("account", adao.getAccount(username));
-            switch (adao.getAccount(username).getRole()) {
-                case 1: {
-                    response.sendRedirect("index.html");
-                    break;
-                }
-                case 2: {
-                    response.sendRedirect("staff-home.jsp");
-                    break;
-                }
-                case 3: {
-                    response.sendRedirect("manager-home.jsp");
-                    break;
-                }
-                default: {
-                    response.sendRedirect("login.jsp");
-                    break;
-                }
-            }
-        } else if (adao.validateAccount(username, password, role) == 3) { //return 3 username or password is incorrect
+
+        if (username == null || username.isEmpty()) {
+            hasErrors = true;
+            request.setAttribute("error_username", "true");
+        }
+        if (adao.isUsernameTaken(username)) {
+            hasErrors = true;
+            request.setAttribute("error_usernametaken", "true");
+        }
+        if (!repassword.equals(password)) {
+            hasErrors = true;
+            request.setAttribute("error_password_dupe", "true");
+        }
+        if (!Validator.validatePassword(password)) {
+            hasErrors = true;
+            request.setAttribute("error_password", "true");
+        }
+
+        if (adao.isEmailTaken(email)) {
+            hasErrors = true;
+            request.setAttribute("error_emailtaken", "true");
+        }
+        if (hasErrors) {
             request.setAttribute("username", username);
-            if (role == 1) {
-                 request.getRequestDispatcher("login.jsp?error=Username or password is incorrect.").forward(request, response);
-            } else {
-                response.sendRedirect("login-staff.jsp?error=Username or password is incorrect.");
+            request.setAttribute("pnum", pnum);
+            request.setAttribute("email", email);
+            request.getRequestDispatcher("signup.jsp").forward(request, response);
+        } else {
+            String salt = EncryptionHelper.generateSalt();
+            String hashedPassword = "";
+            try {
+                hashedPassword = EncryptionHelper.hashPassword(password, salt);
+            } catch (Exception e) {
             }
-        } else if (adao.validateAccount(username, password, role) == 2) { //return 2 right account information but wronng role
-            request.setAttribute("username", username);
-            if (role == 1) {
-                response.sendRedirect("login.jsp?error=Incorrect permission.");
-            } else {
-                response.sendRedirect("login-staff.jsp?error=Incorrect permission.");
-            }
+            
+            request.getRequestDispatcher("login.jsp").forward(request, response);
         }
     }
 
