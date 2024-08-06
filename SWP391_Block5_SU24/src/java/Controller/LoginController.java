@@ -103,7 +103,7 @@ public class LoginController extends HttpServlet {
         } else if (adao.validateAccount(username, password, role) == 3) { //return 3 username or password is incorrect
             request.setAttribute("username", username);
             if (role == 1) {
-                 request.getRequestDispatcher("login.jsp?error=Username or password is incorrect.").forward(request, response);
+                request.getRequestDispatcher("login.jsp?error=Username or password is incorrect.").forward(request, response);
             } else {
                 response.sendRedirect("login-staff.jsp?error=Username or password is incorrect.");
             }
