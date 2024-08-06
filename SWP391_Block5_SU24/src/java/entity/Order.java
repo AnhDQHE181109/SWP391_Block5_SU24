@@ -4,14 +4,13 @@
  */
 package entity;
 
-import java.math.BigDecimal;
+import java.util.Date;
 
-public class Discount {
-    private int discountId;
-    private int productId;
-    private int colorId;
-    private int sizeId;
-    private BigDecimal discountAmount;
+public class Order {
+    private int orderID;
+    private Integer accountID;
+    private Date orderDate;
+    private String status;
 
     // Getters and setters
 }

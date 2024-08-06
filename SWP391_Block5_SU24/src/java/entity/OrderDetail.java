@@ -6,12 +6,12 @@ package entity;
 
 import java.math.BigDecimal;
 
-public class Discount {
-    private int discountId;
-    private int productId;
-    private int colorId;
-    private int sizeId;
-    private BigDecimal discountAmount;
+public class OrderDetail {
+    private int orderDetailID;
+    private Integer orderID;
+    private Integer productID;
+    private int quantity;
+    private BigDecimal salePrice;
 
     // Getters and setters
 }
