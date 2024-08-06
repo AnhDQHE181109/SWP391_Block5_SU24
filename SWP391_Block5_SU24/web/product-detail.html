@@ -61,7 +61,7 @@
 						<div class="col-sm-12 text-left menu-1">
 							<ul>
 								<li><a href="index.html">Home</a></li>
-								<li class="has-dropdown active">
+								<li class="has-dropdown">
 									<a href="men.html">Men</a>
 									<ul class="dropdown">
 										<li><a href="product-detail.html">Product Detail</a></li>
@@ -71,7 +71,7 @@
 										<li><a href="add-to-wishlist.html">Wishlist</a></li>
 									</ul>
 								</li>
-								<li><a href="women.html">Women</a></li>
+								<li class="active"><a href="products.jsp">Products</a></li>
 								<li><a href="about.html">About</a></li>
 								<li><a href="contact.html">Contact</a></li>
 								<li class="cart"><a href="cart.html"><i class="icon-shopping-cart"></i> Cart [0]</a></li>
@@ -187,7 +187,7 @@
 				               </ul>
 				            </div>
 				            <div class="block-26 mb-4">
-									<h4>Width</h4>
+									<h4>Color</h4>
 				               <ul>
 				                  <li><a href="#">M</a></li>
 				                  <li><a href="#">W</a></li>
@@ -200,7 +200,7 @@
                            <i class="icon-minus2"></i>
                         	</button>
                     		</span>
-                     	<input type="text" id="quantity" name="quantity" class="form-control input-number" value="1" min="1" max="100">
+                     	<input type="text" id="quantity" name="quantity" class="form-control input-number" value="1" min="1" max="100" onfocusout="validateQuantity()">
                      	<span class="input-group-btn ml-1">
                         	<button type="button" class="quantity-right-plus btn" data-type="plus" data-field="">
                              <i class="icon-plus2"></i>
@@ -508,8 +508,10 @@ Copyright &copy;<script>document.write(new Date().getFullYear());</script> All r
 		        
 		        // If is not undefined
 		            
-		            $('#quantity').val(quantity + 1);
-
+					if ($('#quantity').val() != 100) {
+						$('#quantity').val(quantity + 1);
+					}
+		            
 		          
 		            // Increment
 		        
@@ -524,12 +526,29 @@ Copyright &copy;<script>document.write(new Date().getFullYear());</script> All r
 		        // If is not undefined
 		      
 		            // Increment
-		            if(quantity>0){
+		            if(quantity>1){
 		            $('#quantity').val(quantity - 1);
 		            }
 		    });
 		    
 		});
+
+		function validateQuantity() {
+			var quantity = parseInt($('#quantity').val());
+			if (isNaN(quantity)) {
+				document.getElementById('quantity').value = 1;
+				alert("Invalid quantity!");
+			} else if (quantity <= 0) {
+				document.getElementById('quantity').value = 1;
+				alert("Quantity can't be less than or equal to 0!");
+			} else if (quantity > 100) {
+				document.getElementById('quantity').value = 100;
+				alert("Quantity can't be more than the stock available!");
+			}
+
+        	location.href = "shoppingcart?updateCartID=" + cartID + "&updateQuantity=" + newQuantity;
+        }
+
 	</script>
 
 
