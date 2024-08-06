@@ -4,8 +4,16 @@
         <servlet-name>LoginController</servlet-name>
         <servlet-class>Controller.LoginController</servlet-class>
     </servlet>
+    <servlet>
+        <servlet-name>ProductsController</servlet-name>
+        <servlet-class>Controller.ProductsController</servlet-class>
+    </servlet>
     <servlet-mapping>
         <servlet-name>LoginController</servlet-name>
         <url-pattern>/LoginController</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>ProductsController</servlet-name>
+        <url-pattern>/ProductsController</url-pattern>
     </servlet-mapping>
 </web-app>
