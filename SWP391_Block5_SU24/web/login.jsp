@@ -41,14 +41,37 @@
 
         <!-- Theme style  -->
         <link rel="stylesheet" href="css/style.css">
-
+        <style>
+            .idiv{
+                align-items: center;
+                display:flex;
+                justify-content: flex-end;
+                background-image: url("../images/Banner.png");
+                background-position: 50% 50%;
+                background-size: contain;
+            }
+        </style>
     </head>
     <body>
         <div style="height: 670px">
             <div class="colorlib-nav" style="padding:50px;padding-left:200px; background-color:white; width:100%; height:12%; font-size:30px; align-items:center;box-shadow:#0000000f 0px 6px 6px 0px;color:#000c;display:flex;">
-                <div style="padding-right:7px" id="colorlib-logo"><a href="index.html">Footwear</a></div> Log In
+                <div class="ldiv" style="padding-right:7px" id="colorlib-logo"><a href="index.html">Footwear</a></div> Log In
             </div>
             <div style="background-color:#88c8bc; width:100%;height:85%;">
+                <div class ="idiv">
+                    <div style="background-color:#fff;border-radius:4px;font-size:14px;">
+                        <div style="align-items: center; display:flex; justify-content: space-between; padding: 22px 30px;">
+                            Log In
+                        </div>
+                        <div style="padding: 0px 30px 30px">
+                            <form action="LoginServlet" method="post">
+                                <input type="text" name="username"><br>
+                                <input type="password" name="password"><br>
+                                <button type="submit">Log In</button>
+                            </form>
+                        </div>
+                    </div>
+                </div>
             </div>
         </div>
     </body>
