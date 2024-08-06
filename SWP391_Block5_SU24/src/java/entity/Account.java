@@ -83,17 +83,5 @@ public class Account {
         this.role = role;
     }
 }
-
-    public void setAddress(String address) {
-        this.address = address;
-    }
-
-    public int getRole() {
-        return role;
-    }
-
-    public void setRole(int role) {
-        this.role = role;
-    }
-}
+    
 
