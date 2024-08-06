@@ -52,7 +52,8 @@
                 background-repeat: no-repeat;
                 background-color:#88c8bc;
                 height:80%;
-                width:80%
+                width:80%;
+                background-size: 70%;
             }
             .idiv{
                 animation-name: slide-right;
@@ -61,7 +62,7 @@
             @keyframes slide-right {
                 from {
                     margin-left: -50px;
-                }              
+                }
                 to {
                     margin-left: 0px;
                 }
@@ -69,7 +70,7 @@
         </style>
     </head>
     <body>
-        <div style="height: 670px; width: 100%;">
+        <div style="height: 1000px; width: 100%;">
             <div class="colorlib-nav" style="padding:50px;padding-left:200px; background-color:white; width:100%; height:12%; font-size:30px; align-items:center;box-shadow:#0000000f 0px 6px 6px 0px;color:#000c;display:flex;">
                 <div class="ldiv" style="padding-right:7px" id="colorlib-logo"><a href="index.html">Footwear</a></div> Log In
             </div>
@@ -79,7 +80,7 @@
                         <div style="align-items: center; padding: 22px 30px 5px;;font-size:20px; color:black; display:flex">
                             <p style='padding-left:7.5%'>Log In<p>
                         </div>
-                        
+
                         <div style="padding: 0px 30px 30px">
                             <%
                             String error = request.getParameter("error");
@@ -88,16 +89,41 @@
                                 <p style='padding-left:7.5%'><%= error%><p>
                             </div>
                             <%}%>
-                            <form action="LoginController" method="post" style='display: flex; flex-direction: column; align-items: center;'>                           
+                            <form action="SignUpController" method="post" style='display: flex; flex-direction: column; align-items: center;'>
+                                <% if ("true".equals(request.getAttribute("error_usernametaken"))) { %>
+                                <p class="error">Username has already been taken!</p>
+                                <% } %>
+                                <% if ("true".equals(request.getAttribute("error_username"))) { %>
+                                <p class="error">Username is required!</p>
+                                <% } %>
                                 <input style='margin:0px 12px 0px 12px; height: 40px; width:85%;' type="text" name="username" placeholder='Username' value="${username != null ? username : ''}"><br>
+                                <% if ("true".equals(request.getAttribute("error_password"))) { %>
+                                <p class="error">Password must be at least 8 characters long, contain at least 1 digit, 1 uppercase character, and have no spaces!</p>
+                                <% } %>
+                                <% if ("true".equals(request.getAttribute("error_password_dupe"))) { %>
+                                <p class="error">Password doesn't match</p>
+                                <% } %>
                                 <input style='margin:0px 12px 0px 12px; height: 40px; width:85%;' type="password" name="password" placeholder='Password'><br>
+                                <input style='margin:0px 12px 0px 12px; height: 40px; width:85%;' type="password" name="repassword" placeholder='Repeat Password'><br>
+                                <% if ("true".equals(request.getAttribute("error_phone_number"))) { %>
+                                <p class="error">Phone number is required and must contain only digits!</p>
+                                <% } %>
+                                <input style='margin:0px 12px 0px 12px; height: 40px; width:85%;' type="text" name="pnum" placeholder='Phone Number' value="${pnum != null ? pnum : ''}"><br>
+                                <% if ("true".equals(request.getAttribute("error_email"))) { %>
+                                <p class="error">Please enter a valid email address!</p>
+                                <% } %>
+                                <% if ("true".equals(request.getAttribute("error_emailtaken"))) { %>
+                                <p class="error">Email already registered to another account!</p>
+                                <% } %>
+                                <input style='margin:0px 12px 0px 12px; height: 40px; width:85%;' type="text" name="email" placeholder='Email' value="${email != null ? email : ''}"><br>
+                                <input style='margin:0px 12px 0px 12px; height: 40px; width:85%;' type="text" name="address" placeholder='Address' value="${adress != null ? address : ''}"><br>
                                 <button name="role" value="1" style='border:0px; text-align:center; background-color: #88c8bc;border-radius: 2px;display:flex;color:white;justify-content:center; width: 85%;' type="submit">LOG IN</button>
                             </form>
                             <div style="justify-content: space-between;display:flex; width:100%;align-items: center">
                                 <a style='padding-left:7.5%'>Forget password</a> <a href="login-staff.jsp" style='padding-right:7.5%'>Employee Login</a></div>
                         </div>
                         <div style="justify-content:center; text-align: center; display:flex; padding: 22px 30px;">
-                            New to Footwear? &nbsp;<a href='signup.jsp'>Sign Up</a>
+                            Already have an account? &nbsp;<a href='login.jsp'>Log In</a>
                         </div>
                     </div>
                 </div>
