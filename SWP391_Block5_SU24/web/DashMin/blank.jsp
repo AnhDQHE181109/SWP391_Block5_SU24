@@ -186,20 +186,26 @@
                         <div class="row vh-100 bg-light rounded align-items-center justify-content-center mx-0">
                             <div class="col-md-6 text-center">
                                 <h3>Product List</h3>
-                                <table class="table table-bordered">
+                                <table id="productTable" class="table table-bordered">
                                     <thead>
                                         <tr>
-                                            <th>Product ID</th>
                                             <th>Product Name</th>
                                             <th>Price</th>
+                                            <th>Total Quantity</th>
+                                            <th>Category ID</th>
+                                            <th>Brand ID</th>
+                                            <th>Image ID</th>
                                         </tr>
                                     </thead>
                                     <tbody>
-                                    <c:forEach var="product" items="${products}">
+                                    <c:forEach items="${productList}" var="product">
                                         <tr>
-                                            <td>${product.productId}</td>
                                             <td>${product.productName}</td>
-                                            <td>${product.price}</td>
+                                            <td><fmt:formatNumber value="${product.price}" pattern="###,###.00"/></td>
+                                        <td>${product.totalQuantity}</td>
+                                        <td>${product.categoryId}</td>
+                                        <td>${product.brandId}</td>
+                                        <td>${product.imageId}</td>
                                         </tr>
                                     </c:forEach>
                                     </tbody>
