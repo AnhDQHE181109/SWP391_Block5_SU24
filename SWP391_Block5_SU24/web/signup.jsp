@@ -56,15 +56,15 @@
                 background-size: 70%;
             }
             .idiv{
-                animation-name: slide-right;
+                animation-name: slide-up;
                 animation-duration: 1s;
             }
-            @keyframes slide-right {
+            @keyframes slide-up {
                 from {
-                    margin-left: -50px;
+                    margin-bottom: -50px;
                 }
                 to {
-                    margin-left: 0px;
+                    margin-bottom: 0px;
                 }
             }
         </style>

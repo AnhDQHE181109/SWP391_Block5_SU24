@@ -66,15 +66,26 @@
                     margin-left: 0px;
                 }
             }
- 
+
             .modal {
                 position: fixed;
                 inset: 0;
-                background: rgba(254,
-                    126,
-                    126,
+                background: rgba(235,
+                    235,
+                    235,
                     0.7);
                 display: none;
+                align-items: center;
+                justify-content: center;
+            }
+            .modal_error {
+                position: fixed;
+                inset: 0;
+                background: rgba(235,
+                    235,
+                    235,
+                    0.7);
+                display: flex;
                 align-items: center;
                 justify-content: center;
             }
@@ -92,10 +103,14 @@
         </style>
     </head>
     <body>
-        <div id="popup-box" class="modal">
+        <%
+        String errorRecover = request.getParameter("error_recover");
+        boolean showErrorModal = "true".equals(errorRecover);
+        %>
+        <div id="popup-box" class="<%= showErrorModal ? "modal_error" : "modal" %>">
             <div class="content">
-                <h1 style="color: green">
-                    Hello GeeksForGeeks!
+                <h1 style="color: black">
+                    Recover password
                 </h1>
                 <p>Never Give Up!</p>
                 <a href="#" style="
