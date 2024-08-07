@@ -40,7 +40,7 @@ public class StocksManagementController extends HttpServlet {
             out.println("<!DOCTYPE html>");
             out.println("<html>");
             out.println("<head>");
-            out.println("<title>Servlet StocksManagementController</title>");            
+            out.println("<title>Servlet StocksManagementController</title>");
             out.println("</head>");
             out.println("<body>");
             out.println("<h1>Servlet StocksManagementController at " + request.getContextPath() + "</h1>");
@@ -65,10 +65,10 @@ public class StocksManagementController extends HttpServlet {
         PrintWriter out = response.getWriter();
 
         StocksManagementDAO smDAO = new StocksManagementDAO();
-        
+
         List<Product> productsList = smDAO.getAllProducts();
         List<Product> productsStocksList = smDAO.getProductsStocks();
-        
+
         request.setAttribute("productsList", productsList);
         request.setAttribute("productsStocksList", productsStocksList);
         request.getRequestDispatcher("staff/stocksManager.jsp").forward(request, response);
@@ -87,25 +87,48 @@ public class StocksManagementController extends HttpServlet {
             throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
         PrintWriter out = response.getWriter();
-        
+
         StocksManagementDAO smDAO = new StocksManagementDAO();
-        
+
+        String confirmYes = request.getParameter("confirmYes");
+        String confirmNo = request.getParameter("confirmNo");
+        if (confirmYes != null) {
+            
+        }
+
+        List<Product> outOfStocksList = new ArrayList<>();
+        String outOfStocksProduct = null;
         Map stocksData = request.getParameterMap();
         for (Object key : stocksData.keySet()) {
-            String keyString = (String)key;
-            String[] value = (String[])stocksData.get(keyString);
+            String keyString = (String) key;
+            String[] value = (String[]) stocksData.get(keyString);
             keyString = keyString.replaceAll("[^\\d]", "");
             System.out.println("Key " + keyString + "   :   " + value[0]);
-            
+
             int productID = Integer.parseInt(keyString);
             int quantity = Integer.parseInt(value[0]);
-            
+
+            if (quantity == 0) {
+                Product outOfStockProduct = smDAO.getProductStockByID(productID);
+                outOfStocksList.add(outOfStockProduct);
+                outOfStocksProduct = smDAO.getProductStockByID(productID).getProductName();
+                continue;
+            }
+
             smDAO.setProductStock(productID, quantity);
         }
-        
+
+        if (outOfStocksList.size() != 0) {
+            request.setAttribute("outOfStocksList", outOfStocksList);
+            request.setAttribute("outOfStocksProduct", outOfStocksProduct);
+            request.setAttribute("popupDisplay", "display: block;");
+            request.getRequestDispatcher("staff/stocksManager.jsp").forward(request, response);
+            return;
+        }
+
         List<Product> productsList = smDAO.getAllProducts();
         List<Product> productsStocksList = smDAO.getProductsStocks();
-        
+
         request.setAttribute("productsList", productsList);
         request.setAttribute("productsStocksList", productsStocksList);
         request.getRequestDispatcher("staff/stocksManager.jsp").forward(request, response);

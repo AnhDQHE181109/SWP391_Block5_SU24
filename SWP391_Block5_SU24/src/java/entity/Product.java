@@ -50,6 +50,12 @@ public class Product {
         this.color = color;
     }
 
+    public Product(int productId, int size, String color) {
+        this.productId = productId;
+        this.size = size;
+        this.color = color;
+    }
+
     // Getters and Setters
     public int getProductId() {
         return productId;
