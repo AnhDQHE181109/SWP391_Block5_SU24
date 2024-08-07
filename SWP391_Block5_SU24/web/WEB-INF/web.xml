@@ -4,12 +4,8 @@
         <servlet-name>LoginController</servlet-name>
         <servlet-class>Controller.LoginController</servlet-class>
     </servlet>
-    <servlet>
-    </servlet>
     <servlet-mapping>
         <servlet-name>LoginController</servlet-name>
         <url-pattern>/LoginController</url-pattern>
-    </servlet-mapping>
-    <servlet-mapping>
     </servlet-mapping>
 </web-app>
