@@ -22,6 +22,24 @@ public class Product {
     private int brandId;
     private int importId;
     private int imageId;
+    private String imageURL;
+
+    public Product() {
+    }
+
+    public Product(int productId, String productName, BigDecimal price) {
+        this.productId = productId;
+        this.productName = productName;
+        this.price = price;
+    }
+
+    public Product(int productId, String productName, String imageURL) {
+        this.productId = productId;
+        this.productName = productName;
+        this.imageURL = imageURL;
+    }
+    
+    
 
     // Getters and Setters
     public int getProductId() {
@@ -103,5 +121,14 @@ public class Product {
     public void setImageId(int imageId) {
         this.imageId = imageId;
     }
-}
 
+    public String getImageURL() {
+        return imageURL;
+    }
+
+    public void setImageURL(String imageURL) {
+        this.imageURL = imageURL;
+    }
+    
+    
+}
