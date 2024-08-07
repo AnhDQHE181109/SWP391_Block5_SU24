@@ -1,6 +1,6 @@
 <%-- 
-    Document   : manageproduct
-    Created on : Aug 6, 2024, 10:15:40 PM
+    Document   : newjsp
+    Created on : Aug 7, 2024, 7:34:19 PM
     Author     : Admin
 --%>
 
@@ -12,6 +12,6 @@
         <title>JSP Page</title>
     </head>
     <body>
-        <h1>Hello World!</h1>
+        <li><a href="ProductsController">Customers</a></li>
     </body>
 </html>

@@ -4,7 +4,6 @@
  */
 package entity;
 
-import java.math.BigDecimal;
 
 /**
  *
@@ -14,11 +13,13 @@ public class Product {
 
     private int productId;
     private String productName;
-    private BigDecimal price;
+    private double price;
     private String origin;
     private String material;
     private int totalQuantity;
     private int categoryId;
+    private String categoryName;
+    private String brandName; 
     private int brandId;
     private int importId;
     private int imageId;
@@ -29,7 +30,7 @@ public class Product {
     public Product() {
     }
 
-    public Product(int productId, String productName, BigDecimal price) {
+    public Product(int productId, String productName, double price) {
         this.productId = productId;
         this.productName = productName;
         this.price = price;
@@ -66,11 +67,11 @@ public class Product {
         this.productName = productName;
     }
 
-    public BigDecimal getPrice() {
+    public double getPrice() {
         return price;
     }
 
-    public void setPrice(BigDecimal price) {
+    public void setPrice(double price) {
         this.price = price;
     }
 
@@ -98,13 +99,28 @@ public class Product {
         this.totalQuantity = totalQuantity;
     }
 
+    public String getCategoryName() {
+        return categoryName;
+    }
+
+    public void setCategoryName(String categoryName) {
+        this.categoryName = categoryName;
+}
+
+    public String getBrandName() {
+        return brandName;
+    }
+
+    public void setBrandName(String brandName) {
+        this.brandName = brandName;
+    }
     public int getCategoryId() {
         return categoryId;
     }
 
     public void setCategoryId(int categoryId) {
         this.categoryId = categoryId;
-    }
+}
 
     public int getBrandId() {
         return brandId;
@@ -113,7 +129,6 @@ public class Product {
     public void setBrandId(int brandId) {
         this.brandId = brandId;
     }
-
     public int getImportId() {
         return importId;
     }

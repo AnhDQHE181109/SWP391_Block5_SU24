@@ -8,6 +8,18 @@
         <servlet-name>StocksManagementController</servlet-name>
         <servlet-class>Controller.StocksManagementController</servlet-class>
     </servlet>
+    <servlet>
+        <servlet-name>AccountController</servlet-name>
+        <servlet-class>Controller.AccountController</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>ProductsController</servlet-name>
+        <servlet-class>Controller.ProductsController</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>AddProductController</servlet-name>
+        <servlet-class>Controller.AddProductController</servlet-class>
+    </servlet>
     <servlet-mapping>
         <servlet-name>LoginController</servlet-name>
         <url-pattern>/LoginController</url-pattern>
@@ -21,14 +33,6 @@
         <url-pattern>/SignUpController</url-pattern>
     </servlet-mapping>
     <servlet>
-        <servlet-name>ProductController</servlet-name>
-        <servlet-class>Controller.ProductController</servlet-class>
-    </servlet>
-    <servlet-mapping>
-        <servlet-name>ProductController</servlet-name>
-        <url-pattern>/ProductController</url-pattern>
-    </servlet-mapping>
-    <servlet>
         <servlet-name>ProductDetailsController</servlet-name>
         <servlet-class>Controller.ProductDetailsController</servlet-class>
     </servlet>
@@ -40,12 +44,6 @@
         <servlet-name>StocksManagementController</servlet-name>
         <url-pattern>/stocksManager</url-pattern>
     </servlet-mapping>
-    <servlet>
-        <servlet-name>AccountManagementController</servlet-name>
-        <servlet-class>Controller.AccountManagementController</servlet-class>
-    </servlet>
-    <servlet-mapping>
-        <servlet-name>AccountManagementController</servlet-name>
-        <url-pattern>/AccountManagementController</url-pattern>
+
     </servlet-mapping>
 </web-app>
