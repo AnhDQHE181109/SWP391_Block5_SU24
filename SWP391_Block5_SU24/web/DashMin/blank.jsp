@@ -203,12 +203,12 @@
                                     <tbody>
                                     <c:forEach items="${requestScope.PList}" var="p">
                                         <tr>
-                                            <td>${p.ProductName}</td>
-                                            <td>${p.Price}</td>
-                                            <td>${p.TotalQuantity}</td>
-                                            <td>${p.CategoryId}</td>
-                                            <td>${p.BrandId}</td>
-                                            <td>${p.ImageId}</td>
+                                            <td>${p.productName}</td>
+                                            <td>${p.price}</td>
+                                            <td>${p.totalQuantity}</td>
+                                            <td>${p.categoryId}</td>
+                                            <td>${p.brandId}</td>
+                                            <td>${p.imageId}</td>
                                         </tr>
                                     </c:forEach>
                                     </tbody>
