@@ -5,7 +5,7 @@
 <html lang="en">
 
     <head>
-        <title>Product List</title>
+        <title>Stocks management</title>
         <meta charset="utf-8">
         <meta http-equiv="X-UA-Compatible" content="IE=edge">
         <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -75,7 +75,7 @@
                             <div class="row element-button">
                                 <div class="col-md-4" style="display: flex; justify-content: flex-start; align-items: center;">
                                     <a class="btn btn-add btn-sm" href="product_manage?action=insert" title="Thêm">
-                                        <i class="fas fa-plus"></i> Add Products
+                                        <i class="fas fa-plus"></i> Add a new product
                                     </a>
                                 </div>
                                 <div class="col-md-4" style="display: flex; justify-content: center; align-items: center;">
@@ -95,66 +95,52 @@
                             <table class="table table-hover table-bordered" id="sampleTable">
                                 <thead>
                                     <tr>
-                                        <th>ID</th>
+                                        <th>Picture</th>
                                         <th>Name</th>
-                                        <th>Author</th>
-                                        <th>Publisher</th>
-                                        <th>Publisher Date</th>
-                                        <th>Genres</th>
-                                        <th>Price</th>
-                                        <th>Quantity</th>
-                                        <th>Details</th>
-                                        <th>All Images</th>
-                                        <th>Action</th>
+                                        <th> </th>
                                     </tr>
                                 </thead>
                                 <tbody>
                                     <c:forEach items="${productList}" var="product">
                                         <tr>
-                                            <td>${product.bookID}</td>
-                                            <td>${product.bookName}</td>
-                                            <td>${product.authorName}</td>
-                                            <td>${product.publisherName}</td>
-                                            <td>${product.publisherDate}</td>
-                                            <td>
-                                                <c:forEach items="${genreList}" var="genre" varStatus="loop">
-                                                    <c:if test="${product.bookID==genre.bookID}">
-                                                        ${genre.genreName} 
-                                                    </c:if>
-                                                </c:forEach>
-                                            </td>
-                                            <td>${product.price}</td>
-                                            <td>${product.quantity}</td>
-                                            <td>${product.detailbook}</td>
-                                            <td>
-                                                <!-- Inside your forEach loop -->
-                                                <button class="add-customer-btn" onclick="openPopup('${product.img_1}', '${product.img_2}', '${product.img_3}', '${product.img_4}')">Show images...</button>
-                                                <div id="popup" class="popup">
+                                            <td>product.getImageLink()</td>
+                                            <td>product.getProductName()</td>
+                                            <td class="col-1">
+                                                <button class="add-order-btn" onclick="openPopup('popup_${order.orderID}')">Show details</button>
+                                                <div id="popup_${order.orderID}" class="popup" style="display: none;">
+                                                    <!-- Popup content for each order -->
                                                     <div class="popup-content">
                                                         <div class="row">
-                                                            <div class="col-3">
-                                                                <img id="img1" alt="Image 1" style="width: 90px; height: 90px;">
-                                                                <p style="text-align: center;">Image 1</p>
-                                                            </div>
-                                                            <div class="col-3">
-                                                                <img id="img2" alt="Image 2" style="width: 90px; height: 90px;">
-                                                                <p style="text-align: center;">Image 2</p>
-                                                            </div>
-                                                            <div class="col-3">
-                                                                <img id="img3" alt="Image 3" style="width: 90px; height: 90px;">
-                                                                <p style="text-align: center;">Image 3</p>
-                                                            </div>
-                                                            <div class="col-3">
-                                                                <img id="img4" alt="Image 4" style="width: 90px; height: 90px;">
-                                                                <p style="text-align: center;">Image 4</p>
-                                                            </div>
+                                                            <table border="1">
+                                                                <thead>
+                                                                    <tr>
+                                                                        <th>Name</th>
+                                                                        <th>Author</th>
+                                                                        <th>Publisher</th>
+                                                                        <th>Quantity</th>
+                                                                        <th>Price</th>
+                                                                    </tr>
+                                                                </thead>
+                                                                <tbody>
+                                                                    <c:forEach items="${infoList}" var="info">
+                                                                        <c:if test="${info.orderID eq order.orderID}">
+                                                                            <tr>
+                                                                                <td>${info.bookName}</td>
+                                                                                <td>${info.author}</td>
+                                                                                <td>${info.publisher}</td>
+                                                                                <td>${info.quantity}</td>
+                                                                                <td>${info.price}</td>
+                                                                            </tr>
+                                                                        </c:if>
+                                                                    </c:forEach>
+                                                                </tbody>
+                                                            </table>
                                                         </div>
                                                         <div id="submit-type">
-                                                            <button type="button" onclick="closePopup()">Close</button>
+                                                            <button type="button" onclick="closePopup('popup_${order.orderID}')">Close</button>
                                                         </div>
                                                     </div>
                                                 </div>
-
                                             </td>
 
                                             <td>
