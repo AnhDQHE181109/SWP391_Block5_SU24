@@ -60,7 +60,7 @@ public class ProductsController extends HttpServlet {
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
     throws ServletException, IOException {
         ProductDetailsDAO pDAO = new ProductDetailsDAO();
-        ArrayList<Product> listProduct = pDAO.getAllProducts();
+        List<Product> listProduct = pDAO.getAllProducts();
         request.setAttribute("PList", listProduct);
         request.getRequestDispatcher("blank.jsp").forward(request, response);
     } 
