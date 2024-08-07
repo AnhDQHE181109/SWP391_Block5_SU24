@@ -25,7 +25,7 @@ public class ProductDetailsDAO extends DBConnect {
     public ArrayList<Product> getAllProducts() {
         ArrayList<Product> list = new ArrayList<>();
         try {
-            String sql = "SELECT * FROM Product";
+            String sql = "SELECT * FROM Products";
             Statement st = conn.createStatement();
             ResultSet rs = st.executeQuery(sql);
             while (rs.next()) {
