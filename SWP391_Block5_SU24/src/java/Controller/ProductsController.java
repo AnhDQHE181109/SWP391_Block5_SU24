@@ -5,19 +5,22 @@
 
 package Controller;
 
+import model.ProductDetailsDAO;
+import entity.Product;
 import java.io.IOException;
-import java.io.PrintWriter;
+import java.util.List;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import java.io.PrintWriter;
 
 /**
  *
  * @author Admin
  */
 public class ProductsController extends HttpServlet {
-   
+
     /** 
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code> methods.
      * @param request servlet request
@@ -53,7 +56,10 @@ public class ProductsController extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
     throws ServletException, IOException {
-        processRequest(request, response);
+            ProductDetailsDAO pDAO = new ProductDetailsDAO();
+            List<Product> products = pDAO.getAllProducts();
+            request.setAttribute("products", products);
+            request.getRequestDispatcher("products.jsp").forward(request, response);
     } 
 
     /** 
