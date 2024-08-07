@@ -1,0 +1,181 @@
+/* Author : Thịnh Nguyễn */
+
+body {
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+    background-color: #f8f9fa;
+}
+
+
+.search-bar {
+    margin: 20px 10px;
+    float: right;
+    display: flex;
+    align-items: center;
+}
+
+.search-bar input[type="text"] {
+    width: calc(100% - 40px);
+    /* Adjusted for the icon width and padding */
+    padding: 10px;
+    margin-right: 2px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    font-size: 16px;
+}
+
+.search-bar button {
+    width: 40px;
+    /* Set width for the button */
+    padding: 12px;
+    margin: 0px;
+    background-color: #007bff;
+    color: #fff;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+    /* Smooth transition on hover */
+}
+
+.search-bar button:hover {
+    background-color: #0056b3;
+    /* Darker color on hover */
+}
+.add-customer-btn {
+    padding: 12px;
+    margin-right: 10px;
+    background-color: #007bff;
+    color: #fff;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    float: right;
+    margin-top: 20px;
+    /* Adjusted margin-top for spacing */
+}
+
+.add-customer-btn i {
+    margin-right: 5px;
+}
+
+.add-customer-btn:hover {
+    background-color: #0056b3;
+}
+
+.table-container {
+    width: calc(100% - 270px);
+    /* Calculate the width of the table container (100% - sidebar width - additional space) */
+    margin-left: 10px;
+    /* Add some space between the sidebar and the table */
+    margin-right: 10px;
+    /* Add some space on the right side of the table */
+    float: right;
+}
+
+.table-container th {
+    text-align: center;
+}
+
+.table-container td {
+    text-align: center;
+}
+
+table {
+    width: 100%;
+}
+
+th,
+td {
+    border: 1px solid #ddd;
+    padding: 8px;
+}
+
+.password-toggle {
+    position: relative;
+}
+
+.password-toggle input[type="password"] {
+    padding-left: 20px;
+    /* Adjust padding to accommodate the icon */
+    border: none;
+    background-color: white;
+}
+
+
+th {
+    background-color: #f2f2f2;
+}
+
+.delete-button {
+    background-color: #f44336;
+    color: white;
+    padding: 8px 16px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+.delete-button:hover {
+    background-color: #d32f2f;
+}
+
+.delete-button i {
+    margin-right: 5px;
+}
+
+/* CSS pop up */
+/* Popup styles */
+.popup {
+    display: none;
+    position: fixed;
+    z-index: 9999;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    overflow: auto;
+    background-color: rgba(0, 0, 0, 0.5);
+}
+
+.popup-content {
+    background-color: #fefefe;
+    margin: 10% auto;
+    padding: 20px;
+    border: 1px solid #ccc;
+    width: 80%;
+    max-width: 400px;
+    border-radius: 5px;
+    box-shadow: 0 0 20px rgba(0, 0, 0, 0.3);
+    /* Add shadow effect */
+}
+
+.popup form input[type="text"],
+.popup form input[type="password"],
+.popup form input[type="email"],
+.popup form button {
+    width: calc(100% - 20px);
+    margin: 10px 0;
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    font-size: 16px;
+}
+
+.popup form button {
+    background-color: #007bff;
+    color: #fff;
+    cursor: pointer;
+    width: 100px;
+}
+
+#submit-type {
+    display: flex;
+    justify-content: space-around
+}
+
+.popup form button:hover {
+    background-color: #0056b3;
+}

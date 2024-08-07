@@ -9,24 +9,24 @@ package Util;
  * @author Long
  */
 public class Validator {
-        public static boolean validatePassword(String password) {
+        public static int validatePassword(String password) {
             if (password == null) {
-                return false;
+                return 1;
             }
-
+            // 1 for invalid
             password = password.trim(); // Trim the password
 
             // Check if the password is more than 8 characters
             if (password.length() <= 8) {
-                return false;
+                return 2;
             }
-
+            //2 for too short
             boolean hasDigit = false;
             boolean hasUppercase = false;
 
             for (char c : password.toCharArray()) {
                 if (Character.isWhitespace(c)) {
-                    return false; // Return false if there are any spaces
+                    return 1; // Return 1 if there are any spaces
                 }
                 if (Character.isDigit(c)) {
                     hasDigit = true;
@@ -36,6 +36,9 @@ public class Validator {
                 }
             }
 
-            return hasDigit && hasUppercase;
+            if(hasDigit && hasUppercase){return 0;};
+            //0 for valid password
+            return 3;
+            //3 for password don't fufill condition.
         }
 }
