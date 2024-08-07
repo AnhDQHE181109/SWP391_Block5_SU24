@@ -30,16 +30,16 @@ public class ProductDetailsDAO extends DBConnect {
             ResultSet rs = st.executeQuery(sql);
             while (rs.next()) {
                 Product p = new Product();
-                p.setProductId(rs.getInt("ProductID"));
-                p.setProductName(rs.getString("ProductName"));
-                p.setPrice(rs.getBigDecimal("Price"));
-                p.setOrigin(rs.getString("Origin"));
-                p.setMaterial(rs.getString("Material"));
-                p.setTotalQuantity(rs.getInt("TotalQuantity"));
-                p.setCategoryId(rs.getInt("CategoryID"));
-                p.setBrandId(rs.getInt("BrandID"));
-                p.setImportId(rs.getInt("ImportID"));
-                p.setImageId(rs.getInt("ImageID"));
+                p.setProductId(rs.getInt(1));
+                p.setProductName(rs.getString(2));
+                p.setPrice(rs.getBigDecimal(3));
+                p.setOrigin(rs.getString(4));
+                p.setMaterial(rs.getString(5));
+                p.setTotalQuantity(rs.getInt(6));
+                p.setCategoryId(rs.getInt(7));
+                p.setBrandId(rs.getInt(8));
+                p.setImportId(rs.getInt(9));
+                p.setImageId(rs.getInt(10));
                 list.add(p);
             }
             rs.close();
