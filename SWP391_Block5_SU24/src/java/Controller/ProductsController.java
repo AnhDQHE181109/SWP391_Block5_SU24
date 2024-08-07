@@ -8,12 +8,15 @@ package Controller;
 import model.ProductDetailsDAO;
 import entity.Product;
 import java.io.IOException;
+
 import java.util.List;
 import jakarta.servlet.ServletException;
+
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import java.io.PrintWriter;
+import java.util.ArrayList;
 
 /**
  *
@@ -56,10 +59,10 @@ public class ProductsController extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
     throws ServletException, IOException {
-            ProductDetailsDAO pDAO = new ProductDetailsDAO();
-            List<Product> products = pDAO.getAllProducts();
-            request.setAttribute("products", products);
-            request.getRequestDispatcher("products.jsp").forward(request, response);
+        ProductDetailsDAO pDAO = new ProductDetailsDAO();
+        ArrayList<Product> listProduct = pDAO.getAllProducts();
+        request.setAttribute("PList", listProduct);
+        request.getRequestDispatcher("blank.jsp").forward(request, response);
     } 
 
     /** 
