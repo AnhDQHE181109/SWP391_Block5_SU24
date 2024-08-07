@@ -1,4 +1,7 @@
 <!DOCTYPE html>
+<%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
+<%@page contentType="text/html" pageEncoding="UTF-8"%>
+<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 <html lang="en">
 
     <head>
@@ -198,7 +201,7 @@
                                         </tr>
                                     </thead>
                                     <tbody>
-                                    <c:forEach items="${PList}" var="p">
+                                    <c:forEach items="${requestScope.PList}" var="p">
                                         <tr>
                                             <td>${p.ProductName}</td>
                                             <td>${p.Price}</td>
