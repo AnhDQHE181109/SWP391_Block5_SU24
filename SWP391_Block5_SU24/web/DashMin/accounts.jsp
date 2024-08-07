@@ -1,9 +1,12 @@
-<!DOCTYPE html>
-<%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
-<%@page contentType="text/html" pageEncoding="UTF-8"%>
-<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
-<html lang="en">
+<%-- 
+    Document   : accounts
+    Created on : Aug 7, 2024, 10:35:22 AM
+    Author     : Admin
+--%>
 
+<%@page contentType="text/html" pageEncoding="UTF-8"%>
+<!DOCTYPE html>
+<html>
     <head>
         <meta charset="utf-8">
         <title>DASHMIN - Bootstrap Admin Template</title>
@@ -188,31 +191,7 @@
                     <div class="container-fluid pt-4 px-4">
                         <div class="row vh-100 bg-light rounded align-items-center justify-content-center mx-0">
                             <div class="col-md-6 text-center">
-                                <h3>Product List</h3>
-                                <table id="productTable" class="table table-bordered">
-                                    <thead>
-                                        <tr>
-                                            <th>Product Name</th>
-                                            <th>Price</th>
-                                            <th>Total Quantity</th>
-                                            <th>Category ID</th>
-                                            <th>Brand ID</th>
-                                            <th>Image ID</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                    <c:forEach items="${requestScope.PList}" var="p">
-                                        <tr>
-                                            <td>${p.ProductName}</td>
-                                            <td>${p.Price}</td>
-                                            <td>${p.TotalQuantity}</td>
-                                            <td>${p.CategoryId}</td>
-                                            <td>${p.BrandId}</td>
-                                            <td>${p.ImageId}</td>
-                                        </tr>
-                                    </c:forEach>
-                                    </tbody>
-                                </table>
+                                <h3>This is blank page</h3>
                             </div>
                         </div>
                     </div>
@@ -228,7 +207,7 @@
                                 &copy; <a href="#">Your Site Name</a>, All Right Reserved. 
                             </div>
                             <div class="col-12 col-sm-6 text-center text-sm-end">
-                                <!--/*** This template is free as long as you keep the footer author?s credit link/attribution link/backlink. If you'd like to use the template without the footer author?s credit link/attribution link/backlink, you can purchase the Credit Removal License from "https://htmlcodex.com/credit-removal". Thank you for your support. ***/-->
+                                <!--/*** This template is free as long as you keep the footer author’s credit link/attribution link/backlink. If you'd like to use the template without the footer author’s credit link/attribution link/backlink, you can purchase the Credit Removal License from "https://htmlcodex.com/credit-removal". Thank you for your support. ***/-->
                                 Designed By <a href="https://htmlcodex.com">HTML Codex</a>
                             </div>
                         </div>
@@ -257,5 +236,4 @@
         <!-- Template Javascript -->
         <script src="js/main.js"></script>
     </body>
-
 </html>

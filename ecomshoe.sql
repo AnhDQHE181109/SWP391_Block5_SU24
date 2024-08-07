@@ -1,10 +1,3 @@
--- Create the database if it does not exist
-IF DB_ID('ECommerceStore') IS NULL
-BEGIN
-    CREATE DATABASE ECommerceStore;
-END
-GO
-
 -- Use the database
 USE ECommerceStore;
 GO
@@ -36,24 +29,6 @@ BEGIN
 END
 GO
 
--- Use the database
-USE ECommerceStore;
-GO
-
-
-
-CREATE TABLE Accounts(
-    AccountID INT IDENTITY(1,1) PRIMARY KEY,
-    Username NVARCHAR(100) NOT NULL, 
-    Hash TEXT NOT NULL,
-    PhoneNumber NVARCHAR(20) NULL,
-    Email NVARCHAR(100) UNIQUE NULL,
-    Address NVARCHAR(200) NULL,
-	Salt TEXT NOT NULL,
-    Role INT NOT NULL
-);
-GO
-
 -- Create Categories table
 CREATE TABLE Categories (
     CategoryID INT IDENTITY(1,1) PRIMARY KEY,
@@ -61,12 +36,18 @@ CREATE TABLE Categories (
 );
 GO
 
+INSERT INTO Categories (CategoryName)
+VALUES (N'Sneaker'), (N'Athletic shoes'), (N'Boots'), (N'Sandals');
+
 -- Create Brand table
 CREATE TABLE Brand (
     BrandID INT IDENTITY(1,1) PRIMARY KEY,
     BrandName NVARCHAR(100) NOT NULL
 );
 GO
+
+INSERT INTO Brand(BrandName)
+VALUES (N'Niko'), (N'Adidos'), (N'Jordan'), (N'Puma');
 
 -- Create Products table
 CREATE TABLE Products (
@@ -91,6 +72,18 @@ CREATE TABLE ProductStockImport (
     ProductID INT NOT NULL,
     ImportDate DATETIME NOT NULL,
     CONSTRAINT FK_ProductStockImport_Products FOREIGN KEY (ProductID) REFERENCES Products(ProductID)
+);
+GO
+
+CREATE TABLE Accounts(
+    AccountID INT IDENTITY(1,1) PRIMARY KEY,
+    Username NVARCHAR(100) NOT NULL, 
+    Hash TEXT NOT NULL,
+    PhoneNumber NVARCHAR(20) NULL,
+    Email NVARCHAR(100) UNIQUE NULL,
+    Address NVARCHAR(200) NULL,
+    Salt TEXT NOT NULL,
+    Role INT NOT NULL
 );
 GO
 
@@ -186,3 +179,9 @@ CREATE TABLE Wishlist (
     CONSTRAINT FK_Wishlist_Products FOREIGN KEY (ProductID) REFERENCES Products(ProductID)
 );
 GO
+
+-- Insert sample data into Products
+INSERT INTO Products(ProductName, Origin, Material, Price, TotalQuantity, CategoryID, BrandID, ImportID) 
+VALUES 
+('Men Taja Commissioner', 'USA', 'Leather', 19.99, 100, 2, 2, NULL),
+('Air Force 1', 'China', 'Suede', 29.99, 200, 1, 1, NULL);
