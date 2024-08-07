@@ -12,7 +12,9 @@ import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
+import java.util.Map;
 import model.StocksManagementDAO;
 
 /**
@@ -65,8 +67,10 @@ public class StocksManagementController extends HttpServlet {
         StocksManagementDAO smDAO = new StocksManagementDAO();
         
         List<Product> productsList = smDAO.getAllProducts();
+        List<Product> productsStocksList = smDAO.getProductsStocks();
         
         request.setAttribute("productsList", productsList);
+        request.setAttribute("productsStocksList", productsStocksList);
         request.getRequestDispatcher("staff/stocksManager.jsp").forward(request, response);
     }
 
@@ -81,7 +85,30 @@ public class StocksManagementController extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        processRequest(request, response);
+        response.setContentType("text/html;charset=UTF-8");
+        PrintWriter out = response.getWriter();
+        
+        StocksManagementDAO smDAO = new StocksManagementDAO();
+        
+        Map stocksData = request.getParameterMap();
+        for (Object key : stocksData.keySet()) {
+            String keyString = (String)key;
+            String[] value = (String[])stocksData.get(keyString);
+            keyString = keyString.replaceAll("[^\\d]", "");
+            System.out.println("Key " + keyString + "   :   " + value[0]);
+            
+            int productID = Integer.parseInt(keyString);
+            int quantity = Integer.parseInt(value[0]);
+            
+            smDAO.setProductStock(productID, quantity);
+        }
+        
+        List<Product> productsList = smDAO.getAllProducts();
+        List<Product> productsStocksList = smDAO.getProductsStocks();
+        
+        request.setAttribute("productsList", productsList);
+        request.setAttribute("productsStocksList", productsStocksList);
+        request.getRequestDispatcher("staff/stocksManager.jsp").forward(request, response);
     }
 
     /**
