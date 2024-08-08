@@ -7,6 +7,7 @@ package Controller;
 
 import entity.Brand;
 import entity.Category;
+import entity.Product;
 import jakarta.servlet.RequestDispatcher;
 import java.io.IOException;
 import java.util.List;
@@ -72,19 +73,32 @@ public class AddProductController extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
     throws ServletException, IOException {
-        ProductDetailsDAO productDAO = new ProductDetailsDAO();
+        try {
+            String productName = request.getParameter("productName");
+            String origin = request.getParameter("origin");
+            double price = Double.parseDouble(request.getParameter("price"));
+            int totalQuantity = Integer.parseInt(request.getParameter("totalQuantity"));
+            int categoryId = Integer.parseInt(request.getParameter("categoryId"));
+            int brandId = Integer.parseInt(request.getParameter("brandId"));
+            int importId = Integer.parseInt(request.getParameter("importId"));
+            
+            Product product = new Product();
+            product.setProductName(productName);
+            product.setOrigin(origin);
+            product.setPrice(price);
+            product.setTotalQuantity(totalQuantity);
+            product.setCategoryId(categoryId);
+            product.setBrandId(brandId);
+            product.setImportId(importId);
 
-        // Fetch the list of brands and categories
-        List<Brand> brands = productDAO.getAllBrands();
-        List<Category> categories = productDAO.getAllCategories();
+            ProductDetailsDAO productDetailsDAO = new ProductDetailsDAO();
+            productDetailsDAO.addProduct(product);
 
-        // Set them as request attributes
-        request.setAttribute("brands", brands);
-        request.setAttribute("categories", categories);
-
-        // Forward to the addProduct.jsp
-        RequestDispatcher dispatcher = request.getRequestDispatcher("addProduct.jsp");
-        dispatcher.forward(request, response);
+            response.sendRedirect("productmanage.jsp");
+        } catch (Exception e) {
+            e.printStackTrace();
+            response.sendRedirect("error.jsp");
+        }
     }
 
     /** 

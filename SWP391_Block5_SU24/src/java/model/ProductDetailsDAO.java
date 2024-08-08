@@ -92,21 +92,19 @@ public class ProductDetailsDAO extends DBConnect {
         return list;
     }
 
-    public void insertProduct(Product product) {
-        String sql = "INSERT INTO Product (ProductName, Origin, Material, Price, TotalQuantity, CategoryID, BrandID, ImportID, ImageID) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)";
-        try (PreparedStatement ps = conn.prepareStatement(sql)) {
-            ps.setString(1, product.getProductName());
-            ps.setString(2, product.getOrigin());
-            ps.setString(3, product.getMaterial());
-            ps.setDouble(4, product.getPrice());
-            ps.setInt(5, product.getTotalQuantity());
-            ps.setInt(6, product.getCategoryId());
-            ps.setInt(7, product.getBrandId());
-            ps.setInt(8, product.getImportId());
-            ps.setInt(9, product.getImageId());
-            ps.executeUpdate();
-        } catch (SQLException e) {
-            System.out.println("Error inserting product");
+        public void addProduct(Product product) throws Exception {
+        try{
+        String sql = "INSERT INTO product (productName, Origin, price, categoryId, brandId) VALUES (?, ?, ?, ?, ?)";
+        PreparedStatement ps = conn.prepareStatement(sql);
+        ps.setString(1, product.getProductName());
+        ps.setString(2, product.getOrigin());
+        ps.setDouble(3, product.getPrice());
+        ps.setInt(4, product.getCategoryId());
+        ps.setInt(5, product.getBrandId());
+        ps.executeUpdate();
+        ps.close();
+        }catch(Exception e){
+            System.out.println("Error inserting product: " + e.getMessage());
         }
     }
 }
