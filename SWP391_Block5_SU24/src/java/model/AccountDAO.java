@@ -38,6 +38,30 @@ public class AccountDAO extends MyDAO {
         }
         return accountList;
     }
+    
+    public List<Account> getAccountsByRole(int role) {
+    String sql = "SELECT * FROM Accounts WHERE Role = ?";
+    List<Account> accountList = new ArrayList<>();
+    try {
+        ps = con.prepareStatement(sql);
+        ps.setInt(1, role);
+        rs = ps.executeQuery();
+        while (rs.next()) {
+            int accountID = rs.getInt("AccountID");
+            String username = rs.getString("Username");
+            String hash = rs.getString("Hash");
+            String phoneNumber = rs.getString("PhoneNumber");
+            String email = rs.getString("Email");
+            String address = rs.getString("Address");
+            String salt = rs.getString("Salt");
+            Account account = new Account(accountID, username, hash, phoneNumber, email, address, salt, role);
+            accountList.add(account);
+        }
+    } catch (Exception e) {
+        e.printStackTrace();
+    }
+    return accountList;
+}
 
     public Account getAccount(String username) {
         String sql = "SELECT * FROM Accounts WHERE Username = ?";

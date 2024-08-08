@@ -44,16 +44,6 @@
         <servlet-name>StocksManagementController</servlet-name>
         <url-pattern>/stocksManager</url-pattern>
     </servlet-mapping>
-    <servlet-mapping>
-        <servlet-name>AccountController</servlet-name>
-        <url-pattern>/AccountController</url-pattern>
-    </servlet-mapping>
-    <servlet-mapping>
-        <servlet-name>ProductsController</servlet-name>
-        <url-pattern>/ProductsController</url-pattern>
-    </servlet-mapping>
-    <servlet-mapping>
-        <servlet-name>AddProductController</servlet-name>
-        <url-pattern>/AddProductController</url-pattern>
+
     </servlet-mapping>
 </web-app>

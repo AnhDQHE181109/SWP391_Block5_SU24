@@ -24,6 +24,8 @@ public class Product {
     private int importId;
     private int imageId;
     private String imageURL;
+    private int size;
+    private String color;
 
     public Product() {
     }
@@ -39,8 +41,14 @@ public class Product {
         this.productName = productName;
         this.imageURL = imageURL;
     }
-    
-    
+
+    public Product(int productID, String productName, int size, String color, int totalQuantity) {
+        this.productId = productID;
+        this.productName = productName;
+        this.totalQuantity = totalQuantity;
+        this.size = size;
+        this.color = color;
+    }
 
     // Getters and Setters
     public int getProductId() {
@@ -144,6 +152,27 @@ public class Product {
     public void setImageURL(String imageURL) {
         this.imageURL = imageURL;
     }
-    
-    
+
+    public int getSize() {
+        return size;
+    }
+
+    public void setSize(int size) {
+        this.size = size;
+    }
+
+    public String getColor() {
+        return color;
+    }
+
+    public void setColor(String color) {
+        this.color = color;
+    }
+
+    @Override
+    public String toString() {
+        return "Product{" + "productId=" + productId + ", productName=" + productName + ", price=" + price + ", origin=" + origin + ", material=" + material + ", totalQuantity=" + totalQuantity + ", categoryId=" + categoryId + ", brandId=" + brandId + ", importId=" + importId + ", imageId=" + imageId + ", imageURL=" + imageURL + ", size=" + size + ", color=" + color + '}';
+    }
+
+
 }

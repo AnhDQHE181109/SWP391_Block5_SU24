@@ -173,6 +173,7 @@
 
                             <%
                                 List<Product> productsList = (List<Product>) request.getAttribute("productsList");
+                                List<Product> productsStocksList = (List<Product>) request.getAttribute("productsStocksList");
                             %>
                             
                             <table class="table table-hover table-bordered" id="sampleTable">
@@ -195,48 +196,52 @@
                                             <td><img src="<%=product.getImageURL() %>"></td>
                                             <td><%=product.getProductName() %></td>
                                             <td class="col-1">
-                                                <button class="add-order-btn" onclick="openPopup('popup_<%=product.getProductId() %>')">Import stocks</button>
+                                                <button class="btn btn-info" onclick="openPopup('popup_<%=product.getProductId() %>')">Import stocks</button>
                                                 <div id="popup_<%=product.getProductId() %>" class="popup" style="display: none;">
                                                     <!-- Popup content for each order -->
                                                     <div class="popup-content">
+                                                      <form id="stocksForm_<%=product.getProductName() %>" action="stocksManager" method="post">
                                                         <div class="row">
-                                                            <p class="h2">Stocks available for </p>
+                                                            <p class="h2">Stocks available for <%=product.getProductName() %></p>
                                                             <table class="table">
                                                                 <thead>
                                                                   <tr>
-                                                                    <th scope="col"></th>
+                                                                    <th scope="col">#</th>
                                                                     <th scope="col">Size</th>
                                                                     <th scope="col">Color</th>
                                                                     <th scope="col">Quantity</th>
                                                                   </tr>
                                                                 </thead>
                                                                 <tbody>
-                                                                  <tr>
-                                                                    <th scope="row">1</th>
-                                                                    <td>Mark</td>
-                                                                    <td>Otto</td>
-                                                                    <td>@mdo</td>
-                                                                  </tr>
-                                                                  <tr>
-                                                                    <th scope="row">2</th>
-                                                                    <td>Jacob</td>
-                                                                    <td>Thornton</td>
-                                                                    <td>@fat</td>
-                                                                  </tr>
-                                                                  <tr>
-                                                                    <th scope="row">3</th>
-                                                                    <td>Larry</td>
-                                                                    <td>the Bird</td>
-                                                                    <td>@twitter</td>
-                                                                  </tr>
+                                                                    <% if (productsStocksList == null || productsStocksList.isEmpty()) { %>
+                                                                        <tr>
+                                                                            <th>Error! Product's stocks are empty!</th>
+                                                                        </tr>
+                                                                    <% } else { 
+                                                                           int i = 1;
+                                                                           for (Product productStocks : productsStocksList) {
+                                                                            if (product.getProductName().equalsIgnoreCase(productStocks.getProductName())) {
+                                                                             %>
+                                                                             <tr>
+                                                                                <th scope="row"><%=i %></th>
+                                                                                <td><%=productStocks.getSize() %></td>
+                                                                                <td><%=productStocks.getColor() %></td>
+                                                                                <td><input type="text" class="form-control" name="<%=productStocks.getProductId()%>_quantity" value="<%=productStocks.getTotalQuantity() %>"></td>
+                                                                              </tr>
+                                                                    <%      i++;
+                                                                            }
+                                                                           }
+                                                                       } %>
                                                                 </tbody>
                                                               </table>
                                                         </div>
-                                                        <div id="submit-type">
-                                                            <button type="button" class="btn btn-danger" onclick="closePopup('popup_<%=product.getProductId() %>')">Close</button>
-                                                            <button type="button" class="btn btn-primary">Update</button>
-                                                            <button type="button" class="btn btn-success">Add a new variant</button>
+                                                    </form>
+                                                        <div id="submit-type" class="col-md-12">
+                                                            <button type="button" class="btn btn-danger col-md-3" onclick="closePopup('popup_<%=product.getProductId() %>')">Close</button>
+                                                            <button type="button" onclick="document.getElementById(&quot;stocksForm_<%=product.getProductName() %>&quot;).submit()" class="btn btn-primary col-md-3">Update</button>
+                                                            <button type="button" class="btn btn-success col-md-6">Add a new variant</button>
                                                         </div>
+                                                    
                                                     </div>
                                                 </div>
                                             </td>
@@ -277,6 +282,25 @@
                                         } %>
                                 </tbody>
                             </table>
+
+                            <div id="popup_<%=product.getProductId() %>" class="popup" style="display: none;">
+                                <!-- Popup content for each order -->
+                                <div class="popup-content">
+                                  <form id="stocksForm_<%=product.getProductName() %>" action="stocksManager" method="post">
+                                    <div class="row">
+                                        <p class="h2">Are you sure these items are out of stock?</p>
+                                        
+                                    </div>
+                                </form>
+                                    <div id="submit-type" class="col-md-12">
+                                        <button type="button" class="btn btn-danger col-md-3" onclick="closePopup('popup_<%=product.getProductId() %>')">Close</button>
+                                        <button type="button" onclick="document.getElementById(&quot;stocksForm_<%=product.getProductName() %>&quot;).submit()" class="btn btn-primary col-md-3">Update</button>
+                                        <button type="button" class="btn btn-success col-md-6">Add a new variant</button>
+                                    </div>
+                                
+                                </div>
+                            </div>
+
                         </div>
                     </div>
                 </div>

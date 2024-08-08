@@ -10,12 +10,21 @@ import java.util.List;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.HashMap;
 
 /**
  *
  * @author ASUS
  */
 public class StocksManagementDAO extends DBConnect {
+
+    public static void main(String[] args) {
+        StocksManagementDAO smDAO = new StocksManagementDAO();
+        List<Product> productsStocksList = smDAO.getProductsStocks();
+        for (Product product : productsStocksList) {
+            System.out.println(product);
+        }
+    }
 
     public List<Product> getAllProducts() {
 
@@ -46,6 +55,62 @@ public class StocksManagementDAO extends DBConnect {
         }
 
         return list;
+    }
+
+    public List<Product> getProductsStocks() {
+
+        String sql = "select p.ProductID, p.ProductName, Size, Color, StockQuantity\n"
+                + "from Products p, Stock s\n"
+                + "where p.ProductID = s.ProductID";
+
+        Product product = null;
+        List<Product> productsStocksList = new ArrayList<>();
+
+        try {
+            PreparedStatement ps = conn.prepareStatement(sql);
+
+            ResultSet rs = ps.executeQuery();
+            while (rs.next()) {
+                product = new Product(rs.getInt(1), rs.getString(2), rs.getInt(3),
+                        rs.getString(4), rs.getInt(5));
+                productsStocksList.add(product);
+            }
+
+            if (rs != null) {
+                rs.close();
+            }
+            if (ps != null) {
+                ps.close();
+            }
+        } catch (SQLException e) {
+            System.out.println(e);
+        }
+
+        return productsStocksList;
+    }
+
+    public void setProductStock(int productID, int quantity) {
+
+        String sql = "update Stock\n"
+                + "set StockQuantity = ?\n"
+                + "where ProductID = ?";
+
+        try {
+            PreparedStatement ps = conn.prepareStatement(sql);
+            ps.setInt(1, quantity);
+            ps.setInt(2, productID);
+
+            ResultSet rs = ps.executeQuery();
+
+            if (rs != null) {
+                rs.close();
+            }
+            if (ps != null) {
+                ps.close();
+            }
+        } catch (SQLException e) {
+            System.out.println(e);
+        }
     }
 
 }
