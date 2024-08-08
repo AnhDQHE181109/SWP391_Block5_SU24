@@ -144,4 +144,63 @@ public class StocksManagementDAO extends DBConnect {
         return product;
     }
 
+    public String getProductNameByID(int productID) {
+
+        String sql = "select ProductName\n"
+                + "from Products\n"
+                + "where ProductID = ?";
+
+        Product product = null;
+
+        try {
+            PreparedStatement ps = conn.prepareStatement(sql);
+            ps.setInt(1, productID);
+
+            ResultSet rs = ps.executeQuery();
+            if (rs.next()) {
+                return rs.getString(1);
+            }
+
+            if (rs != null) {
+                rs.close();
+            }
+            if (ps != null) {
+                ps.close();
+            }
+        } catch (SQLException e) {
+            System.out.println(e);
+        }
+
+        return null;
+    }
+
+    public int getProductStockQuantityByID(int productID) {
+
+        String sql = "select p.ProductID, StockQuantity\n"
+                + "from Products p, Stock s\n"
+                + "where p.ProductID = s.ProductID and p.ProductID = ?";
+
+        Product product = null;
+
+        try {
+            PreparedStatement ps = conn.prepareStatement(sql);
+            ps.setInt(1, productID);
+
+            ResultSet rs = ps.executeQuery();
+            if (rs.next()) {
+                return rs.getInt(2);
+            }
+
+            if (rs != null) {
+                rs.close();
+            }
+            if (ps != null) {
+                ps.close();
+            }
+        } catch (SQLException e) {
+            System.out.println(e);
+        }
+
+        return 0;
+    }
 }

@@ -91,6 +91,7 @@ public class ProductDetailsDAO extends DBConnect {
         return list;
     }
 
+
         public void addProduct(Product product){
         try{
         String sql = "INSERT INTO Products (ProductName, Origin, Material, Price, CategoryID, BrandID) VALUES (?, ?, ?, ?, ?, ?)";
@@ -101,6 +102,7 @@ public class ProductDetailsDAO extends DBConnect {
         ps.setDouble(4, product.getPrice());
         ps.setInt(5, product.getCategoryId());
         ps.setInt(6, product.getBrandId());
+
         ps.executeUpdate();
         ps.close();
         }catch(Exception e){
