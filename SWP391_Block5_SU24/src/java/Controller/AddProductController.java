@@ -77,20 +77,12 @@ public class AddProductController extends HttpServlet {
             String productName = request.getParameter("productName");
             String origin = request.getParameter("origin");
             double price = Double.parseDouble(request.getParameter("price"));
-            int totalQuantity = Integer.parseInt(request.getParameter("totalQuantity"));
+            String material = request.getParameter("material");
             int categoryId = Integer.parseInt(request.getParameter("categoryId"));
             int brandId = Integer.parseInt(request.getParameter("brandId"));
-            int importId = Integer.parseInt(request.getParameter("importId"));
             
-            Product product = new Product();
-            product.setProductName(productName);
-            product.setOrigin(origin);
-            product.setPrice(price);
-            product.setTotalQuantity(totalQuantity);
-            product.setCategoryId(categoryId);
-            product.setBrandId(brandId);
-            product.setImportId(importId);
-
+            Product product = new Product(productName, origin, material, price, categoryId, brandId);
+      
             ProductDetailsDAO productDetailsDAO = new ProductDetailsDAO();
             productDetailsDAO.addProduct(product);
 

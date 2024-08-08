@@ -7,6 +7,7 @@ package Controller;
 
 import model.ProductDetailsDAO;
 import entity.Product;
+import jakarta.servlet.RequestDispatcher;
 import java.io.IOException;
 import java.util.List;
 import jakarta.servlet.ServletException;
@@ -30,10 +31,7 @@ public class ProductsController extends HttpServlet {
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
     throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
-        ProductDetailsDAO pDAO = new ProductDetailsDAO();
-        List<Product> listProduct = pDAO.getAllProducts();
-       request.setAttribute("PList", listProduct);
-        request.getRequestDispatcher("productmanage.jsp").forward(request, response);
+        
     } 
 
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
@@ -47,7 +45,15 @@ public class ProductsController extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
     throws ServletException, IOException {
-        processRequest(request, response);
+        ProductDetailsDAO dao = new ProductDetailsDAO();
+        List<Product> productList = dao.getAllProducts();
+        
+        // Set the product list as request attribute
+        request.setAttribute("PList", productList);
+        
+        // Forward the request to the JSP page
+        RequestDispatcher dispatcher = request.getRequestDispatcher("productmanage.jsp");
+        dispatcher.forward(request, response);
     } 
 
     /** 

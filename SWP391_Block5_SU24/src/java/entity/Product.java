@@ -55,6 +55,14 @@ public class Product {
         this.size = size;
         this.color = color;
     }
+    public Product(String productName, String origin, String material, double price, int categoryId, int brandId){
+        this.productName = productName;
+        this.origin = origin;
+        this.material = material;
+        this.price = price;
+        this.categoryId = categoryId;
+        this.brandId = brandId;
+    }
 
     // Getters and Setters
     public int getProductId() {
