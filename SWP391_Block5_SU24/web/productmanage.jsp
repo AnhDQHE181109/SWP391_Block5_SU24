@@ -6,6 +6,10 @@
 <%@ page import="entity.Product" %>
 <%@ page import="java.util.List" %>
 
+<%
+    ProductDetailsDAO pDAO = new ProductDetailsDAO();
+    List<Product> products = pDAO.getAllProducts();
+%>
 <html lang="en">
 
     <head>
@@ -188,37 +192,41 @@
 
 
                 <!-- Blank Start -->
-                    <div class="container-fluid pt-4 px-4">
-                        <div class="row vh-100 bg-light rounded align-items-center justify-content-center mx-0">
-                            <div class="col-md-6 text-center">
-                                <h3>Product List</h3>
+                <div class="container-fluid pt-4 px-4">
+                    <div class="row vh-100 bg-light rounded align-items-center justify-content-center mx-0">
+                        <div class="col-md-6 text-center">
+                            <h3>Product List</h3>
                                 <table id="productTable" class="table table-bordered">
                                     <thead>
                                         <tr>
                                             <th>Product Name</th>
+                                            <th>Origin</th>
+                                            <th>Material</th>
                                             <th>Price</th>
-                                            <th>Total Quantity</th>
-                                            <th>Category</th>
                                             <th>Brand</th>
-                                            <th>Image</th>
+                                            <th>Category</th>
                                         </tr>
                                     </thead>
                                     <tbody>
-                                        <c:forEach items="${PList}" var="p">
+                                        <%
+                                            for (Product product : products){
+                                        %>    
                                             <tr>
-                                                <td>${p.productName}</td>
-                                                <td>${p.price}</td>
-                                                <td>${p.totalQuantity}</td>
-                                                <td>${p.categoryName}</td>
-                                                <td>${p.brandName}</td>
-                                                <td>${p.imageId}</td>
+                                                <td><%=product.getProductName() %></td>
+                                                <td><%=product.getOrigin() %></td>
+                                                <td><%=product.getMaterial() %>}</td>
+                                                <td><%=product.getPrice() %></td>
+                                                <td><%=product.getBrandName() %>}</td>
+                                                <td><%=product.getCategoryName() %></td>
                                             </tr>
-                                        </c:forEach>
+                                        <%
+                                            }
+                                        %>
                                     </tbody>
                                 </table>
-                            </div>
                         </div>
                     </div>
+                </div>
                 <!-- Blank End -->
 
 

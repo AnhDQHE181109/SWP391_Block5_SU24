@@ -35,10 +35,6 @@
                     <input type="number" class="form-control" id="price" name="price" required>
                 </div>
                 <div class="form-group">
-                    <label for="totalQuantity">Total Quantity</label>
-                    <input type="number" class="form-control" id="totalQuantity" name="totalQuantity" required>
-                </div>
-                <div class="form-group">
                     <label for="categoryId">Category</label>
                     <select class="form-control" id="categoryId" name="categoryId">
                         <%
@@ -50,27 +46,25 @@
                         %>
                     </select>
                     <div class="form-group">
-                        <label for="importId">Import</label>
-                        <input type="number" class="form-control" id="importId" name="importId" required>
+                        <label for="brandId">Brand</label>
+                        <select class="form-control" id="brandId" name="brandId">
+                            <%
+                                for (Brand brand : brands) {
+                            %>
+                            <option value="<%= brand.getBrandId() %>"><%= brand.getBrandName() %></option>
+                            <%
+                                }
+                            %>
+                        </select>
                     </div>
-                </div>
-                <div class="form-group">
-                    <label for="brandId">Brand</label>
-                    <select class="form-control" id="brandId" name="brandId">
-                        <%
-                            for (Brand brand : brands) {
-                        %>
-                        <option value="<%= brand.getBrandId() %>"><%= brand.getBrandName() %></option>
-                        <%
-                            }
-                        %>
-                    </select>
-                </div>
-                <div class="form-group">
-                    <label for="imageId">Image</label>
-                    <input type="text" class="form-control" id="imageId" name="imageId">
-                </div>
-                <button type="submit" class="btn btn-primary">Add Product</button>
+                    <div class="form-group">
+                        <label for="material">Material</label>
+                        <input type="text" class="form-control" id="material" name="material">
+                    </div>
+                    <div class="button-group">
+                        <input type="submit" value="Add">
+                        <input type="reset" value="Reset">
+                    </div>
             </form>
         </div>
 

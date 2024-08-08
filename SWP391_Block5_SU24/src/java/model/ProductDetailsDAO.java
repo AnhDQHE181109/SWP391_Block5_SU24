@@ -21,12 +21,12 @@ import java.sql.PreparedStatement;
 public class ProductDetailsDAO extends DBConnect {
 
     public List<Product> getAllProducts() {
-        List<Product> list = new ArrayList<>();
+        List<Product> products = new ArrayList<>();
         try {
             String sql = "SELECT p.ProductID, p.ProductName, p.Origin, p.Material, p.Price, p.TotalQuantity, "
-                    + "c.CategoryName, b.BrandName, p.ImportID, p.ImageID "
-                    + "FROM Product p "
-                    + "LEFT JOIN Category c ON p.CategoryID = c.CategoryID "
+                    + "c.CategoryName, b.BrandName, p.ImageID "
+                    + "FROM Products p "
+                    + "LEFT JOIN Categories c ON p.CategoryID = c.CategoryID "
                     + "LEFT JOIN Brand b ON p.BrandID = b.BrandID";
             Statement st = conn.createStatement();
             ResultSet rs = st.executeQuery(sql);
@@ -40,16 +40,15 @@ public class ProductDetailsDAO extends DBConnect {
                 p.setTotalQuantity(rs.getInt("TotalQuantity"));
                 p.setCategoryName(rs.getString("CategoryName"));
                 p.setBrandName(rs.getString("BrandName"));
-                p.setImportId(rs.getInt("ImportID"));
                 p.setImageId(rs.getInt("ImageID"));
-                list.add(p);
+                products.add(p);
             }
             rs.close();
             st.close();
         } catch (Exception e) {
             System.out.println(e.getMessage());
         }
-        return list;
+        return products;
     }
 
     public List<Brand> getAllBrands() {
@@ -92,15 +91,16 @@ public class ProductDetailsDAO extends DBConnect {
         return list;
     }
 
-        public void addProduct(Product product) throws Exception {
+        public void addProduct(Product product){
         try{
-        String sql = "INSERT INTO product (productName, Origin, price, categoryId, brandId) VALUES (?, ?, ?, ?, ?)";
+        String sql = "INSERT INTO Products (ProductName, Origin, Material, Price, CategoryID, BrandID) VALUES (?, ?, ?, ?, ?, ?)";
         PreparedStatement ps = conn.prepareStatement(sql);
         ps.setString(1, product.getProductName());
         ps.setString(2, product.getOrigin());
-        ps.setDouble(3, product.getPrice());
-        ps.setInt(4, product.getCategoryId());
-        ps.setInt(5, product.getBrandId());
+        ps.setString(3, product.getMaterial());
+        ps.setDouble(4, product.getPrice());
+        ps.setInt(5, product.getCategoryId());
+        ps.setInt(6, product.getBrandId());
         ps.executeUpdate();
         ps.close();
         }catch(Exception e){
