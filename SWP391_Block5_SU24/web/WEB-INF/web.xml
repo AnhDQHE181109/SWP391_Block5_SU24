@@ -44,6 +44,4 @@
         <servlet-name>StocksManagementController</servlet-name>
         <url-pattern>/stocksManager</url-pattern>
     </servlet-mapping>
-
-    </servlet-mapping>
 </web-app>

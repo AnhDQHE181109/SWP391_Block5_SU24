@@ -23,6 +23,8 @@ import model.StocksManagementDAO;
  */
 public class StocksManagementController extends HttpServlet {
 
+    List<Product> outOfStocksList = new ArrayList<>();
+
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
      * methods.
@@ -90,14 +92,31 @@ public class StocksManagementController extends HttpServlet {
 
         StocksManagementDAO smDAO = new StocksManagementDAO();
 
+        List<Product> productsList = smDAO.getAllProducts();
+        List<Product> productsStocksList = smDAO.getProductsStocks();
+
+        request.setAttribute("productsList", productsList);
+        request.setAttribute("productsStocksList", productsStocksList);
+
         String confirmYes = request.getParameter("confirmYes");
         String confirmNo = request.getParameter("confirmNo");
         if (confirmYes != null) {
-            
+            for (Product product : outOfStocksList) {
+                smDAO.setProductStock(product.getProductId(), 0);
+            }
+            outOfStocksList.clear();
+
+            productsStocksList = smDAO.getProductsStocks();
+            request.setAttribute("productsStocksList", productsStocksList);
+            request.getRequestDispatcher("staff/stocksManager.jsp").forward(request, response);
+            return;
+        } else if (confirmNo != null) {
+            outOfStocksList.clear();
+            request.getRequestDispatcher("staff/stocksManager.jsp").forward(request, response);
+            return;
         }
 
-        List<Product> outOfStocksList = new ArrayList<>();
-        String outOfStocksProduct = null;
+        String outOfStocksProductName = null;
         Map stocksData = request.getParameterMap();
         for (Object key : stocksData.keySet()) {
             String keyString = (String) key;
@@ -110,8 +129,11 @@ public class StocksManagementController extends HttpServlet {
 
             if (quantity == 0) {
                 Product outOfStockProduct = smDAO.getProductStockByID(productID);
-                outOfStocksList.add(outOfStockProduct);
-                outOfStocksProduct = smDAO.getProductStockByID(productID).getProductName();
+                if (smDAO.getProductStockQuantityByID(productID) != 0) {
+                    outOfStocksList.add(outOfStockProduct);
+                    outOfStocksProductName = smDAO.getProductNameByID(productID);
+                    System.out.println(outOfStocksProductName);
+                }
                 continue;
             }
 
@@ -120,16 +142,18 @@ public class StocksManagementController extends HttpServlet {
 
         if (outOfStocksList.size() != 0) {
             request.setAttribute("outOfStocksList", outOfStocksList);
-            request.setAttribute("outOfStocksProduct", outOfStocksProduct);
+            request.setAttribute("outOfStocksProductName", outOfStocksProductName);
             request.setAttribute("popupDisplay", "display: block;");
+            System.out.println("Products variants out of stock:");
+            for (Product product : outOfStocksList) {
+                System.out.println(smDAO.getProductNameByID(product.getProductId())
+                        + " : " + product.getSize() + " : " + product.getColor());
+            }
             request.getRequestDispatcher("staff/stocksManager.jsp").forward(request, response);
             return;
         }
 
-        List<Product> productsList = smDAO.getAllProducts();
-        List<Product> productsStocksList = smDAO.getProductsStocks();
-
-        request.setAttribute("productsList", productsList);
+        productsStocksList = smDAO.getProductsStocks();
         request.setAttribute("productsStocksList", productsStocksList);
         request.getRequestDispatcher("staff/stocksManager.jsp").forward(request, response);
     }

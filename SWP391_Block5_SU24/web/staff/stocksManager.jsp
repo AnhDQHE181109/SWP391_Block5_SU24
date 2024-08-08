@@ -285,10 +285,10 @@
 
                             <%
                                 List<Product> outOfStocksList = (List<Product>) request.getAttribute("outOfStocksList");
-                                String outOfStocksProduct = (String) request.getAttribute("outOfStocksProduct");
+                                String outOfStocksProductName = (String) request.getAttribute("outOfStocksProductName");
                                 String popupDisplay = (String) request.getAttribute("popupDisplay");
-                                if (outOfStocksProduct == null) {
-                                    outOfStocksProduct = "";
+                                if (outOfStocksProductName == null) {
+                                    outOfStocksProductName = "";
                                 }
                                 if (popupDisplay == null) {
                                     popupDisplay = "display: none;";
@@ -299,36 +299,36 @@
                                 <div class="popup-content">
                                   <form action="stocksManager" method="post">
                                     <div class="row">
-                                        <p class="h2">Are you sure these items are out of stock for <%=outOfStocksProduct %>?</p>
-
-                                        <div class="row">
-                                            <table class="table">
-                                              <thead>
-                                                <tr>
-                                                    <th scope="col">#</th>
-                                                    <th scope="col">Size</th>
-                                                    <th scope="col">Color</th>
-                                                  </tr>
-                                              </thead>
-                                              <tbody>
-                                                <% int i = 0;
-                                                if (outOfStocksList != null || !outOfStocksList.isEmpty()) {
-                                                 for (Product outOfStocksProduct : outOfStocksList) { %>
-                                                <tr>
-                                                  <th scope="col"><%=i++ %></th>
-                                                  <th scope="col"><%=outOfStocksProduct.getSize() %></th>
-                                                  <th scope="col"><%=outOfStocksProduct.getColor() %></th>
+                                        <p class="h2">Are you sure these items are out of stock for <%=outOfStocksProductName %>?</p>
+                                        
+                                        <table class="table">
+                                            <thead>
+                                            <tr>
+                                                <th scope="col">#</th>
+                                                <th scope="col">Size</th>
+                                                <th scope="col">Color</th>
                                                 </tr>
-                                                <% 
-                                                 }
-                                                } %>
-                                              </tbody>
-                                        </div>
+                                            </thead>
+                                            <tbody>
+                                            <% int i = 1;
+                                            if (outOfStocksList != null) {
+                                                for (Product outOfStocks : outOfStocksList) { %>
+                                            <tr>
+                                                <th scope="col"><%=i++ %></th>
+                                                <th scope="col"><%=outOfStocks.getSize() %></th>
+                                                <th scope="col"><%=outOfStocks.getColor() %></th>
+                                            </tr>
+                                            <% 
+                                                }
+                                            } %>
+                                            </tbody>
+                                        </table>
 
                                         <div id="submit-type" class="col-md-12">
-                                            <button type="button" name="confirmYes" value="yes" class="btn btn-success col-md-6">Yes</button>
-                                            <button type="button" name="confirmNo" value="no" class="btn btn-danger col-md-6">No</button>
+                                            <button type="submit" name="confirmYes" value="yes" class="btn btn-success col-md-6">Yes</button>
+                                            <button type="submit" name="confirmNo" value="no" class="btn btn-danger col-md-6">No</button>
                                         </div>
+
                                     </div>
                                 </form>
                                 </div>
