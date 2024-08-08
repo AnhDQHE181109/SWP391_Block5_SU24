@@ -82,8 +82,7 @@ public class AddProductController extends HttpServlet {
             int brandId = Integer.parseInt(request.getParameter("brandId"));
             
             Product product = new Product(productName, origin, material, price, categoryId, brandId);
-
-           
+      
             ProductDetailsDAO productDetailsDAO = new ProductDetailsDAO();
             productDetailsDAO.addProduct(product);
 
