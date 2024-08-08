@@ -283,21 +283,54 @@
                                 </tbody>
                             </table>
 
-                            <div id="popup_<%=product.getProductId() %>" class="popup" style="display: none;">
+                            <%
+                                List<Product> outOfStocksList = (List<Product>) request.getAttribute("outOfStocksList");
+                                String outOfStocksProduct = (String) request.getAttribute("outOfStocksProduct");
+                                String popupDisplay = (String) request.getAttribute("popupDisplay");
+                                if (outOfStocksProduct == null) {
+                                    outOfStocksProduct = "";
+                                }
+                                if (popupDisplay == null) {
+                                    popupDisplay = "display: none;";
+                                }
+                            %>
+                            <div id="popup_outOfStockConfirm" class="popup" style="<%=popupDisplay %>">
                                 <!-- Popup content for each order -->
                                 <div class="popup-content">
-                                  <form id="stocksForm_<%=product.getProductName() %>" action="stocksManager" method="post">
+                                  <form action="stocksManager" method="post">
                                     <div class="row">
-                                        <p class="h2">Are you sure these items are out of stock?</p>
-                                        
+                                        <p class="h2">Are you sure these items are out of stock for <%=outOfStocksProduct %>?</p>
+
+                                        <div class="row">
+                                            <table class="table">
+                                              <thead>
+                                                <tr>
+                                                    <th scope="col">#</th>
+                                                    <th scope="col">Size</th>
+                                                    <th scope="col">Color</th>
+                                                  </tr>
+                                              </thead>
+                                              <tbody>
+                                                <% int i = 0;
+                                                if (outOfStocksList != null || !outOfStocksList.isEmpty()) {
+                                                 for (Product outOfStocksProduct : outOfStocksList) { %>
+                                                <tr>
+                                                  <th scope="col"><%=i++ %></th>
+                                                  <th scope="col"><%=outOfStocksProduct.getSize() %></th>
+                                                  <th scope="col"><%=outOfStocksProduct.getColor() %></th>
+                                                </tr>
+                                                <% 
+                                                 }
+                                                } %>
+                                              </tbody>
+                                        </div>
+
+                                        <div id="submit-type" class="col-md-12">
+                                            <button type="button" name="confirmYes" value="yes" class="btn btn-success col-md-6">Yes</button>
+                                            <button type="button" name="confirmNo" value="no" class="btn btn-danger col-md-6">No</button>
+                                        </div>
                                     </div>
                                 </form>
-                                    <div id="submit-type" class="col-md-12">
-                                        <button type="button" class="btn btn-danger col-md-3" onclick="closePopup('popup_<%=product.getProductId() %>')">Close</button>
-                                        <button type="button" onclick="document.getElementById(&quot;stocksForm_<%=product.getProductName() %>&quot;).submit()" class="btn btn-primary col-md-3">Update</button>
-                                        <button type="button" class="btn btn-success col-md-6">Add a new variant</button>
-                                    </div>
-                                
                                 </div>
                             </div>
 
