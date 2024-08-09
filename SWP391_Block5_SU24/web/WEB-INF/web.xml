@@ -4,6 +4,14 @@
         <servlet-name>LoginController</servlet-name>
         <servlet-class>Controller.LoginController</servlet-class>
     </servlet>
+    <servlet>
+        <servlet-name>RecoverController</servlet-name>
+        <servlet-class>Controller.RecoverController</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>AuthRecoverController</servlet-name>
+        <servlet-class>Controller.AuthRecoverController</servlet-class>
+    </servlet>
     <servlet-mapping>
         <servlet-name>LoginController</servlet-name>
         <url-pattern>/LoginController</url-pattern>
@@ -31,5 +39,13 @@
     <servlet-mapping>
         <servlet-name>ProductDetailsController</servlet-name>
         <url-pattern>/ProductDetailsController</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>RecoverController</servlet-name>
+        <url-pattern>/RecoverController</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>AuthRecoverController</servlet-name>
+        <url-pattern>/AuthRecoverController</url-pattern>
     </servlet-mapping>
 </web-app>
