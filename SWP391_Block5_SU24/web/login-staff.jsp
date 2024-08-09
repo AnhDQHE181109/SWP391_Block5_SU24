@@ -95,7 +95,7 @@
                                 <button name="role" value="2" style='border:0px; text-align:center; background-color: #ffb657;border-radius: 2px;display:flex;color:white;justify-content:center; width: 85%;' type="submit">LOG IN</button>
                             </form>
                             <div style="justify-content: space-between;display:flex; width:100%;align-items: center">
-                                <a style='padding-left:7.5%'>Forget password</a> <a href="login.jsp" style='padding-right:7.5%'>Customer Login</a></div>
+                                <a style='padding-left:7.5%'></a> <a href="login.jsp" style='padding-right:7.5%'>Customer Login</a></div>
 
                         </div>
                         <div style="justify-content:center; text-align: center; display:flex; padding: 22px 30px;">

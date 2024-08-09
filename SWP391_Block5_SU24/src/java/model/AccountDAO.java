@@ -2,7 +2,7 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
  */
-/*
+ /*
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
  */
@@ -98,11 +98,11 @@ public class AccountDAO extends MyDAO {
                 String hashedPassword = EncryptionHelper.hashPassword(password, storedSalt);
                 if (hashedPassword.equals(storedHash)) {
                     int storedRole = rs.getInt("Role");
-                    if (role==1 && storedRole == role) {
+                    if (role == 1 && storedRole == role) {
                         return 1; // Login successful customer
-                    } else if((role==2||role==3)&&role!=1){
+                    } else if ((role == 2 || role == 3) && role != 1) {
                         return 1; //Login successful staff and manager
-                    }else{
+                    } else {
                         return 2; // Role mismatch
                     }
                 }
@@ -127,6 +127,7 @@ public class AccountDAO extends MyDAO {
         }
         return false;
     }
+
     public boolean isUsernameTaken(String username) {
         String sql = "SELECT COUNT(*) FROM Accounts WHERE Email = ?";
         try {
@@ -141,6 +142,7 @@ public class AccountDAO extends MyDAO {
         }
         return false;
     }
+
     public boolean isPhoneNumberTaken(String pnum) {
         String sql = "SELECT COUNT(*) FROM Accounts WHERE PhoneNumber = ?";
         try {
@@ -155,7 +157,6 @@ public class AccountDAO extends MyDAO {
         }
         return false;
     }
-    
 
     public boolean addAccount(String username, String hash, String phoneNumber, String email, String address, int role, String salt) {
         String sql = "INSERT INTO Accounts (Username, Hash, PhoneNumber, Email, Address, Role, Salt) VALUES (?, ?, ?, ?, ?, ?, ?)";
@@ -175,5 +176,17 @@ public class AccountDAO extends MyDAO {
         }
         return false;
     }
-}
 
+    public void changePassword(String email, String newpass, String salt) {
+        String sql = "UPDATE Accounts SET Hash = ?, Salt = ? WHERE Email = ?";
+        try {
+            ps = con.prepareStatement(sql);
+            ps.setString(1, newpass);
+            ps.setString(2, salt);
+            ps.setString(3, email);
+            ps.executeUpdate();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+}

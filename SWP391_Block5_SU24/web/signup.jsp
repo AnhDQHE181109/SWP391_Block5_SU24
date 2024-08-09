@@ -91,35 +91,35 @@
                             <%}%>
                             <form action="SignUpController" method="post" style='display: flex; flex-direction: column; align-items: center;'>
                                 <% if ("true".equals(request.getAttribute("error_usernametaken"))) { %>
-                                <p class="error">Username has already been taken!</p>
+                                <p style="color:red" class="error">Username has already been taken!</p>
                                 <% } %>
                                 <% if ("true".equals(request.getAttribute("error_username"))) { %>
-                                <p class="error">Username is required!</p>
+                                <p style="color:red" class="error">Username is required!</p>
                                 <% } %>
                                 <input style='margin:0px 12px 0px 12px; height: 40px; width:85%;' type="text" name="username" placeholder='Username' required value="${username != null ? username : ''}"><br>
                                 <% if ("true".equals(request.getAttribute("error_password"))) { %>
-                                <p class="error">Password must contain at least 1 digit, 1 uppercase character!</p>
+                                <p style="color:red" class="error">Password must contain at least 1 digit, 1 uppercase character!</p>
                                 <% } %>
                                 <% if ("true".equals(request.getAttribute("error_password_short"))) { %>
-                                <p class="error">Password must be at least 8 characters long!</p>
+                                <p style="color:red" class="error">Password must be at least 8 characters long!</p>
                                 <% } %>
                                 <% if ("true".equals(request.getAttribute("error_password_invalid"))) { %>
-                                <p class="error">Invalid password!</p>
+                                <p style="color:red" class="error">Invalid password!</p>
                                 <% } %>
                                 <% if ("true".equals(request.getAttribute("error_password_dupe"))) { %>
-                                <p class="error">Password doesn't match</p>
+                                <p style="color:red" class="error">Password doesn't match</p>
                                 <% } %>
                                 <input style='margin:0px 12px 0px 12px; height: 40px; width:85%;' type="password" name="password" required placeholder='Password'><br>
                                 <input style='margin:0px 12px 0px 12px; height: 40px; width:85%;' type="password" name="repassword" required placeholder='Repeat Password'><br>
                                 <% if ("true".equals(request.getAttribute("error_phone_number"))) { %>
-                                <p class="error">Phone number is required and must contain only digits!</p>
+                                <p style="color:red" class="error">Phone number is required and must contain only digits!</p>
                                 <% } %>
                                 <input style='margin:0px 12px 0px 12px; height: 40px; width:85%;' type="text" name="pnum" required placeholder='Phone Number' value="${pnum != null ? pnum : ''}"><br>
                                 <% if ("true".equals(request.getAttribute("error_email"))) { %>
-                                <p class="error">Please enter a valid email address!</p>
+                                <p style="color:red" class="error">Please enter a valid email address!</p>
                                 <% } %>
                                 <% if ("true".equals(request.getAttribute("error_emailtaken"))) { %>
-                                <p class="error">Email already registered to another account!</p>
+                                <p style="color:red" class="error">Email already registered to another account!</p>
                                 <% } %>
                               
                                 <input style='margin:0px 12px 0px 12px; height: 40px; width:85%;' type="text" name="email" required placeholder='Email' value="${email != null ? email : ''}"><br>
@@ -127,7 +127,7 @@
                                 <button name="role" value="1" style='border:0px; text-align:center; background-color: #88c8bc;border-radius: 2px;display:flex;color:white;justify-content:center; width: 85%;' type="submit">SIGN UP</button>
                             </form>
                             <div style="justify-content: space-between;display:flex; width:100%;align-items: center">
-                                <a style='padding-left:7.5%'>Forget password</a> <a href="login-staff.jsp" style='padding-right:7.5%'>Employee Login</a></div>
+                                <a style='padding-left:7.5%'></a> <a href="login-staff.jsp" style='padding-right:7.5%'>Employee Login</a></div>
                         </div>
                         <div style="justify-content:center; text-align: center; display:flex; padding: 22px 30px;">
                             Already have an account? &nbsp;<a href='login.jsp'>Log In</a>
