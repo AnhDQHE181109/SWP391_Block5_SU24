@@ -49,8 +49,8 @@ CREATE TABLE Accounts(
     PhoneNumber NVARCHAR(20) NULL,
     Email NVARCHAR(100) UNIQUE NULL,
     Address NVARCHAR(200) NULL,
+    Role INT NOT NULL,
 	Salt TEXT NOT NULL,
-    Role INT NOT NULL
 );
 GO
 
@@ -75,10 +75,9 @@ CREATE TABLE Products (
     Origin NVARCHAR(100) NULL,
     Material NVARCHAR(100) NULL,
     Price DECIMAL(18,2) NOT NULL,
-    TotalQuantity INT NOT NULL,
+    TotalQuantity INT  NULL,
     CategoryID INT NULL,
     BrandID INT NULL,
-    ImportID INT NULL,
     ImageID INT NULL,
     CONSTRAINT FK_Products_Categories FOREIGN KEY (CategoryID) REFERENCES Categories(CategoryID),
     CONSTRAINT FK_Products_Brand FOREIGN KEY (BrandID) REFERENCES Brand(BrandID)
@@ -88,9 +87,8 @@ GO
 -- Create ProductStockImport table
 CREATE TABLE ProductStockImport (
     ImportID INT IDENTITY(1,1) PRIMARY KEY,
-    ProductID INT NOT NULL,
+    AccountID INT NOT NULL,
     ImportDate DATETIME NOT NULL,
-    CONSTRAINT FK_ProductStockImport_Products FOREIGN KEY (ProductID) REFERENCES Products(ProductID)
 );
 GO
 
@@ -111,7 +109,22 @@ CREATE TABLE Stock (
     Size INT NOT NULL,
     Color NVARCHAR(50) NOT NULL,
     StockQuantity INT NOT NULL,
+	    ImportID INT NULL,
     CONSTRAINT FK_Stock_Products FOREIGN KEY (ProductID) REFERENCES Products(ProductID)
+);
+GO
+
+-- Create StockImportDetail table with StockID and ImportID
+CREATE TABLE StockImportDetail (
+    StockImportDetailID INT IDENTITY(1,1) PRIMARY KEY,
+    StockID INT NOT NULL,
+    ImportID INT NOT NULL,
+	ProductID INT NOT NULL,
+    Size INT NOT NULL,
+    Color NVARCHAR(50) NOT NULL,
+    StockQuantity INT NOT NULL,
+    CONSTRAINT FK_StockImportDetail_Stock FOREIGN KEY (StockID) REFERENCES Stock(StockID),
+    CONSTRAINT FK_StockImportDetail_ProductStockImport FOREIGN KEY (ImportID) REFERENCES ProductStockImport(ImportID)
 );
 GO
 
