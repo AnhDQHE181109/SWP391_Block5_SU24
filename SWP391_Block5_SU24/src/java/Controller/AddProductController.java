@@ -5,21 +5,25 @@
 
 package Controller;
 
-import model.ProductDetailsDAO;
+import entity.Brand;
+import entity.Category;
 import entity.Product;
 import jakarta.servlet.RequestDispatcher;
 import java.io.IOException;
 import java.util.List;
+import java.io.IOException;
+import java.io.PrintWriter;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import model.ProductDetailsDAO;
 
 /**
  *
  * @author Admin
  */
-public class ProductsController extends HttpServlet {
+public class AddProductController extends HttpServlet {
    
     /** 
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code> methods.
@@ -31,7 +35,18 @@ public class ProductsController extends HttpServlet {
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
     throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
-        
+        try (PrintWriter out = response.getWriter()) {
+            /* TODO output your page here. You may use following sample code. */
+            out.println("<!DOCTYPE html>");
+            out.println("<html>");
+            out.println("<head>");
+            out.println("<title>Servlet AddProductController</title>");  
+            out.println("</head>");
+            out.println("<body>");
+            out.println("<h1>Servlet AddProductController at " + request.getContextPath () + "</h1>");
+            out.println("</body>");
+            out.println("</html>");
+        }
     } 
 
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
@@ -45,15 +60,7 @@ public class ProductsController extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
     throws ServletException, IOException {
-        ProductDetailsDAO dao = new ProductDetailsDAO();
-        List<Product> productList = dao.getAllProducts();
-        
-        // Set the product list as request attribute
-        request.setAttribute("PList", productList);
-        
-        // Forward the request to the JSP page
-        RequestDispatcher dispatcher = request.getRequestDispatcher("productmanage.jsp");
-        dispatcher.forward(request, response);
+        processRequest(request, response);
     } 
 
     /** 
@@ -66,7 +73,24 @@ public class ProductsController extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
     throws ServletException, IOException {
-        processRequest(request, response);
+        try {
+            String productName = request.getParameter("productName");
+            String origin = request.getParameter("origin");
+            double price = Double.parseDouble(request.getParameter("price"));
+            String material = request.getParameter("material");
+            int categoryId = Integer.parseInt(request.getParameter("categoryId"));
+            int brandId = Integer.parseInt(request.getParameter("brandId"));
+            
+            Product product = new Product(productName, origin, material, price, categoryId, brandId);
+      
+            ProductDetailsDAO productDetailsDAO = new ProductDetailsDAO();
+            productDetailsDAO.addProduct(product);
+
+            response.sendRedirect("productmanage.jsp");
+        } catch (Exception e) {
+            e.printStackTrace();
+            response.sendRedirect("error.jsp");
+        }
     }
 
     /** 

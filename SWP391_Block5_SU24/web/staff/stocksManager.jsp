@@ -1,5 +1,7 @@
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <%@taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
+<%@page import = "entity.*" %>
+<%@page import = "java.util.*" %>
 
 <!DOCTYPE html>
 <html lang="en">
@@ -11,11 +13,11 @@
         <meta name="viewport" content="width=device-width, initial-scale=1">
         <!-- Main CSS-->
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-        <link rel="stylesheet" href="css/customer_m.css">
-        <link rel="stylesheet" type="text/css" href="css/main.css">
+        <link rel="stylesheet" href="staff/css/customer_m.css">
+        <link rel="stylesheet" type="text/css" href="staff/css/main.css">
         <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/boxicons@latest/css/boxicons.min.css">
-        <link rel="stylesheet" href="font/themify-icons/themify-icons.css">
-        <link rel="stylesheet" href="css/review_m.css" />
+        <link rel="stylesheet" href="staff/font/themify-icons/themify-icons.css">
+        <link rel="stylesheet" href="staff/css/review_m.css" />
         <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/boxicons@latest/css/boxicons.min.css">
         <!-- or -->
         <link rel="stylesheet" href="https://unpkg.com/boxicons@latest/css/boxicons.min.css">
@@ -92,6 +94,88 @@
                                 </div>
                             </div>
 
+                            <div id="popupAddNewVariantForm" class="popup" style="display: none;">
+                                <!-- Popup content for each order -->
+                                <div class="popup-content">
+                                    <div class="row">
+                                        <p class="h2">Add a new variant for </p>
+
+                                        <div class="input-group mb-3">
+                                            <div class="input-group-prepend">
+                                              <span class="input-group-text" id="basic-addon1">Size</span>
+                                            </div>
+                                            <input type="text" class="form-control" placeholder="Size" aria-label="Size" aria-describedby="basic-addon1">
+                                          </div>
+
+                                        <div class="input-group mb-3">
+                                            <div class="input-group-prepend">
+                                              <span class="input-group-text" id="basic-addon1">Color</span>
+                                            </div>
+                                            <input type="text" class="form-control" placeholder="Color" aria-label="Color" aria-describedby="basic-addon1">
+                                        </div>
+
+                                        <div class="input-group mb-3">
+                                            <div class="input-group-prepend">
+                                              <span class="input-group-text" id="basic-addon1">Quantity</span>
+                                            </div>
+                                            <input type="text" class="form-control" placeholder="Quantity" aria-label="Quantity" aria-describedby="basic-addon1">
+                                        </div>
+
+                                    </div>
+                                    <div id="submit-type">
+                                        <button type="button" onclick="closePopup('popup_${order.orderID}')">Close</button>
+                                        <button type="button" class="btn btn-success">ADD</button>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div id="popupAddNewProductForm" class="popup" style="display: none;">
+                                <!-- Popup content for each order -->
+                                <div class="popup-content">
+                                    <div class="row">
+                                        <p class="h2">Add a new product model </p>
+
+                                        <div class="input-group mb-3">
+                                            <div class="input-group-prepend">
+                                              <span class="input-group-text" id="basic-addon1">Name</span>
+                                            </div>
+                                            <input type="text" class="form-control" placeholder="Name" aria-label="Name" aria-describedby="basic-addon1">
+                                          </div>
+
+                                        <div class="input-group mb-3">
+                                            <div class="input-group-prepend">
+                                              <span class="input-group-text" id="basic-addon1">Origin</span>
+                                            </div>
+                                            <input type="text" class="form-control" placeholder="Origin" aria-label="Origin" aria-describedby="basic-addon1">
+                                        </div>
+
+                                        <div class="input-group mb-3">
+                                            <div class="input-group-prepend">
+                                              <span class="input-group-text" id="basic-addon1">Material</span>
+                                            </div>
+                                            <input type="text" class="form-control" placeholder="Material" aria-label="Material" aria-describedby="basic-addon1">
+                                        </div>
+
+                                        <div class="input-group mb-3">
+                                            <div class="input-group-prepend">
+                                              <span class="input-group-text" id="basic-addon1">Picture</span>
+                                            </div>
+                                            <input type="text" class="form-control" placeholder="Picture" aria-label="Picture" aria-describedby="basic-addon1">
+                                        </div>
+
+                                    </div>
+                                    <div id="submit-type">
+                                        <button type="button" onclick="closePopup('popup_${order.orderID}')">Close</button>
+                                        <button type="button" class="btn btn-success">ADD</button>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <%
+                                List<Product> productsList = (List<Product>) request.getAttribute("productsList");
+                                List<Product> productsStocksList = (List<Product>) request.getAttribute("productsStocksList");
+                            %>
+                            
                             <table class="table table-hover table-bordered" id="sampleTable">
                                 <thead>
                                     <tr>
@@ -101,49 +185,68 @@
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    <c:forEach items="${productList}" var="product">
+                                    <%  if (productsList == null || productsList.isEmpty()) { %>
                                         <tr>
-                                            <td>product.getImageLink()</td>
-                                            <td>product.getProductName()</td>
+                                            <td class="col-sm-8 col-md-6">No products available in the system!</td>
+                                        </tr>
+                                    <%
+                                        } else { 
+                                            for (Product product : productsList) { %>
+                                        <tr>
+                                            <td><img src="<%=product.getImageURL() %>"></td>
+                                            <td><%=product.getProductName() %></td>
                                             <td class="col-1">
-                                                <button class="add-order-btn" onclick="openPopup('popup_${order.orderID}')">Show details</button>
-                                                <div id="popup_${order.orderID}" class="popup" style="display: none;">
+                                                <button class="btn btn-info" onclick="openPopup('popup_<%=product.getProductId() %>')">Import stocks</button>
+                                                <div id="popup_<%=product.getProductId() %>" class="popup" style="display: none;">
                                                     <!-- Popup content for each order -->
                                                     <div class="popup-content">
+                                                      <form id="stocksForm_<%=product.getProductName() %>" action="stocksManager" method="post">
                                                         <div class="row">
-                                                            <table border="1">
+                                                            <p class="h2">Stocks available for <%=product.getProductName() %></p>
+                                                            <table class="table">
                                                                 <thead>
-                                                                    <tr>
-                                                                        <th>Name</th>
-                                                                        <th>Author</th>
-                                                                        <th>Publisher</th>
-                                                                        <th>Quantity</th>
-                                                                        <th>Price</th>
-                                                                    </tr>
+                                                                  <tr>
+                                                                    <th scope="col">#</th>
+                                                                    <th scope="col">Size</th>
+                                                                    <th scope="col">Color</th>
+                                                                    <th scope="col">Quantity</th>
+                                                                  </tr>
                                                                 </thead>
                                                                 <tbody>
-                                                                    <c:forEach items="${infoList}" var="info">
-                                                                        <c:if test="${info.orderID eq order.orderID}">
-                                                                            <tr>
-                                                                                <td>${info.bookName}</td>
-                                                                                <td>${info.author}</td>
-                                                                                <td>${info.publisher}</td>
-                                                                                <td>${info.quantity}</td>
-                                                                                <td>${info.price}</td>
-                                                                            </tr>
-                                                                        </c:if>
-                                                                    </c:forEach>
+                                                                    <% if (productsStocksList == null || productsStocksList.isEmpty()) { %>
+                                                                        <tr>
+                                                                            <th>Error! Product's stocks are empty!</th>
+                                                                        </tr>
+                                                                    <% } else { 
+                                                                           int i = 1;
+                                                                           for (Product productStocks : productsStocksList) {
+                                                                            if (product.getProductName().equalsIgnoreCase(productStocks.getProductName())) {
+                                                                             %>
+                                                                             <tr>
+                                                                                <th scope="row"><%=i %></th>
+                                                                                <td><%=productStocks.getSize() %></td>
+                                                                                <td><%=productStocks.getColor() %></td>
+                                                                                <td><input type="text" class="form-control" name="<%=productStocks.getProductId()%>_quantity" value="<%=productStocks.getTotalQuantity() %>"></td>
+                                                                              </tr>
+                                                                    <%      i++;
+                                                                            }
+                                                                           }
+                                                                       } %>
                                                                 </tbody>
-                                                            </table>
+                                                              </table>
                                                         </div>
-                                                        <div id="submit-type">
-                                                            <button type="button" onclick="closePopup('popup_${order.orderID}')">Close</button>
+                                                    </form>
+                                                        <div id="submit-type" class="col-md-12">
+                                                            <button type="button" class="btn btn-danger col-md-3" onclick="closePopup('popup_<%=product.getProductId() %>')">Close</button>
+                                                            <button type="button" onclick="document.getElementById(&quot;stocksForm_<%=product.getProductName() %>&quot;).submit()" class="btn btn-primary col-md-3">Update</button>
+                                                            <button type="button" class="btn btn-success col-md-6">Add a new variant</button>
                                                         </div>
+                                                    
                                                     </div>
                                                 </div>
                                             </td>
 
-                                            <td>
+                                            <!-- <td>
                                                 <button class="update-product-btn" onclick="showUpdateForm('${product.bookID}', '${product.bookName}', '${product.authorName}', '${product.publisherName}', '${product.publisherDate}', '${product.price}', '${product.quantity}', '${product.detailbook}', '${product.img_1}', '${product.img_2}', '${product.img_3}', '${product.img_4}')">Update</button>
                                                 <form method="post" action="product_manage?action=updateproduct" style="display: none;" id="updateForm${product.bookID}">
                                                     <input type="hidden" name="action" value="updateproduct">
@@ -173,11 +276,64 @@
                                                     <button type="button" class="delete-product-btn" onclick="confirmDelete('${product.bookID}')">Delete</button>
                                                 </form>
 
-                                            </td>
+                                            </td> -->
                                         </tr>
-                                    </c:forEach>
+                                    <% }
+                                        } %>
                                 </tbody>
                             </table>
+
+                            <%
+                                List<Product> outOfStocksList = (List<Product>) request.getAttribute("outOfStocksList");
+                                String outOfStocksProductName = (String) request.getAttribute("outOfStocksProductName");
+                                String popupDisplay = (String) request.getAttribute("popupDisplay");
+                                if (outOfStocksProductName == null) {
+                                    outOfStocksProductName = "";
+                                }
+                                if (popupDisplay == null) {
+                                    popupDisplay = "display: none;";
+                                }
+                            %>
+                            <div id="popup_outOfStockConfirm" class="popup" style="<%=popupDisplay %>">
+                                <!-- Popup content for each order -->
+                                <div class="popup-content">
+                                  <form action="stocksManager" method="post">
+                                    <div class="row">
+                                        <p class="h2">Are you sure these items are out of stock for <%=outOfStocksProductName %>?</p>
+                                        
+                                        <table class="table">
+                                            <thead>
+                                            <tr>
+                                                <th scope="col">#</th>
+                                                <th scope="col">Size</th>
+                                                <th scope="col">Color</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                            <% int i = 1;
+                                            if (outOfStocksList != null) {
+                                                for (Product outOfStocks : outOfStocksList) { %>
+                                            <tr>
+                                                <th scope="col"><%=i++ %></th>
+                                                <th scope="col"><%=outOfStocks.getSize() %></th>
+                                                <th scope="col"><%=outOfStocks.getColor() %></th>
+                                            </tr>
+                                            <% 
+                                                }
+                                            } %>
+                                            </tbody>
+                                        </table>
+
+                                        <div id="submit-type" class="col-md-12">
+                                            <button type="submit" name="confirmYes" value="yes" class="btn btn-success col-md-6">Yes</button>
+                                            <button type="submit" name="confirmNo" value="no" class="btn btn-danger col-md-6">No</button>
+                                        </div>
+
+                                    </div>
+                                </form>
+                                </div>
+                            </div>
+
                         </div>
                     </div>
                 </div>
@@ -249,20 +405,14 @@
                 window.location.href = 'product_manage';
             }
 
-            function openPopup(img1, img2, img3, img4) {
-                // Set the src attribute of each image element to the corresponding image URL
-                document.getElementById("img1").src = img1;
-                document.getElementById("img2").src = img2;
-                document.getElementById("img3").src = img3;
-                document.getElementById("img4").src = img4;
-
+            function openPopup(popupID) {
                 // Display the popup
-                document.getElementById("popup").style.display = "block";
+                document.getElementById(popupID).style.display = "block";
             }
 
-            function closePopup() {
+            function closePopup(popupID) {
                 // Hide the popup
-                document.getElementById("popup").style.display = "none";
+                document.getElementById(popupID).style.display = "none";
             }
             function searchBooksByName() {
                 var input, filter, table, tr, td, i, txtValue;

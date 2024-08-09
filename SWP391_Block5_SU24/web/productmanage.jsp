@@ -1,4 +1,15 @@
 <!DOCTYPE html>
+<%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
+<%@page contentType="text/html" pageEncoding="UTF-8"%>
+<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
+<%@ page import="model.ProductDetailsDAO" %>
+<%@ page import="entity.Product" %>
+<%@ page import="java.util.List" %>
+
+<%
+    ProductDetailsDAO pDAO = new ProductDetailsDAO();
+    List<Product> products = pDAO.getAllProducts();
+%>
 <html lang="en">
 
 <head>
@@ -15,7 +26,7 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Heebo:wght@400;500;600;700&display=swap" rel="stylesheet">
-    
+
     <!-- Icon Font Stylesheet -->
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.10.0/css/all.min.css" rel="stylesheet">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.4.1/font/bootstrap-icons.css" rel="stylesheet">
@@ -28,7 +39,19 @@
     <link href="css/bootstrap.min.css" rel="stylesheet">
 
     <!-- Template Stylesheet -->
-    <link href="css/manager.css" rel="stylesheet">
+    <link href="css/style.css" rel="stylesheet">
+
+    <!-- Add custom styles -->
+    <style>
+        .action-icons {
+            display: flex;
+            justify-content: space-around;
+        }
+
+        .action-icons i {
+            cursor: pointer;
+        }
+    </style>
 </head>
 
 <body>
@@ -114,30 +137,30 @@
                                         <h6 class="fw-normal mb-0">Jhon send you a message</h6>
                                         <small>15 minutes ago</small>
                                     </div>
-                                </div>
-                            </a>
-                            <hr class="dropdown-divider">
-                            <a href="#" class="dropdown-item">
-                                <div class="d-flex align-items-center">
-                                    <img class="rounded-circle" src="img/user.jpg" alt="" style="width: 40px; height: 40px;">
-                                    <div class="ms-2">
-                                        <h6 class="fw-normal mb-0">Jhon send you a message</h6>
-                                        <small>15 minutes ago</small>
+                                </a>
+                                <hr class="dropdown-divider">
+                                <a href="#" class="dropdown-item">
+                                    <div class="d-flex align-items-center">
+                                        <img class="rounded-circle" src="img/user.jpg" alt="" style="width: 40px; height: 40px;">
+                                        <div class="ms-2">
+                                            <h6 class="fw-normal mb-0">Jhon send you a message</h6>
+                                            <small>15 minutes ago</small>
+                                        </div>
                                     </div>
-                                </div>
-                            </a>
-                            <hr class="dropdown-divider">
-                            <a href="#" class="dropdown-item">
-                                <div class="d-flex align-items-center">
-                                    <img class="rounded-circle" src="img/user.jpg" alt="" style="width: 40px; height: 40px;">
-                                    <div class="ms-2">
-                                        <h6 class="fw-normal mb-0">Jhon send you a message</h6>
-                                        <small>15 minutes ago</small>
+                                </a>
+                                <hr class="dropdown-divider">
+                                <a href="#" class="dropdown-item">
+                                    <div class="d-flex align-items-center">
+                                        <img class="rounded-circle" src="img/user.jpg" alt="" style="width: 40px; height: 40px;">
+                                        <div class="ms-2">
+                                            <h6 class="fw-normal mb-0">Jhon send you a message</h6>
+                                            <small>15 minutes ago</small>
+                                        </div>
                                     </div>
-                                </div>
-                            </a>
-                            <hr class="dropdown-divider">
-                            <a href="#" class="dropdown-item text-center">See all message</a>
+                                </a>
+                                <hr class="dropdown-divider">
+                                <a href="#" class="dropdown-item text-center">See all message</a>
+                            </div>
                         </div>
                     </div>
                     <div class="nav-item dropdown">
@@ -181,15 +204,50 @@
 
 
             <!-- Blank Start -->
-            <form action="" method="">
             <div class="container-fluid pt-4 px-4">
                 <div class="row vh-100 bg-light rounded align-items-center justify-content-center mx-0">
-                    <div class="col-md-6 text-center">
-                        <h3>This is blank page</h3>
+                    <div class="col-md-10">
+                        <h3>Product List</h3>
+                        <table id="productTable" class="table table-bordered">
+                            <thead>
+                                <tr>
+                                    <th>Product Name</th>
+                                    <th>Origin</th>
+                                    <th>Material</th>
+                                    <th>Price</th>
+                                    <th>Brand</th>
+                                    <th>Category</th>
+                                    <th>Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <%
+                                    for (Product product : products) {
+                                %>
+                                    <tr>
+                                        <td><%=product.getProductName() %></td>
+                                        <td><%=product.getOrigin() %></td>
+                                        <td><%=product.getMaterial() %></td>
+                                        <td><%=product.getPrice() %></td>
+                                        <td><%=product.getBrandName() %></td>
+                                        <td><%=product.getCategoryName() %></td>
+                                        <td class="action-icons">
+                                            <a href="editproduct.jsp?productId=<%=product.getProductId()%>" class="text-warning">
+                                                <i class="bi bi-pencil-square"></i>
+                                            </a>
+                                            <a href="#" class="text-danger" onclick="confirmDelete('<%=product.getProductId()%>')">
+                                                <i class="bi bi-trash"></i>
+                                            </a>
+                                        </td>
+                                    </tr>
+                                <%
+                                    }
+                                %>
+                            </tbody>
+                        </table>
                     </div>
                 </div>
             </div>
-            </form>
             <!-- Blank End -->
 
 
@@ -198,10 +256,9 @@
                 <div class="bg-light rounded-top p-4">
                     <div class="row">
                         <div class="col-12 col-sm-6 text-center text-sm-start">
-                            &copy; <a href="#">Your Site Name</a>, All Right Reserved. 
+                            &copy; <a href="#">Your Site Name</a>, All Right Reserved.
                         </div>
                         <div class="col-12 col-sm-6 text-center text-sm-end">
-                            <!--/*** This template is free as long as you keep the footer author’s credit link/attribution link/backlink. If you'd like to use the template without the footer author’s credit link/attribution link/backlink, you can purchase the Credit Removal License from "https://htmlcodex.com/credit-removal". Thank you for your support. ***/-->
                             Designed By <a href="https://htmlcodex.com">HTML Codex</a>
                         </div>
                     </div>
@@ -229,6 +286,15 @@
 
     <!-- Template Javascript -->
     <script src="js/main.js"></script>
+
+    <!-- Custom Javascript -->
+    <script>
+        function confirmDelete(productId) {
+            if (confirm('Are you sure you want to delete this product?')) {
+                window.location.href = 'deleteProduct.jsp?productId=' + productId;
+            }
+        }
+    </script>
 </body>
 
 </html>
