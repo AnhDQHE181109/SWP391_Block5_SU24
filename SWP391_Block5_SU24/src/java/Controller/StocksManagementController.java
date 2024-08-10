@@ -4,6 +4,7 @@
  */
 package Controller;
 
+import entity.Account;
 import entity.Product;
 import java.io.IOException;
 import java.io.PrintWriter;
@@ -11,6 +12,7 @@ import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import jakarta.servlet.http.HttpSession;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -24,6 +26,8 @@ import model.StocksManagementDAO;
 public class StocksManagementController extends HttpServlet {
 
     List<Product> outOfStocksList = new ArrayList<>();
+    int loggedImportID = 0;
+    List<Product> loggedProducts = new ArrayList<>();
 
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
@@ -66,25 +70,29 @@ public class StocksManagementController extends HttpServlet {
         response.setContentType("text/html;charset=UTF-8");
         PrintWriter out = response.getWriter();
 
+        HttpSession session = request.getSession();
+        Account account = (Account) session.getAttribute("account");
+        int accountID = account.getAccountID();
+
         StocksManagementDAO smDAO = new StocksManagementDAO();
-        
+
         String newVariantProductID = request.getParameter("newVariantProductID");
         if (newVariantProductID != null) {
             int size = Integer.parseInt(request.getParameter("newVariantSize"));
             String color = request.getParameter("newVariantColor");
             int quantity = Integer.parseInt(request.getParameter("newVariantQuantity"));
             int productID = Integer.parseInt(request.getParameter("newVariantProductID"));
-            
-            smDAO.addNewProductVariant(productID, size, color, quantity, 1);
+
+            int importID = smDAO.logAccountAndGetImportID(accountID);
+            smDAO.addNewProductVariant(productID, size, color, quantity, importID);
             request.setAttribute("openPopup", "popup_" + productID);
         }
 
         List<Product> productsList = smDAO.getAllProducts();
         List<Product> productsStocksList = smDAO.getProductsStocks();
-        
+
         //Debugging
 //        request.setAttribute("openPopup", "popup_" + 1);
-
         request.setAttribute("productsList", productsList);
         request.setAttribute("productsStocksList", productsStocksList);
         request.getRequestDispatcher("staff/stocksManager.jsp").forward(request, response);
@@ -104,6 +112,10 @@ public class StocksManagementController extends HttpServlet {
         response.setContentType("text/html;charset=UTF-8");
         PrintWriter out = response.getWriter();
 
+        HttpSession session = request.getSession();
+        Account account = (Account) session.getAttribute("account");
+        int accountID = account.getAccountID();
+
         StocksManagementDAO smDAO = new StocksManagementDAO();
 
         List<Product> productsList = smDAO.getAllProducts();
@@ -117,8 +129,11 @@ public class StocksManagementController extends HttpServlet {
         if (confirmYes != null) {
             for (Product product : outOfStocksList) {
                 smDAO.setProductStock(product.getStockID(), 0);
+                loggedProducts.add(product);
             }
             outOfStocksList.clear();
+            smDAO.logUpdatedProducts(accountID, loggedProducts);
+            loggedProducts.clear();
 
             productsStocksList = smDAO.getProductsStocks();
             request.setAttribute("productsStocksList", productsStocksList);
@@ -132,6 +147,7 @@ public class StocksManagementController extends HttpServlet {
 
         String outOfStocksProductName = null;
         Map stocksData = request.getParameterMap();
+        loggedImportID = smDAO.logAccountAndGetImportID(accountID);
         for (Object key : stocksData.keySet()) {
             String keyString = (String) key;
             String[] value = (String[]) stocksData.get(keyString);
@@ -159,7 +175,10 @@ public class StocksManagementController extends HttpServlet {
             }
 
             smDAO.setProductStock(stockID, quantity);
+            loggedProducts.add(smDAO.getProductStockByStockID(stockID));
         }
+        smDAO.logUpdatedProducts(accountID, loggedProducts);
+        loggedProducts.clear();
 
         if (outOfStocksList.size() != 0) {
             request.setAttribute("outOfStocksList", outOfStocksList);
