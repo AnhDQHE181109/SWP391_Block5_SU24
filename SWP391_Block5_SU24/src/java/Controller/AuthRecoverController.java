@@ -2,51 +2,55 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/JSP_Servlet/Servlet.java to edit this template
  */
-
 package Controller;
 
+import Util.EncryptionHelper;
+import Util.Validator;
 import java.io.IOException;
 import java.io.PrintWriter;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
-import java.util.List;
-import model.ProductDetailsDAO;
+import jakarta.servlet.http.HttpSession;
+import model.AccountDAO;
 
 /**
  *
- * @author Admin
+ * @author Long
  */
-public class DeleteProductController extends HttpServlet {
-   
-    /** 
-     * Processes requests for both HTTP <code>GET</code> and <code>POST</code> methods.
+public class AuthRecoverController extends HttpServlet {
+
+    /**
+     * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
+     * methods.
+     *
      * @param request servlet request
      * @param response servlet response
      * @throws ServletException if a servlet-specific error occurs
      * @throws IOException if an I/O error occurs
      */
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
-    throws ServletException, IOException {
+            throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
         try (PrintWriter out = response.getWriter()) {
             /* TODO output your page here. You may use following sample code. */
             out.println("<!DOCTYPE html>");
             out.println("<html>");
             out.println("<head>");
-            out.println("<title>Servlet DeleteProductController</title>");  
+            out.println("<title>Servlet AuthRecoverController</title>");
             out.println("</head>");
             out.println("<body>");
-            out.println("<h1>Servlet DeleteProductController at " + request.getContextPath () + "</h1>");
+            out.println("<h1>Servlet AuthRecoverController at " + request.getContextPath() + "</h1>");
             out.println("</body>");
             out.println("</html>");
         }
-    } 
+    }
 
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
-    /** 
+    /**
      * Handles the HTTP <code>GET</code> method.
+     *
      * @param request servlet request
      * @param response servlet response
      * @throws ServletException if a servlet-specific error occurs
@@ -54,12 +58,13 @@ public class DeleteProductController extends HttpServlet {
      */
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
-    throws ServletException, IOException {
+            throws ServletException, IOException {
+        processRequest(request, response);
+    }
 
-    } 
-
-    /** 
+    /**
      * Handles the HTTP <code>POST</code> method.
+     *
      * @param request servlet request
      * @param response servlet response
      * @throws ServletException if a servlet-specific error occurs
@@ -67,23 +72,43 @@ public class DeleteProductController extends HttpServlet {
      */
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
-    throws ServletException, IOException {
-        try {
-            int productId = Integer.parseInt(request.getParameter("productId"));
-
-            ProductDetailsDAO productDAO = new ProductDetailsDAO();
-            productDAO.deleteProduct(productId);
-
-            response.sendRedirect("productmanage.jsp?status=deleted");
-
-        } catch (Exception e) {
-            e.printStackTrace();
-            response.sendRedirect("productmanage.jsp?status=error");
+            throws ServletException, IOException {
+        String newpass = request.getParameter("npass");
+        String renewpass = request.getParameter("rnpass");
+        if (newpass.compareTo(renewpass) != 0) {
+            request.setAttribute("error_password_dupe", "true");
+            request.getRequestDispatcher("recover.jsp").forward(request, response);
+            return;
+        } else if (Validator.validatePassword(newpass) == 1) {
+            request.setAttribute("error_password_invalid", "true");
+            request.getRequestDispatcher("recover.jsp").forward(request, response);
+            return;
+        } else if (Validator.validatePassword(newpass) == 2) {
+            request.setAttribute("error_password_short", "true");
+            request.getRequestDispatcher("recover.jsp").forward(request, response);
+            return;
+        } else if (Validator.validatePassword(newpass) == 3) {
+            request.setAttribute("error_password", "true");
+            request.getRequestDispatcher("recover.jsp").forward(request, response);
+            return;
         }
+        String salt = EncryptionHelper.generateSalt();
+        String hashedPassword = "";
+        try {
+            hashedPassword = EncryptionHelper.hashPassword(newpass, salt);
+        } catch (Exception e) {
+        }
+        HttpSession session = request.getSession();
+        System.out.println(newpass);
+        System.out.println(renewpass);
+        AccountDAO adao = new AccountDAO();
+        adao.changePassword((String) session.getAttribute("email"), hashedPassword, salt);
+        request.getRequestDispatcher("login.jsp").forward(request, response);
     }
 
-    /** 
+    /**
      * Returns a short description of the servlet.
+     *
      * @return a String containing servlet description
      */
     @Override
