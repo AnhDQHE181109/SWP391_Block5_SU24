@@ -208,10 +208,10 @@
                                                                                 <td><%=productStocks.getSize() %></td>
                                                                                 <td><%=productStocks.getColor() %></td>
                                                                                 <td><input type="number" class="form-control" 
-                                                                                    name="<%=productStocks.getProductId()%>_quantity"
-                                                                                    id="<%=productStocks.getProductId()%>_quantity" 
+                                                                                    name="<%=productStocks.getStockID()%>_quantity"
+                                                                                    id="<%=productStocks.getStockID()%>_quantity" 
                                                                                     value="<%=productStocks.getTotalQuantity() %>" required
-                                                                                    onfocusout="checkIfFieldEmpty('<%=productStocks.getProductId()%>_quantity', '<%=productStocks.getTotalQuantity() %>')"></td>
+                                                                                    onfocusout="checkIfFieldEmpty('<%=productStocks.getStockID()%>_quantity', '<%=productStocks.getTotalQuantity() %>')"></td>
                                                                               </tr>
                                                                     <%      i++;
                                                                             }
@@ -230,13 +230,13 @@
                                                     </div>
                                                 </div>
 
-                                                <div id="popupAddNewVariantForm_<%=product.getProductId() %>" class="popup" style="display: block;">
+                                                <div id="popupAddNewVariantForm_<%=product.getProductId() %>" class="popup" style="display: none;">
                                                     <!-- Popup content for each order -->
                                                     <div class="popup-content">
                                                         <div class="row">
                                                             <p class="h2">Add a new variant for <%=product.getProductName() %></p>
                                                             
-                                                            <form name="addNewVariantForm_<%=product.getProductId() %>" action="stocksManager" method="get">
+                                                            <form id="addNewVariantForm_<%=product.getProductId() %>" action="stocksManager" method="get">
                                                                 <div class="input-group mb-3">
                                                                     <div class="input-group-prepend">
                                                                       <span class="input-group-text" id="basic-addon1">Size</span>
@@ -258,7 +258,7 @@
                                                                     <input type="number" name="newVariantQuantity" class="form-control" placeholder="Quantity" aria-label="Quantity" aria-describedby="basic-addon1">
                                                                 </div>
 
-                                                               x <input type="text" name="newVariantName_<%=product.getProductName() %>" hidden>
+                                                                <input type="text" name="newVariantProductID" value="<%=product.getProductId() %>" hidden>
                         
                                                             </form>
 
@@ -497,6 +497,11 @@
                 }
             }
         </script>
+
+<% String openPopup = (String) request.getAttribute("openPopup");
+if (openPopup != null) { %>
+    <script>openPopup('<%=openPopup %>')</script>
+<% } %>
 
     </body>
 

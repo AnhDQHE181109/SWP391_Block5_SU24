@@ -67,9 +67,23 @@ public class StocksManagementController extends HttpServlet {
         PrintWriter out = response.getWriter();
 
         StocksManagementDAO smDAO = new StocksManagementDAO();
+        
+        String newVariantProductID = request.getParameter("newVariantProductID");
+        if (newVariantProductID != null) {
+            int size = Integer.parseInt(request.getParameter("newVariantSize"));
+            String color = request.getParameter("newVariantColor");
+            int quantity = Integer.parseInt(request.getParameter("newVariantQuantity"));
+            int productID = Integer.parseInt(request.getParameter("newVariantProductID"));
+            
+            smDAO.addNewProductVariant(productID, size, color, quantity, 1);
+            request.setAttribute("openPopup", "popup_" + productID);
+        }
 
         List<Product> productsList = smDAO.getAllProducts();
         List<Product> productsStocksList = smDAO.getProductsStocks();
+        
+        //Debugging
+//        request.setAttribute("openPopup", "popup_" + 1);
 
         request.setAttribute("productsList", productsList);
         request.setAttribute("productsStocksList", productsStocksList);
@@ -102,7 +116,7 @@ public class StocksManagementController extends HttpServlet {
         String confirmNo = request.getParameter("confirmNo");
         if (confirmYes != null) {
             for (Product product : outOfStocksList) {
-                smDAO.setProductStock(product.getProductId(), 0);
+                smDAO.setProductStock(product.getStockID(), 0);
             }
             outOfStocksList.clear();
 
@@ -131,20 +145,20 @@ public class StocksManagementController extends HttpServlet {
                 return;
             }
 
-            int productID = Integer.parseInt(keyString);
+            int stockID = Integer.parseInt(keyString);
             int quantity = Integer.parseInt(value[0]);
 
             if (quantity == 0) {
-                Product outOfStockProduct = smDAO.getProductStockByID(productID);
-                if (smDAO.getProductStockQuantityByID(productID) != 0) {
+                Product outOfStockProduct = smDAO.getProductStockByStockID(stockID);
+                if (smDAO.getProductStockQuantityByID(stockID) != 0) {
                     outOfStocksList.add(outOfStockProduct);
-                    outOfStocksProductName = smDAO.getProductNameByID(productID);
+                    outOfStocksProductName = smDAO.getProductNameByID(outOfStockProduct.getProductId());
                     System.out.println(outOfStocksProductName);
                 }
                 continue;
             }
 
-            smDAO.setProductStock(productID, quantity);
+            smDAO.setProductStock(stockID, quantity);
         }
 
         if (outOfStocksList.size() != 0) {
