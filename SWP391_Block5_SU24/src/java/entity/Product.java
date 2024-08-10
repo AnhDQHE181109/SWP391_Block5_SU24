@@ -4,23 +4,64 @@
  */
 package entity;
 
-import java.math.BigDecimal;
 
 /**
  *
  * @author asus
  */
 public class Product {
+
     private int productId;
     private String productName;
-    private BigDecimal price;
+    private double price;
+    private String origin;
+    private String material;
+    private int totalQuantity;
+    private int categoryId;
+    private String categoryName;
+    private String brandName; 
+    private int brandId;
+    private int importId;
+    private int imageId;
+    private String imageURL;
+    private int size;
+    private String color;
 
-    public Product() {}
+    public Product() {
+    }
 
-    public Product(int productId, String productName, BigDecimal price) {
+    public Product(int productId, String productName, double price) {
         this.productId = productId;
         this.productName = productName;
         this.price = price;
+    }
+
+    public Product(int productId, String productName, String imageURL) {
+        this.productId = productId;
+        this.productName = productName;
+        this.imageURL = imageURL;
+    }
+
+    public Product(int productID, String productName, int size, String color, int totalQuantity) {
+        this.productId = productID;
+        this.productName = productName;
+        this.totalQuantity = totalQuantity;
+        this.size = size;
+        this.color = color;
+    }
+
+    public Product(int productId, int size, String color) {
+        this.productId = productId;
+        this.size = size;
+        this.color = color;
+    }
+    public Product(String productName, String origin, String material, double price, int categoryId, int brandId){
+        this.productName = productName;
+        this.origin = origin;
+        this.material = material;
+        this.price = price;
+        this.categoryId = categoryId;
+        this.brandId = brandId;
     }
 
     // Getters and Setters
@@ -40,12 +81,112 @@ public class Product {
         this.productName = productName;
     }
 
-    public BigDecimal getPrice() {
+    public double getPrice() {
         return price;
     }
 
-    public void setPrice(BigDecimal price) {
+    public void setPrice(double price) {
         this.price = price;
     }
+
+    public String getOrigin() {
+        return origin;
+    }
+
+    public void setOrigin(String origin) {
+        this.origin = origin;
+    }
+
+    public String getMaterial() {
+        return material;
+    }
+
+    public void setMaterial(String material) {
+        this.material = material;
+    }
+
+    public int getTotalQuantity() {
+        return totalQuantity;
+    }
+
+    public void setTotalQuantity(int totalQuantity) {
+        this.totalQuantity = totalQuantity;
+    }
+
+    public String getCategoryName() {
+        return categoryName;
+    }
+
+    public void setCategoryName(String categoryName) {
+        this.categoryName = categoryName;
 }
 
+    public String getBrandName() {
+        return brandName;
+    }
+
+    public void setBrandName(String brandName) {
+        this.brandName = brandName;
+    }
+    public int getCategoryId() {
+        return categoryId;
+    }
+
+    public void setCategoryId(int categoryId) {
+        this.categoryId = categoryId;
+}
+
+    public int getBrandId() {
+        return brandId;
+    }
+
+    public void setBrandId(int brandId) {
+        this.brandId = brandId;
+    }
+    public int getImportId() {
+        return importId;
+    }
+
+    public void setImportId(int importId) {
+        this.importId = importId;
+    }
+
+    public int getImageId() {
+        return imageId;
+    }
+
+    public void setImageId(int imageId) {
+        this.imageId = imageId;
+    }
+
+    public String getImageURL() {
+        return imageURL;
+    }
+
+    public void setImageURL(String imageURL) {
+        this.imageURL = imageURL;
+    }
+
+    public int getSize() {
+        return size;
+    }
+
+    public void setSize(int size) {
+        this.size = size;
+    }
+
+    public String getColor() {
+        return color;
+    }
+
+    public void setColor(String color) {
+        this.color = color;
+    }
+
+    @Override
+    public String toString() {
+        return "Product{" + "productId=" + productId + ", productName=" + productName + ", price=" + price + ", origin=" + origin + ", material=" + material + ", totalQuantity=" + totalQuantity + ", categoryId=" + categoryId + ", brandId=" + brandId + ", importId=" + importId + ", imageId=" + imageId + ", imageURL=" + imageURL + ", size=" + size + ", color=" + color + '}';
+    }
+
+
+}
