@@ -63,6 +63,14 @@ public class Product {
         this.categoryId = categoryId;
         this.brandId = brandId;
     }
+    public Product(String productName, String origin, String material, double price, String categoryName, String brandName){
+        this.productName = productName;
+        this.origin = origin;
+        this.material = material;
+        this.price = price;
+        this.categoryName = categoryName;
+        this.brandName = brandName;
+    }
 
     // Getters and Setters
     public int getProductId() {
