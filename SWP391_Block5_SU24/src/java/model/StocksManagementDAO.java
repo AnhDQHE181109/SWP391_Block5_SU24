@@ -115,7 +115,7 @@ public class StocksManagementDAO extends DBConnect {
 
     public Product getProductStockByStockID(int stockID) {
 
-        String sql = "select s.StockID, p.ProductID, Size, Color\n"
+        String sql = "select s.StockID, p.ProductID, Size, Color, StockQuantity\n"
                 + "from Products p, Stock s\n"
                 + "where p.ProductID = s.ProductID and s.StockID = ?";
 
@@ -127,7 +127,8 @@ public class StocksManagementDAO extends DBConnect {
 
             ResultSet rs = ps.executeQuery();
             if (rs.next()) {
-                product = new Product(rs.getInt(1), rs.getInt(2), rs.getInt(3), rs.getString(4));
+                product = new Product(rs.getInt(1), rs.getInt(2), rs.getInt(3), rs.getString(4),
+                        rs.getInt(5));
                 return product;
             }
 
@@ -227,6 +228,77 @@ public class StocksManagementDAO extends DBConnect {
             }
         } catch (SQLException e) {
             System.out.println(e);
+        }
+    }
+
+    //User activity logging functions
+    public int logAccountAndGetImportID(int accountID) {
+
+        String sql = "insert into ProductStockImport(AccountID, ImportDate) \n"
+                + "values (?, getdate())\n"
+                + "\n"
+                + "select top 1 ImportID, AccountID\n"
+                + "from ProductStockImport\n"
+                + "order by ImportID desc";
+
+        try {
+            PreparedStatement ps = conn.prepareStatement(sql);
+            ps.setInt(1, accountID);
+
+            ResultSet rs = ps.executeQuery();
+            if (rs.next()) {
+                return rs.getInt(1);
+            }
+
+            if (rs != null) {
+                rs.close();
+            }
+            if (ps != null) {
+                ps.close();
+            }
+        } catch (SQLException e) {
+            System.out.println(e);
+        }
+
+        return -1;
+    }
+
+    public void logUserUpdateActivity(int stockID, int importID, int productID, int size, String color, int stockQuantity) {
+
+        String sql = "insert into StockImportDetail(StockID, ImportID, ProductID, Size, Color, StockQuantity)\n"
+                + "values (?, ?, ?, ?, ?, ?)";
+
+        try {
+            PreparedStatement ps = conn.prepareStatement(sql);
+            ps.setInt(1, stockID);
+            ps.setInt(2, importID);
+            ps.setInt(3, productID);
+            ps.setInt(4, size);
+            ps.setString(5, color);
+            ps.setInt(6, stockQuantity);
+
+            ResultSet rs = ps.executeQuery();
+
+            if (rs != null) {
+                rs.close();
+            }
+            if (ps != null) {
+                ps.close();
+            }
+        } catch (SQLException e) {
+            System.out.println(e);
+        }
+    }
+
+    public void logUpdatedProducts(int accountID, List<Product> loggedProducts) {
+        int importID = logAccountAndGetImportID(accountID);
+        for (Product product : loggedProducts) {
+            int stockID = product.getStockID();
+            int productID = product.getProductId();
+            int size = product.getSize();
+            String color = product.getColor();
+            int stockQuantity = product.getStockQuantity();
+            logUserUpdateActivity(stockID, importID, productID, size, color, stockQuantity);
         }
     }
 }

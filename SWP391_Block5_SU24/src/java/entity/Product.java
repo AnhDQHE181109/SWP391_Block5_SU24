@@ -27,6 +27,7 @@ public class Product {
     private int size;
     private String color;
     private int stockID;
+    private int stockQuantity;
 
     public Product() {
     }
@@ -52,11 +53,12 @@ public class Product {
         this.color = color;
     }
 
-    public Product(int stockID, int productId, int size, String color) {
+    public Product(int stockID, int productId, int size, String color, int stockQuantity) {
         this.stockID = stockID;
         this.productId = productId;
         this.size = size;
         this.color = color;
+        this.stockQuantity = stockQuantity;
     }
     public Product(String productName, String origin, String material, double price, int categoryId, int brandId){
         this.productName = productName;
@@ -200,6 +202,14 @@ public class Product {
 
     public void setStockID(int stockID) {
         this.stockID = stockID;
+    }
+
+    public int getStockQuantity() {
+        return stockQuantity;
+    }
+
+    public void setStockQuantity(int stockQuantity) {
+        this.stockQuantity = stockQuantity;
     }
 
     @Override
