@@ -59,7 +59,7 @@ public class StocksManagementDAO extends DBConnect {
 
     public List<Product> getProductsStocks() {
 
-        String sql = "select p.ProductID, p.ProductName, Size, Color, StockQuantity\n"
+        String sql = "select s.StockID, p.ProductID, p.ProductName, Size, Color, StockQuantity\n"
                 + "from Products p, Stock s\n"
                 + "where p.ProductID = s.ProductID";
 
@@ -71,8 +71,8 @@ public class StocksManagementDAO extends DBConnect {
 
             ResultSet rs = ps.executeQuery();
             while (rs.next()) {
-                product = new Product(rs.getInt(1), rs.getString(2), rs.getInt(3),
-                        rs.getString(4), rs.getInt(5));
+                product = new Product(rs.getInt(1), rs.getInt(2), rs.getString(3), rs.getInt(4),
+                        rs.getString(5), rs.getInt(6));
                 productsStocksList.add(product);
             }
 
@@ -89,16 +89,16 @@ public class StocksManagementDAO extends DBConnect {
         return productsStocksList;
     }
 
-    public void setProductStock(int productID, int quantity) {
+    public void setProductStock(int stockID, int quantity) {
 
         String sql = "update Stock\n"
                 + "set StockQuantity = ?\n"
-                + "where ProductID = ?";
+                + "where StockID = ?";
 
         try {
             PreparedStatement ps = conn.prepareStatement(sql);
             ps.setInt(1, quantity);
-            ps.setInt(2, productID);
+            ps.setInt(2, stockID);
 
             ResultSet rs = ps.executeQuery();
 
@@ -113,21 +113,21 @@ public class StocksManagementDAO extends DBConnect {
         }
     }
 
-    public Product getProductStockByID(int productID) {
+    public Product getProductStockByStockID(int stockID) {
 
-        String sql = "select p.ProductID, Size, Color\n"
+        String sql = "select s.StockID, p.ProductID, Size, Color\n"
                 + "from Products p, Stock s\n"
-                + "where p.ProductID = s.ProductID and p.ProductID = ?";
+                + "where p.ProductID = s.ProductID and s.StockID = ?";
 
         Product product = null;
 
         try {
             PreparedStatement ps = conn.prepareStatement(sql);
-            ps.setInt(1, productID);
+            ps.setInt(1, stockID);
 
             ResultSet rs = ps.executeQuery();
             if (rs.next()) {
-                product = new Product(rs.getInt(1), rs.getInt(2), rs.getString(3));
+                product = new Product(rs.getInt(1), rs.getInt(2), rs.getInt(3), rs.getString(4));
                 return product;
             }
 
@@ -174,17 +174,17 @@ public class StocksManagementDAO extends DBConnect {
         return null;
     }
 
-    public int getProductStockQuantityByID(int productID) {
+    public int getProductStockQuantityByID(int stockID) {
 
-        String sql = "select p.ProductID, StockQuantity\n"
+        String sql = "select s.StockID, StockQuantity\n"
                 + "from Products p, Stock s\n"
-                + "where p.ProductID = s.ProductID and p.ProductID = ?";
+                + "where p.ProductID = s.ProductID and s.StockID = ?";
 
         Product product = null;
 
         try {
             PreparedStatement ps = conn.prepareStatement(sql);
-            ps.setInt(1, productID);
+            ps.setInt(1, stockID);
 
             ResultSet rs = ps.executeQuery();
             if (rs.next()) {
@@ -202,5 +202,31 @@ public class StocksManagementDAO extends DBConnect {
         }
 
         return 0;
+    }
+
+    public void addNewProductVariant(int productID, int size, String color, int quantity, int importID) {
+
+        String sql = "insert into Stock(ProductID, Size, Color, StockQuantity, ImportID) \n"
+                + "values (?, ?, ?, ?, ?)";
+
+        try {
+            PreparedStatement ps = conn.prepareStatement(sql);
+            ps.setInt(1, productID);
+            ps.setInt(2, size);
+            ps.setString(3, color);
+            ps.setInt(4, quantity);
+            ps.setInt(5, importID);
+
+            ResultSet rs = ps.executeQuery();
+
+            if (rs != null) {
+                rs.close();
+            }
+            if (ps != null) {
+                ps.close();
+            }
+        } catch (SQLException e) {
+            System.out.println(e);
+        }
     }
 }

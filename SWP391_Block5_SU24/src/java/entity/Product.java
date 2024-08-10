@@ -26,6 +26,7 @@ public class Product {
     private String imageURL;
     private int size;
     private String color;
+    private int stockID;
 
     public Product() {
     }
@@ -42,7 +43,8 @@ public class Product {
         this.imageURL = imageURL;
     }
 
-    public Product(int productID, String productName, int size, String color, int totalQuantity) {
+    public Product(int stockID, int productID, String productName, int size, String color, int totalQuantity) {
+        this.stockID = stockID;
         this.productId = productID;
         this.productName = productName;
         this.totalQuantity = totalQuantity;
@@ -50,7 +52,8 @@ public class Product {
         this.color = color;
     }
 
-    public Product(int productId, int size, String color) {
+    public Product(int stockID, int productId, int size, String color) {
+        this.stockID = stockID;
         this.productId = productId;
         this.size = size;
         this.color = color;
@@ -62,6 +65,14 @@ public class Product {
         this.price = price;
         this.categoryId = categoryId;
         this.brandId = brandId;
+    }
+    public Product(String productName, String origin, String material, double price, String categoryName, String brandName){
+        this.productName = productName;
+        this.origin = origin;
+        this.material = material;
+        this.price = price;
+        this.categoryName = categoryName;
+        this.brandName = brandName;
     }
 
     // Getters and Setters
@@ -181,6 +192,14 @@ public class Product {
 
     public void setColor(String color) {
         this.color = color;
+    }
+
+    public int getStockID() {
+        return stockID;
+    }
+
+    public void setStockID(int stockID) {
+        this.stockID = stockID;
     }
 
     @Override

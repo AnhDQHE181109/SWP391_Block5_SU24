@@ -28,6 +28,20 @@
         <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.8.2/css/all.css">
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jquery-confirm/3.3.2/jquery-confirm.min.css">
 
+        <style>
+            /* Chrome, Safari, Edge, Opera */
+        input::-webkit-outer-spin-button,
+        input::-webkit-inner-spin-button {
+        -webkit-appearance: none;
+        margin: 0;
+        }
+
+        /* Firefox */
+        input[type=number] {
+        -moz-appearance: textfield;
+        }
+        </style>
+
     </head>
 
     <body onload="time()" class="app sidebar-mini rtl">
@@ -94,40 +108,6 @@
                                 </div>
                             </div>
 
-                            <div id="popupAddNewVariantForm" class="popup" style="display: none;">
-                                <!-- Popup content for each order -->
-                                <div class="popup-content">
-                                    <div class="row">
-                                        <p class="h2">Add a new variant for </p>
-
-                                        <div class="input-group mb-3">
-                                            <div class="input-group-prepend">
-                                              <span class="input-group-text" id="basic-addon1">Size</span>
-                                            </div>
-                                            <input type="text" class="form-control" placeholder="Size" aria-label="Size" aria-describedby="basic-addon1">
-                                          </div>
-
-                                        <div class="input-group mb-3">
-                                            <div class="input-group-prepend">
-                                              <span class="input-group-text" id="basic-addon1">Color</span>
-                                            </div>
-                                            <input type="text" class="form-control" placeholder="Color" aria-label="Color" aria-describedby="basic-addon1">
-                                        </div>
-
-                                        <div class="input-group mb-3">
-                                            <div class="input-group-prepend">
-                                              <span class="input-group-text" id="basic-addon1">Quantity</span>
-                                            </div>
-                                            <input type="text" class="form-control" placeholder="Quantity" aria-label="Quantity" aria-describedby="basic-addon1">
-                                        </div>
-
-                                    </div>
-                                    <div id="submit-type">
-                                        <button type="button" onclick="closePopup('popup_${order.orderID}')">Close</button>
-                                        <button type="button" class="btn btn-success">ADD</button>
-                                    </div>
-                                </div>
-                            </div>
                             
                             <div id="popupAddNewProductForm" class="popup" style="display: none;">
                                 <!-- Popup content for each order -->
@@ -170,6 +150,7 @@
                                     </div>
                                 </div>
                             </div>
+
 
                             <%
                                 List<Product> productsList = (List<Product>) request.getAttribute("productsList");
@@ -226,7 +207,11 @@
                                                                                 <th scope="row"><%=i %></th>
                                                                                 <td><%=productStocks.getSize() %></td>
                                                                                 <td><%=productStocks.getColor() %></td>
-                                                                                <td><input type="text" class="form-control" name="<%=productStocks.getProductId()%>_quantity" value="<%=productStocks.getTotalQuantity() %>"></td>
+                                                                                <td><input type="number" class="form-control" 
+                                                                                    name="<%=productStocks.getStockID()%>_quantity"
+                                                                                    id="<%=productStocks.getStockID()%>_quantity" 
+                                                                                    value="<%=productStocks.getTotalQuantity() %>" required
+                                                                                    onfocusout="checkIfFieldEmpty('<%=productStocks.getStockID()%>_quantity', '<%=productStocks.getTotalQuantity() %>')"></td>
                                                                               </tr>
                                                                     <%      i++;
                                                                             }
@@ -239,11 +224,52 @@
                                                         <div id="submit-type" class="col-md-12">
                                                             <button type="button" class="btn btn-danger col-md-3" onclick="closePopup('popup_<%=product.getProductId() %>')">Close</button>
                                                             <button type="button" onclick="document.getElementById(&quot;stocksForm_<%=product.getProductName() %>&quot;).submit()" class="btn btn-primary col-md-3">Update</button>
-                                                            <button type="button" class="btn btn-success col-md-6">Add a new variant</button>
+                                                            <button type="button" class="btn btn-success col-md-6" onclick="openPopup('popupAddNewVariantForm_<%=product.getProductId() %>')">Add a new variant</button>
                                                         </div>
                                                     
                                                     </div>
                                                 </div>
+
+                                                <div id="popupAddNewVariantForm_<%=product.getProductId() %>" class="popup" style="display: none;">
+                                                    <!-- Popup content for each order -->
+                                                    <div class="popup-content">
+                                                        <div class="row">
+                                                            <p class="h2">Add a new variant for <%=product.getProductName() %></p>
+                                                            
+                                                            <form id="addNewVariantForm_<%=product.getProductId() %>" action="stocksManager" method="get">
+                                                                <div class="input-group mb-3">
+                                                                    <div class="input-group-prepend">
+                                                                      <span class="input-group-text" id="basic-addon1">Size</span>
+                                                                    </div>
+                                                                    <input type="number" name="newVariantSize" class="form-control" placeholder="Size" aria-label="Size" aria-describedby="basic-addon1">
+                                                                  </div>
+                        
+                                                                <div class="input-group mb-3">
+                                                                    <div class="input-group-prepend">
+                                                                      <span class="input-group-text" id="basic-addon1">Color</span>
+                                                                    </div>
+                                                                    <input type="text" name="newVariantColor" class="form-control" placeholder="Color" aria-label="Color" aria-describedby="basic-addon1">
+                                                                </div>
+                        
+                                                                <div class="input-group mb-3">
+                                                                    <div class="input-group-prepend">
+                                                                      <span class="input-group-text" id="basic-addon1">Quantity</span>
+                                                                    </div>
+                                                                    <input type="number" name="newVariantQuantity" class="form-control" placeholder="Quantity" aria-label="Quantity" aria-describedby="basic-addon1">
+                                                                </div>
+
+                                                                <input type="text" name="newVariantProductID" value="<%=product.getProductId() %>" hidden>
+                        
+                                                            </form>
+
+                                                            <div id="submit-type" class="col-md-12">
+                                                                <button type="button" class="btn btn-danger col-md-3" onclick="closePopup('popupAddNewVariantForm_<%=product.getProductId() %>')">Close</button>
+                                                                <button type="button" class="btn btn-success col-md-9" onclick="document.getElementById(&quot;addNewVariantForm_<%=product.getProductId() %>&quot;).submit()">ADD</button>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+
                                             </td>
 
                                             <!-- <td>
@@ -436,6 +462,20 @@
                 }
             }
 
+            function checkIfFieldEmpty(fieldID, initialValue) {
+                //document.getElementById(fieldID).value = document.getElementById(fieldID).value.trim();
+                // if (document.getElementById(fieldID).value == "") {
+                //     alert("One or more quantities is empty!");
+                // }
+                if ($('#' + fieldID).val() == '') {
+                    alert("One or more quantities is empty!");
+                    document.getElementById(fieldID).value = initialValue;
+                } else if ($('#' + fieldID).val() < 0) {
+                    alert("One or more quantities cannot be less than 0!");
+                    document.getElementById(fieldID).value = initialValue;
+                }
+            }
+
         </script>
         <script>
             function confirmDelete(bookID) {
@@ -457,6 +497,11 @@
                 }
             }
         </script>
+
+<% String openPopup = (String) request.getAttribute("openPopup");
+if (openPopup != null) { %>
+    <script>openPopup('<%=openPopup %>')</script>
+<% } %>
 
     </body>
 

@@ -113,7 +113,7 @@ public class ProductDetailsDAO extends DBConnect {
 
     public void updateProduct(Product product) {
         try {
-            String sql = "UPDATE product SET productName = ?, price = ?, totalQuantity = ? WHERE productId = ?";
+            String sql = "UPDATE product SET ProductName = ?,Origin = ?, Material = ?, Price = ?, CategoryID = ?, BrandID = ? ";
             PreparedStatement ps = conn.prepareStatement(sql);
             ps.setString(1, product.getProductName());
             ps.setDouble(2, product.getPrice());
