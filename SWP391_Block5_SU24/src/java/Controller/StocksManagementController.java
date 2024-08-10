@@ -124,6 +124,13 @@ public class StocksManagementController extends HttpServlet {
             keyString = keyString.replaceAll("[^\\d]", "");
             System.out.println("Key " + keyString + "   :   " + value[0]);
 
+            if (value[0].trim().equalsIgnoreCase("")) {
+                out.println("<script type=\"text/javascript\">");
+                out.println("alert('One or more quantities is empty!');");
+                out.println("</script>");
+                return;
+            }
+
             int productID = Integer.parseInt(keyString);
             int quantity = Integer.parseInt(value[0]);
 
@@ -144,6 +151,7 @@ public class StocksManagementController extends HttpServlet {
             request.setAttribute("outOfStocksList", outOfStocksList);
             request.setAttribute("outOfStocksProductName", outOfStocksProductName);
             request.setAttribute("popupDisplay", "display: block;");
+            //Debugging
             System.out.println("Products variants out of stock:");
             for (Product product : outOfStocksList) {
                 System.out.println(smDAO.getProductNameByID(product.getProductId())
