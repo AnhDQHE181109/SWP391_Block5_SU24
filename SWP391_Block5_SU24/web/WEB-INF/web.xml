@@ -17,8 +17,12 @@
         <servlet-class>Controller.ProductsController</servlet-class>
     </servlet>
     <servlet>
-        <servlet-name>EditProduct</servlet-name>
-        <servlet-class>Controller.EditProduct</servlet-class>
+        <servlet-name>EditProductController</servlet-name>
+        <servlet-class>Controller.EditProductController</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>DeleteProductController</servlet-name>
+        <servlet-class>Controller.DeleteProductController</servlet-class>
     </servlet>
     <servlet-mapping>
         <servlet-name>ProductsController</servlet-name>
@@ -57,7 +61,11 @@
         <url-pattern>/stocksManager</url-pattern>
     </servlet-mapping>
     <servlet-mapping>
-        <servlet-name>EditProduct</servlet-name>
-        <url-pattern>/EditProduct</url-pattern>
+        <servlet-name>EditProductController</servlet-name>
+        <url-pattern>/EditProductController</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>DeleteProductController</servlet-name>
+        <url-pattern>/DeleteProductController</url-pattern>
     </servlet-mapping>
 </web-app>

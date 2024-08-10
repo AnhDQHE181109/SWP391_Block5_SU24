@@ -5,7 +5,6 @@
 
 package Controller;
 
-import entity.Product;
 import java.io.IOException;
 import java.io.PrintWriter;
 import jakarta.servlet.ServletException;
@@ -18,7 +17,7 @@ import model.ProductDetailsDAO;
  *
  * @author Admin
  */
-public class EditProduct extends HttpServlet {
+public class DeleteProductController extends HttpServlet {
    
     /** 
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code> methods.
@@ -35,10 +34,10 @@ public class EditProduct extends HttpServlet {
             out.println("<!DOCTYPE html>");
             out.println("<html>");
             out.println("<head>");
-            out.println("<title>Servlet EditProduct</title>");  
+            out.println("<title>Servlet DeleteProductController</title>");  
             out.println("</head>");
             out.println("<body>");
-            out.println("<h1>Servlet EditProduct at " + request.getContextPath () + "</h1>");
+            out.println("<h1>Servlet DeleteProductController at " + request.getContextPath () + "</h1>");
             out.println("</body>");
             out.println("</html>");
         }
@@ -55,15 +54,7 @@ public class EditProduct extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
     throws ServletException, IOException {
-        try {
-            ProductDetailsDAO pDao = new ProductDetailsDAO();
-            int id = Integer.parseInt(request.getParameter("id"));
-            Product p = pDao.getProductById(id);
-            request.setAttribute("p", p);
-            request.getRequestDispatcher("editPitch.jsp").forward(request, response);
-        } catch (Exception e) {
-
-        }
+        processRequest(request, response);
     } 
 
     /** 
@@ -76,7 +67,18 @@ public class EditProduct extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
     throws ServletException, IOException {
-        processRequest(request, response);
+        try {
+            int productId = Integer.parseInt(request.getParameter("productId"));
+
+            ProductDetailsDAO productDAO = new ProductDetailsDAO();
+            productDAO.deleteProduct(productId);
+
+            response.sendRedirect("productmanage.jsp?status=deleted");
+
+        } catch (Exception e) {
+            e.printStackTrace();
+            response.sendRedirect("productmanage.jsp?status=error");
+        }
     }
 
     /** 
