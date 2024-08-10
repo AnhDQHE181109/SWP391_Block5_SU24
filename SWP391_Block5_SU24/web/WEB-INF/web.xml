@@ -12,7 +12,7 @@
         <servlet-name>AuthRecoverController</servlet-name>
         <servlet-class>Controller.AuthRecoverController</servlet-class>
     </servlet>
-
+    <servlet>
         <servlet-name>StocksManagementController</servlet-name>
         <servlet-class>Controller.StocksManagementController</servlet-class>
     </servlet>
@@ -68,7 +68,8 @@
     <servlet-mapping>
         <servlet-name>AuthRecoverController</servlet-name>
         <url-pattern>/AuthRecoverController</url-pattern>
-
+    </servlet-mapping>
+    <servlet-mapping>
         <servlet-name>StocksManagementController</servlet-name>
         <url-pattern>/stocksManager</url-pattern>
     </servlet-mapping>

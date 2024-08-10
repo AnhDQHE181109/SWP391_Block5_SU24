@@ -12,6 +12,7 @@ import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import java.util.List;
 import model.ProductDetailsDAO;
 
 /**
@@ -58,7 +59,7 @@ public class EditProduct extends HttpServlet {
         try {
             ProductDetailsDAO pDao = new ProductDetailsDAO();
             int id = Integer.parseInt(request.getParameter("id"));
-            Product p = pDao.getProductById(id);
+            List<Product> p = pDao.getProductById(id);
             request.setAttribute("p", p);
             request.getRequestDispatcher("editPitch.jsp").forward(request, response);
         } catch (Exception e) {
