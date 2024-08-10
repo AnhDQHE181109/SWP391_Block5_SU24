@@ -173,10 +173,9 @@ GO
 -- Create ProductImages table with ImageURL
 CREATE TABLE ProductImages (
     ImageID INT IDENTITY(1,1) PRIMARY KEY,
-    ProductID INT NOT NULL,
-    Color NVARCHAR(50) NOT NULL,
+    StockID INT NOT NULL,
     ImageURL NVARCHAR(255) NOT NULL,
-    CONSTRAINT FK_ProductImages_Products FOREIGN KEY (ProductID) REFERENCES Products(ProductID)
+	CONSTRAINT FK_ProductImages_Stock FOREIGN KEY (StockID) REFERENCES Stock(StockID)
 );
 GO
 
@@ -272,13 +271,13 @@ VALUES
 (1, 1, 2, 140.00),
 (2, 3, 1, 170.00);
 
--- Insert data into ProductImages
-INSERT INTO ProductImages (ProductID, Color, ImageURL)
+-- Insert data into ProductImages (now using StockID)
+INSERT INTO ProductImages (StockID, ImageURL)
 VALUES 
-(1, 'Red', 'images/airmax_red.jpg'),
-(1, 'Blue', 'images/airmax_blue.jpg'),
-(2, 'White', 'images/ultraboost_white.jpg'),
-(3, 'Black', 'images/suede_black.jpg');
+(1, 'images/airmax_red.jpg'),
+(2, 'images/airmax_blue.jpg'),
+(3, 'images/ultraboost_white.jpg'),
+(4, 'images/suede_black.jpg');
 
 -- Insert data into Wishlist
 INSERT INTO Wishlist (AccountID, StockID, DateAdded)
