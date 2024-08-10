@@ -172,6 +172,8 @@ CREATE TABLE OrderDetails (
     OrderDetailID INT IDENTITY(1,1) PRIMARY KEY,
     OrderID INT NULL,
     ProductID INT NULL,
+    color NVARCHAR(50) NOT NULL,
+    size INT NOT NULL,
     Quantity INT NOT NULL,
     SalePrice DECIMAL(18,2) NOT NULL,
     CONSTRAINT FK_OrderDetails_Orders FOREIGN KEY (OrderID) REFERENCES Orders(OrderID),
