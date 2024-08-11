@@ -8,5 +8,23 @@ public class Category {
     private int categoryID;
     private String categoryName;
 
-    // Getters and setters
+
+    public int getCategoryId() {
+        return categoryId;
+    }
+
+    public String getCategoryName() {
+        return categoryName;
+    }
+
+    public void setCategoryId(int categoryId) {
+        this.categoryId = categoryId;
+    }
+
+    public void setCategoryName(String categoryName) {
+        this.categoryName = categoryName;
+    }
+
+    
+
 }

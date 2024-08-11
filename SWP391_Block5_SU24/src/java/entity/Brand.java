@@ -8,5 +8,23 @@ public class Brand {
     private int brandID;
     private String brandName;
 
-    // Getters and setters
+
+    public int getBrandId() {
+        return brandId;
+    }
+
+    public String getBrandName() {
+        return brandName;
+    }
+
+    public void setBrandId(int brandId) {
+        this.brandId = brandId;
+    }
+
+    public void setBrandName(String brandName) {
+        this.brandName = brandName;
+    }
+
+    
+
 }
