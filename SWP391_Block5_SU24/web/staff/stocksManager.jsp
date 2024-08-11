@@ -2,8 +2,15 @@
 <%@taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <%@page import = "entity.*" %>
 <%@page import = "java.util.*" %>
+<%@page import = "jakarta.servlet.http.HttpSession" %>
 
 <!DOCTYPE html>
+<% Account account = (Account) session.getAttribute("account");
+  if (account == null) { %>
+    <h1 style="color:red">You do not have permission to visit this page!</h1> 
+  <% } else if (account.getRole() == 1) { %>
+    <h1 style="color:red">You do not have permission to visit this page!</h1> 
+  <% } else { %>
 <html lang="en">
 
     <head>
@@ -56,7 +63,7 @@
                     </div>
                     <hr>
                     <ul class="app-menu">
-                        <li><a class="app-menu__item" href="dashboard"><i class='app-menu__icon bx bx-tachometer'></i><span
+                        <!-- <li><a class="app-menu__item" href="dashboard"><i class='app-menu__icon bx bx-tachometer'></i><span
                                     class="app-menu__label">Dashboard</span></a></li>
                         <li><a class="app-menu__item" href="customer_manage"><i class='app-menu__icon bx bx-user-voice'></i><span
                                     class="app-menu__label">Customers</span></a></li>
@@ -161,7 +168,9 @@
                                 <thead>
                                     <tr>
                                         <th>Picture</th>
+                                        <th>Brand</th>
                                         <th>Name</th>
+                                        <th>Category</th>
                                         <th> </th>
                                     </tr>
                                 </thead>
@@ -175,7 +184,9 @@
                                             for (Product product : productsList) { %>
                                         <tr>
                                             <td><img src="<%=product.getImageURL() %>"></td>
+                                            <td><%=product.getBrandName() %></td>
                                             <td><%=product.getProductName() %></td>
+                                            <td><%=product.getCategoryName() %></td>
                                             <td class="col-1">
                                                 <button class="btn btn-info" onclick="openPopup('popup_<%=product.getProductId() %>')">Import stocks</button>
                                                 <div id="popup_<%=product.getProductId() %>" class="popup" style="display: none;">
@@ -454,7 +465,7 @@
 
                 // Loop through all table rows, and hide those that don't match the search query
                 for (i = 0; i < tr.length; i++) {
-                    td = tr[i].getElementsByTagName("td")[1]; // Column index for book name, change if needed
+                    td = tr[i].getElementsByTagName("td")[2]; // Column index for book name, change if needed
 
                     if (td) {
                         txtValue = td.textContent || td.innerText;
@@ -544,8 +555,9 @@ if (openPopup != null) { %>
 <% String alertMessage = (String) request.getAttribute("alertMessage");
 if (alertMessage != null) { %>
     <script>alert('<%=alertMessage %>')</script>
-<% } %>
+    <% } %>
 
     </body>
 
 </html>
+<% } %>
