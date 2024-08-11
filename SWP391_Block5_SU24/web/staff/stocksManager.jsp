@@ -90,9 +90,9 @@
                         <div class="tile-body">
                             <div class="row element-button">
                                 <div class="col-md-4" style="display: flex; justify-content: flex-start; align-items: center;">
-                                    <a class="btn btn-add btn-sm" href="product_manage?action=insert" title="Thêm">
+                                    <!-- <a class="btn btn-add btn-sm" href="product_manage?action=insert" title="Thêm">
                                         <i class="fas fa-plus"></i> Add a new product
-                                    </a>
+                                    </a> -->
                                 </div>
                                 <div class="col-md-4" style="display: flex; justify-content: center; align-items: center;">
                                     <!-- Button for sorting -->

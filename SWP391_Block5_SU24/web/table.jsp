@@ -1,10 +1,17 @@
 <%-- 
     Document   : table.jsp
-    Created on : Aug 7, 2024, 9:53:36 PM
+    Created on : Aug 10, 2024, 6:36:24 PM
     Author     : nobbe
 --%>
 
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
+<%-- 
+    Document   : table.jsp
+    Created on : Aug 7, 2024, 9:53:36 PM
+    Author     : nobbe
+--%>
+
+
 <%@ page import="model.AccountDAO" %>
 <%@ page import="entity.Account" %>
 <%@ page import="java.util.List" %>
@@ -38,7 +45,7 @@
     <link href="css/bootstrap.min.css" rel="stylesheet">
 
     <!-- Template Stylesheet -->
-    <link href="css/style.css" rel="stylesheet">
+    <link href="css/manager.css" rel="stylesheet">
 </head>
 
 <body>
