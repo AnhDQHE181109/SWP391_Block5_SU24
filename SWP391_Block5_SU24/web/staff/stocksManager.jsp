@@ -60,12 +60,12 @@
                                     class="app-menu__label">Dashboard</span></a></li>
                         <li><a class="app-menu__item" href="customer_manage"><i class='app-menu__icon bx bx-user-voice'></i><span
                                     class="app-menu__label">Customers</span></a></li>
-                        <li><a class="app-menu__item" href="product_manage"><i
+                        <li><a class="app-menu__item" href="stocksManager"><i
                                     class='app-menu__icon bx bx-purchase-tag-alt'></i><span class="app-menu__label">Products</span></a>
                         </li>
-                        <li><a class="app-menu__item" href="order_manage"><i class='app-menu__icon bx bx-task'></i><span
+                        <li><a class="app-menu__item" href="Ordercontroller"><i class='app-menu__icon bx bx-task'></i><span
                                     class="app-menu__label">Orders</span></a></li>
-                        <li><a class="app-menu__item" href="review_manage"><i class='app-menu__icon bx bx-task'></i><span
+                        <li><a class="app-menu__item" href="productStockImport"><i class='app-menu__icon bx bx-task'></i><span
                                     class="app-menu__label">Reviews</span></a></li>
                        
                         <button class="admin_logout" onclick="showLogoutBox()">Logout</button>

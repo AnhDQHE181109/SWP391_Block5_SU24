@@ -36,6 +36,18 @@
         <servlet-name>LogoutController</servlet-name>
         <servlet-class>Controller.LogoutController</servlet-class>
     </servlet>
+    <servlet>
+        <servlet-name>Ordercontroller</servlet-name>
+        <servlet-class>Controller.Ordercontroller</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>Orderdetailcontroller</servlet-name>
+        <servlet-class>Controller.Orderdetailcontroller</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>productStockImportController</servlet-name>
+        <servlet-class>Controller.productStockImportController</servlet-class>
+    </servlet>
     <servlet-mapping>
         <servlet-name>ProductsController</servlet-name>
         <url-pattern>/ProductsController</url-pattern>
@@ -91,7 +103,7 @@
     <servlet-mapping>
         <servlet-name>LogoutController</servlet-name>
         <url-pattern>/LogoutController</url-pattern>
-        </servlet-mapping>
+    </servlet-mapping>
     <servlet>
         <servlet-name>DeleteAccountController</servlet-name>
         <servlet-class>Controller.DeleteAccountController</servlet-class>
@@ -107,5 +119,17 @@
     <servlet-mapping>
         <servlet-name>UpdateAccountController</servlet-name>
         <url-pattern>/updateAccount</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>Ordercontroller</servlet-name>
+        <url-pattern>/Ordercontroller</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>Orderdetailcontroller</servlet-name>
+        <url-pattern>/Orderdetailcontroller</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>productStockImportController</servlet-name>
+        <url-pattern>/productStockImport</url-pattern>
     </servlet-mapping>
 </web-app>
