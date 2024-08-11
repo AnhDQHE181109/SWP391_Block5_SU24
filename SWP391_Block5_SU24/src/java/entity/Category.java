@@ -5,8 +5,9 @@
 package entity;
 
 public class Category {
-    private int categoryId;
+    private int categoryID;
     private String categoryName;
+
 
     public int getCategoryId() {
         return categoryId;
@@ -25,4 +26,5 @@ public class Category {
     }
 
     
+
 }
