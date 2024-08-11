@@ -7,18 +7,15 @@ package Controller;
 import java.io.IOException;
 import java.io.PrintWriter;
 import jakarta.servlet.ServletException;
-import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
-import jakarta.servlet.http.HttpSession;
-import model.AccountDAO;
 
 /**
  *
- * @author Long
+ * @author asus
  */
-public class LoginController extends HttpServlet {
+public class logincotroller extends HttpServlet {
 
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
@@ -37,10 +34,10 @@ public class LoginController extends HttpServlet {
             out.println("<!DOCTYPE html>");
             out.println("<html>");
             out.println("<head>");
-            out.println("<title>Servlet LoginController</title>");
+            out.println("<title>Servlet logincotroller</title>");            
             out.println("</head>");
             out.println("<body>");
-            out.println("<h1>Servlet LoginController at " + request.getContextPath() + "</h1>");
+            out.println("<h1>Servlet logincotroller at " + request.getContextPath() + "</h1>");
             out.println("</body>");
             out.println("</html>");
         }
@@ -72,49 +69,7 @@ public class LoginController extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        String username = request.getParameter("username");
-        String password = request.getParameter("password");
-        int role = Integer.parseInt(request.getParameter("role"));
-        AccountDAO adao = new AccountDAO();
-        if (adao.validateAccount(username, password, role) == 1) { //return 1 login successful
-            Cookie loginCookie = new Cookie("user", username);
-            loginCookie.setMaxAge(30 * 60);
-            response.addCookie(loginCookie);
-            HttpSession session = request.getSession();
-            session.setAttribute("account", adao.getAccount(username));
-            switch (adao.getAccount(username).getRole()) {
-                case 1: {
-                    response.sendRedirect("index.jsp");
-                    break;
-                }
-                case 2: {
-                    response.sendRedirect("stocksManager");
-                    break;
-                }
-                case 3: {
-                    response.sendRedirect("manager-home.jsp");
-                    break;
-                }
-                default: {
-                    response.sendRedirect("login.jsp");
-                    break;
-                }
-            }
-        } else if (adao.validateAccount(username, password, role) == 3) { //return 3 username or password is incorrect
-            request.setAttribute("username", username);
-            if (role == 1) {
-                request.getRequestDispatcher("login.jsp?error=Username or password is incorrect.").forward(request, response);
-            } else {
-                response.sendRedirect("login-staff.jsp?error=Username or password is incorrect.");
-            }
-        } else if (adao.validateAccount(username, password, role) == 2) { //return 2 right account information but wronng role
-            request.setAttribute("username", username);
-            if (role == 1) {
-                response.sendRedirect("login.jsp?error=Incorrect permission.");
-            } else {
-                response.sendRedirect("login-staff.jsp?error=Incorrect permission.");
-            }
-        }
+        processRequest(request, response);
     }
 
     /**

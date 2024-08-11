@@ -4,46 +4,49 @@
  */
 package entity;
 
-/**
- *
- * @author asus
- */
-public class ProductImage {
-    private int imageId;
-    private int productId;
-    private String imageUrl;
+import java.io.Serializable;
 
-    public ProductImage() {}
 
-    public ProductImage(int imageId, int productId, String imageUrl) {
-        this.imageId = imageId;
-        this.productId = productId;
-        this.imageUrl = imageUrl;
+public class ProductImage implements Serializable {
+    
+
+
+    private int imageID;
+    private int stockID;
+    private String imageURL;
+
+    public ProductImage() {
     }
 
-    // Getters and Setters
-    public int getImageId() {
-        return imageId;
+    public ProductImage(int imageID, int stockID, String imageURL) {
+        this.imageID = imageID;
+        this.stockID = stockID;
+        this.imageURL = imageURL;
     }
 
-    public void setImageId(int imageId) {
-        this.imageId = imageId;
+    public int getImageID() {
+        return imageID;
     }
 
-    public int getProductId() {
-        return productId;
+    public void setImageID(int imageID) {
+        this.imageID = imageID;
     }
 
-    public void setProductId(int productId) {
-        this.productId = productId;
+    public int getStockID() {
+        return stockID;
     }
 
-    public String getImageUrl() {
-        return imageUrl;
+    public void setStockID(int stockID) {
+        this.stockID = stockID;
     }
 
-    public void setImageUrl(String imageUrl) {
-        this.imageUrl = imageUrl;
+    public String getImageURL() {
+        return imageURL;
     }
+
+    public void setImageURL(String imageURL) {
+        this.imageURL = imageURL;
+    }
+
+
 }
-

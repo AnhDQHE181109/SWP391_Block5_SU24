@@ -4,14 +4,15 @@
  */
 package entity;
 
+import java.io.Serializable;
 import java.util.Date;
 
-public class Wishlist {
+public class Wishlist implements Serializable {
+    
     private int wishlistID;
-    private int accountID;
-    private int productID;
+    private Account account;
+    private int stockID;
     private Date dateAdded;
 
-    // Getters and setters
+    // Getters and Setters
 }
-

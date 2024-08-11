@@ -12,5 +12,47 @@ public class Order {
     private Date orderDate;
     private String status;
 
-    // Getters and setters
+    public Order() {
+    }
+
+    public Order(int orderID, Integer accountID, Date orderDate, String status) {
+        this.orderID = orderID;
+        this.accountID = accountID;
+        this.orderDate = orderDate;
+        this.status = status;
+    }
+
+    public int getOrderID() {
+        return orderID;
+    }
+
+    public void setOrderID(int orderID) {
+        this.orderID = orderID;
+    }
+
+    public Integer getAccountID() {
+        return accountID;
+    }
+
+    public void setAccountID(Integer accountID) {
+        this.accountID = accountID;
+    }
+
+    public Date getOrderDate() {
+        return orderDate;
+    }
+
+    public void setOrderDate(Date orderDate) {
+        this.orderDate = orderDate;
+    }
+
+    public String getStatus() {
+        return status;
+    }
+
+    public void setStatus(String status) {
+        this.status = status;
+    }
+
+   
 }
