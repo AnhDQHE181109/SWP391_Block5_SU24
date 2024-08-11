@@ -207,7 +207,7 @@
         </nav>
         <!-- Navbar End -->
 
-
+        
         <!-- Blank Start -->
         <div class="container-fluid pt-4 px-4">
             <div class="row vh-100 bg-light rounded align-items-center justify-content-center mx-0">
@@ -261,10 +261,11 @@
         <div class="modal fade" id="editProductModal" tabindex="-1" aria-labelledby="editProductModalLabel" aria-hidden="true">
             <div class="modal-dialog">
                 <div class="modal-content">
-                    <form action="EditProductController" method="post">
+                    <form id="editProductForm" action="EditProductController" method="post">
                         <div class="modal-header">
                             <h5 class="modal-title" id="editProductModalLabel">Edit Product</h5>
                             <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                            <div></div>
                         </div>
                         <div class="modal-body">
                             <input type="hidden" name="productId" id="editProductId">
@@ -273,24 +274,53 @@
                             <div class="mb-3">
                                 <label for="editProductName" class="form-label">Product Name</label>
                                 <input type="text" class="form-control" id="editProductName" name="productName" required>
+                                <div class="invalid-feedback">
+                                    <%
+                                        String mess = (String) request.getAttribute("mess");
+                                        if (mess != null) {
+                                            out.print("<span style='color:red;'>" + mess + "</span>");
+                                        }
+                                    %>
+                                </div>
                             </div>
 
                             <!-- Origin -->
                             <div class="mb-3">
                                 <label for="editOrigin" class="form-label">Origin</label>
                                 <input type="text" class="form-control" id="editOrigin" name="origin" required>
+                                <div class="invalid-feedback">
+                                    <%
+                                        if (mess != null) {
+                                            out.print("<span style='color:red;'>" + mess + "</span>");
+                                        }
+                                    %>
+                                </div>
                             </div>
 
                             <!-- Material -->
                             <div class="mb-3">
                                 <label for="editMaterial" class="form-label">Material</label>
                                 <input type="text" class="form-control" id="editMaterial" name="material" required>
+                                <div class="invalid-feedback">
+                                    <%
+                                        if (mess != null) {
+                                            out.print("<span style='color:red;'>" + mess + "</span>");
+                                        }
+                                    %>
+                                </div>
                             </div>
 
                             <!-- Price -->
                             <div class="mb-3">
                                 <label for="editPrice" class="form-label">Price</label>
                                 <input type="number" class="form-control" id="editPrice" name="price" step="0.01" required>
+                                <div class="invalid-feedback">
+                                    <%
+                                        if (mess != null) {
+                                            out.print("<span style='color:red;'>" + mess + "</span>");
+                                        }
+                                    %>
+                                </div>
                             </div>
 
                             <!-- Brand Select Dropdown -->
@@ -431,6 +461,52 @@
         var productId = button.getAttribute('data-id');
         var modal = this;
         modal.querySelector('#deleteProductId').value = productId;
+    });
+    document.getElementById('editProductForm').addEventListener('submit', function (event) {
+        let isValid = true;
+
+        // Clear previous error messages
+        document.getElementById('productNameError').innerText = '';
+        document.getElementById('originError').innerText = '';
+        document.getElementById('materialError').innerText = '';
+        document.getElementById('priceError').innerText = '';
+
+        // Regex patterns
+        const textPattern = /^[A-Z][a-zA-Z\s'-\[\]]*$/;
+        const pricePattern = /^\d+(\.\d{1,2})?$/;
+
+        // Validate Product Name
+        const productName = document.getElementById('editProductName').value.trim();
+        if (!productName.match(textPattern)) {
+            document.getElementById('productNameError').innerText = 'Product name must start with an uppercase letter and contain only valid characters.';
+            isValid = false;
+        }
+
+        // Validate Origin
+        const origin = document.getElementById('editOrigin').value.trim();
+        if (!origin.match(textPattern)) {
+            document.getElementById('originError').innerText = 'Origin must start with an uppercase letter and contain only valid characters.';
+            isValid = false;
+        }
+
+        // Validate Material
+        const material = document.getElementById('editMaterial').value.trim();
+        if (!material.match(textPattern)) {
+            document.getElementById('materialError').innerText = 'Material must start with an uppercase letter and contain only valid characters.';
+            isValid = false;
+        }
+
+        // Validate Price
+        const price = document.getElementById('editPrice').value.trim();
+        if (!price.match(pricePattern)) {
+            document.getElementById('priceError').innerText = 'Price must be a valid decimal number (up to 2 decimal places).';
+            isValid = false;
+        }
+
+        // Prevent form submission if validation fails
+        if (!isValid) {
+            event.preventDefault();
+        }
     });
 </script>
 
