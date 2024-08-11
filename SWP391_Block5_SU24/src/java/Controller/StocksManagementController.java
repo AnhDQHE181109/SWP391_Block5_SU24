@@ -78,10 +78,29 @@ public class StocksManagementController extends HttpServlet {
 
         String newVariantProductID = request.getParameter("newVariantProductID");
         if (newVariantProductID != null) {
-            int size = Integer.parseInt(request.getParameter("newVariantSize"));
-            String color = request.getParameter("newVariantColor");
-            int quantity = Integer.parseInt(request.getParameter("newVariantQuantity"));
+//            int size = Integer.parseInt(request.getParameter("newVariantSize"));
+//            String color = request.getParameter("newVariantColor");
+//            int quantity = Integer.parseInt(request.getParameter("newVariantQuantity"));
+//            int productID = Integer.parseInt(request.getParameter("newVariantProductID"));
+
+            Map newVariantData = request.getParameterMap();
+            int size = 0, quantity = 0;
             int productID = Integer.parseInt(request.getParameter("newVariantProductID"));
+            String color = "";
+
+            for (Object key : newVariantData.keySet()) {
+                String keyString = (String) key;
+                String[] value = (String[]) newVariantData.get(keyString);
+
+                if (keyString.startsWith("newVariantSize")) {
+                    size = Integer.parseInt(value[0]);
+                } else if (keyString.startsWith("newVariantColor")) {
+                    color = value[0];
+                } else if (keyString.startsWith("newVariantQuantity")) {
+                    quantity = Integer.parseInt(value[0]);
+                }
+
+            }
 
             int importID = smDAO.logAccountAndGetImportID(accountID);
             smDAO.addNewProductVariant(productID, size, color, quantity, importID);
@@ -129,7 +148,7 @@ public class StocksManagementController extends HttpServlet {
         if (confirmYes != null) {
             //Debugging
             System.out.println("confirmYes: " + confirmYes);
-            
+
             for (Product product : outOfStocksList) {
                 smDAO.setProductStock(product.getStockID(), 0);
                 product.setStockQuantity(0);
@@ -146,15 +165,15 @@ public class StocksManagementController extends HttpServlet {
         } else if (confirmNo != null) {
             //Debugging
             System.out.println("confirmNo: " + confirmNo);
-            
+
             for (Product product : outOfStocksList) {
                 loggedProducts.add(product);
             }
-            
+
             outOfStocksList.clear();
             smDAO.logUpdatedProducts(accountID, loggedImportID, loggedProducts);
             loggedProducts.clear();
-            
+
             request.getRequestDispatcher("staff/stocksManager.jsp").forward(request, response);
             return;
         }
