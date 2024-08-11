@@ -168,7 +168,7 @@
                     </div>
                     <input type="hidden" id="extraData" name="extraData">
                 </form>
-                Code is available for <p id="timer"></p>
+                <p id="timer"></p>
                 <a href="login.jsp" style="
                    position: absolute;
                    top: 10px;
