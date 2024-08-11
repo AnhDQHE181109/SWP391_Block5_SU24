@@ -130,26 +130,27 @@
 
             </div>
             <hr>
-            <ul class="app-menu">
-                <li><a class="app-menu__item" href="dashboard"><i class='app-menu__icon bx bx-tachometer'></i><span
-                            class="app-menu__label">Dashboard</span></a></li>
-                <li><a class="app-menu__item" href="customer_manage"><i class='app-menu__icon bx bx-user-voice'></i><span
-                            class="app-menu__label">Customers</span></a></li>
-                <li><a class="app-menu__item" href="product_manage"><i
-                            class='app-menu__icon bx bx-purchase-tag-alt'></i><span class="app-menu__label">Products</span></a>
-                </li>
-                <li><a class="app-menu__item" href="order_manage"><i class='app-menu__icon bx bx-task'></i><span
-                            class="app-menu__label">Orders</span></a></li>
-                <li><a class="app-menu__item" href="review_manage" target="_blank"><i class='app-menu__icon bx bx-task'></i><span
-                            class="app-menu__label">Reviews</span></a></li>
-                <button class="admin_logout" onclick="showLogoutBox()">Logout</button>
-                <div class="logout-box" id="logoutBox" style="display: none">
-                    <h2>Logout</h2>
-                    <p>Are you sure you want to logout?</p>
-                    <button onclick="logout()">Logout</button>
-                    <button onclick="cancelLogout()">Cancel</button>
-                </div>
-            </ul>
+                    <ul class="app-menu">
+                        <li><a class="app-menu__item" href="dashboard"><i class='app-menu__icon bx bx-tachometer'></i><span
+                                    class="app-menu__label">Dashboard</span></a></li>
+                        <li><a class="app-menu__item" href="customer_manage"><i class='app-menu__icon bx bx-user-voice'></i><span
+                                    class="app-menu__label">Customers</span></a></li>
+                        <li><a class="app-menu__item" href="stocksManager"><i
+                                    class='app-menu__icon bx bx-purchase-tag-alt'></i><span class="app-menu__label">Products</span></a>
+                        </li>
+                        <li><a class="app-menu__item" href="Ordercontroller"><i class='app-menu__icon bx bx-task'></i><span
+                                    class="app-menu__label">Orders</span></a></li>
+                        <li><a class="app-menu__item" href="productStockImport"><i class='app-menu__icon bx bx-task'></i><span
+                                    class="app-menu__label">Reviews</span></a></li>
+                       
+                        <button class="admin_logout" onclick="showLogoutBox()">Logout</button>
+                        <div class="logout-box" id="logoutBox" style="display: none">
+                            <h2>Logout</h2>
+                            <p>Are you sure you want to logout?</p>
+                            <button onclick="logout()">Logout</button>
+                            <button onclick="cancelLogout()">Cancel</button>
+                        </div>
+                    </ul>
         </aside>
         <main class="app-content">
             <div class="app-title">

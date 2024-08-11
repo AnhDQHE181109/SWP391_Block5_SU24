@@ -218,4 +218,50 @@ public boolean deleteAccount(int accountId) {
             e.printStackTrace();
         }
     }
+
+   public String getUsernameByAccountID(int accountID) {
+        String username = null;
+        String sql = "SELECT username FROM Accounts WHERE accountID = ?";
+        try {
+            ps = con.prepareStatement(sql);
+            ps.setInt(1, accountID);
+            rs = ps.executeQuery();
+            if (rs.next()) {
+                username = rs.getString("username");
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            try {
+                if (rs != null) rs.close();
+                if (ps != null) ps.close();
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+        return username;
+    }
+
+   // Tìm accountID theo username, có thể nhập một vài ký tự ở bất kỳ vị trí nào
+    public List<Integer> findAccountIDsByUsername(String usernamePattern) throws Exception {
+        List<Integer> accountIDs = new ArrayList<>();
+        String query = "SELECT accountID FROM Accounts WHERE username LIKE ?";
+        
+        try {
+            ps = con.prepareStatement(query);
+            ps.setString(1, "%" + usernamePattern + "%"); // Thêm '%' vào cả đầu và cuối
+            rs = ps.executeQuery();
+            
+            while (rs.next()) {
+                accountIDs.add(rs.getInt("accountID"));
+            }
+        } finally {
+            // Đảm bảo đóng ResultSet, PreparedStatement
+            if (rs != null) rs.close();
+            if (ps != null) ps.close();
+        }
+        
+        return accountIDs;
+    }
+    
 }

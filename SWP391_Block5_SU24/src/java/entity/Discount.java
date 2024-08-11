@@ -4,14 +4,13 @@
  */
 package entity;
 
-import java.math.BigDecimal;
+import java.io.Serializable;
 
-public class Discount {
-    private int discountId;
-    private int productId;
-    private int colorId;
-    private int sizeId;
-    private BigDecimal discountAmount;
+public class Discount implements Serializable {
+    
+    private int discountID;
+    private Product product;
+    private double discountAmount;
 
-    // Getters and setters
+    // Getters and Setters
 }
