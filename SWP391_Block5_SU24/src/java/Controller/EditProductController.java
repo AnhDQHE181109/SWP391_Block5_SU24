@@ -97,6 +97,7 @@ public class EditProductController extends HttpServlet {
             double price = Double.parseDouble(request.getParameter("price"));
             int brandId = Integer.parseInt(request.getParameter("brandId"));
             int categoryId = Integer.parseInt(request.getParameter("categoryId"));
+
             if(productName.isBlank() || origin.isBlank() || material.isBlank()){
                 request.setAttribute("mess", "Input must not be blank");
                 request.getRequestDispatcher("productmanage.jsp").forward(request, response);
