@@ -100,7 +100,7 @@ public class AccountDAO extends MyDAO {
                     int storedRole = rs.getInt("Role");
                     if (role == 1 && storedRole == role) {
                         return 1; // Login successful customer
-                    } else if ((role == 2 || role == 3) && role != 1) {
+                    } else if ((storedRole == 2 || storedRole == 3) && role != 1) {
                         return 1; //Login successful staff and manager
                     } else {
                         return 2; // Role mismatch
