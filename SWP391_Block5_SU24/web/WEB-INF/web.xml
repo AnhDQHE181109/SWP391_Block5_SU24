@@ -85,4 +85,20 @@
         <servlet-name>DeleteProductController</servlet-name>
         <url-pattern>/DeleteProductController</url-pattern>
     </servlet-mapping>
+    <servlet>
+        <servlet-name>DeleteAccountController</servlet-name>
+        <servlet-class>Controller.DeleteAccountController</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>DeleteAccountController</servlet-name>
+        <url-pattern>/deleteAccount</url-pattern>
+    </servlet-mapping>
+    <servlet>
+        <servlet-name>UpdateAccountController</servlet-name>
+        <servlet-class>Controller.UpdateAccountController</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>UpdateAccountController</servlet-name>
+        <url-pattern>/updateAccount</url-pattern>
+    </servlet-mapping>
 </web-app>
