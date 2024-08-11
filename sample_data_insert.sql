@@ -17,9 +17,9 @@ DELETE FROM Brand
 
 -- Insert data into Accounts
 INSERT INTO Accounts (Username, Hash, PhoneNumber, Email, Address, Role, Salt) VALUES
-('johndoe', 'hashedpassword1', '123-456-7890', 'johndoe@example.com', '123 Main St, Anytown, USA', 1, 'salt1'),
-('janedoe', 'hashedpassword2', '987-654-3210', 'janedoe@example.com', '456 Elm St, Othertown, USA', 2, 'salt2'),
-('alice', 'hashedpassword3', '555-123-4567', 'alice@example.com', '789 Maple St, Sometown, USA', 1, 'salt3');
+('johndoe', 'NqmCu0KLyfdegTojOpWmaAC8gODT1EfFxKtyJ9tfwUDneUmaWlo7TiaWJYzGnaWaYcWsUtytBL/iqltP+MLvVA==', '123-456-7890', 'johndoe@example.com', '123 Main St, Anytown, USA', 1, 'jMxFrhzK+pkZRnCz7jEkew=='),
+('janedoe', 'NqmCu0KLyfdegTojOpWmaAC8gODT1EfFxKtyJ9tfwUDneUmaWlo7TiaWJYzGnaWaYcWsUtytBL/iqltP+MLvVA==', '987-654-3210', 'janedoe@example.com', '456 Elm St, Othertown, USA', 2, 'jMxFrhzK+pkZRnCz7jEkew=='),
+('alice', 'NqmCu0KLyfdegTojOpWmaAC8gODT1EfFxKtyJ9tfwUDneUmaWlo7TiaWJYzGnaWaYcWsUtytBL/iqltP+MLvVA==', '555-123-4567', 'alice@example.com', '789 Maple St, Sometown, USA', 1, 'jMxFrhzK+pkZRnCz7jEkew==');
 
 -- Insert data into Categories
 INSERT INTO Categories (CategoryName) VALUES
