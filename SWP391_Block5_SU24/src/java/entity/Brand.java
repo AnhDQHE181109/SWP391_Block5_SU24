@@ -5,8 +5,9 @@
 package entity;
 
 public class Brand {
-    private int brandId;
+    private int brandID;
     private String brandName;
+
 
     public int getBrandId() {
         return brandId;
@@ -25,4 +26,5 @@ public class Brand {
     }
 
     
+
 }
