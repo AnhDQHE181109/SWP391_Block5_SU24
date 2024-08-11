@@ -36,7 +36,7 @@ public class StocksManagementDAO extends DBConnect {
 
         String sql = "select p.ProductID, ProductName, ImageURL\n"
                 + "from Products p, ProductImages pi\n"
-                + "where p.ProductID = pi.ProductID";
+                + "where p.ImageID = pi.ImageID";
 
         Product product = null;
         List<Product> list = new ArrayList<>();
@@ -288,19 +288,16 @@ public class StocksManagementDAO extends DBConnect {
         return -1;
     }
 
-    public void logUserUpdateActivity(int stockID, int importID, int productID, int size, String color, int stockQuantity) {
+    public void logUserUpdateActivity(int stockID, int importID, int stockQuantity) {
 
-        String sql = "insert into StockImportDetail(StockID, ImportID, ProductID, Size, Color, StockQuantity)\n"
-                + "values (?, ?, ?, ?, ?, ?)";
+        String sql = "insert into StockImportDetail(StockID, ImportID, StockQuantity)\n"
+                + "values (?, ?, ?)";
 
         try {
             PreparedStatement ps = conn.prepareStatement(sql);
             ps.setInt(1, stockID);
             ps.setInt(2, importID);
-            ps.setInt(3, productID);
-            ps.setInt(4, size);
-            ps.setString(5, color);
-            ps.setInt(6, stockQuantity);
+            ps.setInt(3, stockQuantity);
 
             ResultSet rs = ps.executeQuery();
 
@@ -322,14 +319,11 @@ public class StocksManagementDAO extends DBConnect {
         System.out.println("logUpdatedProducts(): " + "importID: " + importID);
         for (Product product : loggedProducts) {
             int stockID = product.getStockID();
-            int productID = product.getProductId();
-            int size = product.getSize();
-            String color = product.getColor();
             int stockQuantity = product.getStockQuantity();
-            logUserUpdateActivity(stockID, importID, productID, size, color, stockQuantity);
+            logUserUpdateActivity(stockID, importID, stockQuantity);
         }
     }
-    
+
     public void logUpdatedProducts(int accountID, int importID, List<Product> loggedProducts) {
         //Debugging
         System.out.println("logUpdatedProducts(): " + "accountID: " + accountID);
@@ -340,7 +334,7 @@ public class StocksManagementDAO extends DBConnect {
             int size = product.getSize();
             String color = product.getColor();
             int stockQuantity = product.getStockQuantity();
-            logUserUpdateActivity(stockID, importID, productID, size, color, stockQuantity);
+            logUserUpdateActivity(stockID, importID, stockQuantity);
         }
     }
 }

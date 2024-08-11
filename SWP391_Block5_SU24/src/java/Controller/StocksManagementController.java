@@ -132,6 +132,7 @@ public class StocksManagementController extends HttpServlet {
             
             for (Product product : outOfStocksList) {
                 smDAO.setProductStock(product.getStockID(), 0);
+                product.setStockQuantity(0);
                 loggedProducts.add(product);
             }
             outOfStocksList.clear();
@@ -146,7 +147,14 @@ public class StocksManagementController extends HttpServlet {
             //Debugging
             System.out.println("confirmNo: " + confirmNo);
             
+            for (Product product : outOfStocksList) {
+                loggedProducts.add(product);
+            }
+            
             outOfStocksList.clear();
+            smDAO.logUpdatedProducts(accountID, loggedImportID, loggedProducts);
+            loggedProducts.clear();
+            
             request.getRequestDispatcher("staff/stocksManager.jsp").forward(request, response);
             return;
         }
@@ -175,6 +183,7 @@ public class StocksManagementController extends HttpServlet {
                 if (smDAO.getProductStockQuantityByID(stockID) != 0) {
                     outOfStocksList.add(outOfStockProduct);
                     outOfStocksProductName = smDAO.getProductNameByID(outOfStockProduct.getProductId());
+                    //Debugging
                     System.out.println(outOfStocksProductName);
                 } else {
                     loggedProducts.add(outOfStockProduct);
