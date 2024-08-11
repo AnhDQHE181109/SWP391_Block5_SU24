@@ -102,9 +102,21 @@ public class StocksManagementController extends HttpServlet {
 
             }
 
-            int importID = smDAO.logAccountAndGetImportID(accountID);
-            smDAO.addNewProductVariant(productID, size, color, quantity, importID);
-            request.setAttribute("openPopup", "popup_" + productID);
+            if (smDAO.checkIfStockExists(size, color)) {
+                List<Product> productsList = smDAO.getAllProducts();
+                List<Product> productsStocksList = smDAO.getProductsStocks();
+
+                request.setAttribute("alertMessage", "Product variant already exists!");
+                request.setAttribute("productsList", productsList);
+                request.setAttribute("productsStocksList", productsStocksList);
+                request.getRequestDispatcher("staff/stocksManager.jsp").forward(request, response);
+                return;
+            } else {
+                int importID = smDAO.logAccountAndGetImportID(accountID);
+                smDAO.addNewProductVariant(productID, size, color, quantity, importID);
+                request.setAttribute("openPopup", "popup_" + productID);
+            }
+
         }
 
         List<Product> productsList = smDAO.getAllProducts();
