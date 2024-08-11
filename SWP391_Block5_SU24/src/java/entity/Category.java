@@ -5,7 +5,7 @@
 package entity;
 
 public class Category {
-    private int categoryID;
+    private int categoryId;
     private String categoryName;
 
 
