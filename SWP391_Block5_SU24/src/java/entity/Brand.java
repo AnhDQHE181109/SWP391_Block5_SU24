@@ -5,7 +5,7 @@
 package entity;
 
 public class Brand {
-    private int brandID;
+    private int brandId;
     private String brandName;
 
 
