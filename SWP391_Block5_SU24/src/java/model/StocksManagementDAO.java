@@ -20,10 +20,16 @@ public class StocksManagementDAO extends DBConnect {
 
     public static void main(String[] args) {
         StocksManagementDAO smDAO = new StocksManagementDAO();
-        List<Product> productsStocksList = smDAO.getProductsStocks();
-        for (Product product : productsStocksList) {
-            System.out.println(product);
-        }
+//        List<Product> productsStocksList = smDAO.getProductsStocks();
+//        for (Product product : productsStocksList) {
+//            System.out.println(product);
+//        }
+//        smDAO.logAccount(3);
+
+        List<Product> loggedProducts = new ArrayList<>();
+        Product prod = new Product(5, 19, 1, 45, "White", 20);
+        loggedProducts.add(prod);
+        smDAO.logUpdatedProducts(3, loggedProducts);
     }
 
     public List<Product> getAllProducts() {
@@ -51,7 +57,7 @@ public class StocksManagementDAO extends DBConnect {
                 ps.close();
             }
         } catch (SQLException e) {
-            System.out.println(e);
+            System.out.println("getAllProducts(): " + e);
         }
 
         return list;
@@ -83,7 +89,7 @@ public class StocksManagementDAO extends DBConnect {
                 ps.close();
             }
         } catch (SQLException e) {
-            System.out.println(e);
+            System.out.println("getProductsStocks(): " + e);
         }
 
         return productsStocksList;
@@ -109,7 +115,7 @@ public class StocksManagementDAO extends DBConnect {
                 ps.close();
             }
         } catch (SQLException e) {
-            System.out.println(e);
+            System.out.println("setProductStock(): " + e);
         }
     }
 
@@ -139,7 +145,7 @@ public class StocksManagementDAO extends DBConnect {
                 ps.close();
             }
         } catch (SQLException e) {
-            System.out.println(e);
+            System.out.println("getProductStockByStockID(): " + e);
         }
 
         return product;
@@ -169,7 +175,7 @@ public class StocksManagementDAO extends DBConnect {
                 ps.close();
             }
         } catch (SQLException e) {
-            System.out.println(e);
+            System.out.println("getProductNameByID(): " + e);
         }
 
         return null;
@@ -199,7 +205,7 @@ public class StocksManagementDAO extends DBConnect {
                 ps.close();
             }
         } catch (SQLException e) {
-            System.out.println(e);
+            System.out.println("getProductStockQuantityByID(): " + e);
         }
 
         return 0;
@@ -227,23 +233,42 @@ public class StocksManagementDAO extends DBConnect {
                 ps.close();
             }
         } catch (SQLException e) {
-            System.out.println(e);
+            System.out.println("addNewProductVariant(): " + e);
         }
     }
 
     //User activity logging functions
-    public int logAccountAndGetImportID(int accountID) {
+    public void logAccount(int accountID) {
 
         String sql = "insert into ProductStockImport(AccountID, ImportDate) \n"
-                + "values (?, getdate())\n"
-                + "\n"
-                + "select top 1 ImportID, AccountID\n"
+                + "values (?, getdate())";
+
+        try {
+            PreparedStatement ps = conn.prepareStatement(sql);
+            ps.setInt(1, accountID);
+
+            ResultSet rs = ps.executeQuery();
+
+            if (rs != null) {
+                rs.close();
+            }
+            if (ps != null) {
+                ps.close();
+            }
+        } catch (SQLException e) {
+            System.out.println("logAccount(): " + e);
+        }
+    }
+
+    public int logAccountAndGetImportID(int accountID) {
+        logAccount(accountID);
+
+        String sql = "select top 1 ImportID, AccountID\n"
                 + "from ProductStockImport\n"
                 + "order by ImportID desc";
 
         try {
             PreparedStatement ps = conn.prepareStatement(sql);
-            ps.setInt(1, accountID);
 
             ResultSet rs = ps.executeQuery();
             if (rs.next()) {
@@ -257,7 +282,7 @@ public class StocksManagementDAO extends DBConnect {
                 ps.close();
             }
         } catch (SQLException e) {
-            System.out.println(e);
+            System.out.println("logAccountAndGetImportID(): " + e);
         }
 
         return -1;
@@ -286,12 +311,15 @@ public class StocksManagementDAO extends DBConnect {
                 ps.close();
             }
         } catch (SQLException e) {
-            System.out.println(e);
+            System.out.println("logUserUpdateActivity(): " + e);
         }
     }
 
     public void logUpdatedProducts(int accountID, List<Product> loggedProducts) {
         int importID = logAccountAndGetImportID(accountID);
+        //Debugging
+        System.out.println("logUpdatedProducts(): " + "accountID: " + accountID);
+        System.out.println("logUpdatedProducts(): " + "importID: " + importID);
         for (Product product : loggedProducts) {
             int stockID = product.getStockID();
             int productID = product.getProductId();
