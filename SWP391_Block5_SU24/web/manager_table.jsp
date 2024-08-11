@@ -41,29 +41,7 @@
         <link href="css/manager.css" rel="stylesheet">
 
         <script>
-            function deleteAccount(accountId) {
-                if (confirm("Are you sure you want to delete this account?")) {
-                    fetch('deleteAccount', {
-                        method: 'POST',
-                        headers: {
-                            'Content-Type': 'application/json'
-                        },
-                        body: JSON.stringify({id: accountId})
-                    })
-                            .then(response => {
-                                if (response.ok) {
-                                    alert("Account deleted successfully!");
-                                    // Optionally, you can reload the page or update the table dynamically
-                                } else {
-                                    response.text().then(text => alert("Error deleting the account: " + text));
-                                }
-                            })
-                            .catch(error => {
-                                console.error("Error deleting the account:", error);
-                                alert("An error occurred while deleting the account. Please try again later.");
-                            });
-                }
-            }
+            
 
             function editAccount(accountId, username, email, phoneNumber, address) {
                 document.querySelector('#editForm [name="accountId"]').value = accountId;
@@ -152,7 +130,7 @@
                             </div>
                         </div>
                         <a href="widget.html" class="nav-item nav-link"><i class="fa fa-th me-2"></i>Widgets</a>
-                        <a href="form.html" class="nav-item nav-link"><i class="fa fa-keyboard me-2"></i>Forms</a>
+                        <a href="addStaffAccount.jsp" class="nav-item nav-link"><i class="fa fa-keyboard me-2"></i>Forms</a>
                         <a href="manager_table.jsp" class="nav-item nav-link active"><i class="fa fa-table me-2"></i>Tables</a>
                         <a href="chart.html" class="nav-item nav-link"><i class="fa fa-chart-bar me-2"></i>Charts</a>
                         <div class="nav-item dropdown">
@@ -298,7 +276,6 @@
                                                 <td><%= account.getAddress() %></td>
                                                 <td><%= account.getRole() %></td>
                                                 <td>
-                                                    <button class="btn btn-danger btn-sm" onclick="deleteAccount(<%= account.getAccountID() %>)">Delete</button>
                                                     <button class="btn btn-primary btn-sm" onclick="editAccount(<%= account.getAccountID() %>, '<%= account.getUsername() %>', '<%= account.getEmail() %>', '<%= account.getPhoneNumber() %>', '<%= account.getAddress() %>')">Edit</button>
                                                 </td>
                                             </tr>
@@ -342,7 +319,6 @@
                                                 <td><%= account.getAddress() %></td>
                                                 <td><%= account.getRole() %></td>
                                                 <td>
-                                                    <button class="btn btn-danger btn-sm" onclick="deleteAccount(<%= account.getAccountID() %>)">Delete</button>
                                                     <button class="btn btn-primary btn-sm" onclick="editAccount(<%= account.getAccountID() %>, '<%= account.getUsername() %>', '<%= account.getEmail() %>', '<%= account.getPhoneNumber() %>', '<%= account.getAddress() %>')">Edit</button>
                                                 </td>
                                             </tr>

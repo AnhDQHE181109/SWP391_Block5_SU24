@@ -5,21 +5,25 @@
 package Controller;
 
 import java.io.IOException;
-import java.io.PrintWriter;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import model.AccountDAO;
+import Util.EncryptionHelper;
+import Util.Validator;
+import java.io.PrintWriter;
+import java.security.NoSuchAlgorithmException;
+import java.security.spec.InvalidKeySpecException;
 
 /**
  *
  * @author nobbe
  */
-@WebServlet(name = "DeleteAccountController", urlPatterns = {"/deleteAccount"})
-public class DeleteAccountController extends HttpServlet {
-
+@WebServlet(name = "CreateStaffController", urlPatterns = {"/CreateStaffController"})
+public class CreateStaffController extends HttpServlet {
+    private static final long serialVersionUID = 1L;
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
      * methods.
@@ -29,6 +33,9 @@ public class DeleteAccountController extends HttpServlet {
      * @throws ServletException if a servlet-specific error occurs
      * @throws IOException if an I/O error occurs
      */
+    
+    
+
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
@@ -37,14 +44,16 @@ public class DeleteAccountController extends HttpServlet {
             out.println("<!DOCTYPE html>");
             out.println("<html>");
             out.println("<head>");
-            out.println("<title>Servlet DeleteAccountController</title>");            
+            out.println("<title>Servlet CreateStaffController</title>");            
             out.println("</head>");
             out.println("<body>");
-            out.println("<h1>Servlet DeleteAccountController at " + request.getContextPath() + "</h1>");
+            out.println("<h1>Servlet CreateStaffController at " + request.getContextPath() + "</h1>");
             out.println("</body>");
             out.println("</html>");
         }
     }
+    
+    
 
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
     /**
@@ -72,24 +81,33 @@ public class DeleteAccountController extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        processRequest(request, response);
-        int accountId = Integer.parseInt(request.getParameter("id"));
+        String username = request.getParameter("username");
+        String password = request.getParameter("password");
+        String email = request.getParameter("email");
+        String phoneNumber = request.getParameter("phoneNumber");
+        String address = request.getParameter("address");
+        int role = 2; // Assuming role '2' is for staff
+
+        AccountDAO accountDAO = new AccountDAO();
 
         try {
-            AccountDAO accountDAO = new AccountDAO();
-            boolean deleted = accountDAO.deleteAccount(accountId);
-            if (deleted) {
-                response.setStatus(HttpServletResponse.SC_OK);
+            String salt = EncryptionHelper.generateSalt();
+            String hashedPassword = EncryptionHelper.hashPassword(password, salt);
+
+            if (accountDAO.addAccount(username, hashedPassword, phoneNumber, email, address, role, salt)) {
+                request.setAttribute("message", "Account created successfully!");
             } else {
-                response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
-                response.getWriter().write("Error deleting the account.");
+                request.setAttribute("message", "Failed to create account. Please try again.");
             }
-        } catch (Exception e) {
-            response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
-            response.getWriter().write("Error deleting the account: " + e.getMessage());
+        } catch (NoSuchAlgorithmException | InvalidKeySpecException e) {
             e.printStackTrace();
+            request.setAttribute("message", "Error occurred during account creation.");
         }
+
+        request.getRequestDispatcher("addStaffAccount.jsp").forward(request, response);
     }
+    
+    
 
     /**
      * Returns a short description of the servlet.
