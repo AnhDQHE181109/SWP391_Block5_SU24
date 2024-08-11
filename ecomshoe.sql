@@ -126,12 +126,12 @@ GO
 -- Create Cart table, referencing StockID instead of ProductID, Size, and Color
 CREATE TABLE Cart (
     cart_id INT IDENTITY(1,1) PRIMARY KEY,
-    customer_id INT NOT NULL,
+    AccountID INT NOT NULL,
     StockID INT NOT NULL,
     quantity INT NOT NULL,
     discount DECIMAL(5,2) DEFAULT 0.00 NOT NULL,
     date_added DATETIME DEFAULT GETDATE() NOT NULL,
-    CONSTRAINT FK_Cart_Accounts FOREIGN KEY (customer_id) REFERENCES Accounts(AccountID),
+    CONSTRAINT FK_Cart_Accounts FOREIGN KEY (AccountID) REFERENCES Accounts(AccountID),
     CONSTRAINT FK_Cart_Stock FOREIGN KEY (StockID) REFERENCES Stock(StockID)
 );
 GO
@@ -148,12 +148,12 @@ GO
 -- Create Feedback table, referencing StockID instead of ProductID, Size, and Color
 CREATE TABLE Feedback (
     feedback_id INT IDENTITY(1,1) PRIMARY KEY,
-    customer_id INT NOT NULL,
+    AccountID INT NOT NULL,
     StockID INT NOT NULL,
     rating INT NULL,
     comment TEXT NULL,
     created_at DATETIME DEFAULT GETDATE() NULL,
-    CONSTRAINT FK_Feedback_Accounts FOREIGN KEY (customer_id) REFERENCES Accounts(AccountID),
+    CONSTRAINT FK_Feedback_Accounts FOREIGN KEY (AccountID) REFERENCES Accounts(AccountID),
     CONSTRAINT FK_Feedback_Stock FOREIGN KEY (StockID) REFERENCES Stock(StockID)
 );
 GO
@@ -222,8 +222,8 @@ VALUES
 -- Insert data into ProductStockImport
 INSERT INTO ProductStockImport (AccountID, ImportDate)
 VALUES 
-(1, GETDATE()),
-(2, GETDATE());
+(1, 12/3/2024),
+(2, 12/32/2024);
 
 -- Insert data into Stock
 INSERT INTO Stock (ProductID, Size, Color, StockQuantity, ImportID)
@@ -248,7 +248,7 @@ VALUES
 (2, GETDATE(), 'Shipped');
 
 -- Insert data into Cart
-INSERT INTO Cart (customer_id, StockID, quantity, discount, date_added)
+INSERT INTO Cart (AccountID, StockID, quantity, discount, date_added)
 VALUES 
 (1, 1, 2, 10.00, GETDATE()),
 (2, 3, 1, 5.00, GETDATE());
@@ -260,7 +260,7 @@ VALUES
 (2, 20.00);
 
 -- Insert data into Feedback
-INSERT INTO Feedback (customer_id, StockID, rating, comment, created_at)
+INSERT INTO Feedback (AccountID, StockID, rating, comment, created_at)
 VALUES 
 (1, 1, 5, 'Great product!', GETDATE()),
 (2, 3, 4, 'Comfortable and stylish.', GETDATE());
