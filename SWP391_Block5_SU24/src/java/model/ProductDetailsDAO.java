@@ -113,7 +113,7 @@ public class ProductDetailsDAO extends DBConnect {
 
     public void updateProduct(Product product) {
         try {
-            String sql = "UPDATE product SET ProductName = ?,Origin = ?, Material = ?, Price = ?, CategoryID = ?, BrandID = ? ";
+            String sql = "UPDATE Products SET ProductName = ?,Origin = ?, Material = ?, Price = ?, CategoryID = ?, BrandID = ? ";
             PreparedStatement ps = conn.prepareStatement(sql);
             ps.setString(1, product.getProductName());
             ps.setDouble(2, product.getPrice());
@@ -128,7 +128,7 @@ public class ProductDetailsDAO extends DBConnect {
 
     public void deleteProduct(int productId) {
         try {
-            String sql = "DELETE FROM product WHERE productId = ?";
+            String sql = "DELETE FROM Products WHERE productId = ?";
             PreparedStatement ps = conn.prepareStatement(sql);
             ps.setInt(1, productId);
             ps.executeUpdate();
