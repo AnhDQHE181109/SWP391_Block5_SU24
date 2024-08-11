@@ -4,11 +4,15 @@
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 <%@ page import="model.ProductDetailsDAO" %>
 <%@ page import="entity.Product" %>
+<%@ page import="entity.Brand" %>
+<%@ page import="entity.Category" %>
 <%@ page import="java.util.List" %>
 
 <%
     ProductDetailsDAO pDAO = new ProductDetailsDAO();
     List<Product> products = pDAO.getAllProducts();
+    List<Brand> brandList = pDAO.getAllBrands();
+    List<Category> categoryList = pDAO.getAllCategories();
 %>
 
 <html lang="en">
@@ -222,40 +226,38 @@
                             </tr>
                         </thead>
                         <tbody>
-                            <%
-                                for (Product product : products){
-                            %>    
+                            <% for (Product product : products) { %>    
                             <tr>
-                                <td><%=product.getProductName() %></td>
-                                <td><%=product.getOrigin() %></td>
-                                <td><%=product.getMaterial() %></td>
-                                <td><%=product.getPrice() %></td>
-                                <td><%=product.getBrandName() %></td>
-                                <td><%=product.getCategoryName() %></td>
+                                <td><%= product.getProductName() %></td>
+                                <td><%= product.getOrigin() %></td>
+                                <td><%= product.getMaterial() %></td>
+                                <td><%= product.getPrice() %></td>
+                                <td><%= product.getBrandName() %></td>
+                                <td><%= product.getCategoryName() %></td>
                                 <td>
-                                    <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#editProductModal" 
-                                    data-id="<%= product.getProductId() %>" data-name="<%= product.getProductName() %>" 
-                                    data-origin="<%= product.getOrigin() %>" data-material="<%= product.getMaterial() %>" 
-                                    data-price="<%= product.getPrice() %>" data-brand="<%= product.getBrandName() %>" 
-                                    data-category="<%= product.getCategoryName() %>">
-                                Edit
-                            </button>
+                                    <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#editProductModal"
+                                            data-id="<%= product.getProductId() %>" data-name="<%= product.getProductName() %>"
+                                            data-origin="<%= product.getOrigin() %>" data-material="<%= product.getMaterial() %>"
+                                            data-price="<%= product.getPrice() %>" data-brand="<%= product.getBrandName() %>"
+                                            data-category="<%= product.getCategoryName() %>">
+                                        Edit
+                                    </button>
 
-                            <!-- Delete Button -->
-                            <button type="button" class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#deleteProductModal"
-                                    data-id="<%= product.getProductId() %>">
-                                Delete
-                            </button>
+                                    <!-- Delete Button -->
+                                    <button type="button" class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#deleteProductModal"
+                                            data-id="<%= product.getProductId() %>">
+                                        Delete
+                                    </button>
                                 </td>
                             </tr>
-                            <%
-                                }
-                            %>
+                            <% } %>
                         </tbody>
                     </table>
                 </div>
             </div>
         </div>
+
+        <!-- Edit Product Modal -->
         <div class="modal fade" id="editProductModal" tabindex="-1" aria-labelledby="editProductModalLabel" aria-hidden="true">
             <div class="modal-dialog">
                 <div class="modal-content">
@@ -266,29 +268,53 @@
                         </div>
                         <div class="modal-body">
                             <input type="hidden" name="productId" id="editProductId">
+
+                            <!-- Product Name -->
                             <div class="mb-3">
                                 <label for="editProductName" class="form-label">Product Name</label>
                                 <input type="text" class="form-control" id="editProductName" name="productName" required>
                             </div>
+
+                            <!-- Origin -->
                             <div class="mb-3">
                                 <label for="editOrigin" class="form-label">Origin</label>
                                 <input type="text" class="form-control" id="editOrigin" name="origin" required>
                             </div>
+
+                            <!-- Material -->
                             <div class="mb-3">
                                 <label for="editMaterial" class="form-label">Material</label>
                                 <input type="text" class="form-control" id="editMaterial" name="material" required>
                             </div>
+
+                            <!-- Price -->
                             <div class="mb-3">
                                 <label for="editPrice" class="form-label">Price</label>
                                 <input type="number" class="form-control" id="editPrice" name="price" step="0.01" required>
                             </div>
+
+                            <!-- Brand Select Dropdown -->
                             <div class="mb-3">
                                 <label for="editBrand" class="form-label">Brand</label>
-                                <input type="text" class="form-control" id="editBrand" name="brandName" required>
+                                <select name="brandId" id="editBrand" class="form-control">
+                                    <% for(Brand brand : brandList) { %>
+                                    <option value="<%= brand.getBrandId() %>">
+                                        <%= brand.getBrandName() %>
+                                    </option>
+                                    <% } %>
+                                </select>
                             </div>
+
+                            <!-- Category Select Dropdown -->
                             <div class="mb-3">
                                 <label for="editCategory" class="form-label">Category</label>
-                                <input type="text" class="form-control" id="editCategory" name="categoryName" required>
+                                <select name="categoryId" id="editCategory" class="form-control">
+                                    <% for(Category category : categoryList) { %>
+                                    <option value="<%= category.getCategoryId() %>">
+                                        <%= category.getCategoryName() %>
+                                    </option>
+                                    <% } %>
+                                </select>
                             </div>
                         </div>
                         <div class="modal-footer">
@@ -299,7 +325,7 @@
                 </div>
             </div>
         </div>
-`````
+        `````
         <!-- Delete Product Modal -->
         <div class="modal fade" id="deleteProductModal" tabindex="-1" aria-labelledby="deleteProductModalLabel" aria-hidden="true">
             <div class="modal-dialog">
@@ -356,6 +382,57 @@
 <script src="lib/tempusdominus/js/moment.min.js"></script>
 <script src="lib/tempusdominus/js/moment-timezone.min.js"></script>
 <script src="lib/tempusdominus/js/tempusdominus-bootstrap-4.min.js"></script>
+
+
+<script>
+    var editProductModal = document.getElementById('editProductModal');
+    editProductModal.addEventListener('show.bs.modal', function (event) {
+        var button = event.relatedTarget;
+
+        // Retrieve data attributes from the button
+        var productId = button.getAttribute('data-id');
+        var productName = button.getAttribute('data-name');
+        var origin = button.getAttribute('data-origin');
+        var material = button.getAttribute('data-material');
+        var price = button.getAttribute('data-price');
+        var brand = button.getAttribute('data-brand');
+        var category = button.getAttribute('data-category');
+
+        // Populate the modal fields with the retrieved data
+        var modal = this;
+        modal.querySelector('#editProductId').value = productId;
+        modal.querySelector('#editProductName').value = productName;
+        modal.querySelector('#editOrigin').value = origin;
+        modal.querySelector('#editMaterial').value = material;
+        modal.querySelector('#editPrice').value = price;
+
+        // Set the selected brand in the dropdown
+        var brandSelect = modal.querySelector('#editBrand');
+        for (var i = 0; i < brandSelect.options.length; i++) {
+            if (brandSelect.options[i].text === brand) {
+                brandSelect.options[i].selected = true;
+                break;
+            }
+        }
+
+        // Set the selected category in the dropdown
+        var categorySelect = modal.querySelector('#editCategory');
+        for (var i = 0; i < categorySelect.options.length; i++) {
+            if (categorySelect.options[i].text === category) {
+                categorySelect.options[i].selected = true;
+                break;
+            }
+        }
+
+    });
+    var deleteProductModal = document.getElementById('deleteProductModal');
+    deleteProductModal.addEventListener('show.bs.modal', function (event) {
+        var button = event.relatedTarget;
+        var productId = button.getAttribute('data-id');
+        var modal = this;
+        modal.querySelector('#deleteProductId').value = productId;
+    });
+</script>
 
 <!-- Template Javascript -->
 <script src="js/main.js"></script>
