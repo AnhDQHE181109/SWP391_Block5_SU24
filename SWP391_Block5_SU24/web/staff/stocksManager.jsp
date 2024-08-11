@@ -241,7 +241,7 @@
                                                                     <div class="input-group-prepend">
                                                                       <span class="input-group-text" id="basic-addon1">Size</span>
                                                                     </div>
-                                                                    <input type="number" id="newVariantSize_<%=product.getProductId() %>" name="_<%=product.getProductId() %>" class="form-control" placeholder="Size"
+                                                                    <input type="number" id="newVariantSize_<%=product.getProductId() %>" name="newVariantSize_<%=product.getProductId() %>" class="form-control" placeholder="Size"
                                                                     aria-label="Size" aria-describedby="basic-addon1" required min="28" max="40"
                                                                     onfocusout="validateMinMax('newVariantSize_<%=product.getProductId() %>', '28', '40', 'Size')">
                                                                   </div>
@@ -539,6 +539,11 @@
 <% String openPopup = (String) request.getAttribute("openPopup");
 if (openPopup != null) { %>
     <script>openPopup('<%=openPopup %>')</script>
+<% } %>
+
+<% String alertMessage = (String) request.getAttribute("alertMessage");
+if (alertMessage != null) { %>
+    <script>alert('<%=alertMessage %>')</script>
 <% } %>
 
     </body>

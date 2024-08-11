@@ -68,17 +68,17 @@ public class DeleteProductController extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
     throws ServletException, IOException {
-        try {
-            int productId = Integer.parseInt(request.getParameter("productId"));
+        int productId = Integer.parseInt(request.getParameter("productId"));
 
-            ProductDetailsDAO productDAO = new ProductDetailsDAO();
-            productDAO.deleteProduct(productId);
+        // Use the DAO to delete the product
+        ProductDetailsDAO pDAO = new ProductDetailsDAO();
+        boolean isDeleted = pDAO.deleteProduct(productId);
 
-            response.sendRedirect("productmanage.jsp?status=deleted");
-
-        } catch (Exception e) {
-            e.printStackTrace();
-            response.sendRedirect("productmanage.jsp?status=error");
+        // Redirect back to the product list page with a success message
+        if (isDeleted) {
+            response.sendRedirect("productmanage.jsp?message=Product deleted successfully");
+        } else {
+            response.sendRedirect("productmanage.jsp?error=Failed to delete product");
         }
     }
 
