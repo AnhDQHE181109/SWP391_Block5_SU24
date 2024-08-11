@@ -50,11 +50,13 @@ public class UpdateAccountController extends HttpServlet {
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         int accountId = Integer.parseInt(request.getParameter("id"));
-        String newPassword = request.getParameter("password");
         String newEmail = request.getParameter("email");
+        String newPhoneNumber = request.getParameter("phoneNumber");
+        String newAddress = request.getParameter("address");
+
         try {
             AccountDAO accountDAO = new AccountDAO();
-            boolean updated = accountDAO.updateAccount(accountId, newPassword, newEmail);
+            boolean updated = accountDAO.updateAccount(accountId, newEmail, newPhoneNumber, newAddress);
             if (updated) {
                 response.setStatus(HttpServletResponse.SC_OK);
                 response.getWriter().write("Success");

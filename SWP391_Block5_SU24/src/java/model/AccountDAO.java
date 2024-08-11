@@ -178,26 +178,14 @@ public class AccountDAO extends MyDAO {
     }
 
     
-public boolean deleteAccount(int accountId) {
-    String sql = "DELETE FROM Accounts WHERE AccountID = ?";
+public boolean updateAccount(int accountId, String newEmail, String newPhoneNumber, String newAddress) {
+    String sql = "UPDATE Accounts SET Email = ?, PhoneNumber = ?, Address = ? WHERE AccountID = ?";
     try {
         ps = con.prepareStatement(sql);
-        ps.setInt(1, accountId);
-        int rowsAffected = ps.executeUpdate();
-        return rowsAffected > 0;
-    } catch (Exception e) {
-        e.printStackTrace();
-    }
-    return false;
-}
-    
-    public boolean updateAccount(int accountId, String newPassword, String newEmail) {
-    String sql = "UPDATE Accounts SET Hash = ?, Email = ? WHERE AccountID = ?";
-    try {
-        ps = con.prepareStatement(sql);
-         ps.setString(1, newPassword); 
-        ps.setString(2, newEmail);    
-        ps.setInt(3, accountId);     
+        ps.setString(1, newEmail);
+        ps.setString(2, newPhoneNumber);
+        ps.setString(3, newAddress);
+        ps.setInt(4, accountId);
         int rowsAffected = ps.executeUpdate();
         return rowsAffected > 0;
     } catch (Exception e) {
