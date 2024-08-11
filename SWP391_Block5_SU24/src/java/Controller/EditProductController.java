@@ -55,22 +55,33 @@ public class EditProductController extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
     throws ServletException, IOException {
+        int productId = Integer.parseInt(request.getParameter("productId"));
         String productName = request.getParameter("productName");
         String origin = request.getParameter("origin");
         String material = request.getParameter("material");
         double price = Double.parseDouble(request.getParameter("price"));
-        String brandName = request.getParameter("brandName");
-        String categoryName = request.getParameter("categoryName");
+        int brandId = Integer.parseInt(request.getParameter("brandId"));
+        int categoryId = Integer.parseInt(request.getParameter("categoryId"));
 
-        Product product = new Product(productName, origin, material, price, brandName, categoryName);
+        // Create a Product object and set its properties
+        Product product = new Product();
+        product.setProductId(productId);
+        product.setProductName(productName);
+        product.setOrigin(origin);
+        product.setMaterial(material);
+        product.setPrice(price);
+        product.setBrandId(brandId);
+        product.setCategoryId(categoryId);
 
+        // Use the DAO to update the product
         ProductDetailsDAO pDAO = new ProductDetailsDAO();
-        try {
-            pDAO.updateProduct(product);
-            response.sendRedirect("productList.jsp"); // Redirect to the product list on success
-        } catch (RuntimeException e) {
-            request.setAttribute("error", "Failed to update product: " + e.getMessage());
-            request.getRequestDispatcher("productList.jsp").forward(request, response); // Forward to the same page with an error message
+        boolean isUpdated = pDAO.updateProduct(product);
+
+        // Redirect back to the product list page with a success message
+        if (isUpdated) {
+            response.sendRedirect("productList.jsp?message=Product updated successfully");
+        } else {
+            response.sendRedirect("productList.jsp?error=Failed to update product");
         }
     }
 
@@ -84,18 +95,34 @@ public class EditProductController extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
     throws ServletException, IOException {
-        try {
+                try {
+            ProductDetailsDAO pDAO = new ProductDetailsDAO();
             int productId = Integer.parseInt(request.getParameter("productId"));
+            String productName = request.getParameter("productName");
+            String origin = request.getParameter("origin");
+            String material = request.getParameter("material");
+            double price = Double.parseDouble(request.getParameter("price"));
+            int brandId = Integer.parseInt(request.getParameter("brandId"));
+            int categoryId = Integer.parseInt(request.getParameter("categoryId"));
 
-            ProductDetailsDAO productDAO = new ProductDetailsDAO();
-            productDAO.deleteProduct(productId);
+            // Tạo đối tượng Product với thông tin mới
+            // một là sửa lại contructor hai là phải thêm hai hàm khác để tim brand id với category name
+            Product updatedProduct = new Product(productId, productName, origin, material, price, brandId, categoryId);
 
-            response.sendRedirect("productmanage.jsp?status=deleted");
+            // Cập nhật thông tin sản phẩm
+            boolean updateSuccess = pDAO.updateProduct(updatedProduct);
+
+            if (updateSuccess) {
+                response.sendRedirect("productmanage.jsp?status=updated");
+            } else {
+                response.sendRedirect("productmanage.jsp?status=error");
+            }
 
         } catch (Exception e) {
             e.printStackTrace();
             response.sendRedirect("productmanage.jsp?status=error");
         }
+
     }
 
     /** 
