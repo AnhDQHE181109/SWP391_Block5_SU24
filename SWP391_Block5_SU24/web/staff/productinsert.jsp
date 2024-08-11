@@ -269,7 +269,7 @@
                             document.getElementById('logoutBox').style.display = 'block';
                         }
                         function logout() {
-                            window.location.href = 'index.html';
+                            window.location.href = 'index.jsp';
                         }
                         function cancelLogout() {
                             window.location.href = 'productinsert';

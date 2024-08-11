@@ -114,7 +114,7 @@
     <body>
         <div style="height: 670px; width: 100%;">
             <div class="colorlib-nav" style="padding:50px;padding-left:200px; background-color:white; width:100%; height:12%; font-size:30px; align-items:center;box-shadow:#0000000f 0px 6px 6px 0px;color:#000c;display:flex;">
-                <div class="ldiv" style="padding-right:7px" id="colorlib-logo"><a href="index.html">Footwear</a></div> Recover
+                <div class="ldiv" style="padding-right:7px" id="colorlib-logo"><a href="index.jsp">Footwear</a></div> Recover
             </div>
             <div style="background-color:#88c8bc; width:100%;height:85%;align-items: center;justify-content: center;display:flex">
                 <div class ="idiv">
@@ -137,8 +137,8 @@
                             <p style="color:red" class="error">Password doesn't match</p>
                             <% } %>
                             <form action="AuthRecoverController" method="post" style='display: flex; flex-direction: column; align-items: center;'>                           
-                                <input style='margin:0px 12px 0px 12px; height: 40px; width:85%;' type="type" name="npass" placeholder='New password'><br>
-                                <input style='margin:0px 12px 0px 12px; height: 40px; width:85%;' type="type" name="rnpass" placeholder='Repeat new password'><br>
+                                <input style='margin:0px 12px 0px 12px; height: 40px; width:85%;' type="password" name="npass" placeholder='New password'><br>
+                                <input style='margin:0px 12px 0px 12px; height: 40px; width:85%;' type="password" name="rnpass" placeholder='Repeat new password'><br>
                                 <button style='border:0px; text-align:center; background-color: #88c8bc;border-radius: 2px;display:flex;color:white;justify-content:center; width: 85%;' type="submit">CHANGE PASSWORD</button>
                             </form>
                             <div style="justify-content: space-between;display:flex; width:100%;align-items: center">

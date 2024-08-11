@@ -100,7 +100,7 @@ public class AccountDAO extends MyDAO {
                     int storedRole = rs.getInt("Role");
                     if (role == 1 && storedRole == role) {
                         return 1; // Login successful customer
-                    } else if ((role == 2 || role == 3) && role != 1) {
+                    } else if ((storedRole == 2 || storedRole == 3) && role != 1) {
                         return 1; //Login successful staff and manager
                     } else {
                         return 2; // Role mismatch
@@ -177,6 +177,35 @@ public class AccountDAO extends MyDAO {
         return false;
     }
 
+    
+public boolean deleteAccount(int accountId) {
+    String sql = "DELETE FROM Accounts WHERE AccountID = ?";
+    try {
+        ps = con.prepareStatement(sql);
+        ps.setInt(1, accountId);
+        int rowsAffected = ps.executeUpdate();
+        return rowsAffected > 0;
+    } catch (Exception e) {
+        e.printStackTrace();
+    }
+    return false;
+}
+    
+    public boolean updateAccount(int accountId, String newPassword, String newEmail) {
+    String sql = "UPDATE Accounts SET Hash = ?, Email = ? WHERE AccountID = ?";
+    try {
+        ps = con.prepareStatement(sql);
+         ps.setString(1, newPassword); 
+        ps.setString(2, newEmail);    
+        ps.setInt(3, accountId);     
+        int rowsAffected = ps.executeUpdate();
+        return rowsAffected > 0;
+    } catch (Exception e) {
+        e.printStackTrace();
+    }
+    return false;
+}
+    
     public void changePassword(String email, String newpass, String salt) {
         String sql = "UPDATE Accounts SET Hash = ?, Salt = ? WHERE Email = ?";
         try {
