@@ -3,12 +3,13 @@
     Created on : Aug 11, 2024, 7:23:09 PM
     Author     : Long
 --%>
-
+<%@ page import="entity.Account" %>
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <!DOCTYPE html>
 <html>
     <head>
         <title>Footwear - Free Bootstrap 4 Template by Colorlib</title>
+        <script src="https://kit.fontawesome.com/c630e9f862.js" crossorigin="anonymous"></script>
         <meta charset="utf-8">
         <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 
@@ -82,9 +83,14 @@
                                     <li><a href="women.html">Women</a></li>
                                     <li><a href="about.html">About</a></li>
                                     <li><a href="contact.html">Contact</a></li>
-                                    
+                                    <%if(session.getAttribute("account")!=null){
+                                    Account account = (Account) session.getAttribute("account");
+                                    %>
+                                    <li class = "cart" id="lsbtn"><a href="LogoutController">Logout</a></li>
+                                    <li class = "cart"><i class="fa-regular fa-user"> </i> <%= account.getUsername()%></li>
+                                    <%}else{%>
                                     <li class = "cart" id="lsbtn"><a href="signup.jsp">Sign Up</a></li>
-                                    <li class = "cart" id="lsbtn"><a href="login.jsp">Login</a></li>
+                                    <li class = "cart" id="lsbtn"><a href="login.jsp">Login</a></li><%}%>
                                     <li class="cart"><a href="cart.html"><i class="icon-shopping-cart"></i> Cart [0]</a></li>
                                 </ul>
                             </div>

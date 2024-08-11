@@ -66,7 +66,7 @@ public class RecoverController extends HttpServlet {
         String email = (String) session.getAttribute("email");
         String recode = (String) session.getAttribute("recode");
         String cinput = request.getParameter("extraData");
-        int recodei =  0;
+        int recodei = 0;
         int cinputi = 1;
         try {
             recodei = Integer.parseInt(recode);
@@ -123,6 +123,8 @@ public class RecoverController extends HttpServlet {
         session.setAttribute("recode", "" + recode);
         session.setAttribute("email", re);
         request.setAttribute("recode", "true");
+        long endTime = System.currentTimeMillis() + (5 * 60 * 1000); // 10 minutes from now
+        request.getSession().setAttribute("endTime", endTime);
         request.getRequestDispatcher("login.jsp").forward(request, response);
     }
 
