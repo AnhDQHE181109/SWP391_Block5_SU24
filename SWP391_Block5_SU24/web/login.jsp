@@ -115,6 +115,17 @@
         <%
         String errorRecover = request.getParameter("error_recover");
         boolean showErrorModal = "true".equals(errorRecover);
+        long remainingTime = 100*6*60*1000;
+        try{
+        long endTime = (long) session.getAttribute("endTime");
+        long currentTime = System.currentTimeMillis();
+        remainingTime = endTime - currentTime;
+
+        if (remainingTime <= 0) {
+        // Time's up, redirect back to the servlet
+        response.sendRedirect("login.jsp");
+        }
+            }catch(Exception e){}
         %>
         <div id="popup-box" class="<%= showErrorModal ? "modal_error" : "modal" %>">
             <div class="content">
@@ -157,6 +168,7 @@
                     </div>
                     <input type="hidden" id="extraData" name="extraData">
                 </form>
+                Code is available for <p id="timer"></p>
                 <a href="login.jsp" style="
                    position: absolute;
                    top: 10px;
@@ -249,5 +261,31 @@
             document.getElementById('extraData').value = otp;
             document.getElementById('rform').submit();
         }
+
+        let remainingTime = <%= remainingTime %>;
+
+        function startTimer() {
+            let timer = setInterval(function () {
+                if (remainingTime <= 0) {
+                    clearInterval(timer);
+                    document.getElementById("timer").innerHTML = "Code expired, please try again. ";
+                    const inputtemp = document.querySelectorAll('.digits input[type="text"]');
+                    
+                    inputtemp.forEach(input => {
+                        input.readOnly = true;
+                        input.style.backgroundColor = "#ededed";
+                    input.style.color = "white";
+                    input.style.borderColor = "darkgray";
+                    });
+                } else {
+                    remainingTime -= 1000;
+                    let minutes = Math.floor((remainingTime % (1000 * 60 * 60)) / (1000 * 60));
+                    let seconds = Math.floor((remainingTime % (1000 * 60)) / 1000);
+                    document.getElementById("timer").innerHTML = "Code is available for: " + minutes + "m " + seconds + "s ";
+                }
+            }, 1000);
+        }
+
+        window.onload = startTimer;
     </script>
 </html>
