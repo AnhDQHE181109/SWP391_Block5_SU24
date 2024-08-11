@@ -44,7 +44,6 @@
         <servlet-name>AddProductController</servlet-name>
         <url-pattern>/AddProductController</url-pattern>
     </servlet-mapping>
-
     <servlet-mapping>
         <servlet-name>LoginController</servlet-name>
         <url-pattern>/LoginController</url-pattern>

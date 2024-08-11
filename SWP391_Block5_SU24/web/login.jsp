@@ -170,7 +170,7 @@
         <%}%>
         <div style="height: 670px; width: 100%;">
             <div class="colorlib-nav" style="padding:50px;padding-left:200px; background-color:white; width:100%; height:12%; font-size:30px; align-items:center;box-shadow:#0000000f 0px 6px 6px 0px;color:#000c;display:flex;">
-                <div class="ldiv" style="padding-right:7px" id="colorlib-logo"><a href="index.html">Footwear</a></div> Log In
+                <div class="ldiv" style="padding-right:7px" id="colorlib-logo"><a href="index.jsp">Footwear</a></div> Log In
             </div>
             <div style="background-color:#88c8bc; width:100%;height:85%;align-items: center;justify-content: center;display:flex">
                 <div class ="idiv">
