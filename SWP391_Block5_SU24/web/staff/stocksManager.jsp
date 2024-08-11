@@ -210,7 +210,7 @@
                                                                                 <td><input type="number" class="form-control" 
                                                                                     name="<%=productStocks.getStockID()%>_quantity"
                                                                                     id="<%=productStocks.getStockID()%>_quantity" 
-                                                                                    value="<%=productStocks.getTotalQuantity() %>" required
+                                                                                    value="<%=productStocks.getTotalQuantity() %>" required min="0" max="99"
                                                                                     onfocusout="checkIfFieldEmpty('<%=productStocks.getStockID()%>_quantity', '<%=productStocks.getTotalQuantity() %>')"></td>
                                                                               </tr>
                                                                     <%      i++;
@@ -241,21 +241,26 @@
                                                                     <div class="input-group-prepend">
                                                                       <span class="input-group-text" id="basic-addon1">Size</span>
                                                                     </div>
-                                                                    <input type="number" name="newVariantSize" class="form-control" placeholder="Size" aria-label="Size" aria-describedby="basic-addon1">
+                                                                    <input type="number" id="newVariantSize_<%=product.getProductId() %>" name="_<%=product.getProductId() %>" class="form-control" placeholder="Size"
+                                                                    aria-label="Size" aria-describedby="basic-addon1" required min="28" max="40"
+                                                                    onfocusout="validateMinMax('newVariantSize_<%=product.getProductId() %>', '28', '40', 'Size')">
                                                                   </div>
                         
                                                                 <div class="input-group mb-3">
                                                                     <div class="input-group-prepend">
                                                                       <span class="input-group-text" id="basic-addon1">Color</span>
                                                                     </div>
-                                                                    <input type="text" name="newVariantColor" class="form-control" placeholder="Color" aria-label="Color" aria-describedby="basic-addon1">
+                                                                    <input type="text" id="newVariantColor_<%=product.getProductId() %>" name="newVariantColor_<%=product.getProductId() %>" class="form-control" placeholder="Color" 
+                                                                    aria-label="Color" aria-describedby="basic-addon1" required>
                                                                 </div>
                         
                                                                 <div class="input-group mb-3">
                                                                     <div class="input-group-prepend">
                                                                       <span class="input-group-text" id="basic-addon1">Quantity</span>
                                                                     </div>
-                                                                    <input type="number" name="newVariantQuantity" class="form-control" placeholder="Quantity" aria-label="Quantity" aria-describedby="basic-addon1">
+                                                                    <input type="number" id="newVariantQuantity_<%=product.getProductId() %>" name="newVariantQuantity_<%=product.getProductId() %>" class="form-control" placeholder="Quantity" 
+                                                                    aria-label="Quantity" aria-describedby="basic-addon1" required min="0" max="99"
+                                                                    onfocusout="validateMinMax('newVariantQuantity_<%=product.getProductId() %>', '1', '99', 'Quantity')">
                                                                 </div>
 
                                                                 <input type="text" name="newVariantProductID" value="<%=product.getProductId() %>" hidden>
@@ -473,6 +478,39 @@
                 } else if ($('#' + fieldID).val() < 0) {
                     alert("One or more quantities cannot be less than 0!");
                     document.getElementById(fieldID).value = initialValue;
+                } else if ($('#' + fieldID).val() > 99) {
+                    alert("One or more quantities cannot be more than 99!");
+                    document.getElementById(fieldID).value = initialValue;
+                }
+            }
+
+            function validateQuantity(fieldID) {
+                var quantity = parseInt($('#' + fieldID).val());
+                if (isNaN(quantity)) {
+                    document.getElementById(fieldID).value = 1;
+                    alert("Invalid quantity!");
+                } else if (quantity <= 0) {
+                    document.getElementById(fieldID).value = 1;
+                    alert("Quantity can't be less than or equal to 0!");
+                } else if (quantity > 100) {
+                    document.getElementById(fieldID).value = 100;
+                    alert("Quantity can't be more than the stock available!");
+                }
+            }
+
+            function validateQuantityInput(fieldID, initialValue) {
+                checkIfFieldEmpty(fieldID, initialValue);
+                validateQuantity(fieldID);
+            }
+
+            function validateMinMax(fieldID, min, max, type) {
+                var value = parseInt($('#' + fieldID).val());
+                if (value < min) {
+                    document.getElementById(fieldID).value = min;
+                    alert(type + " can't be less than " + min + "!");
+                } else if (value > max) {
+                    document.getElementById(fieldID).value = max;
+                    alert(type + " can't be more than " + max + "!");
                 }
             }
 
