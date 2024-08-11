@@ -27,7 +27,7 @@ public class StocksManagementDAO extends DBConnect {
 //        smDAO.logAccount(3);
 
         List<Product> loggedProducts = new ArrayList<>();
-        Product prod = new Product(5, 19, 1, 45, "White", 20);
+        Product prod = new Product(5, 1, 45, "White", 20);
         loggedProducts.add(prod);
         smDAO.logUpdatedProducts(3, loggedProducts);
     }
@@ -317,6 +317,20 @@ public class StocksManagementDAO extends DBConnect {
 
     public void logUpdatedProducts(int accountID, List<Product> loggedProducts) {
         int importID = logAccountAndGetImportID(accountID);
+        //Debugging
+        System.out.println("logUpdatedProducts(): " + "accountID: " + accountID);
+        System.out.println("logUpdatedProducts(): " + "importID: " + importID);
+        for (Product product : loggedProducts) {
+            int stockID = product.getStockID();
+            int productID = product.getProductId();
+            int size = product.getSize();
+            String color = product.getColor();
+            int stockQuantity = product.getStockQuantity();
+            logUserUpdateActivity(stockID, importID, productID, size, color, stockQuantity);
+        }
+    }
+    
+    public void logUpdatedProducts(int accountID, int importID, List<Product> loggedProducts) {
         //Debugging
         System.out.println("logUpdatedProducts(): " + "accountID: " + accountID);
         System.out.println("logUpdatedProducts(): " + "importID: " + importID);
