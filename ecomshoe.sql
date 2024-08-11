@@ -215,9 +215,9 @@ VALUES
 -- Insert data into Products
 INSERT INTO Products (ProductName, Origin, Material, Price, TotalQuantity, CategoryID, BrandID, ImageID)
 VALUES 
-('Air Max 2021', 'Vietnam', 'Leather', 150.00, 100, 1, 1, NULL),
-('Ultraboost 21', 'Germany', 'Synthetic', 180.00, 200, 1, 2, NULL),
-('Suede Classic', 'Vietnam', 'Suede', 120.00, 150, 1, 3, NULL);
+('Air Max 2021', 'Vietnam', 'Leather', 150.00, 100, 1, 1, 2),
+('Ultraboost 21', 'Germany', 'Synthetic', 180.00, 200, 1, 2, 3),
+('Suede Classic', 'Vietnam', 'Suede', 120.00, 150, 1, 3, 4);
 
 -- Insert data into ProductStockImport
 INSERT INTO ProductStockImport (AccountID, ImportDate)
