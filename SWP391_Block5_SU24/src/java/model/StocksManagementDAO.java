@@ -237,6 +237,35 @@ public class StocksManagementDAO extends DBConnect {
         }
     }
 
+    public Boolean checkIfStockExists(int size, String color) {
+
+        String sql = "select Size, Color\n"
+                + "from Stock\n"
+                + "where Size = ? and Color = ?";
+
+        try {
+            PreparedStatement ps = conn.prepareStatement(sql);
+            ps.setInt(1, size);
+            ps.setString(2, color);
+
+            ResultSet rs = ps.executeQuery();
+            if (rs.next()) {
+                return true;
+            }
+
+            if (rs != null) {
+                rs.close();
+            }
+            if (ps != null) {
+                ps.close();
+            }
+        } catch (SQLException e) {
+            System.out.println("checkIfStockExists(): " + e);
+        }
+
+        return false;
+    }
+
     //User activity logging functions
     public void logAccount(int accountID) {
 
