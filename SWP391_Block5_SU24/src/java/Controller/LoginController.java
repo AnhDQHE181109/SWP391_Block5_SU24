@@ -84,7 +84,7 @@ public class LoginController extends HttpServlet {
             session.setAttribute("account", adao.getAccount(username));
             switch (adao.getAccount(username).getRole()) {
                 case 1: {
-                    response.sendRedirect("index.html");
+                    response.sendRedirect("index.jsp");
                     break;
                 }
                 case 2: {

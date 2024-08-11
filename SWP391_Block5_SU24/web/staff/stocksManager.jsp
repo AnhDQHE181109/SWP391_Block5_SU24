@@ -424,7 +424,7 @@
             }
 
             function logout() {
-                window.location.href = 'index.html';
+                window.location.href = 'index.jsp';
             }
 
             function cancelLogout() {
