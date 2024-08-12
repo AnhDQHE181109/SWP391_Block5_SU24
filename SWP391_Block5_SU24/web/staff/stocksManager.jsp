@@ -99,8 +99,8 @@
                                 <div class="col-md-4" style="display: flex; justify-content: flex-start; align-items: center;">
                                     <!-- <a class="btn btn-add btn-sm" href="product_manage?action=insert" title="Thêm">
                                         <i class="fas fa-plus"></i> Add a new product
-                                    </a>
-                                </div>
+                                    </a> -->
+                                </div> 
                                 <div class="col-md-4" style="display: flex; justify-content: center; align-items: center;">
                                     <!-- Button for sorting -->
                                     <button onclick="sortTableByPriceDescending()" class="btn btn-primary btn-sm">
