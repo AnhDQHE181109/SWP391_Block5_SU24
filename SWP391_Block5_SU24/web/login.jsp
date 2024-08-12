@@ -135,6 +135,9 @@
                 <% if ("true".equals(request.getAttribute("error_recover"))) { %>
                 <p style="color:red" class="error">No account with this email found!</p>
                 <% } %>
+                <% if ("true".equals(request.getAttribute("error_recover_role"))) { %>
+                <p style="color:red" class="error">You do not have permission to use this function!</p>
+                <% } %>
                 <form action="RecoverController" method="post" style='display: flex; flex-direction: column; align-items: center;'>                           
                     <input style='margin:0px 12px 0px 12px; height: 40px; width:85%;' type="text" name="recover-email" placeholder='Recover Email'><br>
                     <button name="role" value="1" style='border:0px;margin-bottom:20px; text-align:center; background-color: #88c8bc;border-radius: 2px;display:flex;color:white;justify-content:center; width: 85%;' type="submit">Next</button>

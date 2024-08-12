@@ -115,6 +115,9 @@ public class SignUpController extends HttpServlet {
         if (adao.isUsernameTaken(username)) {
             hasErrors = true;
             request.setAttribute("error_usernametaken", "true");
+        } else if (username.length() > 20) {
+            hasErrors = true;
+            request.setAttribute("error_username_length", "true");
         } else {
             for (char c : username.toCharArray()) {
                 if (Character.isWhitespace(c)) {
@@ -148,6 +151,12 @@ public class SignUpController extends HttpServlet {
             request.setAttribute("error_emailtaken", "true");
         }
         if (!pnum.matches("[0-9]+")) {
+            hasErrors = true;
+            request.setAttribute("error_phone_number", "true");
+        } else if (adao.isPhoneNumberTaken(pnum)) {
+            hasErrors = true;
+            request.setAttribute("error_phone_number_dupe", "true");
+        } else if (pnum.length() < 9 || pnum.length() > 11 || !pnum.matches("^(03|05|07|08|09).*")) {
             hasErrors = true;
             request.setAttribute("error_phone_number", "true");
         }
