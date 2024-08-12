@@ -18,7 +18,6 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 import model.StocksManagementDAO;
-        
 
 public class StocksManagementController extends HttpServlet {
 
@@ -96,6 +95,18 @@ public class StocksManagementController extends HttpServlet {
             for (Object key : newVariantData.keySet()) {
                 String keyString = (String) key;
                 String[] value = (String[]) newVariantData.get(keyString);
+
+                if (value[0].trim().equalsIgnoreCase("")) {
+                    List<Product> productsList = smDAO.getAllProducts();
+                    List<Product> productsStocksList = smDAO.getProductsStocks();
+                    
+                    request.setAttribute("alertMessage", "Please input valid data for the variant!");
+                    request.setAttribute("openPopup", "popup_" + productID);
+                    request.setAttribute("productsList", productsList);
+                    request.setAttribute("productsStocksList", productsStocksList);
+                    request.getRequestDispatcher("staff/stocksManager.jsp").forward(request, response);
+                    return;
+                }
 
                 if (keyString.startsWith("newVariantSize")) {
                     size = Integer.parseInt(value[0]);

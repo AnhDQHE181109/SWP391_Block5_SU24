@@ -254,7 +254,7 @@
                                                                     </div>
                                                                     <input type="number" id="newVariantSize_<%=product.getProductId() %>" name="newVariantSize_<%=product.getProductId() %>" class="form-control" placeholder="Size"
                                                                     aria-label="Size" aria-describedby="basic-addon1" required min="28" max="40"
-                                                                    onfocusout="validateMinMax('newVariantSize_<%=product.getProductId() %>', '28', '40', 'Size')">
+                                                                    onfocusout="validateEmptyMinMax('newVariantSize_<%=product.getProductId() %>', 28, 40, 'Size')">
                                                                   </div>
                         
                                                                 <div class="input-group mb-3">
@@ -279,8 +279,8 @@
                                                                       <span class="input-group-text" id="basic-addon1">Quantity</span>
                                                                     </div>
                                                                     <input type="number" id="newVariantQuantity_<%=product.getProductId() %>" name="newVariantQuantity_<%=product.getProductId() %>" class="form-control" placeholder="Quantity" 
-                                                                    aria-label="Quantity" aria-describedby="basic-addon1" required min="0" max="99"
-                                                                    onfocusout="validateMinMax('newVariantQuantity_<%=product.getProductId() %>', '1', '99', 'Quantity')">
+                                                                    aria-label="Quantity" aria-describedby="basic-addon1" required min="1" max="99"
+                                                                    onfocusout="validateEmptyMinMax('newVariantQuantity_<%=product.getProductId() %>', 1, 99, 'Quantity')">
                                                                 </div>
 
                                                                 <input type="text" name="newVariantProductID" value="<%=product.getProductId() %>" hidden>
@@ -427,10 +427,10 @@
                 }
                 if (ascDescStat == 1) {
                     ascDescStat = 0;
-                    document.querySelector('#sortButton').innerText = 'Sort by Name (Asc)';
+                    document.querySelector('#sortButton').innerHTML = '<i class="fas fa-sort-amount-down"></i> Sort by Name (Asc)';
                 } else {
                     ascDescStat = 1;
-                    document.querySelector('#sortButton').innerText = 'Sort by Name (Desc)';
+                    document.querySelector('#sortButton').innerHTML = '<i class="fas fa-sort-amount-up"></i> Sort by Name (Desc)';
                 }
             }
 
@@ -489,16 +489,24 @@
                 table = document.getElementById("sampleTable");
                 tr = table.getElementsByTagName("tr");
 
-                // Loop through all table rows, and hide those that don't match the search query
-                for (i = 0; i < tr.length; i++) {
-                    td = tr[i].getElementsByTagName("td")[2]; // Column index for book name, change if needed
+                if (/[\/\\<>&$#%"()!?|`~]/.test(filter)) {
+                    alert('The search term cannot contain special characters!')
+                } else {
+                    if(filter.trim() == '') {
+                        input.value = '';
+                        filter = '';
+                    } 
+                    // Loop through all table rows, and hide those that don't match the search query
+                    for (i = 0; i < tr.length; i++) {
+                        td = tr[i].getElementsByTagName("td")[2]; // Column index for book name, change if needed
 
-                    if (td) {
-                        txtValue = td.textContent || td.innerText;
-                        if (txtValue.toUpperCase().indexOf(filter) > -1) {
-                            tr[i].style.display = "";
-                        } else {
-                            tr[i].style.display = "none";
+                        if (td) {
+                            txtValue = td.textContent || td.innerText;
+                            if (txtValue.toUpperCase().indexOf(filter) > -1) {
+                                tr[i].style.display = "";
+                            } else {
+                                tr[i].style.display = "none";
+                            }
                         }
                     }
                 }
@@ -551,9 +559,12 @@
                 validateQuantity(fieldID);
             }
 
-            function validateMinMax(fieldID, min, max, type) {
-                var value = parseInt($('#' + fieldID).val());
-                if (value < min) {
+            function validateEmptyMinMax(fieldID, min, max, type) {
+                // var value = parseInt($('#' + fieldID).val());
+                var value = document.getElementById(fieldID).value;
+                if (value.trim() == '') {
+                    alert("Please input " + type + "!");
+                } else if (value < min) {
                     document.getElementById(fieldID).value = min;
                     alert(type + " can't be less than " + min + "!");
                 } else if (value > max) {
