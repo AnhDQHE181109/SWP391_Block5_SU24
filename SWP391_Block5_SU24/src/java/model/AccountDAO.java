@@ -85,6 +85,28 @@ public class AccountDAO extends MyDAO {
         }
         return account;
     }
+    public Account getAccountbyEmail(String email) {
+        String sql = "SELECT * FROM Accounts WHERE Email = ?";
+        Account account = null;
+        try {
+            ps = con.prepareStatement(sql);
+            ps.setString(1, email);
+            rs = ps.executeQuery();
+            if (rs.next()) {
+                int accountID = rs.getInt("AccountID");
+                String username = rs.getString("Username");
+                String hash = rs.getString("Hash");
+                String phoneNumber = rs.getString("PhoneNumber");
+                String address = rs.getString("Address");
+                int role = rs.getInt("Role");
+                String salt = rs.getString("Salt");
+                account = new Account(accountID, username, hash, phoneNumber, email, address, salt, role);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return account;
+    }
 
     public int validateAccount(String username, String password, int role) {
         String query = "SELECT * FROM Accounts WHERE Username = ?";

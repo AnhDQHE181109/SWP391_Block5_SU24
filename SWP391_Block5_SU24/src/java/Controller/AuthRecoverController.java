@@ -6,6 +6,7 @@ package Controller;
 
 import Util.EncryptionHelper;
 import Util.Validator;
+import entity.Account;
 import java.io.IOException;
 import java.io.PrintWriter;
 import jakarta.servlet.ServletException;
@@ -76,7 +77,7 @@ public class AuthRecoverController extends HttpServlet {
         String newpass = request.getParameter("npass");
         String renewpass = request.getParameter("rnpass");
         if (newpass.compareTo(renewpass) != 0) {
-            request.setAttribute("error_password_dupe", "true");
+            request.setAttribute("error_password_match", "true");
             request.getRequestDispatcher("recover.jsp").forward(request, response);
             return;
         } else if (Validator.validatePassword(newpass) == 1) {
@@ -99,9 +100,17 @@ public class AuthRecoverController extends HttpServlet {
         } catch (Exception e) {
         }
         HttpSession session = request.getSession();
-        System.out.println(newpass);
-        System.out.println(renewpass);
         AccountDAO adao = new AccountDAO();
+        Account temp = adao.getAccountbyEmail((String) session.getAttribute("email"));
+        try {
+            String t = EncryptionHelper.hashPassword(newpass, temp.getSalt());
+            if (t.equals(temp.getHash())) {
+                request.setAttribute("error_password_dupe", "true");
+                request.getRequestDispatcher("recover.jsp").forward(request, response);
+                return;
+            }
+        } catch (Exception e) {
+        }
         adao.changePassword((String) session.getAttribute("email"), hashedPassword, salt);
         request.getRequestDispatcher("login.jsp").forward(request, response);
     }
