@@ -98,10 +98,18 @@ public class EditProductController extends HttpServlet {
             int brandId = Integer.parseInt(request.getParameter("brandId"));
             int categoryId = Integer.parseInt(request.getParameter("categoryId"));
 
-            if(productName.isBlank() || origin.isBlank() || material.isBlank()){
+            if (productName.isBlank() || origin.isBlank() || material.isBlank()) {
                 request.setAttribute("mess", "Input must not be blank");
                 request.getRequestDispatcher("productmanage.jsp").forward(request, response);
+                return;
+            } else if (price <= 0 || price >= 100000000) {
+            request.setAttribute("mess", "Price must be greater than 0 and less than 100,000,000");
+            request.getRequestDispatcher("productmanage.jsp").forward(request, response);
             return;
+            } else if (pDAO.isProductNameExists(productName, productId)) {
+                request.setAttribute("mess", "Product name already exists. Please choose a different name.");
+                request.getRequestDispatcher("productmanage.jsp").forward(request, response);
+                return;
             }
             // Tạo đối tượng Product với thông tin mới
             // một là sửa lại contructor hai là phải thêm hai hàm khác để tim brand id với category name
