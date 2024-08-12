@@ -115,6 +115,14 @@ public class SignUpController extends HttpServlet {
         if (adao.isUsernameTaken(username)) {
             hasErrors = true;
             request.setAttribute("error_usernametaken", "true");
+        } else {
+            for (char c : username.toCharArray()) {
+                if (Character.isWhitespace(c)) {
+                    hasErrors = true;
+                    request.setAttribute("error_username_invalid", "true");
+                    break;
+                }
+            }
         }
         if (!repassword.equals(password)) {
             hasErrors = true;

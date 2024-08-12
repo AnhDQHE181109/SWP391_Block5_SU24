@@ -90,6 +90,9 @@
                             </div>
                             <%}%>
                             <form action="SignUpController" method="post" style='display: flex; flex-direction: column; align-items: center;'>
+                                <% if ("true".equals(request.getAttribute("error_username_invalid"))) { %>
+                                <p style="color:red" class="error">Invalid username!</p>
+                                <% } %>
                                 <% if ("true".equals(request.getAttribute("error_usernametaken"))) { %>
                                 <p style="color:red" class="error">Username has already been taken!</p>
                                 <% } %>
