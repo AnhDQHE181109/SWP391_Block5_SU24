@@ -4,6 +4,7 @@
  */
 package Controller;
 
+import entity.Account;
 import entity.ProductStockImport;
 import model.DAOProductStockImport;
 import model.DBConnect;
@@ -11,6 +12,7 @@ import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import jakarta.servlet.http.HttpSession;
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.List;
@@ -31,6 +33,17 @@ public class productStockImportController extends HttpServlet {
 
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        HttpSession session = request.getSession();
+        Account account = (Account) session.getAttribute("account");
+        if (account == null) {
+            response.sendError(HttpServletResponse.SC_FORBIDDEN, "You do not have permission to access this page.");
+            return;
+        }
+        if (account.getRole() == 1) {
+            response.sendError(HttpServletResponse.SC_FORBIDDEN, "You do not have permission to access this page.");
+            return;
+        }
+        
         String searchUsername = request.getParameter("searchUsername");
         String startDateStr = request.getParameter("startDate");
         String endDateStr = request.getParameter("endDate");

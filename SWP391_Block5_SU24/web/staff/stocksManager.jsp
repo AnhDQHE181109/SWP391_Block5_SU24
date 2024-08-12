@@ -103,13 +103,13 @@
                                 </div> 
                                 <div class="col-md-4" style="display: flex; justify-content: center; align-items: center;">
                                     <!-- Button for sorting -->
-                                    <button onclick="sortTableByPriceDescending()" class="btn btn-primary btn-sm">
-                                        <i class="fas fa-sort-amount-down"></i> Sort by Price (Desc)
+                                    <button onclick="sortTableByNameDescending()" class="btn btn-primary btn-sm">
+                                        <i class="fas fa-sort-amount-down"></i> Sort by Name (Desc)
                                     </button>
                                 </div>
                                 <div class="col-md-4" style="display: flex; justify-content: flex-end; align-items: center;">
-                                    <input type="text" id="searchInput" placeholder="Search by name.." style="margin-right: 5px;">
-                                    <button onclick="searchBooksByName()" class="btn btn-primary btn-sm">
+                                    <input type="text" id="searchInput" class="form-control" placeholder="Search by name.." style="margin-right: 5px;">
+                                    <button onclick="searchProductsByName()" class="btn btn-primary btn-sm">
                                         <i class="ti-search"></i> Search
                                     </button>
                                 </div>
@@ -385,7 +385,7 @@
         <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
         <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-confirm/3.3.2/jquery-confirm.min.js"></script>
         <script>
-            function sortTableByPriceDescending() {
+            function sortTableByNameDescending() {
                 var table, rows, switching, i, x, y, shouldSwitch;
                 table = document.getElementById("sampleTable");
                 switching = true;
@@ -394,9 +394,9 @@
                     rows = table.rows;
                     for (i = 1; i < (rows.length - 1); i++) {
                         shouldSwitch = false;
-                        x = rows[i].getElementsByTagName("td")[6]; // Column index for Price (change if needed)
-                        y = rows[i + 1].getElementsByTagName("td")[6]; // Column index for Price (change if needed)
-                        if (Number(x.innerHTML) < Number(y.innerHTML)) {
+                        x = rows[i].getElementsByTagName("td")[2]; // Column index for Name (change if needed)
+                        y = rows[i + 1].getElementsByTagName("td")[2]; // Column index for Name (change if needed)
+                        if (x.innerHTML < y.innerHTML) {
                             shouldSwitch = true;
                             break;
                         }
@@ -456,7 +456,7 @@
                 // Hide the popup
                 document.getElementById(popupID).style.display = "none";
             }
-            function searchBooksByName() {
+            function searchProductsByName() {
                 var input, filter, table, tr, td, i, txtValue;
                 input = document.getElementById("searchInput");
                 filter = input.value.toUpperCase();
