@@ -49,7 +49,7 @@ public class DAOProducts extends MyDAO {
                 product.setProductName(rs.getString("ProductName"));
                 product.setOrigin(rs.getString("Origin"));
                 product.setMaterial(rs.getString("Material"));
-                product.setPrice(rs.getBigDecimal("Price"));
+                product.setPrice(rs.getDouble("Price"));
                 product.setTotalQuantity(rs.getInt("TotalQuantity"));
                 product.setCategoryID(rs.getInt("CategoryID"));
                 product.setBrandID(rs.getInt("BrandID"));

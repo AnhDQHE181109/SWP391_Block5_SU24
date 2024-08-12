@@ -92,7 +92,7 @@ public class LoginController extends HttpServlet {
                     break;
                 }
                 case 3: {
-                    response.sendRedirect("manager-home.jsp");
+                    response.sendRedirect("manager_home.jsp");
                     break;
                 }
                 default: {
