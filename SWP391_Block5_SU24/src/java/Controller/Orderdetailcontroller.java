@@ -25,6 +25,7 @@ public class Orderdetailcontroller extends HttpServlet {
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         String orderIdParam = request.getParameter("id");
+        String status  = request.getParameter("status");
         if (orderIdParam != null && !orderIdParam.isEmpty()) {
             int orderId = Integer.parseInt(orderIdParam);
             
@@ -52,12 +53,16 @@ public class Orderdetailcontroller extends HttpServlet {
             request.setAttribute("orderDetailList", orderDetailList);
             request.setAttribute("stockMap", stockMap);
             request.setAttribute("productNameMap", productNameMap);  // Pass product names to JSP
+             request.setAttribute("status", status);
+
             
             System.out.println("stockMap" + stockMap);
             System.out.println("productNameMap" + productNameMap);
+            System.out.println("status"+status);
             
             // Forward request and response to JSP page
             request.getRequestDispatcher("staff/orderdetail.jsp").forward(request, response);
+ 
         } else {
             response.sendRedirect("staff/orderlist.jsp");
         }
