@@ -298,7 +298,7 @@
                                 <% if ("true".equals(request.getAttribute("error_phone_number_length"))) { %>
                                 <p style="color:red" class="error">Invalid phone number!</p>
                                 <% } %>
-                                <input style='margin:0px 12px 0px 12px; height: 40px; width:85%;' type="text" id="pnum" name="pnum" required placeholder='Phone Number' value="${pnum != null ? pnum : ''}"><br>
+                                <input style='margin:0px 12px 0px 12px; height: 40px; width:85%;' type="number" id="pnum" name="pnum" required placeholder='Phone Number' value="${pnum != null ? pnum : ''}"><br>
                                 <div id="pmessage">          
                                     <b>Phone number must contain: </b>
                                     <p id="pletter" class="pinvalid">Only <b>digits</b></p>
@@ -335,7 +335,7 @@
     </body>
     <script>
         var eInput = document.getElementById("em");
-        var estructure = document.getElementById("estructure");       
+        var estructure = document.getElementById("estructure");
         var enumber = document.getElementById("enumber");
         eInput.onfocus = function () {
             document.getElementById("emessage").style.display = "block";
@@ -357,6 +357,12 @@
                 estructure.classList.remove("einvalid");
                 estructure.classList.add("evalid");
             } else {
+                estructure.classList.remove("evalid");
+                estructure.classList.add("einvalid");
+            }
+            if (eInput.value === "") {
+                enumber.classList.remove("evalid");
+                enumber.classList.add("einvalid");
                 estructure.classList.remove("evalid");
                 estructure.classList.add("einvalid");
             }
@@ -397,6 +403,14 @@
                 pnumber.classList.remove("pvalid");
                 pnumber.classList.add("pinvalid");
             }
+            if (pInput.value === "") {
+                pletter.classList.remove("pvalid");
+                pletter.classList.add("pinvalid");
+                plength.classList.remove("pvalid");
+                plength.classList.add("pinvalid");
+                pnumber.classList.remove("pvalid");
+                pnumber.classList.add("pinvalid");
+            }
         }
 
         var unameInput = document.getElementById("usname");
@@ -422,6 +436,12 @@
                 ulength.classList.remove("uinvalid");
                 ulength.classList.add("uvalid");
             } else {
+                ulength.classList.remove("uvalid");
+                ulength.classList.add("uinvalid");
+            }
+            if (unameInput.value === "") {
+                uletter.classList.remove("uvalid");
+                uletter.classList.add("uinvalid");
                 ulength.classList.remove("uvalid");
                 ulength.classList.add("uinvalid");
             }
@@ -483,6 +503,16 @@
                 length.classList.remove("valid");
                 length.classList.add("invalid");
             }
+            if (myInput.value === "") {
+                letter.classList.remove("valid");
+                letter.classList.add("invalid");
+                capital.classList.remove("valid");
+                capital.classList.add("invalid");
+                number.classList.remove("valid");
+                number.classList.add("invalid");
+                length.classList.remove("valid");
+                length.classList.add("invalid");
+            }
         }
 
         var myInput2 = document.getElementById("psw2");
@@ -540,6 +570,16 @@
             } else {
                 length2.classList.remove("valid2");
                 length2.classList.add("invalid2");
+            }
+            if (myInput2.value === "") {
+                letter2.classList.remove("valid");
+                letter2.classList.add("invalid");
+                capital2.classList.remove("valid");
+                capital2.classList.add("invalid");
+                number2.classList.remove("valid");
+                number2.classList.add("invalid");
+                length2.classList.remove("valid");
+                length2.classList.add("invalid");
             }
         }
     </script>
