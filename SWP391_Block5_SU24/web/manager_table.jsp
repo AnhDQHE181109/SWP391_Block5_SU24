@@ -41,77 +41,54 @@
         <link href="css/manager.css" rel="stylesheet">
 
         <script>
-            function deleteAccount(accountId) {
-                if (confirm("Are you sure you want to delete this account?")) {
-                    fetch('deleteAccount', {
-                        method: 'POST',
-                        headers: {
-                            'Content-Type': 'application/json'
-                        },
-                        body: JSON.stringify({id: accountId})
-                    })
-                            .then(response => {
-                                if (response.ok) {
-                                    alert("Account deleted successfully!");
-                                    // Optionally, you can reload the page or update the table dynamically
-                                } else {
-                                    response.text().then(text => alert("Error deleting the account: " + text));
-                                }
-                            })
-                            .catch(error => {
-                                console.error("Error deleting the account:", error);
-                                alert("An error occurred while deleting the account. Please try again later.");
-                            });
-                }
-            }
+        function editAccount(accountId, username, email, phoneNumber, address, role) {
+            document.querySelector('#editForm [name="accountId"]').value = accountId;
+            document.querySelector('#editForm #username').value = username;
+            document.querySelector('#editForm #email').value = email;
+            document.querySelector('#editForm #phoneNumber').value = phoneNumber;
+            document.querySelector('#editForm #address').value = address;
+            document.querySelector('#editForm #role').value = role;
+            // Show the modal
+            $('#editModal').modal('show');
+        }
 
-            function editAccount(accountId, username, email, phoneNumber, address) {
-                document.querySelector('#editForm [name="accountId"]').value = accountId;
-                document.querySelector('#editForm #username').value = username;
-                document.querySelector('#editForm #email').value = email;
-                document.querySelector('#editForm #phoneNumber').value = phoneNumber;
-                document.querySelector('#editForm #address').value = address;
-                // Show the modal
-                $('#editModal').modal('show');
-            }
+        function updateAccount(event) {
+            event.preventDefault(); // Prevent form submission
 
-            function updateAccount(event) {
-                event.preventDefault(); // Prevent form submission
+            const formData = new FormData(event.target);
+            const accountId = formData.get('accountId');
+            const newEmail = formData.get('email');
+            const newPhoneNumber = formData.get('phoneNumber');
+            const newAddress = formData.get('address');
 
-                const formData = new FormData(event.target);
-                const accountId = formData.get('accountId');
-                const newPassword = formData.get('password');
-                const newEmail = formData.get('email');
-
-                fetch('updateAccount', {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/x-www-form-urlencoded',
-                    },
-                    body: new URLSearchParams({
-                        id: accountId,
-                        password: newPassword,
-                        email: newEmail
-                    })
+            fetch('updateAccount', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/x-www-form-urlencoded',
+                },
+                body: new URLSearchParams({
+                    id: accountId,
+                    email: newEmail,
+                    phoneNumber: newPhoneNumber,
+                    address: newAddress
                 })
-                    .then(response => {
-                        if (response.ok) {
-                            alert('Account updated successfully!');
-                            location.reload(); // Reload to see the changes
-                        } else {
-                            return response.text().then(text => {
-                                throw new Error(text)
-                            });
-                        }
-                    })
-                    .catch(error => {
-                        console.error('Error updating account:', error);
-                        alert('An error occurred while updating the account. Please try again later.');
+            })
+            .then(response => {
+                if (response.ok) {
+                    alert('Account updated successfully!');
+                    location.reload(); // Reload to see the changes
+                } else {
+                    return response.text().then(text => {
+                        throw new Error(text)
                     });
-            }
-            
-            
-        </script>
+                }
+            })
+            .catch(error => {
+                console.error('Error updating account:', error);
+                alert('An error occurred while updating the account. Please try again later.');
+            });
+        }
+    </script>
     </head>
 
     <body>
@@ -152,7 +129,7 @@
                             </div>
                         </div>
                         <a href="widget.html" class="nav-item nav-link"><i class="fa fa-th me-2"></i>Widgets</a>
-                        <a href="form.html" class="nav-item nav-link"><i class="fa fa-keyboard me-2"></i>Forms</a>
+                        <a href="addStaffAccount.jsp" class="nav-item nav-link"><i class="fa fa-keyboard me-2"></i>Forms</a>
                         <a href="manager_table.jsp" class="nav-item nav-link active"><i class="fa fa-table me-2"></i>Tables</a>
                         <a href="chart.html" class="nav-item nav-link"><i class="fa fa-chart-bar me-2"></i>Charts</a>
                         <div class="nav-item dropdown">
@@ -265,95 +242,128 @@
 
                 <!-- Table Start -->
                 <div class="container-fluid pt-4 px-4">
-                    <div class="row g-4">
-                        <div class="col-12">
-                            <div class="bg-light rounded h-100 p-4">
-                                <h6 class="mb-4">Staff Account Table</h6>
+        <div class="row g-4">
+            <div class="col-12">
+                <div class="bg-light rounded h-100 p-4">
+                    <h6 class="mb-4">Staff Account Table</h6>
 
-                                <div class="table-responsive">
-                                    <table class="table">
-                                        <thead>
-                                            <tr>
-                                                <th scope="col">Account ID</th>
-                                                <th scope="col">Username</th>
-                                                <th scope="col">Phone Number</th>
-                                                <th scope="col">Email</th>
-                                                <th scope="col">Address</th>
-                                                <th scope="col">Role</th>
-                                                <th scope="col">Actions</th>
-                                            </tr>
-                                        </thead>
-                                        <tbody>
-                                            <!-- Staff account rows will be inserted here -->
-                                            <%
-                                            AccountDAO accountDAO = new AccountDAO();
-                                            List<Account> staffAccounts = accountDAO.getAccountsByRole(2);
-                                            for (Account account : staffAccounts) {
-                                            %>
-                                            <tr>
-                                                <td><%= account.getAccountID() %></td>
-                                                <td><%= account.getUsername() %></td>
-                                                <td><%= account.getPhoneNumber() %></td>
-                                                <td><%= account.getEmail() %></td>
-                                                <td><%= account.getAddress() %></td>
-                                                <td><%= account.getRole() %></td>
-                                                <td>
-                                                    <button class="btn btn-danger btn-sm" onclick="deleteAccount(<%= account.getAccountID() %>)">Delete</button>
-                                                    <button class="btn btn-primary btn-sm" onclick="editAccount(<%= account.getAccountID() %>, '<%= account.getUsername() %>', '<%= account.getEmail() %>', '<%= account.getPhoneNumber() %>', '<%= account.getAddress() %>')">Edit</button>
-                                                </td>
-                                            </tr>
-                                            <% } %>
-                                        </tbody>
-                                    </table>
-                                </div>
-
-                            </div>
-                        </div>
-
-                       
-
-                        <div class="col-12">
-                            <div class="bg-light rounded h-100 p-4">
-                                <h6 class="mb-4">Customer Account Table</h6>
-                                <div class="table-responsive">
-                                    <table class="table">
-                                        <thead>
-                                            <tr>
-                                                <th scope="col">Account ID</th>
-                                                <th scope="col">Username</th>
-                                                <th scope="col">Phone Number</th>
-                                                <th scope="col">Email</th>
-                                                <th scope="col">Address</th>
-                                                <th scope="col">Role</th>
-                                                <th scope="col">Actions</th>
-                                            </tr>
-                                        </thead>
-                                        <tbody>
-                                            <!-- Customer account rows will be inserted here -->
-                                            <%
-                                            List<Account> customerAccounts = accountDAO.getAccountsByRole(1);
-                                            for (Account account : customerAccounts) {
-                                            %>
-                                            <tr>
-                                                <td><%= account.getAccountID() %></td>
-                                                <td><%= account.getUsername() %></td>
-                                                <td><%= account.getPhoneNumber() %></td>
-                                                <td><%= account.getEmail() %></td>
-                                                <td><%= account.getAddress() %></td>
-                                                <td><%= account.getRole() %></td>
-                                                <td>
-                                                    <button class="btn btn-danger btn-sm" onclick="deleteAccount(<%= account.getAccountID() %>)">Delete</button>
-                                                    <button class="btn btn-primary btn-sm" onclick="editAccount(<%= account.getAccountID() %>, '<%= account.getUsername() %>', '<%= account.getEmail() %>', '<%= account.getPhoneNumber() %>', '<%= account.getAddress() %>')">Edit</button>
-                                                </td>
-                                            </tr>
-                                            <% } %>
-                                        </tbody>
-                                    </table>
-                                </div>
-                            </div>
-                        </div>
+                    <div class="table-responsive">
+                        <table class="table">
+                            <thead>
+                                <tr>
+                                    <th scope="col">Account ID</th>
+                                    <th scope="col">Username</th>
+                                    <th scope="col">Phone Number</th>
+                                    <th scope="col">Email</th>
+                                    <th scope="col">Address</th>
+                                    <th scope="col">Role</th>
+                                    <th scope="col">Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <!-- Staff account rows will be inserted here -->
+                                <%
+                                AccountDAO accountDAO = new AccountDAO();
+                                List<Account> staffAccounts = accountDAO.getAccountsByRole(2);
+                                for (Account account : staffAccounts) {
+                                %>
+                                <tr>
+                                    <td><%= account.getAccountID() %></td>
+                                    <td><%= account.getUsername() %></td>
+                                    <td><%= account.getPhoneNumber() %></td>
+                                    <td><%= account.getEmail() %></td>
+                                    <td><%= account.getAddress() %></td>
+                                    <td><%= account.getRole() %></td>
+                                    <td>
+                                        <button class="btn btn-primary btn-sm" onclick="editAccount(<%= account.getAccountID() %>, '<%= account.getUsername() %>', '<%= account.getEmail() %>', '<%= account.getPhoneNumber() %>', '<%= account.getAddress() %>', <%= account.getRole() %>)">Edit</button>
+                                    </td>
+                                </tr>
+                                <% } %>
+                            </tbody>
+                        </table>
                     </div>
+
                 </div>
+            </div>
+
+            <div class="col-12">
+                <div class="bg-light rounded h-100 p-4">
+                    <h6 class="mb-4">Customer Account Table</h6>
+
+                    <div class="table-responsive">
+                        <table class="table">
+                            <thead>
+                                <tr>
+                                    <th scope="col">Account ID</th>
+                                    <th scope="col">Username</th>
+                                    <th scope="col">Phone Number</th>
+                                    <th scope="col">Email</th>
+                                    <th scope="col">Address</th>
+                                    <th scope="col">Role</th>
+                                    <th scope="col">Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <!-- Customer account rows will be inserted here -->
+                                <%
+                                List<Account> customerAccounts = accountDAO.getAccountsByRole(1);
+                                for (Account account : customerAccounts) {
+                                %>
+                                <tr>
+                                    <td><%= account.getAccountID() %></td>
+                                    <td><%= account.getUsername() %></td>
+                                    <td><%= account.getPhoneNumber() %></td>
+                                    <td><%= account.getEmail() %></td>
+                                    <td><%= account.getAddress() %></td>
+                                    <td><%= account.getRole() %></td>
+                                    <td>
+                                        <button class="btn btn-primary btn-sm" onclick="editAccount(<%= account.getAccountID() %>, '<%= account.getUsername() %>', '<%= account.getEmail() %>', '<%= account.getPhoneNumber() %>', '<%= account.getAddress() %>', <%= account.getRole() %>)">Edit</button>
+                                    </td>
+                                </tr>
+                                <% } %>
+                            </tbody>
+                        </table>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Edit Account Modal -->
+    <div class="modal fade" id="editModal" tabindex="-1" aria-labelledby="editModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="editModalLabel">Edit Account</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <form id="editForm" onsubmit="updateAccount(event)">
+                        <input type="hidden" name="accountId" />
+                        <div class="mb-3">
+                            <label for="username" class="form-label">Username</label>
+                            <input type="text" class="form-control" id="username" name="username" disabled>
+                        </div>
+                        <div class="mb-3">
+                            <label for="email" class="form-label">Email</label>
+                            <input type="email" class="form-control" id="email" name="email">
+                        </div>
+                        <div class="mb-3">
+                            <label for="phoneNumber" class="form-label">Phone Number</label>
+                            <input type="text" class="form-control" id="phoneNumber" name="phoneNumber">
+                        </div>
+                        <div class="mb-3">
+                            <label for="address" class="form-label">Address</label>
+                            <input type="text" class="form-control" id="address" name="address">
+                        </div>
+                        <input type="hidden" id="role" name="role" />
+                        <button type="submit" class="btn btn-primary">Save Changes</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
                 <!-- Table End -->
 
                 <!-- Edit Account Modal -->

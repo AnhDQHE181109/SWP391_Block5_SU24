@@ -46,7 +46,7 @@ public class AccountManagementController extends HttpServlet {
         request.setAttribute("userAccounts", userAccounts);
         
         // Forward to the JSP page
-        request.getRequestDispatcher("DashMin/table.html").forward(request, response);
+        request.getRequestDispatcher("manager_table.jsp").forward(request, response);
     }
 
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">

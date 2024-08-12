@@ -2,8 +2,15 @@
 <%@taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <%@page import = "entity.*" %>
 <%@page import = "java.util.*" %>
+<%@page import = "jakarta.servlet.http.HttpSession" %>
 
 <!DOCTYPE html>
+<% Account account = (Account) session.getAttribute("account");
+  if (account == null) { %>
+    <h1 style="color:red">You do not have permission to visit this page!</h1> 
+  <% } else if (account.getRole() == 1) { %>
+    <h1 style="color:red">You do not have permission to visit this page!</h1> 
+  <% } else { %>
 <html lang="en">
 
     <head>
@@ -56,16 +63,16 @@
                     </div>
                     <hr>
                     <ul class="app-menu">
-                        <li><a class="app-menu__item" href="dashboard"><i class='app-menu__icon bx bx-tachometer'></i><span
+                        <!-- <li><a class="app-menu__item" href="dashboard"><i class='app-menu__icon bx bx-tachometer'></i><span
                                     class="app-menu__label">Dashboard</span></a></li>
                         <li><a class="app-menu__item" href="customer_manage"><i class='app-menu__icon bx bx-user-voice'></i><span
-                                    class="app-menu__label">Customers</span></a></li>
-                        <li><a class="app-menu__item" href="product_manage"><i
+                                    class="app-menu__label">Customers</span></a></li> -->
+                        <li><a class="app-menu__item" href="stocksManager"><i
                                     class='app-menu__icon bx bx-purchase-tag-alt'></i><span class="app-menu__label">Products</span></a>
                         </li>
-                        <li><a class="app-menu__item" href="order_manage"><i class='app-menu__icon bx bx-task'></i><span
+                        <li><a class="app-menu__item" href="Ordercontroller"><i class='app-menu__icon bx bx-task'></i><span
                                     class="app-menu__label">Orders</span></a></li>
-                        <li><a class="app-menu__item" href="review_manage"><i class='app-menu__icon bx bx-task'></i><span
+                        <li><a class="app-menu__item" href="productStockImport"><i class='app-menu__icon bx bx-task'></i><span
                                     class="app-menu__label">Reviews</span></a></li>
                        
                         <button class="admin_logout" onclick="showLogoutBox()">Logout</button>
@@ -93,16 +100,16 @@
                                     <!-- <a class="btn btn-add btn-sm" href="product_manage?action=insert" title="Thêm">
                                         <i class="fas fa-plus"></i> Add a new product
                                     </a> -->
-                                </div>
+                                </div> 
                                 <div class="col-md-4" style="display: flex; justify-content: center; align-items: center;">
                                     <!-- Button for sorting -->
-                                    <button onclick="sortTableByPriceDescending()" class="btn btn-primary btn-sm">
-                                        <i class="fas fa-sort-amount-down"></i> Sort by Price (Desc)
+                                    <button onclick="sortTableByNameDescending()" class="btn btn-primary btn-sm">
+                                        <i class="fas fa-sort-amount-down"></i> Sort by Name (Desc)
                                     </button>
                                 </div>
                                 <div class="col-md-4" style="display: flex; justify-content: flex-end; align-items: center;">
-                                    <input type="text" id="searchInput" placeholder="Search by name.." style="margin-right: 5px;">
-                                    <button onclick="searchBooksByName()" class="btn btn-primary btn-sm">
+                                    <input type="text" id="searchInput" class="form-control" placeholder="Search by name.." style="margin-right: 5px;">
+                                    <button onclick="searchProductsByName()" class="btn btn-primary btn-sm">
                                         <i class="ti-search"></i> Search
                                     </button>
                                 </div>
@@ -161,7 +168,9 @@
                                 <thead>
                                     <tr>
                                         <th>Picture</th>
+                                        <th>Brand</th>
                                         <th>Name</th>
+                                        <th>Category</th>
                                         <th> </th>
                                     </tr>
                                 </thead>
@@ -175,7 +184,9 @@
                                             for (Product product : productsList) { %>
                                         <tr>
                                             <td><img src="<%=product.getImageURL() %>"></td>
+                                            <td><%=product.getBrandName() %></td>
                                             <td><%=product.getProductName() %></td>
+                                            <td><%=product.getCategoryName() %></td>
                                             <td class="col-1">
                                                 <button class="btn btn-info" onclick="openPopup('popup_<%=product.getProductId() %>')">Import stocks</button>
                                                 <div id="popup_<%=product.getProductId() %>" class="popup" style="display: none;">
@@ -210,7 +221,7 @@
                                                                                 <td><input type="number" class="form-control" 
                                                                                     name="<%=productStocks.getStockID()%>_quantity"
                                                                                     id="<%=productStocks.getStockID()%>_quantity" 
-                                                                                    value="<%=productStocks.getTotalQuantity() %>" required
+                                                                                    value="<%=productStocks.getTotalQuantity() %>" required min="0" max="99"
                                                                                     onfocusout="checkIfFieldEmpty('<%=productStocks.getStockID()%>_quantity', '<%=productStocks.getTotalQuantity() %>')"></td>
                                                                               </tr>
                                                                     <%      i++;
@@ -241,21 +252,35 @@
                                                                     <div class="input-group-prepend">
                                                                       <span class="input-group-text" id="basic-addon1">Size</span>
                                                                     </div>
-                                                                    <input type="number" name="newVariantSize" class="form-control" placeholder="Size" aria-label="Size" aria-describedby="basic-addon1">
+                                                                    <input type="number" id="newVariantSize_<%=product.getProductId() %>" name="newVariantSize_<%=product.getProductId() %>" class="form-control" placeholder="Size"
+                                                                    aria-label="Size" aria-describedby="basic-addon1" required min="28" max="40"
+                                                                    onfocusout="validateMinMax('newVariantSize_<%=product.getProductId() %>', '28', '40', 'Size')">
                                                                   </div>
                         
                                                                 <div class="input-group mb-3">
                                                                     <div class="input-group-prepend">
                                                                       <span class="input-group-text" id="basic-addon1">Color</span>
                                                                     </div>
-                                                                    <input type="text" name="newVariantColor" class="form-control" placeholder="Color" aria-label="Color" aria-describedby="basic-addon1">
+                                                                    <!-- <input type="text" id="newVariantColor_<%=product.getProductId() %>" name="newVariantColor_<%=product.getProductId() %>" class="form-control" placeholder="Color" 
+                                                                    aria-label="Color" aria-describedby="basic-addon1" required
+                                                                    onfocusout="checkIfFieldEmpty('newVariantColor_<%=product.getProductId() %>', 'Size')"> -->
+                                                                    <select class="form-select" name="newVariantColor_<%=product.getProductId() %>" id="newVariantColor_<%=product.getProductId() %>"
+                                                                        aria-label="Color" aria-describedby="basic-addon1">
+                                                                        <option value="White">White</option>
+                                                                        <option value="Black">Black</option>
+                                                                        <option value="Red">Red</option>
+                                                                        <option value="Pink">Pink</option>
+                                                                        <option value="Yellow">Yellow</option>
+                                                                    </select>
                                                                 </div>
                         
                                                                 <div class="input-group mb-3">
                                                                     <div class="input-group-prepend">
                                                                       <span class="input-group-text" id="basic-addon1">Quantity</span>
                                                                     </div>
-                                                                    <input type="number" name="newVariantQuantity" class="form-control" placeholder="Quantity" aria-label="Quantity" aria-describedby="basic-addon1">
+                                                                    <input type="number" id="newVariantQuantity_<%=product.getProductId() %>" name="newVariantQuantity_<%=product.getProductId() %>" class="form-control" placeholder="Quantity" 
+                                                                    aria-label="Quantity" aria-describedby="basic-addon1" required min="0" max="99"
+                                                                    onfocusout="validateMinMax('newVariantQuantity_<%=product.getProductId() %>', '1', '99', 'Quantity')">
                                                                 </div>
 
                                                                 <input type="text" name="newVariantProductID" value="<%=product.getProductId() %>" hidden>
@@ -369,7 +394,7 @@
         <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
         <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-confirm/3.3.2/jquery-confirm.min.js"></script>
         <script>
-            function sortTableByPriceDescending() {
+            function sortTableByNameDescending() {
                 var table, rows, switching, i, x, y, shouldSwitch;
                 table = document.getElementById("sampleTable");
                 switching = true;
@@ -378,9 +403,9 @@
                     rows = table.rows;
                     for (i = 1; i < (rows.length - 1); i++) {
                         shouldSwitch = false;
-                        x = rows[i].getElementsByTagName("td")[6]; // Column index for Price (change if needed)
-                        y = rows[i + 1].getElementsByTagName("td")[6]; // Column index for Price (change if needed)
-                        if (Number(x.innerHTML) < Number(y.innerHTML)) {
+                        x = rows[i].getElementsByTagName("td")[2]; // Column index for Name (change if needed)
+                        y = rows[i + 1].getElementsByTagName("td")[2]; // Column index for Name (change if needed)
+                        if (x.innerHTML < y.innerHTML) {
                             shouldSwitch = true;
                             break;
                         }
@@ -440,7 +465,7 @@
                 // Hide the popup
                 document.getElementById(popupID).style.display = "none";
             }
-            function searchBooksByName() {
+            function searchProductsByName() {
                 var input, filter, table, tr, td, i, txtValue;
                 input = document.getElementById("searchInput");
                 filter = input.value.toUpperCase();
@@ -449,7 +474,7 @@
 
                 // Loop through all table rows, and hide those that don't match the search query
                 for (i = 0; i < tr.length; i++) {
-                    td = tr[i].getElementsByTagName("td")[1]; // Column index for book name, change if needed
+                    td = tr[i].getElementsByTagName("td")[2]; // Column index for book name, change if needed
 
                     if (td) {
                         txtValue = td.textContent || td.innerText;
@@ -473,6 +498,50 @@
                 } else if ($('#' + fieldID).val() < 0) {
                     alert("One or more quantities cannot be less than 0!");
                     document.getElementById(fieldID).value = initialValue;
+                } else if ($('#' + fieldID).val() > 99) {
+                    alert("One or more quantities cannot be more than 99!");
+                    document.getElementById(fieldID).value = initialValue;
+                }
+            }
+
+            // function checkIfFieldEmpty(fieldID, type) {
+            //     //document.getElementById(fieldID).value = document.getElementById(fieldID).value.trim();
+            //     // if (document.getElementById(fieldID).value == "") {
+            //     //     alert("One or more quantities is empty!");
+            //     // }
+            //     if (document.getElementById(fieldID).value.trim() == '') {
+            //         alert(type + " cannot be empty!");
+            //         document.getElementById(fieldID).value = '';
+            //     }
+            // }
+
+            function validateQuantity(fieldID) {
+                var quantity = parseInt($('#' + fieldID).val());
+                if (isNaN(quantity)) {
+                    document.getElementById(fieldID).value = 1;
+                    alert("Invalid quantity!");
+                } else if (quantity <= 0) {
+                    document.getElementById(fieldID).value = 1;
+                    alert("Quantity can't be less than or equal to 0!");
+                } else if (quantity > 100) {
+                    document.getElementById(fieldID).value = 100;
+                    alert("Quantity can't be more than the stock available!");
+                }
+            }
+
+            function validateQuantityInput(fieldID, initialValue) {
+                checkIfFieldEmpty(fieldID, initialValue);
+                validateQuantity(fieldID);
+            }
+
+            function validateMinMax(fieldID, min, max, type) {
+                var value = parseInt($('#' + fieldID).val());
+                if (value < min) {
+                    document.getElementById(fieldID).value = min;
+                    alert(type + " can't be less than " + min + "!");
+                } else if (value > max) {
+                    document.getElementById(fieldID).value = max;
+                    alert(type + " can't be more than " + max + "!");
                 }
             }
 
@@ -503,6 +572,12 @@ if (openPopup != null) { %>
     <script>openPopup('<%=openPopup %>')</script>
 <% } %>
 
+<% String alertMessage = (String) request.getAttribute("alertMessage");
+if (alertMessage != null) { %>
+    <script>alert('<%=alertMessage %>')</script>
+    <% } %>
+
     </body>
 
 </html>
+<% } %>

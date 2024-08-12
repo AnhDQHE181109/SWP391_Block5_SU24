@@ -38,9 +38,11 @@ public class Product {
         this.price = price;
     }
 
-    public Product(int productId, String productName, String imageURL) {
+    public Product(int productId, String brandName, String productName, String categoryName, String imageURL) {
         this.productId = productId;
+        this.brandName = brandName;
         this.productName = productName;
+        this.categoryName = categoryName;
         this.imageURL = imageURL;
     }
 
@@ -76,6 +78,16 @@ public class Product {
         this.categoryName = categoryName;
         this.brandName = brandName;
     }
+    public Product(int productId, String productName, String origin, String material, double price, int categoryId, int brandId){
+        this.productId = productId;
+        this.productName = productName;
+        this.origin = origin;
+        this.material = material;
+        this.price = price;
+        this.categoryId = categoryId;
+        this.brandId = brandId;
+    }
+    
 
     // Getters and Setters
     public int getProductId() {

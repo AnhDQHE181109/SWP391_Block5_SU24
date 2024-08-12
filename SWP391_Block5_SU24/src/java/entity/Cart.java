@@ -4,18 +4,17 @@
  */
 package entity;
 
-import java.math.BigDecimal;
+import java.io.Serializable;
 import java.util.Date;
 
-public class Cart {
-    private int cartId;
-    private int customerId;
-    private int productId;
-    private int colorId;
-    private int sizeId;
+public class Cart implements Serializable {
+    
+    private int cartID;
+    private Account customer;
+    private int stockID;
     private int quantity;
-    private BigDecimal discount;
+    private double discount;
     private Date dateAdded;
 
-    // Getters and setters
+    // Getters and Setters
 }

@@ -2,51 +2,63 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/JSP_Servlet/Servlet.java to edit this template
  */
-
 package Controller;
 
 import java.io.IOException;
-import java.io.PrintWriter;
 import jakarta.servlet.ServletException;
+import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
-import java.util.List;
-import model.ProductDetailsDAO;
+import model.AccountDAO;
+import Util.EncryptionHelper;
+import Util.Validator;
+import java.io.PrintWriter;
+import java.security.NoSuchAlgorithmException;
+import java.security.spec.InvalidKeySpecException;
 
 /**
  *
- * @author Admin
+ * @author nobbe
  */
-public class DeleteProductController extends HttpServlet {
-   
-    /** 
-     * Processes requests for both HTTP <code>GET</code> and <code>POST</code> methods.
+@WebServlet(name = "CreateStaffController", urlPatterns = {"/CreateStaffController"})
+public class CreateStaffController extends HttpServlet {
+    private static final long serialVersionUID = 1L;
+    /**
+     * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
+     * methods.
+     *
      * @param request servlet request
      * @param response servlet response
      * @throws ServletException if a servlet-specific error occurs
      * @throws IOException if an I/O error occurs
      */
+    
+    
+
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
-    throws ServletException, IOException {
+            throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
         try (PrintWriter out = response.getWriter()) {
             /* TODO output your page here. You may use following sample code. */
             out.println("<!DOCTYPE html>");
             out.println("<html>");
             out.println("<head>");
-            out.println("<title>Servlet DeleteProductController</title>");  
+            out.println("<title>Servlet CreateStaffController</title>");            
             out.println("</head>");
             out.println("<body>");
-            out.println("<h1>Servlet DeleteProductController at " + request.getContextPath () + "</h1>");
+            out.println("<h1>Servlet CreateStaffController at " + request.getContextPath() + "</h1>");
             out.println("</body>");
             out.println("</html>");
         }
-    } 
+    }
+    
+    
 
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
-    /** 
+    /**
      * Handles the HTTP <code>GET</code> method.
+     *
      * @param request servlet request
      * @param response servlet response
      * @throws ServletException if a servlet-specific error occurs
@@ -54,12 +66,13 @@ public class DeleteProductController extends HttpServlet {
      */
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
-    throws ServletException, IOException {
+            throws ServletException, IOException {
+        processRequest(request, response);
+    }
 
-    } 
-
-    /** 
+    /**
      * Handles the HTTP <code>POST</code> method.
+     *
      * @param request servlet request
      * @param response servlet response
      * @throws ServletException if a servlet-specific error occurs
@@ -67,23 +80,38 @@ public class DeleteProductController extends HttpServlet {
      */
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
-    throws ServletException, IOException {
-        int productId = Integer.parseInt(request.getParameter("productId"));
+            throws ServletException, IOException {
+        String username = request.getParameter("username");
+        String password = request.getParameter("password");
+        String email = request.getParameter("email");
+        String phoneNumber = request.getParameter("phoneNumber");
+        String address = request.getParameter("address");
+        int role = 2; // Assuming role '2' is for staff
 
-        // Use the DAO to delete the product
-        ProductDetailsDAO pDAO = new ProductDetailsDAO();
-        boolean isDeleted = pDAO.deleteProduct(productId);
+        AccountDAO accountDAO = new AccountDAO();
 
-        // Redirect back to the product list page with a success message
-        if (isDeleted) {
-            response.sendRedirect("productmanage.jsp?message=Product deleted successfully");
-        } else {
-            response.sendRedirect("productmanage.jsp?error=Failed to delete product");
+        try {
+            String salt = EncryptionHelper.generateSalt();
+            String hashedPassword = EncryptionHelper.hashPassword(password, salt);
+
+            if (accountDAO.addAccount(username, hashedPassword, phoneNumber, email, address, role, salt)) {
+                request.setAttribute("message", "Account created successfully!");
+            } else {
+                request.setAttribute("message", "Failed to create account. Please try again.");
+            }
+        } catch (NoSuchAlgorithmException | InvalidKeySpecException e) {
+            e.printStackTrace();
+            request.setAttribute("message", "Error occurred during account creation.");
         }
-    }
 
-    /** 
+        request.getRequestDispatcher("addStaffAccount.jsp").forward(request, response);
+    }
+    
+    
+
+    /**
      * Returns a short description of the servlet.
+     *
      * @return a String containing servlet description
      */
     @Override

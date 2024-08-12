@@ -34,9 +34,9 @@ public class StocksManagementDAO extends DBConnect {
 
     public List<Product> getAllProducts() {
 
-        String sql = "select p.ProductID, ProductName, ImageURL\n"
-                + "from Products p, ProductImages pi\n"
-                + "where p.ImageID = pi.ImageID";
+        String sql = "select p.ProductID, BrandName, ProductName, CategoryName, ImageURL\n"
+                + "from Products p, ProductImages pi, Brand b, Categories c\n"
+                + "where p.ImageID = pi.ImageID and b.BrandID = p.BrandID and c.CategoryID = p.CategoryID";
 
         Product product = null;
         List<Product> list = new ArrayList<>();
@@ -46,7 +46,8 @@ public class StocksManagementDAO extends DBConnect {
 
             ResultSet rs = ps.executeQuery();
             while (rs.next()) {
-                product = new Product(rs.getInt(1), rs.getString(2), rs.getString(3));
+                product = new Product(rs.getInt(1), rs.getString(2), rs.getString(3), 
+                        rs.getString(4), rs.getString(5));
                 list.add(product);
             }
 
@@ -235,6 +236,35 @@ public class StocksManagementDAO extends DBConnect {
         } catch (SQLException e) {
             System.out.println("addNewProductVariant(): " + e);
         }
+    }
+
+    public Boolean checkIfStockExists(int size, String color) {
+
+        String sql = "select Size, Color\n"
+                + "from Stock\n"
+                + "where Size = ? and Color = ?";
+
+        try {
+            PreparedStatement ps = conn.prepareStatement(sql);
+            ps.setInt(1, size);
+            ps.setString(2, color);
+
+            ResultSet rs = ps.executeQuery();
+            if (rs.next()) {
+                return true;
+            }
+
+            if (rs != null) {
+                rs.close();
+            }
+            if (ps != null) {
+                ps.close();
+            }
+        } catch (SQLException e) {
+            System.out.println("checkIfStockExists(): " + e);
+        }
+
+        return false;
     }
 
     //User activity logging functions

@@ -178,26 +178,14 @@ public class AccountDAO extends MyDAO {
     }
 
     
-public boolean deleteAccount(int accountId) {
-    String sql = "DELETE FROM Accounts WHERE AccountID = ?";
+public boolean updateAccount(int accountId, String newEmail, String newPhoneNumber, String newAddress) {
+    String sql = "UPDATE Accounts SET Email = ?, PhoneNumber = ?, Address = ? WHERE AccountID = ?";
     try {
         ps = con.prepareStatement(sql);
-        ps.setInt(1, accountId);
-        int rowsAffected = ps.executeUpdate();
-        return rowsAffected > 0;
-    } catch (Exception e) {
-        e.printStackTrace();
-    }
-    return false;
-}
-    
-    public boolean updateAccount(int accountId, String newPassword, String newEmail) {
-    String sql = "UPDATE Accounts SET Hash = ?, Email = ? WHERE AccountID = ?";
-    try {
-        ps = con.prepareStatement(sql);
-         ps.setString(1, newPassword); 
-        ps.setString(2, newEmail);    
-        ps.setInt(3, accountId);     
+        ps.setString(1, newEmail);
+        ps.setString(2, newPhoneNumber);
+        ps.setString(3, newAddress);
+        ps.setInt(4, accountId);
         int rowsAffected = ps.executeUpdate();
         return rowsAffected > 0;
     } catch (Exception e) {
@@ -218,4 +206,50 @@ public boolean deleteAccount(int accountId) {
             e.printStackTrace();
         }
     }
+
+   public String getUsernameByAccountID(int accountID) {
+        String username = null;
+        String sql = "SELECT username FROM Accounts WHERE accountID = ?";
+        try {
+            ps = con.prepareStatement(sql);
+            ps.setInt(1, accountID);
+            rs = ps.executeQuery();
+            if (rs.next()) {
+                username = rs.getString("username");
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            try {
+                if (rs != null) rs.close();
+                if (ps != null) ps.close();
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+        return username;
+    }
+
+   // Tìm accountID theo username, có thể nhập một vài ký tự ở bất kỳ vị trí nào
+    public List<Integer> findAccountIDsByUsername(String usernamePattern) throws Exception {
+        List<Integer> accountIDs = new ArrayList<>();
+        String query = "SELECT accountID FROM Accounts WHERE username LIKE ?";
+        
+        try {
+            ps = con.prepareStatement(query);
+            ps.setString(1, "%" + usernamePattern + "%"); // Thêm '%' vào cả đầu và cuối
+            rs = ps.executeQuery();
+            
+            while (rs.next()) {
+                accountIDs.add(rs.getInt("accountID"));
+            }
+        } finally {
+            // Đảm bảo đóng ResultSet, PreparedStatement
+            if (rs != null) rs.close();
+            if (ps != null) ps.close();
+        }
+        
+        return accountIDs;
+    }
+    
 }

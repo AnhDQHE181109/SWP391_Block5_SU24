@@ -263,7 +263,6 @@
                 </div>
             </div>
         </div>
-        <button name="addProduct" class="btn btn-success" id="addProduct" onclick="location.href=&quot;addproduct.jsp&quot;">Add a new product</button>
 
         <!-- Edit Product Modal -->
         <div class="modal fade" id="editProductModal" tabindex="-1" aria-labelledby="editProductModalLabel" aria-hidden="true">

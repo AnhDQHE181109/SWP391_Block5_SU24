@@ -18,11 +18,8 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 import model.StocksManagementDAO;
+        
 
-/**
- *
- * @author ASUS
- */
 public class StocksManagementController extends HttpServlet {
 
     List<Product> outOfStocksList = new ArrayList<>();
@@ -72,20 +69,59 @@ public class StocksManagementController extends HttpServlet {
 
         HttpSession session = request.getSession();
         Account account = (Account) session.getAttribute("account");
+        if (account == null) {
+            response.sendError(HttpServletResponse.SC_FORBIDDEN, "You do not have permission to access this page.");
+            return;
+        }
+        if (account.getRole() == 1) {
+            response.sendError(HttpServletResponse.SC_FORBIDDEN, "You do not have permission to access this page.");
+            return;
+        }
         int accountID = account.getAccountID();
 
         StocksManagementDAO smDAO = new StocksManagementDAO();
 
         String newVariantProductID = request.getParameter("newVariantProductID");
         if (newVariantProductID != null) {
-            int size = Integer.parseInt(request.getParameter("newVariantSize"));
-            String color = request.getParameter("newVariantColor");
-            int quantity = Integer.parseInt(request.getParameter("newVariantQuantity"));
-            int productID = Integer.parseInt(request.getParameter("newVariantProductID"));
+//            int size = Integer.parseInt(request.getParameter("newVariantSize"));
+//            String color = request.getParameter("newVariantColor");
+//            int quantity = Integer.parseInt(request.getParameter("newVariantQuantity"));
+//            int productID = Integer.parseInt(request.getParameter("newVariantProductID"));
 
-            int importID = smDAO.logAccountAndGetImportID(accountID);
-            smDAO.addNewProductVariant(productID, size, color, quantity, importID);
-            request.setAttribute("openPopup", "popup_" + productID);
+            Map newVariantData = request.getParameterMap();
+            int size = 0, quantity = 0;
+            int productID = Integer.parseInt(request.getParameter("newVariantProductID"));
+            String color = "";
+
+            for (Object key : newVariantData.keySet()) {
+                String keyString = (String) key;
+                String[] value = (String[]) newVariantData.get(keyString);
+
+                if (keyString.startsWith("newVariantSize")) {
+                    size = Integer.parseInt(value[0]);
+                } else if (keyString.startsWith("newVariantColor")) {
+                    color = value[0];
+                } else if (keyString.startsWith("newVariantQuantity")) {
+                    quantity = Integer.parseInt(value[0]);
+                }
+
+            }
+
+            if (smDAO.checkIfStockExists(size, color)) {
+                List<Product> productsList = smDAO.getAllProducts();
+                List<Product> productsStocksList = smDAO.getProductsStocks();
+
+                request.setAttribute("alertMessage", "Product variant already exists!");
+                request.setAttribute("productsList", productsList);
+                request.setAttribute("productsStocksList", productsStocksList);
+                request.getRequestDispatcher("staff/stocksManager.jsp").forward(request, response);
+                return;
+            } else {
+                int importID = smDAO.logAccountAndGetImportID(accountID);
+                smDAO.addNewProductVariant(productID, size, color, quantity, importID);
+                request.setAttribute("openPopup", "popup_" + productID);
+            }
+
         }
 
         List<Product> productsList = smDAO.getAllProducts();
@@ -114,6 +150,14 @@ public class StocksManagementController extends HttpServlet {
 
         HttpSession session = request.getSession();
         Account account = (Account) session.getAttribute("account");
+        if (account == null) {
+            response.sendError(HttpServletResponse.SC_FORBIDDEN, "You do not have permission to access this page.");
+            return;
+        }
+        if (account.getRole() == 1) {
+            response.sendError(HttpServletResponse.SC_FORBIDDEN, "You do not have permission to access this page.");
+            return;
+        }
         int accountID = account.getAccountID();
 
         StocksManagementDAO smDAO = new StocksManagementDAO();
@@ -129,7 +173,7 @@ public class StocksManagementController extends HttpServlet {
         if (confirmYes != null) {
             //Debugging
             System.out.println("confirmYes: " + confirmYes);
-            
+
             for (Product product : outOfStocksList) {
                 smDAO.setProductStock(product.getStockID(), 0);
                 product.setStockQuantity(0);
@@ -146,15 +190,15 @@ public class StocksManagementController extends HttpServlet {
         } else if (confirmNo != null) {
             //Debugging
             System.out.println("confirmNo: " + confirmNo);
-            
+
             for (Product product : outOfStocksList) {
                 loggedProducts.add(product);
             }
-            
+
             outOfStocksList.clear();
             smDAO.logUpdatedProducts(accountID, loggedImportID, loggedProducts);
             loggedProducts.clear();
-            
+
             request.getRequestDispatcher("staff/stocksManager.jsp").forward(request, response);
             return;
         }
