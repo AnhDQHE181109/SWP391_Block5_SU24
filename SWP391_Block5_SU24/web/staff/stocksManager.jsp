@@ -103,8 +103,8 @@
                                 </div> 
                                 <div class="col-md-4" style="display: flex; justify-content: center; align-items: center;">
                                     <!-- Button for sorting -->
-                                    <button onclick="sortTableByNameDescending()" class="btn btn-primary btn-sm">
-                                        <i class="fas fa-sort-amount-down"></i> Sort by Name (Desc)
+                                    <button onclick="sortTableByNameAscendingDescending()" class="btn btn-primary btn-sm" id="sortButton">
+                                        <i class="fas fa-sort-amount-down"></i> Sort by Name (Asc)
                                     </button>
                                 </div>
                                 <div class="col-md-4" style="display: flex; justify-content: flex-end; align-items: center;">
@@ -394,7 +394,9 @@
         <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
         <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-confirm/3.3.2/jquery-confirm.min.js"></script>
         <script>
-            function sortTableByNameDescending() {
+            var ascDescStat = 1;
+
+            function sortTableByNameAscendingDescending() {
                 var table, rows, switching, i, x, y, shouldSwitch;
                 table = document.getElementById("sampleTable");
                 switching = true;
@@ -405,15 +407,30 @@
                         shouldSwitch = false;
                         x = rows[i].getElementsByTagName("td")[2]; // Column index for Name (change if needed)
                         y = rows[i + 1].getElementsByTagName("td")[2]; // Column index for Name (change if needed)
-                        if (x.innerHTML < y.innerHTML) {
+                        if (ascDescStat == 1) {
+                            if (x.innerHTML > y.innerHTML) {
                             shouldSwitch = true;
                             break;
+                            }
+                        } else {
+                            if (x.innerHTML < y.innerHTML) {
+                            shouldSwitch = true;
+                            break;
+                            }
                         }
+                        
                     }
                     if (shouldSwitch) {
                         rows[i].parentNode.insertBefore(rows[i + 1], rows[i]);
                         switching = true;
                     }
+                }
+                if (ascDescStat == 1) {
+                    ascDescStat = 0;
+                    document.querySelector('#sortButton').innerText = 'Sort by Name (Asc)';
+                } else {
+                    ascDescStat = 1;
+                    document.querySelector('#sortButton').innerText = 'Sort by Name (Desc)';
                 }
             }
 
@@ -453,7 +470,7 @@
             }
 
             function cancelLogout() {
-                window.location.href = 'product_manage';
+                window.location.href = 'stocksManager';
             }
 
             function openPopup(popupID) {
