@@ -192,6 +192,9 @@
                         </div>
 
                         <div style="padding: 0px 30px 30px">
+                            <% if ("true".equals(request.getAttribute("signup_success"))) { %>
+                            <p style="color:#66ff33; padding-left:7.5%" class="error">Sign up successful!</p>
+                            <% } %>
                             <%
                             String error = request.getParameter("error");
                             if(!(error==null)){%>
@@ -270,12 +273,12 @@
                     clearInterval(timer);
                     document.getElementById("timer").innerHTML = "Code expired, please try again. ";
                     const inputtemp = document.querySelectorAll('.digits input[type="text"]');
-                    
+
                     inputtemp.forEach(input => {
                         input.readOnly = true;
                         input.style.backgroundColor = "#ededed";
-                    input.style.color = "white";
-                    input.style.borderColor = "darkgray";
+                        input.style.color = "white";
+                        input.style.borderColor = "darkgray";
                     });
                 } else {
                     remainingTime -= 1000;
