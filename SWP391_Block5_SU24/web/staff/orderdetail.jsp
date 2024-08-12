@@ -154,64 +154,68 @@
         </aside>
         
         
-        <main class="app-content">
-            <div class="app-title">
-                <ul class="app-breadcrumb breadcrumb">
-                    <li class="breadcrumb-item">All Products</li>
-                    <li class="breadcrumb-item"><a href="#">Order list</a></li>
-                </ul>
+<main class="app-content">
+    <div class="app-title">
+        <ul class="app-breadcrumb breadcrumb">
+            <li class="breadcrumb-item">Order Details</li>
+            <li class="breadcrumb-item"><a href="orderlist.jsp">Order List</a></li>
+        </ul>
+    </div>
+    
+    <div class="row">
+        <div class="col-md-12">
+            <div class="tile">
+                <h3 class="tile-title">Order Details</h3>
+                <table border="1" class="table table-bordered">
+                    <thead class="thead-dark">
+                        <tr>
+                            <th>Product Name</th>
+                            <th>Quantity</th>
+                            <th>Size</th>
+                            <th>Color</th>
+                            <th>Sale Price</th>
+                            <th>Status</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <c:forEach var="detail" items="${orderDetailList}">
+                            <c:set var="stock" value="${stockMap[detail.stockID]}"/>
+                            <c:set var="productName" value="${productNameMap[stock.productID]}"/>
+                            
+                            <tr>
+                                <td><c:out value="${productName}"/></td>
+                                <td><c:out value="${detail.quantity}"/></td>
+                                <td><c:out value="${stock.size}"/></td>
+                                <td><c:out value="${stock.color}"/></td>
+                                <td><c:out value="${detail.salePrice}"/></td>
+                                <td><c:out value="${status}"/></td>
+                            </tr>
+                        </c:forEach>
+                    </tbody>
+                </table>
+                
+                <div class="text-center mt-4">
+                    <c:if test="${status == 'Pending'}">
+                        <form action="Orderdetailcontroller" method="post" class="form-inline justify-content-center">
+                            <input type="hidden" name="orderId" value="<c:out value="${orderDetailList[0].orderID}"/>"/>
+                            <input type="hidden" name="newStatus" value="Shipping"/>
+                            <button type="submit" class="btn btn-primary">Confirm Order</button>
+                        </form>
+                    </c:if>
+                    
+                    <c:if test="${status != 'Pending'}">
+                        <a href="shipcontroller" class="btn btn-secondary">Go to Shipping</a>
+                    </c:if>
+
+                    <!-- Back Button -->
+                    <div class="mt-3">
+                        <a href="Ordercontroller" class="btn btn-secondary">Back</a>
+                    </div>
+                </div>
             </div>
-                        
-                        <div class="row">
-            <div class="col-md-12">
-                <div class="tile">
-                    <h3 class="tile-title">Order list </h3>
-      <!-- Check if the orderDetailList attribute is set and not empty -->
-
-<table border="1">
-    <thead>
-        <tr>
-            <th>Product Name</th> <!-- Move Product Name to the first column -->
-            <th>Quantity</th>
-            <th style="display:none;">Order Detail ID</th>
-            <th style="display:none;">Order ID</th>
-            <th style="display:none;">Stock ID</th>
-            <th style="display:none;">Product ID</th>
-            <th>Size</th>
-            <th>Color</th>
-            <th>Sale Price</th>
-        </tr>
-    </thead>
-    <tbody>
-        <c:forEach var="detail" items="${orderDetailList}">
-            <tr>
-                <!-- Retrieve and display product name -->
-                <c:set var="stock" value="${stockMap[detail.stockID]}"/>
-                <c:set var="productName" value="${productNameMap[stock.productID]}"/>
-                
-                <td><c:out value="${productName}"/></td> <!-- Display product name as the first column -->
-                <td><c:out value="${detail.quantity}"/></td>
-                
-                <td style="display:none;"><c:out value="${detail.orderDetailID}"/></td>
-                <td style="display:none;"><c:out value="${detail.orderID}"/></td>
-                <td style="display:none;"><c:out value="${detail.stockID}"/></td>
-                <td style="display:none;"><c:out value="${stock.productID}"/></td>
-                <td><c:out value="${stock.size}"/></td>
-                <td><c:out value="${stock.color}"/></td>
-                <td><c:out value="${detail.salePrice}"/></td>
-            </tr>
-        </c:forEach>
-            
-
-    </tbody>
-
-</table>
-
-                      <form action="Orderdetailcontroller" method="post">
-    <input type="text" name="orderId" value="<c:out value="${stock.productID}"/>"/> <!-- The ID of the order -->
-    <input type="hidden" name="newStatus" value="Shipping"/> <!-- The new status -->
-    <button type="submit">Confirm Order</button>
-</form>
+        </div>
+    </div>
+</main>
 
 
 

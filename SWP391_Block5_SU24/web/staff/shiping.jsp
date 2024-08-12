@@ -154,78 +154,87 @@
         </aside>
         
         
-        <main class="app-content">
-            <div class="app-title">
-                <ul class="app-breadcrumb breadcrumb">
-                    <li class="breadcrumb-item">All Products</li>
-                    <li class="breadcrumb-item"><a href="#">Add products</a></li>
-                </ul>
-            </div>
-            <div class="row">
-                <div class="col-md-12">
-
-                        
-                        <div class="row">
-            <div class="col-md-12">
-                <form action="Ordercontroller" method="get">
-                        <label for="username">Username:</label>
-                        <input type="text" id="username" name="username" />
-
-                        <label for="orderDate">Order Date:</label>
-                        <input type="date" id="orderDate" name="orderDate" />
-
-                        <label for="status">Status:</label>
-                        <select id="status" name="status">
-                            <option value="">All</option>
-                            <option value="Pending">Pending</option>
-                            <option value="Shipped">Shipped</option>
-                            <option value="Cancelled">Cancelled</option>
-                        </select>
-
-                        <label for="startDate">Start Date:</label>
-                        <input type="date" id="startDate" name="startDate" />
-
-                        <label for="endDate">End Date:</label>
-                        <input type="date" id="endDate" name="endDate" />
-
-                        <button type="submit">Search</button>
-                    </form>
-
-
-                <div class="tile">
-                    <h3 class="tile-title">Order list </h3>
-    <table border="1">
-        <thead>
-            <tr>
-                <th>Order ID</th>
-                <th>Username</th> <!-- Thay đổi thành Username -->
-                <th>Order Date</th>
-                <th>Status</th>
-                <th>Action</th>
-            </tr>
-        </thead>
-        <tbody>
-            <c:forEach var="order" items="${orderList}">
-                <tr>
-                    <td>${order.orderID}</td>
-                    <td>${usernameMap[order.accountID]}</td> <!-- Sử dụng usernameMap để lấy username -->
-                    <td>${order.orderDate}</td>
-                    <td>${order.status}</td>
-                    <td>
-                        <form action="Orderdetailcontroller" method="get"> <!-- Đảm bảo 'Ordercontroller' là tên servlet đúng -->
-                            <input type="hidden" name="status" value="${order.status}" />
-                            <input type="hidden" name="id" value="${order.orderID}" />
-                            <input type="hidden" name="service" value="detailService" />
-                            <button type="submit">Detail</button> <!-- Nút Detail -->
+<main class="app-content">
+    <div class="app-title">
+        <ul class="app-breadcrumb breadcrumb">
+            <li class="breadcrumb-item">Order Details</li>
+            <li class="breadcrumb-item"><a href="orderlist.jsp">Order List</a></li>
+        </ul>
+    </div>
+    
+    <div class="row">
+        <div class="col-md-12">
+            <div class="tile">
+                <h3 class="tile-title">Order Details</h3>
+                <table border="1" class="table table-bordered">
+                    <thead class="thead-dark">
+                        <tr>
+                            <th>Product Name</th>
+                            <th>Quantity</th>
+                            <th>Size</th>
+                            <th>Color</th>
+                            <th>Sale Price</th>
+                            <th>Status</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <c:forEach var="detail" items="${orderDetailList}">
+                            <c:set var="stock" value="${stockMap[detail.stockID]}"/>
+                            <c:set var="productName" value="${productNameMap[stock.productID]}"/>
+                            
+                            <tr>
+                                <td><c:out value="${productName}"/></td>
+                                <td><c:out value="${detail.quantity}"/></td>
+                                <td><c:out value="${stock.size}"/></td>
+                                <td><c:out value="${stock.color}"/></td>
+                                <td><c:out value="${detail.salePrice}"/></td>
+                                <td><c:out value="${status}"/></td>
+                            </tr>
+                        </c:forEach>
+                    </tbody>
+                </table>
+                
+                <div class="text-center mt-4">
+                    <c:if test="${status == 'Pending'}">
+                        <form action="Orderdetailcontroller" method="post" class="form-inline justify-content-center">
+                            <input type="hidden" name="orderId" value="<c:out value="${orderDetailList[0].orderID}"/>"/>
+                            <input type="hidden" name="newStatus" value="Shipping"/>
+                            <button type="submit" class="btn btn-primary">Confirm Order</button>
                         </form>
-                    </td>
-                </tr>
-            </c:forEach>
-        </tbody>
-    </table>
+                    </c:if>
+                    
+                    <c:if test="${status != 'Pending'}">
+                        <a href="shippingstatus.jsp" class="btn btn-secondary">Go to Shipping</a>
+                    </c:if>
+
+                    <!-- Back Button -->
+                    <div class="mt-3">
+                        <a href="Ordercontroller" class="btn btn-secondary">Back</a>
+                    </div>
                 </div>
             </div>
         </div>
+    </div>
+</main>
+
+
+
+
+
+
+
+    <!-- If the orderDetailList is empty or not set -->
+    <c:if test="${empty orderDetailList}">
+        <p>No details found for this order.</p>
+    </c:if>
+                </div>
+            </div>
+        </div>
+                               <!-- Button back to the order list page -->
+                  <a href="Ordercontroller" class="btn btn-primary">Return</a>
+
+
+
 
                     </div>
                     </main>
