@@ -67,7 +67,7 @@
                     margin-bottom: 0px;
                 }
             }
-            
+
             #umessage{
                 display:none;
                 background: #f1f1f1;
@@ -94,6 +94,37 @@
             }
 
             .uinvalid:before {
+                position: relative;
+                left: -35px;
+                content: "✖";
+            }
+
+            #emessage{
+                display:none;
+                background: #f1f1f1;
+                color: #000;
+                position: relative;
+                padding: 0px 10px 10px 10px;
+                margin-bottom: 5px;
+            }
+            #emessage p {
+                padding: 0px 35px;
+                font-size: 14px;
+            }
+            .evalid {
+                color: green;
+            }
+
+            .evalid:before {
+                position: relative;
+                left: -35px;
+                content: "✔";
+            }
+            .einvalid {
+                color: red;
+            }
+
+            .einvalid:before {
                 position: relative;
                 left: -35px;
                 content: "✖";
@@ -158,7 +189,7 @@
                 left: -35px;
                 content: "✖";
             }
-            
+
             #pmessage{
                 display:none;
                 background: #f1f1f1;
@@ -281,7 +312,13 @@
                                 <p style="color:red" class="error">Email already registered to another account!</p>
                                 <% } %>
 
-                                <input style='margin:0px 12px 0px 12px; height: 40px; width:85%;' type="text" name="email" required placeholder='Email' value="${email != null ? email : ''}"><br>
+                                <input style='margin:0px 12px 0px 12px; height: 40px; width:85%;' type="text" name="email" id='em' required placeholder='Email' value="${email != null ? email : ''}"><br>
+                                <div id="emessage">          
+                                    <b>Email must:</b>
+                                    <p id="estructure" class="einvalid">Follow the email structure: <ul><li>local@domainname.topleveldomain</li><li>domainname part of email must contain at least 2 characters</li><li>topleveldomain part of email must contain at least 2 characters</li></ul></p>
+                                    <p id="enumber" class="einvalid">Not <b>start with a digit</b></p>
+
+                                </div>
                                 <input style='margin:0px 12px 0px 12px; height: 40px; width:85%;' type="text" name="address" required placeholder='Address' value="${address != null ? address : ''}"><br>
                                 <button name="role" value="1" style='border:0px; text-align:center; background-color: #88c8bc;border-radius: 2px;display:flex;color:white;justify-content:center; width: 85%;' type="submit">SIGN UP</button>
                             </form>
@@ -297,6 +334,34 @@
         </div>
     </body>
     <script>
+        var eInput = document.getElementById("em");
+        var estructure = document.getElementById("estructure");       
+        var enumber = document.getElementById("enumber");
+        eInput.onfocus = function () {
+            document.getElementById("emessage").style.display = "block";
+        }
+        eInput.onblur = function () {
+            document.getElementById("emessage").style.display = "none";
+        };
+        const InvalidEstart = /^\d/;
+        const EMAIL_REGEX = /^(?=.{1,64}@)[A-Za-z0-9_-]+(\.[A-Za-z0-9_-]+)*@[^-][A-Za-z0-9-]+(\.[A-Za-z0-9-]+)*(\.[A-Za-z]{2,})$/;
+        eInput.onkeyup = function () {
+            if (!InvalidEstart.test(eInput.value)) {
+                enumber.classList.remove("einvalid");
+                enumber.classList.add("evalid");
+            } else {
+                enumber.classList.remove("evalid");
+                enumber.classList.add("einvalid");
+            }
+            if (EMAIL_REGEX.test(eInput.value)) {
+                estructure.classList.remove("einvalid");
+                estructure.classList.add("evalid");
+            } else {
+                estructure.classList.remove("evalid");
+                estructure.classList.add("einvalid");
+            }
+        };
+
         var pInput = document.getElementById("pnum");
         var pletter = document.getElementById("pletter");
         var plength = document.getElementById("plength");
@@ -333,7 +398,7 @@
                 pnumber.classList.add("pinvalid");
             }
         }
-        
+
         var unameInput = document.getElementById("usname");
         var uletter = document.getElementById("uletter");
         var ulength = document.getElementById("ulength");
