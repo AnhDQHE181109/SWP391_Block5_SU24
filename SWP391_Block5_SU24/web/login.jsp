@@ -193,7 +193,7 @@
 
                         <div style="padding: 0px 30px 30px">
                             <% if ("true".equals(request.getAttribute("signup_success"))) { %>
-                            <p style="color:#66ff33; padding-left:7.5%" class="error">Sign up successful!</p>
+                            <p style="color:#4ac421; padding-left:7.5%" class="error">Sign up successful!</p>
                             <% } %>
                             <%
                             String error = request.getParameter("error");
