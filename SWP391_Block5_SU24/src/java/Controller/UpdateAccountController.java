@@ -4,6 +4,7 @@
  */
 package Controller;
 
+import Util.Validator;
 import java.io.IOException;
 import java.io.PrintWriter;
 import jakarta.servlet.ServletException;
@@ -54,8 +55,34 @@ public class UpdateAccountController extends HttpServlet {
         String newPhoneNumber = request.getParameter("phoneNumber");
         String newAddress = request.getParameter("address");
 
+        Validator validator = new Validator();
+        AccountDAO accountDAO = new AccountDAO();
+
+        if (!validator.isValidEmail(newEmail)) {
+            response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
+            response.getWriter().write("Invalid email format.");
+            return;
+        }
+
+        if (!validator.isEmailUnique(newEmail)) {
+            response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
+            response.getWriter().write("Email is already taken.");
+            return;
+        }
+
+        if (!validator.isValidPhoneNumber(newPhoneNumber)) {
+            response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
+            response.getWriter().write("Invalid phone number format.");
+            return;
+        }
+
+        if (!validator.isPhoneNumberUnique(newPhoneNumber)) {
+            response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
+            response.getWriter().write("Phone number is already taken.");
+            return;
+        }
+
         try {
-            AccountDAO accountDAO = new AccountDAO();
             boolean updated = accountDAO.updateAccount(accountId, newEmail, newPhoneNumber, newAddress);
             if (updated) {
                 response.setStatus(HttpServletResponse.SC_OK);
@@ -70,6 +97,8 @@ public class UpdateAccountController extends HttpServlet {
             e.printStackTrace();
         }
     }
+
+    
 
     
     @Override
