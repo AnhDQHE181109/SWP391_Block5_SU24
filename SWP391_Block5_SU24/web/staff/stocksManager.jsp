@@ -261,8 +261,17 @@
                                                                     <div class="input-group-prepend">
                                                                       <span class="input-group-text" id="basic-addon1">Color</span>
                                                                     </div>
-                                                                    <input type="text" id="newVariantColor_<%=product.getProductId() %>" name="newVariantColor_<%=product.getProductId() %>" class="form-control" placeholder="Color" 
-                                                                    aria-label="Color" aria-describedby="basic-addon1" required>
+                                                                    <!-- <input type="text" id="newVariantColor_<%=product.getProductId() %>" name="newVariantColor_<%=product.getProductId() %>" class="form-control" placeholder="Color" 
+                                                                    aria-label="Color" aria-describedby="basic-addon1" required
+                                                                    onfocusout="checkIfFieldEmpty('newVariantColor_<%=product.getProductId() %>', 'Size')"> -->
+                                                                    <select class="form-select" name="newVariantColor_<%=product.getProductId() %>" id="newVariantColor_<%=product.getProductId() %>"
+                                                                        aria-label="Color" aria-describedby="basic-addon1">
+                                                                        <option value="White">White</option>
+                                                                        <option value="Black">Black</option>
+                                                                        <option value="Red">Red</option>
+                                                                        <option value="Pink">Pink</option>
+                                                                        <option value="Yellow">Yellow</option>
+                                                                    </select>
                                                                 </div>
                         
                                                                 <div class="input-group mb-3">
@@ -494,6 +503,17 @@
                     document.getElementById(fieldID).value = initialValue;
                 }
             }
+
+            // function checkIfFieldEmpty(fieldID, type) {
+            //     //document.getElementById(fieldID).value = document.getElementById(fieldID).value.trim();
+            //     // if (document.getElementById(fieldID).value == "") {
+            //     //     alert("One or more quantities is empty!");
+            //     // }
+            //     if (document.getElementById(fieldID).value.trim() == '') {
+            //         alert(type + " cannot be empty!");
+            //         document.getElementById(fieldID).value = '';
+            //     }
+            // }
 
             function validateQuantity(fieldID) {
                 var quantity = parseInt($('#' + fieldID).val());

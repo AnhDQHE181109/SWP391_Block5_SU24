@@ -8,46 +8,31 @@ public class Category {
     private int categoryId;
     private String categoryName;
 
-<<<<<<< Updated upstream
+    public Category(int categoryId, String categoryName) {
+        this.categoryId = categoryId;
+        this.categoryName = categoryName;
+    }
+    
+    public Category() {
+        
+    }
 
     public int getCategoryId() {
         return categoryId;
-=======
-    public Category() {
     }
 
-    public Category(int categoryID, String categoryName) {
-        this.categoryID = categoryID;
-        this.categoryName = categoryName;
-    }
-
-    public int getCategoryID() {
-        return categoryID;
-    }
-
-    public void setCategoryID(int categoryID) {
-        this.categoryID = categoryID;
->>>>>>> Stashed changes
+    public void setCategoryId(int categoryId) {
+        this.categoryId = categoryId;
     }
 
     public String getCategoryName() {
         return categoryName;
     }
 
-<<<<<<< Updated upstream
-    public void setCategoryId(int categoryId) {
-        this.categoryId = categoryId;
-    }
-
-=======
->>>>>>> Stashed changes
     public void setCategoryName(String categoryName) {
         this.categoryName = categoryName;
     }
 
     
-<<<<<<< Updated upstream
 
-=======
->>>>>>> Stashed changes
 }

@@ -20,6 +20,7 @@
     </head>
     <body>
         <div class="container">
+            <button name="goBack" class="btn btn-success" id="goBack" onclick="history.back()">Go back</button>
             <h3 class="mt-5">Add Product</h3>
             <form action="AddProductController" method="post">
                 <div class="form-group">
