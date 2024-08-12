@@ -1,327 +1,521 @@
-<%@page contentType="text/html" pageEncoding="UTF-8"%>
-<%@taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
-
 <!DOCTYPE html>
+<%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
+<%@page contentType="text/html" pageEncoding="UTF-8"%>
+<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
+<%@ page import="model.ProductDetailsDAO" %>
+<%@ page import="entity.Product" %>
+<%@ page import="entity.Brand" %>
+<%@ page import="entity.Category" %>
+<%@ page import="java.util.List" %>
+
+<%
+    ProductDetailsDAO pDAO = new ProductDetailsDAO();
+    List<Product> products = pDAO.getAllProducts();
+    List<Brand> brandList = pDAO.getAllBrands();
+    List<Category> categoryList = pDAO.getAllCategories();
+%>
+
 <html lang="en">
 
     <head>
-        <title>Product List</title>
         <meta charset="utf-8">
-        <meta http-equiv="X-UA-Compatible" content="IE=edge">
-        <meta name="viewport" content="width=device-width, initial-scale=1">
-        <!-- Main CSS-->
-        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-        <link rel="stylesheet" href="admin/css/customer_m.css">
-        <link rel="stylesheet" type="text/css" href="admin/css/main.css">
-        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/boxicons@latest/css/boxicons.min.css">
-        <link rel="stylesheet" href="admin/font/themify-icons/themify-icons.css">
-        <link rel="stylesheet" href="admin/css/review_m.css" />
-        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/boxicons@latest/css/boxicons.min.css">
-        <!-- or -->
-        <link rel="stylesheet" href="https://unpkg.com/boxicons@latest/css/boxicons.min.css">
+        <title>DASHMIN - Bootstrap Admin Template</title>
+        <meta content="width=device-width, initial-scale=1.0" name="viewport">
+        <meta content="" name="keywords">
+        <meta content="" name="description">
 
-        <!-- Font-icon css-->
-        <link rel="stylesheet" type="text/css" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
-        <script src="https://cdnjs.cloudflare.com/ajax/libs/sweetalert/2.1.2/sweetalert.min.js"></script>
-        <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.8.2/css/all.css">
-        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jquery-confirm/3.3.2/jquery-confirm.min.css">
+        <!-- Favicon -->
+        <link href="img/favicon.ico" rel="icon">
 
+        <!-- Google Web Fonts -->
+        <link rel="preconnect" href="https://fonts.googleapis.com">
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link href="https://fonts.googleapis.com/css2?family=Heebo:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+        <!-- Icon Font Stylesheet -->
+        <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.10.0/css/all.min.css" rel="stylesheet">
+        <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.4.1/font/bootstrap-icons.css" rel="stylesheet">
+
+        <!-- Libraries Stylesheet -->
+        <link href="lib/owlcarousel/assets/owl.carousel.min.css" rel="stylesheet">
+        <link href="lib/tempusdominus/css/tempusdominus-bootstrap-4.min.css" rel="stylesheet" />
+
+        <!-- Customized Bootstrap Stylesheet -->
+        <link href="css/bootstrap.min.css" rel="stylesheet">
+
+        <!-- Template Stylesheet -->
+        <link href="css/style.css" rel="stylesheet">
+
+        <!-- Add custom styles -->
+        <style>
+            .action-icons {
+                display: flex;
+                justify-content: space-around;
+            }
+
+            .action-icons i {
+                cursor: pointer;
+            }
+        </style>
     </head>
 
-    <body onload="time()" class="app sidebar-mini rtl">
-        <div class="app-sidebar__overlay" data-toggle="sidebar"></div>
-        <aside class="app-sidebar">
-            <body onload="time()" class="app sidebar-mini rtl">
-                <div class="app-sidebar__overlay" data-toggle="sidebar"></div>
-                <aside class="app-sidebar">
-                    <div class="app-sidebar__user"><img class="app-sidebar__user-avatar" src="https://thumbs.dreamstime.com/b/admin-sign-laptop-icon-stock-vector-166205404.jpg" width="50px"
-                                                        alt="User Image">
-
-                    </div>
-                    <hr>
-                    <ul class="app-menu">
-                        <li><a class="app-menu__item" href="dashboard"><i class='app-menu__icon bx bx-tachometer'></i><span
-                                    class="app-menu__label">Dashboard</span></a></li>
-                        <li><a class="app-menu__item" href="customer_manage"><i class='app-menu__icon bx bx-user-voice'></i><span
-                                    class="app-menu__label">Customers</span></a></li>
-                        <li><a class="app-menu__item" href="stocksManager"><i
-                                    class='app-menu__icon bx bx-purchase-tag-alt'></i><span class="app-menu__label">Products</span></a>
-                        </li>
-                        <li><a class="app-menu__item" href="Ordercontroller"><i class='app-menu__icon bx bx-task'></i><span
-                                    class="app-menu__label">Orders</span></a></li>
-                        <li><a class="app-menu__item" href="productStockImport"><i class='app-menu__icon bx bx-task'></i><span
-                                    class="app-menu__label">Reviews</span></a></li>
-                       
-                        <button class="admin_logout" onclick="showLogoutBox()">Logout</button>
-                        <div class="logout-box" id="logoutBox" style="display: none">
-                            <h2>Logout</h2>
-                            <p>Are you sure you want to logout?</p>
-                            <button onclick="logout()">Logout</button>
-                            <button onclick="cancelLogout()">Cancel</button>
-                        </div>
-                    </ul>
-                </aside>
-        </aside>
-        <main class="app-content">
-            <div class="app-title">
-                <ul class="app-breadcrumb breadcrumb side">
-                    <li class="breadcrumb-item active"><a href="#"><b>All Products</b></a></li>
-                </ul>
+    <body>
+        <div class="container-fluid position-relative bg-white d-flex p-0">
+            <!-- Spinner Start -->
+            <div id="spinner" class="show bg-white position-fixed translate-middle w-100 vh-100 top-50 start-50 d-flex align-items-center justify-content-center">
+                <div class="spinner-border text-primary" style="width: 3rem; height: 3rem;" role="status">
+                    <span class="sr-only">Loading...</span>
+                </div>
             </div>
-            <div class="row">
-                <div class="col-md-12">
-                    <div class="tile">
-                        <div class="tile-body">
-                            <div class="row element-button">
-                                <div class="col-md-4" style="display: flex; justify-content: flex-start; align-items: center;">
-                                    <a class="btn btn-add btn-sm" href="product_manage?action=insert" title="Thêm">
-                                        <i class="fas fa-plus"></i> Add Products
-                                    </a>
-                                </div>
-                                <div class="col-md-4" style="display: flex; justify-content: center; align-items: center;">
-                                    <!-- Button for sorting -->
-                                    <button onclick="sortTableByPriceDescending()" class="btn btn-primary btn-sm">
-                                        <i class="fas fa-sort-amount-down"></i> Sort by Price (Desc)
+            <!-- Spinner End -->
+
+
+            <!-- Sidebar Start -->
+            <div class="sidebar pe-4 pb-3">
+                <nav class="navbar bg-light navbar-light">
+                    <a href="index.jsp" class="navbar-brand mx-4 mb-3">
+                        <h3 class="text-primary"><i class="fa fa-hashtag me-2"></i>DASHMIN</h3>
+                    </a>
+                    <div class="d-flex align-items-center ms-4 mb-4">
+                        <div class="position-relative">
+                            <img class="rounded-circle" src="img/user.jpg" alt="" style="width: 40px; height: 40px;">
+                            <div class="bg-success rounded-circle border border-2 border-white position-absolute end-0 bottom-0 p-1"></div>
+                        </div>
+                        <div class="ms-3">
+                            <h6 class="mb-0">Jhon Doe</h6>
+                            <span>Admin</span>
+                        </div>
+                    </div>
+                    <div class="navbar-nav w-100">
+                        <a href="index.jsp" class="nav-item nav-link"><i class="fa fa-tachometer-alt me-2"></i>Dashboard</a>
+                        <div class="nav-item dropdown">
+                            <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown"><i class="fa fa-laptop me-2"></i>Elements</a>
+                            <div class="dropdown-menu bg-transparent border-0">
+                                <a href="button.html" class="dropdown-item">Buttons</a>
+                                <a href="typography.html" class="dropdown-item">Typography</a>
+                                <a href="element.html" class="dropdown-item">Other Elements</a>
+                            </div>
+                        </div>
+                        <a href="widget.html" class="nav-item nav-link"><i class="fa fa-th me-2"></i>Widgets</a>
+                        <a href="form.html" class="nav-item nav-link"><i class="fa fa-keyboard me-2"></i>Forms</a>
+                        <a href="table.html" class="nav-item nav-link"><i class="fa fa-table me-2"></i>Tables</a>
+                        <a href="chart.html" class="nav-item nav-link"><i class="fa fa-chart-bar me-2"></i>Charts</a>
+                        <div class="nav-item dropdown">
+                            <a href="#" class="nav-link dropdown-toggle active" data-bs-toggle="dropdown"><i class="far fa-file-alt me-2"></i>Pages</a>
+                            <div class="dropdown-menu bg-transparent border-0">
+                                <a href="signin.html" class="dropdown-item">Sign In</a>
+                                <a href="signup.html" class="dropdown-item">Sign Up</a>
+                                <a href="404.html" class="dropdown-item">404 Error</a>
+                                <a href="blank.html" class="dropdown-item active">Blank Page</a>
+                            </div>
+                        </div>
+                    </div>
+                </nav>
+            </div>
+            <!-- Sidebar End -->
+
+
+            <!-- Content Start -->
+            <div class="content">
+                <!-- Navbar Start -->
+                <nav class="navbar navbar-expand bg-light navbar-light sticky-top px-4 py-0">
+                    <a href="index.jsp" class="navbar-brand d-flex d-lg-none me-4">
+                        <h2 class="text-primary mb-0"><i class="fa fa-hashtag"></i></h2>
+                    </a>
+                    <a href="#" class="sidebar-toggler flex-shrink-0">
+                        <i class="fa fa-bars"></i>
+                    </a>
+                    <form class="d-none d-md-flex ms-4">
+                        <input class="form-control border-0" type="search" placeholder="Search">
+                    </form>
+                    <div class="navbar-nav align-items-center ms-auto">
+                        <div class="nav-item dropdown">
+                            <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown">
+                                <i class="fa fa-envelope me-lg-2"></i>
+                                <span class="d-none d-lg-inline-flex">Message</span>
+                            </a>
+                            <div class="dropdown-menu dropdown-menu-end bg-light border-0 rounded-0 rounded-bottom m-0">
+                                <a href="#" class="dropdown-item">
+                                    <div class="d-flex align-items-center">
+                                        <img class="rounded-circle" src="img/user.jpg" alt="" style="width: 40px; height: 40px;">
+                                        <div class="ms-2">
+                                            <h6 class="fw-normal mb-0">Jhon send you a message</h6>
+                                            <small>15 minutes ago</small>
+                                        </div>
+                                </a>
+                                <hr class="dropdown-divider">
+                                <a href="#" class="dropdown-item">
+                                    <div class="d-flex align-items-center">
+                                        <img class="rounded-circle" src="img/user.jpg" alt="" style="width: 40px; height: 40px;">
+                                        <div class="ms-2">
+                                            <h6 class="fw-normal mb-0">Jhon send you a message</h6>
+                                            <small>15 minutes ago</small>
+                                        </div>
+                                    </div>
+                                </a>
+                                <hr class="dropdown-divider">
+                                <a href="#" class="dropdown-item">
+                                    <div class="d-flex align-items-center">
+                                        <img class="rounded-circle" src="img/user.jpg" alt="" style="width: 40px; height: 40px;">
+                                        <div class="ms-2">
+                                            <h6 class="fw-normal mb-0">Jhon send you a message</h6>
+                                            <small>15 minutes ago</small>
+                                        </div>
+                                    </div>
+                                </a>
+                                <hr class="dropdown-divider">
+                                <a href="#" class="dropdown-item text-center">See all message</a>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="nav-item dropdown">
+                        <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown">
+                            <i class="fa fa-bell me-lg-2"></i>
+                            <span class="d-none d-lg-inline-flex">Notificatin</span>
+                        </a>
+                        <div class="dropdown-menu dropdown-menu-end bg-light border-0 rounded-0 rounded-bottom m-0">
+                            <a href="#" class="dropdown-item">
+                                <h6 class="fw-normal mb-0">Profile updated</h6>
+                                <small>15 minutes ago</small>
+                            </a>
+                            <hr class="dropdown-divider">
+                            <a href="#" class="dropdown-item">
+                                <h6 class="fw-normal mb-0">New user added</h6>
+                                <small>15 minutes ago</small>
+                            </a>
+                            <hr class="dropdown-divider">
+                            <a href="#" class="dropdown-item">
+                                <h6 class="fw-normal mb-0">Password changed</h6>
+                                <small>15 minutes ago</small>
+                            </a>
+                            <hr class="dropdown-divider">
+                            <a href="#" class="dropdown-item text-center">See all notifications</a>
+                        </div>
+                    </div>
+                    <div class="nav-item dropdown">
+                        <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown">
+                            <img class="rounded-circle me-lg-2" src="img/user.jpg" alt="" style="width: 40px; height: 40px;">
+                            <span class="d-none d-lg-inline-flex">John Doe</span>
+                        </a>
+                        <div class="dropdown-menu dropdown-menu-end bg-light border-0 rounded-0 rounded-bottom m-0">
+                            <a href="#" class="dropdown-item">My Profile</a>
+                            <a href="#" class="dropdown-item">Settings</a>
+                            <a href="#" class="dropdown-item">Log Out</a>
+                        </div>
+                    </div>
+            </div>
+        </nav>
+        <!-- Navbar End -->
+
+
+        <%
+                                        String mess = (String) request.getAttribute("mess");
+                                        if (mess != null) {
+                                            out.print("<span style='color:red;'>" + mess + "</span>");
+                                        }
+                                    %>
+
+        <!-- Blank Start -->
+        <div class="container-fluid pt-4 px-4">
+            <div class="row vh-100 bg-light rounded align-items-center justify-content-center mx-0">
+                <div class="col-md-10">
+                    <h3>Product List</h3>
+                    <table id="productTable" class="table table-bordered">
+                        <thead>
+                            <tr>
+                                <th>Product Name</th>
+                                <th>Origin</th>
+                                <th>Material</th>
+                                <th>Price</th>
+                                <th>Brand</th>
+                                <th>Category</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <% for (Product product : products) { %>    
+                            <tr>
+                                <td><%= product.getProductName() %></td>
+                                <td><%= product.getOrigin() %></td>
+                                <td><%= product.getMaterial() %></td>
+                                <td><%= product.getPrice() %></td>
+                                <td><%= product.getBrandName() %></td>
+                                <td><%= product.getCategoryName() %></td>
+                                <td>
+                                    <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#editProductModal"
+                                            data-id="<%= product.getProductId() %>" data-name="<%= product.getProductName() %>"
+                                            data-origin="<%= product.getOrigin() %>" data-material="<%= product.getMaterial() %>"
+                                            data-price="<%= product.getPrice() %>" data-brand="<%= product.getBrandName() %>"
+                                            data-category="<%= product.getCategoryName() %>">
+                                        Edit
                                     </button>
-                                </div>
-                                <div class="col-md-4" style="display: flex; justify-content: flex-end; align-items: center;">
-                                    <input type="text" id="searchInput" placeholder="Search by name.." style="margin-right: 5px;">
-                                    <button onclick="searchBooksByName()" class="btn btn-primary btn-sm">
-                                        <i class="ti-search"></i> Search
+
+                                    <!-- Delete Button -->
+                                    <button type="button" class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#deleteProductModal"
+                                            data-id="<%= product.getProductId() %>">
+                                        Delete
                                     </button>
+                                </td>
+                            </tr>
+                            <% } %>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+        <!-- Edit Product Modal -->
+        <div class="modal fade" id="editProductModal" tabindex="-1" aria-labelledby="editProductModalLabel" aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <form id="editProductForm" action="EditProductController" method="post">
+                        <div class="modal-header">
+                            <h5 class="modal-title" id="editProductModalLabel">Edit Product</h5>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                            <div></div>
+                        </div>
+                        <div class="modal-body">
+                            <input type="hidden" name="productId" id="editProductId">
+
+                            <!-- Product Name -->
+                            <div class="mb-3">
+                                <label for="editProductName" class="form-label">Product Name</label>
+                                <input type="text" class="form-control" id="editProductName" name="productName" required>
+                                <div class="invalid-feedback">
+
                                 </div>
                             </div>
 
-                            <table class="table table-hover table-bordered" id="sampleTable">
-                                <thead>
-                                    <tr>
-                                        <th>ID</th>
-                                        <th>Name</th>
-                                        <th>Author</th>
-                                        <th>Publisher</th>
-                                        <th>Publisher Date</th>
-                                        <th>Genres</th>
-                                        <th>Price</th>
-                                        <th>Quantity</th>
-                                        <th>Details</th>
-                                        <th>All Images</th>
-                                        <th>Action</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    <c:forEach items="${productList}" var="product">
-                                        <tr>
-                                            <td>${product.bookID}</td>
-                                            <td>${product.bookName}</td>
-                                            <td>${product.authorName}</td>
-                                            <td>${product.publisherName}</td>
-                                            <td>${product.publisherDate}</td>
-                                            <td>
-                                                <c:forEach items="${genreList}" var="genre" varStatus="loop">
-                                                    <c:if test="${product.bookID==genre.bookID}">
-                                                        ${genre.genreName} 
-                                                    </c:if>
-                                                </c:forEach>
-                                            </td>
-                                            <td>${product.price}</td>
-                                            <td>${product.quantity}</td>
-                                            <td>${product.detailbook}</td>
-                                            <td>
-                                                <!-- Inside your forEach loop -->
-                                                <button class="add-customer-btn" onclick="openPopup('${product.img_1}', '${product.img_2}', '${product.img_3}', '${product.img_4}')">Show images...</button>
-                                                <div id="popup" class="popup">
-                                                    <div class="popup-content">
-                                                        <div class="row">
-                                                            <div class="col-3">
-                                                                <img id="img1" alt="Image 1" style="width: 90px; height: 90px;">
-                                                                <p style="text-align: center;">Image 1</p>
-                                                            </div>
-                                                            <div class="col-3">
-                                                                <img id="img2" alt="Image 2" style="width: 90px; height: 90px;">
-                                                                <p style="text-align: center;">Image 2</p>
-                                                            </div>
-                                                            <div class="col-3">
-                                                                <img id="img3" alt="Image 3" style="width: 90px; height: 90px;">
-                                                                <p style="text-align: center;">Image 3</p>
-                                                            </div>
-                                                            <div class="col-3">
-                                                                <img id="img4" alt="Image 4" style="width: 90px; height: 90px;">
-                                                                <p style="text-align: center;">Image 4</p>
-                                                            </div>
-                                                        </div>
-                                                        <div id="submit-type">
-                                                            <button type="button" onclick="closePopup()">Close</button>
-                                                        </div>
-                                                    </div>
-                                                </div>
+                            <!-- Origin -->
+                            <div class="mb-3">
+                                <label for="editOrigin" class="form-label">Origin</label>
+                                <input type="text" class="form-control" id="editOrigin" name="origin" required>
+                                <div class="invalid-feedback">
+                                    <%
+                                        if (mess != null) {
+                                            out.print("<span style='color:red;'>" + mess + "</span>");
+                                        }
+                                    %>
+                                </div>
+                            </div>
 
-                                            </td>
+                            <!-- Material -->
+                            <div class="mb-3">
+                                <label for="editMaterial" class="form-label">Material</label>
+                                <input type="text" class="form-control" id="editMaterial" name="material" required>
+                                <div class="invalid-feedback">
+                                    <%
+                                        if (mess != null) {
+                                            out.print("<span style='color:red;'>" + mess + "</span>");
+                                        }
+                                    %>
+                                </div>
+                            </div>
 
-                                            <td>
-                                                <button class="update-product-btn" onclick="showUpdateForm('${product.bookID}', '${product.bookName}', '${product.authorName}', '${product.publisherName}', '${product.publisherDate}', '${product.price}', '${product.quantity}', '${product.detailbook}', '${product.img_1}', '${product.img_2}', '${product.img_3}', '${product.img_4}')">Update</button>
-                                                <form method="post" action="product_manage?action=updateproduct" style="display: none;" id="updateForm${product.bookID}">
-                                                    <input type="hidden" name="action" value="updateproduct">
-                                                    <input type="hidden" name="bookID" value="${product.bookID}">
-                                                    Name: <input type="text" name="bookName" value="${product.bookName}"><br>
-                                                    Author: <input type="text" name="authorName" value="${product.authorName}"><br>
-                                                    Publisher: <input type="text" name="publisherName" value="${product.publisherName}"><br>
-                                                    Publisher Date: <input type="text" name="publisherDate" value="${product.publisherDate}"><br>
-                                                    Genre: <select class="form-control" name="genres">
-                                                        <option value="">-- Choose Genre --</option>
-                                                        <c:forEach items="${genreList3}" var="genre">
-                                                            <option value="${genre.genreName}">${genre.genreName}</option>
-                                                        </c:forEach>
-                                                    </select>
-                                                    Price: <input type="text" name="price" value="${product.price}"><br>
-                                                    Quantity: <input type="text" name="quantity" value="${product.quantity}"><br>
-                                                    Details: <input type="text" name="detailbook" value="${product.detailbook}"><br>
-                                                    Image 1: <input type="text" name="image1" value="${product.img_1}"><br>
-                                                    Image 2: <input type="text" name="image2" value="${product.img_2}"><br>
-                                                    Image 3: <input type="text" name="image3" value="${product.img_3}"><br>
-                                                    Image 4: <input type="text" name="image4" value="${product.img_4}"><br>
-                                                    <input type="submit" value="update">
-                                                </form>
-                                                <form method="post" action="product_manage?action=deleteproduct" style="display: inline;" id="deleteForm${product.bookID}">
-                                                    <input type="hidden" name="action" value="deleteproduct">
-                                                    <input type="hidden" name="bookID" value="${product.bookID}">
-                                                    <button type="button" class="delete-product-btn" onclick="confirmDelete('${product.bookID}')">Delete</button>
-                                                </form>
+                            <!-- Price -->
+                            <div class="mb-3">
+                                <label for="editPrice" class="form-label">Price</label>
+                                <input type="number" class="form-control" id="editPrice" name="price" step="0.01" required>
+                                <div class="invalid-feedback">
+                                    <%
+                                        if (mess != null) {
+                                            out.print("<span style='color:red;'>" + mess + "</span>");
+                                        }
+                                    %>
+                                </div>
+                            </div>
 
-                                            </td>
-                                        </tr>
-                                    </c:forEach>
-                                </tbody>
-                            </table>
+                            <!-- Brand Select Dropdown -->
+                            <div class="mb-3">
+                                <label for="editBrand" class="form-label">Brand</label>
+                                <select name="brandId" id="editBrand" class="form-control">
+                                    <% for(Brand brand : brandList) { %>
+                                    <option value="<%= brand.getBrandId() %>">
+                                        <%= brand.getBrandName() %>
+                                    </option>
+                                    <% } %>
+                                </select>
+                            </div>
+
+                            <!-- Category Select Dropdown -->
+                            <div class="mb-3">
+                                <label for="editCategory" class="form-label">Category</label>
+                                <select name="categoryId" id="editCategory" class="form-control">
+                                    <% for(Category category : categoryList) { %>
+                                    <option value="<%= category.getCategoryId() %>">
+                                        <%= category.getCategoryName() %>
+                                    </option>
+                                    <% } %>
+                                </select>
+                            </div>
                         </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                            <button type="submit" class="btn btn-primary">Save changes</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+        `````
+        <!-- Delete Product Modal -->
+        <div class="modal fade" id="deleteProductModal" tabindex="-1" aria-labelledby="deleteProductModalLabel" aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <form action="DeleteProductController" method="post">
+                        <div class="modal-header">
+                            <h5 class="modal-title" id="deleteProductModalLabel">Confirm Delete</h5>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                        </div>
+                        <div class="modal-body">
+                            <p>Are you sure you want to delete this product?</p>
+                            <input type="hidden" name="productId" id="deleteProductId">
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                            <button type="submit" class="btn btn-danger">Yes, Delete</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+        <!-- Blank End -->
+
+
+        <!-- Footer Start -->
+        <div class="container-fluid pt-4 px-4">
+            <div class="bg-light rounded-top p-4">
+                <div class="row">
+                    <div class="col-12 col-sm-6 text-center text-sm-start">
+                        &copy; <a href="#">Your Site Name</a>, All Right Reserved.
+                    </div>
+                    <div class="col-12 col-sm-6 text-center text-sm-end">
+                        Designed By <a href="https://htmlcodex.com">HTML Codex</a>
                     </div>
                 </div>
             </div>
-        </main>
+        </div>
+        <!-- Footer End -->
+    </div>
+    <!-- Content End -->
 
-        <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
-        <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-confirm/3.3.2/jquery-confirm.min.js"></script>
-        <script>
-            function sortTableByPriceDescending() {
-                var table, rows, switching, i, x, y, shouldSwitch;
-                table = document.getElementById("sampleTable");
-                switching = true;
-                while (switching) {
-                    switching = false;
-                    rows = table.rows;
-                    for (i = 1; i < (rows.length - 1); i++) {
-                        shouldSwitch = false;
-                        x = rows[i].getElementsByTagName("td")[6]; // Column index for Price (change if needed)
-                        y = rows[i + 1].getElementsByTagName("td")[6]; // Column index for Price (change if needed)
-                        if (Number(x.innerHTML) < Number(y.innerHTML)) {
-                            shouldSwitch = true;
-                            break;
-                        }
-                    }
-                    if (shouldSwitch) {
-                        rows[i].parentNode.insertBefore(rows[i + 1], rows[i]);
-                        switching = true;
-                    }
-                }
+
+    <!-- Back to Top -->
+    <a href="#" class="btn btn-lg btn-primary btn-lg-square back-to-top"><i class="bi bi-arrow-up"></i></a>
+</div>
+
+<!-- JavaScript Libraries -->
+<script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0/dist/js/bootstrap.bundle.min.js"></script>
+<script src="lib/chart/chart.min.js"></script>
+<script src="lib/easing/easing.min.js"></script>
+<script src="lib/waypoints/waypoints.min.js"></script>
+<script src="lib/owlcarousel/owl.carousel.min.js"></script>
+<script src="lib/tempusdominus/js/moment.min.js"></script>
+<script src="lib/tempusdominus/js/moment-timezone.min.js"></script>
+<script src="lib/tempusdominus/js/tempusdominus-bootstrap-4.min.js"></script>
+
+
+<script>
+    var editProductModal = document.getElementById('editProductModal');
+    editProductModal.addEventListener('show.bs.modal', function (event) {
+        var button = event.relatedTarget;
+
+        // Retrieve data attributes from the button
+        var productId = button.getAttribute('data-id');
+        var productName = button.getAttribute('data-name');
+        var origin = button.getAttribute('data-origin');
+        var material = button.getAttribute('data-material');
+        var price = button.getAttribute('data-price');
+        var brand = button.getAttribute('data-brand');
+        var category = button.getAttribute('data-category');
+
+        // Populate the modal fields with the retrieved data
+        var modal = this;
+        modal.querySelector('#editProductId').value = productId;
+        modal.querySelector('#editProductName').value = productName;
+        modal.querySelector('#editOrigin').value = origin;
+        modal.querySelector('#editMaterial').value = material;
+        modal.querySelector('#editPrice').value = price;
+
+        // Set the selected brand in the dropdown
+        var brandSelect = modal.querySelector('#editBrand');
+        for (var i = 0; i < brandSelect.options.length; i++) {
+            if (brandSelect.options[i].text === brand) {
+                brandSelect.options[i].selected = true;
+                break;
             }
+        }
 
-            function showUpdateForm(bookID, bookName, authorName, publisherName, publisherDate, price, quantity, detailbook, img_1, img_2, img_3, img_4) {
-                // Hide all other update forms first
-                jQuery("form[id^='updateForm']").hide();
-
-                // Show the form for this product
-                var formID = "updateForm" + bookID;
-                var form = document.getElementById(formID);
-
-                // Pre-fill the form with current product details
-                form.elements["bookName"].value = decodeURIComponent(bookName);
-                form.elements["authorName"].value = authorName;
-                form.elements["publisherName"].value = publisherName;
-                form.elements["publisherDate"].value = publisherDate;
-                form.elements["price"].value = price;
-                form.elements["quantity"].value = quantity;
-                form.elements["detailbook"].value = detailbook;
-                form.elements["image1"].value = img_1;
-                form.elements["image2"].value = img_2;
-                form.elements["image3"].value = img_3;
-                form.elements["image4"].value = img_4;
-
-                // Show the form
-                jQuery("#" + formID).show();
+        // Set the selected category in the dropdown
+        var categorySelect = modal.querySelector('#editCategory');
+        for (var i = 0; i < categorySelect.options.length; i++) {
+            if (categorySelect.options[i].text === category) {
+                categorySelect.options[i].selected = true;
+                break;
             }
-        </script>
+        }
 
-        <script>
-            function showLogoutBox() {
-                document.getElementById('logoutBox').style.display = 'block';
-            }
+    });
+    var deleteProductModal = document.getElementById('deleteProductModal');
+    deleteProductModal.addEventListener('show.bs.modal', function (event) {
+        var button = event.relatedTarget;
+        var productId = button.getAttribute('data-id');
+        var modal = this;
+        modal.querySelector('#deleteProductId').value = productId;
+    });
+    document.getElementById('editProductForm').addEventListener('submit', function (event) {
+        let isValid = true;
 
-            function logout() {
-                window.location.href = 'index.html';
-            }
+        // Clear previous error messages
+        document.getElementById('productNameError').innerText = '';
+        document.getElementById('originError').innerText = '';
+        document.getElementById('materialError').innerText = '';
+        document.getElementById('priceError').innerText = '';
 
-            function cancelLogout() {
-                window.location.href = 'product_manage';
-            }
+        // Regex patterns
+        const textPattern = /^[A-Z][a-zA-Z\s'-\[\]]*$/;
+        const pricePattern = /^\d+(\.\d{1,2})?$/;
 
-            function openPopup(img1, img2, img3, img4) {
-                // Set the src attribute of each image element to the corresponding image URL
-                document.getElementById("img1").src = img1;
-                document.getElementById("img2").src = img2;
-                document.getElementById("img3").src = img3;
-                document.getElementById("img4").src = img4;
+        // Validate Product Name
+        const productName = document.getElementById('editProductName').value.trim();
+        if (!productName.match(textPattern)) {
+            document.getElementById('productNameError').innerText = 'Product name must start with an uppercase letter and contain only valid characters.';
+            isValid = false;
+        }
 
-                // Display the popup
-                document.getElementById("popup").style.display = "block";
-            }
+        // Validate Origin
+        const origin = document.getElementById('editOrigin').value.trim();
+        if (!origin.match(textPattern)) {
+            document.getElementById('originError').innerText = 'Origin must start with an uppercase letter and contain only valid characters.';
+            isValid = false;
+        }
 
-            function closePopup() {
-                // Hide the popup
-                document.getElementById("popup").style.display = "none";
-            }
-            function searchBooksByName() {
-                var input, filter, table, tr, td, i, txtValue;
-                input = document.getElementById("searchInput");
-                filter = input.value.toUpperCase();
-                table = document.getElementById("sampleTable");
-                tr = table.getElementsByTagName("tr");
+        // Validate Material
+        const material = document.getElementById('editMaterial').value.trim();
+        if (!material.match(textPattern)) {
+            document.getElementById('materialError').innerText = 'Material must start with an uppercase letter and contain only valid characters.';
+            isValid = false;
+        }
 
-                // Loop through all table rows, and hide those that don't match the search query
-                for (i = 0; i < tr.length; i++) {
-                    td = tr[i].getElementsByTagName("td")[1]; // Column index for book name, change if needed
+        // Validate Price
+        const price = document.getElementById('editPrice').value.trim();
+        if (!price.match(pricePattern)) {
+            document.getElementById('priceError').innerText = 'Price must be a valid decimal number (up to 2 decimal places).';
+            isValid = false;
+        }
 
-                    if (td) {
-                        txtValue = td.textContent || td.innerText;
-                        if (txtValue.toUpperCase().indexOf(filter) > -1) {
-                            tr[i].style.display = "";
-                        } else {
-                            tr[i].style.display = "none";
-                        }
-                    }
-                }
-            }
+        // Prevent form submission if validation fails
+        if (!isValid) {
+            event.preventDefault();
+        }
+    });
+</script>
 
-        </script>
-        <script>
-            function confirmDelete(bookID) {
-                var result = window.confirm("Are you sure you want to delete this product?");
-                if (result) {
-                    // Submit the form to delete the product
-                    document.getElementById("deleteForm" + bookID).submit();
-                }
-            }
-        </script>
-        <script>
-            var myApp = new function () {
-                this.printTable = function () {
-                    var tab = document.getElementById('sampleTable');
-                    var win = window.open('', '', 'height=700,width=700');
-                    win.document.write(tab.outerHTML);
-                    win.document.close();
-                    win.print();
-                }
-            }
-        </script>
+<!-- Template Javascript -->
+<script src="js/main.js"></script>
 
-    </body>
+<!-- Custom Javascript -->
+</body>
 
 </html>
