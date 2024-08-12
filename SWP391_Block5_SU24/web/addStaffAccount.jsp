@@ -6,6 +6,7 @@
 
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
+
 <!DOCTYPE html>
 <html lang="en">
 
@@ -37,6 +38,46 @@
 
     <!-- Template Stylesheet -->
     <link href="css/manager.css" rel="stylesheet">
+    
+    <script>
+    function validateForm() {
+        let username = document.getElementById("username").value;
+        let password = document.getElementById("password").value;
+        let phoneNumber = document.getElementById("phoneNumber").value;
+        let email = document.getElementById("email").value;
+
+        // Username validation
+        let usernamePattern = /^[^\s\/\\<>&$#%"\'!?()]+$/;
+        if (!usernamePattern.test(username)) {
+            alert("Username contains invalid characters.");
+            return false;
+        }
+
+        // Password validation
+        let passwordPattern = /^(?=.*[A-Z])(?=.*\d)[^\s]{8,}$/;
+        if (!passwordPattern.test(password)) {
+            alert("Password must be at least 8 characters long, contain at least one uppercase letter, one digit, and no spaces.");
+            return false;
+        }
+
+        // Phone number validation
+        let phonePattern = /^\d{9,11}$/;
+        if (!phonePattern.test(phoneNumber)) {
+            alert("Phone number must be between 9 and 11 digits.");
+            return false;
+        }
+
+        // Email format validation
+        let emailPattern = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
+        if (!emailPattern.test(email)) {
+            alert("Please enter a valid email address.");
+            return false;
+        }
+
+        return true;
+    }
+</script>
+
 </head>
 
 <body>
@@ -194,7 +235,7 @@
         <c:if test="${not empty message}">
             <div class="alert alert-info">${message}</div>
         </c:if>
-        <form action="CreateStaffController" method="post">
+        <form action="CreateStaffController" method="post" onsubmit="return validateForm();">
             <div class="mb-3">
                 <label for="username" class="form-label">Username</label>
                 <input type="text" class="form-control" id="username" name="username" required>
@@ -255,7 +296,7 @@
     <script src="lib/tempusdominus/js/moment-timezone.min.js"></script>
     <script src="lib/tempusdominus/js/tempusdominus-bootstrap-4.min.js"></script>
 
-    <!-- Template Javascript -->
+    <!-- Template Javascript -->    
     <script src="js/main.js"></script>
 </body>
 
