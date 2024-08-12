@@ -82,30 +82,56 @@ public class CreateStaffController extends HttpServlet {
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         String username = request.getParameter("username");
-        String password = request.getParameter("password");
-        String email = request.getParameter("email");
-        String phoneNumber = request.getParameter("phoneNumber");
-        String address = request.getParameter("address");
-        int role = 2; // Assuming role '2' is for staff
+    String password = request.getParameter("password");
+    String email = request.getParameter("email");
+    String phoneNumber = request.getParameter("phoneNumber");
+    String address = request.getParameter("address");
+    int role = 2; // Assuming role '2' is for staff
 
-        AccountDAO accountDAO = new AccountDAO();
+    Validator validator = new Validator();
+    AccountDAO accountDAO = new AccountDAO();
 
-        try {
-            String salt = EncryptionHelper.generateSalt();
-            String hashedPassword = EncryptionHelper.hashPassword(password, salt);
-
-            if (accountDAO.addAccount(username, hashedPassword, phoneNumber, email, address, role, salt)) {
-                request.setAttribute("message", "Account created successfully!");
-            } else {
-                request.setAttribute("message", "Failed to create account. Please try again.");
-            }
-        } catch (NoSuchAlgorithmException | InvalidKeySpecException e) {
-            e.printStackTrace();
-            request.setAttribute("message", "Error occurred during account creation.");
-        }
-
+    // Server-side validation
+    if (!validator.isValidUsername(username)) {
+        request.setAttribute("message", "Invalid username.");
         request.getRequestDispatcher("addStaffAccount.jsp").forward(request, response);
+        return;
     }
+
+    if (!validator.isValidPassword(password)) {
+        request.setAttribute("message", "Invalid password.");
+        request.getRequestDispatcher("addStaffAccount.jsp").forward(request, response);
+        return;
+    }
+
+    if (!validator.isValidEmail(email) || accountDAO.isEmailTaken(email)) {
+        request.setAttribute("message", "Invalid or duplicate email.");
+        request.getRequestDispatcher("addStaffAccount.jsp").forward(request, response);
+        return;
+    }
+
+    if (!validator.isValidPhoneNumber(phoneNumber) || accountDAO.isPhoneNumberTaken(phoneNumber)) {
+        request.setAttribute("message", "Invalid or duplicate phone number.");
+        request.getRequestDispatcher("addStaffAccount.jsp").forward(request, response);
+        return;
+    }
+
+    try {
+        String salt = EncryptionHelper.generateSalt();
+        String hashedPassword = EncryptionHelper.hashPassword(password, salt);
+
+        if (accountDAO.addAccount(username, hashedPassword, phoneNumber, email, address, role, salt)) {
+            request.setAttribute("message", "Account created successfully!");
+        } else {
+            request.setAttribute("message", "Failed to create account. Please try again.");
+        }
+    } catch (NoSuchAlgorithmException | InvalidKeySpecException e) {
+        e.printStackTrace();
+        request.setAttribute("message", "Error occurred during account creation.");
+    }
+
+    request.getRequestDispatcher("addStaffAccount.jsp").forward(request, response);
+}
     
     
 
