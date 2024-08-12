@@ -9,6 +9,22 @@ package Util;
  * @author Long
  */
 public class Validator {
+    
+    public boolean isValidUsername(String username) {
+        return username != null && username.matches("^[^\\s/\\\\<>&$#%\"'!?()]+$");
+    }
+
+    public boolean isValidPassword(String password) {
+        return password != null && password.matches("^(?=.*[A-Z])(?=.*\\d)[^\\s]{8,}$");
+    }
+
+    public boolean isValidEmail(String email) {
+        return email != null && email.matches("^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,}$");
+    }
+
+    public boolean isValidPhoneNumber(String phoneNumber) {
+        return phoneNumber != null && phoneNumber.matches("^\\d{9,11}$");
+    }
         public static int validatePassword(String password) {
             if (password == null) {
                 return 1;
