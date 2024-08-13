@@ -171,7 +171,9 @@
                                         <th>Brand</th>
                                         <th>Name</th>
                                         <th>Category</th>
+                                        <% if (account.getRole() == 2) { %>
                                         <th> </th>
+                                        <% } %>
                                     </tr>
                                 </thead>
                                 <tbody>
@@ -187,6 +189,7 @@
                                             <td><%=product.getBrandName() %></td>
                                             <td><%=product.getProductName() %></td>
                                             <td><%=product.getCategoryName() %></td>
+                                            <% if (account.getRole() == 2) { %>
                                             <td class="col-1">
                                                 <button class="btn btn-info" onclick="openPopup('popup_<%=product.getProductId() %>')">View variants</button>
                                                 <div id="popup_<%=product.getProductId() %>" class="popup" style="display: none;">
@@ -329,10 +332,25 @@
 
                                             </td> -->
                                         </tr>
+                                        <% } %>
                                     <% }
                                         } %>
                                 </tbody>
                             </table>
+
+                            <div>
+                                <c:if test="${currentPage > 1}">
+                                    <a href="stocksManager?page=${currentPage - 1}">Previous</a>
+                                </c:if>
+                            
+                                <c:forEach begin="1" end="${totalPages}" var="i">
+                                    <a href="stocksManager?page=${i}">${i}</a>
+                                </c:forEach>
+                            
+                                <c:if test="${currentPage < totalPages}">
+                                    <a href="stocksManager?page=${currentPage + 1}">Next</a>
+                                </c:if>
+                            </div>
 
                             <%
                                 List<Product> outOfStocksList = (List<Product>) request.getAttribute("outOfStocksList");
