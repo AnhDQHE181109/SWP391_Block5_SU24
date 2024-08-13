@@ -58,6 +58,8 @@ public class DAOProductStockImport extends MyDAO {
         }
         return stockImports;
     }
+    
+    
 
     // Method to update a ProductStockImport record
     public boolean updateProductStockImport(ProductStockImport stockImport) {
@@ -232,6 +234,31 @@ public class DAOProductStockImport extends MyDAO {
             closeResources();
         }
         
+        return stockImports;
+    }
+
+public List<ProductStockImport> getAllProductStockImportssort(String sortOrder) {
+    List<ProductStockImport> stockImports = new ArrayList<>();
+    String xSql = "SELECT * FROM ProductStockImport ORDER BY ImportDate " + sortOrder;
+
+        try {
+            ps = con.prepareStatement(xSql);
+            rs = ps.executeQuery();
+
+            while (rs.next()) {
+                ProductStockImport stockImport = new ProductStockImport();
+                stockImport.setImportID(rs.getInt("ImportID"));
+                stockImport.setAccountID(rs.getInt("AccountID"));
+                stockImport.setImportDate(rs.getDate("ImportDate"));
+
+                stockImports.add(stockImport);
+            }
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+        } finally {
+            closeResources();
+        }
         return stockImports;
     }
 }
