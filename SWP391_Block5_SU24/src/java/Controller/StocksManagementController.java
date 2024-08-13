@@ -80,6 +80,22 @@ public class StocksManagementController extends HttpServlet {
 
         StocksManagementDAO smDAO = new StocksManagementDAO();
 
+        List<Product> productsList = smDAO.getAllProducts();
+        List<Product> productsStocksList = smDAO.getProductsStocks();
+
+        // Phân trang
+        int page = 1;
+        int recordsPerPage = 10;
+        if (request.getParameter("page") != null) {
+            page = Integer.parseInt(request.getParameter("page"));
+        }
+        int totalRecords = productsList.size();
+        int totalPages = (int) Math.ceil(totalRecords * 1.0 / recordsPerPage);
+
+        // Tính toán chỉ mục bắt đầu và kết thúc cho trang hiện tại
+        int start = (page - 1) * recordsPerPage;
+        int end = Math.min(start + recordsPerPage, totalRecords);
+
         String newVariantProductID = request.getParameter("newVariantProductID");
         if (newVariantProductID != null) {
 //            int size = Integer.parseInt(request.getParameter("newVariantSize"));
@@ -97,12 +113,15 @@ public class StocksManagementController extends HttpServlet {
                 String[] value = (String[]) newVariantData.get(keyString);
 
                 if (value[0].trim().equalsIgnoreCase("")) {
-                    List<Product> productsList = smDAO.getAllProducts();
-                    List<Product> productsStocksList = smDAO.getProductsStocks();
-                    
+//                    List<Product> productsList = smDAO.getAllProducts();
+//                    List<Product> productsStocksList = smDAO.getProductsStocks();
+                    List<Product> paginatedOrderList = productsList.subList(start, end);
+                    request.setAttribute("productsList", paginatedOrderList);
+                    request.setAttribute("currentPage", page);
+                    request.setAttribute("totalPages", totalPages);
+
                     request.setAttribute("alertMessage", "Please input valid data for the variant!");
                     request.setAttribute("openPopup", "popup_" + productID);
-                    request.setAttribute("productsList", productsList);
                     request.setAttribute("productsStocksList", productsStocksList);
                     request.getRequestDispatcher("staff/stocksManager.jsp").forward(request, response);
                     return;
@@ -119,8 +138,13 @@ public class StocksManagementController extends HttpServlet {
             }
 
             if (smDAO.checkIfStockExists(size, color)) {
-                List<Product> productsList = smDAO.getAllProducts();
-                List<Product> productsStocksList = smDAO.getProductsStocks();
+//                List<Product> productsList = smDAO.getAllProducts();
+//                List<Product> productsStocksList = smDAO.getProductsStocks();
+
+                List<Product> paginatedOrderList = productsList.subList(start, end);
+                request.setAttribute("productsList", paginatedOrderList);
+                request.setAttribute("currentPage", page);
+                request.setAttribute("totalPages", totalPages);
 
                 request.setAttribute("alertMessage", "Product variant already exists!");
                 request.setAttribute("productsList", productsList);
@@ -135,12 +159,14 @@ public class StocksManagementController extends HttpServlet {
 
         }
 
-        List<Product> productsList = smDAO.getAllProducts();
-        List<Product> productsStocksList = smDAO.getProductsStocks();
+        List<Product> paginatedOrderList = productsList.subList(start, end);
+        request.setAttribute("productsList", paginatedOrderList);
+        request.setAttribute("currentPage", page);
+        request.setAttribute("totalPages", totalPages);
 
         //Debugging
 //        request.setAttribute("openPopup", "popup_" + 1);
-        request.setAttribute("productsList", productsList);
+//        request.setAttribute("productsList", productsList);
         request.setAttribute("productsStocksList", productsStocksList);
         request.getRequestDispatcher("staff/stocksManager.jsp").forward(request, response);
     }
@@ -175,8 +201,26 @@ public class StocksManagementController extends HttpServlet {
 
         List<Product> productsList = smDAO.getAllProducts();
         List<Product> productsStocksList = smDAO.getProductsStocks();
+        
+        
+        // Phân trang
+        int page = 1;
+        int recordsPerPage = 10;
+        
+        int totalRecords = productsList.size();
+        int totalPages = (int) Math.ceil(totalRecords * 1.0 / recordsPerPage);
 
-        request.setAttribute("productsList", productsList);
+        // Tính toán chỉ mục bắt đầu và kết thúc cho trang hiện tại
+        int start = (page - 1) * recordsPerPage;
+        int end = Math.min(start + recordsPerPage, totalRecords);
+        
+        List<Product> paginatedOrderList = productsList.subList(start, end);
+        request.setAttribute("productsList", paginatedOrderList);
+        request.setAttribute("currentPage", page);
+        request.setAttribute("totalPages", totalPages);
+        
+
+//        request.setAttribute("productsList", productsList);
         request.setAttribute("productsStocksList", productsStocksList);
 
         String confirmYes = request.getParameter("confirmYes");
