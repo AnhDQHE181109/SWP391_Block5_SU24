@@ -188,7 +188,7 @@
                                             <td><%=product.getProductName() %></td>
                                             <td><%=product.getCategoryName() %></td>
                                             <td class="col-1">
-                                                <button class="btn btn-info" onclick="openPopup('popup_<%=product.getProductId() %>')">Import stocks</button>
+                                                <button class="btn btn-info" onclick="openPopup('popup_<%=product.getProductId() %>')">View variants</button>
                                                 <div id="popup_<%=product.getProductId() %>" class="popup" style="display: none;">
                                                     <!-- Popup content for each order -->
                                                     <div class="popup-content">
