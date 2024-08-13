@@ -47,6 +47,10 @@
         input[type=number] {
         -moz-appearance: textfield;
         }
+
+        th {
+            cursor: pointer;
+        }
         </style>
 
     </head>
@@ -168,9 +172,9 @@
                                 <thead>
                                     <tr>
                                         <th>Picture</th>
-                                        <th>Brand</th>
-                                        <th>Name</th>
-                                        <th>Category</th>
+                                        <th onclick="sortTableAscendingDescending(1)">Brand</th>
+                                        <th onclick="sortTableAscendingDescending(2)">Name</th>
+                                        <th onclick="sortTableAscendingDescending(3)">Category</th>
                                         <% if (account.getRole() == 2) { %>
                                         <th> </th>
                                         <% } %>
@@ -224,7 +228,7 @@
                                                                                 <td><input type="number" class="form-control" 
                                                                                     name="<%=productStocks.getStockID()%>_quantity"
                                                                                     id="<%=productStocks.getStockID()%>_quantity" 
-                                                                                    value="<%=productStocks.getTotalQuantity() %>" required min="0" max="99"
+                                                                                    value="<%=productStocks.getTotalQuantity() %>" required min="0" max="99" onkeypress="return event.charCode >= 48 && event.charCode <= 57"
                                                                                     onfocusout="checkIfFieldEmpty('<%=productStocks.getStockID()%>_quantity', '<%=productStocks.getTotalQuantity() %>')"></td>
                                                                               </tr>
                                                                     <%      i++;
@@ -257,7 +261,8 @@
                                                                     </div>
                                                                     <input type="number" id="newVariantSize_<%=product.getProductId() %>" name="newVariantSize_<%=product.getProductId() %>" class="form-control" placeholder="Size"
                                                                     aria-label="Size" aria-describedby="basic-addon1" required min="28" max="40"
-                                                                    onfocusout="validateEmptyMinMax('newVariantSize_<%=product.getProductId() %>', 28, 40, 'Size')">
+                                                                    onblur="validateEmptyMinMax('newVariantSize_<%=product.getProductId() %>', 28, 40, 'Size')"
+                                                                    onkeypress="return event.charCode >= 48 && event.charCode <= 57">
                                                                   </div>
                         
                                                                 <div class="input-group mb-3">
@@ -283,7 +288,8 @@
                                                                     </div>
                                                                     <input type="number" id="newVariantQuantity_<%=product.getProductId() %>" name="newVariantQuantity_<%=product.getProductId() %>" class="form-control" placeholder="Quantity" 
                                                                     aria-label="Quantity" aria-describedby="basic-addon1" required min="1" max="99"
-                                                                    onfocusout="validateEmptyMinMax('newVariantQuantity_<%=product.getProductId() %>', 1, 99, 'Quantity')">
+                                                                    onblur="validateEmptyMinMax('newVariantQuantity_<%=product.getProductId() %>', 1, 99, 'Quantity')"
+                                                                    onkeypress="return event.charCode >= 48 && event.charCode <= 57">
                                                                 </div>
 
                                                                 <input type="text" name="newVariantProductID" value="<%=product.getProductId() %>" hidden>
@@ -414,23 +420,30 @@
         <script>
             var ascDescStat = 1;
 
-            function sortTableByNameAscendingDescending() {
-                var table, rows, switching, i, x, y, shouldSwitch;
+            function sortTableAscendingDescending(column) {
+                //Debugging
+                console.log('Executed sort function');
+
+                var table, rows, switching, i, x, y, shouldSwitch, dir, switchCount = 0;
                 table = document.getElementById("sampleTable");
                 switching = true;
+                // Set the sorting direction to ascending:
+                dir = "asc";
+                /* Make a loop that will continue until
+                no switching has been done: */
                 while (switching) {
                     switching = false;
                     rows = table.rows;
                     for (i = 1; i < (rows.length - 1); i++) {
                         shouldSwitch = false;
-                        x = rows[i].getElementsByTagName("td")[2]; // Column index for Name (change if needed)
-                        y = rows[i + 1].getElementsByTagName("td")[2]; // Column index for Name (change if needed)
-                        if (ascDescStat == 1) {
+                        x = rows[i].getElementsByTagName("td")[column]; // Column index for Name (change if needed)
+                        y = rows[i + 1].getElementsByTagName("td")[column]; // Column index for Name (change if needed)
+                        if (dir == "asc") {
                             if (x.innerHTML > y.innerHTML) {
                             shouldSwitch = true;
                             break;
                             }
-                        } else {
+                        } else if (dir == "desc") {
                             if (x.innerHTML < y.innerHTML) {
                             shouldSwitch = true;
                             break;
@@ -439,17 +452,28 @@
                         
                     }
                     if (shouldSwitch) {
+                        /* If a switch has been marked, make the switch
+                        and mark that a switch has been done: */
                         rows[i].parentNode.insertBefore(rows[i + 1], rows[i]);
                         switching = true;
+                        //Each time a switch is done, switchCount is incremented
+                        switchCount++;
+                    } else {
+                        /* If no switching has been done AND the direction is "asc",
+                        set the direction to "desc" and run the while loop again. */
+                        if (dir == "asc" && switchCount == 0) {
+                            dir = "desc";
+                            switching = true;
+                        }
                     }
                 }
-                if (ascDescStat == 1) {
-                    ascDescStat = 0;
-                    document.querySelector('#sortButton').innerHTML = '<i class="fas fa-sort-amount-down"></i> Sort by Name (Asc)';
-                } else {
-                    ascDescStat = 1;
-                    document.querySelector('#sortButton').innerHTML = '<i class="fas fa-sort-amount-up"></i> Sort by Name (Desc)';
-                }
+                // if (ascDescStat == 1) {
+                //     ascDescStat = 0;
+                //     document.querySelector('#sortButton').innerHTML = '<i class="fas fa-sort-amount-down"></i> Sort by Name (Asc)';
+                // } else {
+                //     ascDescStat = 1;
+                //     document.querySelector('#sortButton').innerHTML = '<i class="fas fa-sort-amount-up"></i> Sort by Name (Desc)';
+                // }
             }
 
             function showUpdateForm(bookID, bookName, authorName, publisherName, publisherDate, price, quantity, detailbook, img_1, img_2, img_3, img_4) {
@@ -580,8 +604,10 @@
             function validateEmptyMinMax(fieldID, min, max, type) {
                 // var value = parseInt($('#' + fieldID).val());
                 var value = document.getElementById(fieldID).value;
+
                 if (value.trim() == '') {
-                    alert("Please input " + type + "!");
+                    document.getElementById(fieldID).value = '';
+                    alert("Invalid " + type + "!");
                 } else if (value < min) {
                     document.getElementById(fieldID).value = min;
                     alert(type + " can't be less than " + min + "!");
