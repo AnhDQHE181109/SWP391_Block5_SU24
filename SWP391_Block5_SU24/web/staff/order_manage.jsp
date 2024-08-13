@@ -155,19 +155,19 @@
         
         
         <main class="app-content">
-            <div class="app-title">
-                <ul class="app-breadcrumb breadcrumb">
-                    <li class="breadcrumb-item">All Products</li>
-                    <li class="breadcrumb-item"><a href="#">Add products</a></li>
-                </ul>
-            </div>
+    <div class="app-title">
+        <ul class="app-breadcrumb breadcrumb">
+            <li class="breadcrumb-item">All Products</li>
+            <li class="breadcrumb-item"><a href="#">Add products</a></li>
+        </ul>
+    </div>
+    <div class="row">
+        <div class="col-md-12">
+
+            <!-- Search Form -->
             <div class="row">
                 <div class="col-md-12">
-
-                        
-                        <div class="row">
-            <div class="col-md-12">
-                <form action="Ordercontroller" method="get">
+                    <form action="Ordercontroller" method="get">
                         <label for="username">Username:</label>
                         <input type="text" id="username" name="username" />
 
@@ -178,7 +178,7 @@
                         <select id="status" name="status">
                             <option value="">All</option>
                             <option value="Pending">Pending</option>
-                            <option value="Shipped">Shipped</option>
+                            <option value="Shipping">Shipping</option>
                             <option value="Cancelled">Cancelled</option>
                         </select>
 
@@ -190,45 +190,64 @@
 
                         <button type="submit">Search</button>
                     </form>
-
-
-                <div class="tile">
-                    <h3 class="tile-title">Order list </h3>
-    <table border="1">
-        <thead>
-            <tr>
-                <th>Order ID</th>
-                <th>Username</th> <!-- Thay đổi thành Username -->
-                <th>Order Date</th>
-                <th>Status</th>
-                <th>Action</th>
-            </tr>
-        </thead>
-        <tbody>
-            <c:forEach var="order" items="${orderList}">
-                <tr>
-                    <td>${order.orderID}</td>
-                    <td>${usernameMap[order.accountID]}</td> <!-- Sử dụng usernameMap để lấy username -->
-                    <td>${order.orderDate}</td>
-                    <td>${order.status}</td>
-                    <td>
-                        <form action="Orderdetailcontroller" method="get"> <!-- Đảm bảo 'Ordercontroller' là tên servlet đúng -->
-                            <input type="hidden" name="status" value="${order.status}" />
-                            <input type="hidden" name="id" value="${order.orderID}" />
-                            <input type="hidden" name="service" value="detailService" />
-                            <button type="submit">Detail</button> <!-- Nút Detail -->
-                        </form>
-                    </td>
-                </tr>
-            </c:forEach>
-        </tbody>
-    </table>
                 </div>
             </div>
-        </div>
 
-                    </div>
-                    </main>
+            <!-- Order List Table -->
+            <div class="tile">
+                <h3 class="tile-title">Order List</h3>
+                <table border="1" class="table table-striped">
+                    <thead>
+                        <tr>
+                            <th>Order ID</th>
+                            <th>Username</th>
+                            <th>Order Date</th>
+                            <th>Status</th>
+                            <th>Action</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <c:forEach var="order" items="${orderList}">
+                            <tr>
+                                <td>${order.orderID}</td>
+                                <td>${usernameMap[order.accountID]}</td> <!-- Assuming usernameMap contains usernames -->
+                                <td>${order.orderDate}</td>
+                                <td>${order.status}</td>
+                                <td>
+                                    <form action="Orderdetailcontroller" method="get">
+                                        <input type="hidden" name="status" value="${order.status}" />
+                                        <input type="hidden" name="id" value="${order.orderID}" />
+                                        <input type="hidden" name="service" value="detailService" />
+                                        <button type="submit">Detail</button>
+                                    </form>
+                                </td>
+                            </tr>
+                        </c:forEach>
+                    </tbody>
+                </table>
+
+                <!-- Pagination Navigation -->
+                <div class="pagination">
+                    <c:if test="${currentPage > 1}">
+                        <a href="Ordercontroller?page=${currentPage - 1}">Previous</a>
+                    </c:if>
+
+                    <c:forEach begin="1" end="${totalPages}" var="i">
+                        <a href="Ordercontroller?page=${i}">${i}</a>
+                    </c:forEach>
+
+                    <c:if test="${currentPage < totalPages}">
+                        <a href="Ordercontroller?page=${currentPage + 1}">Next</a>
+                    </c:if>
+                </div>
+            </div>
+
+        </div>
+    </div>
+</main>
+
+        
+        
                     <script>
                         function showLogoutBox() {
                             document.getElementById('logoutBox').style.display = 'block';

@@ -1,10 +1,7 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/JSP_Servlet/Servlet.java to edit this template
- */
 package Controller;
 
 import entity.Account;
+import entity.Order;
 import entity.ProductStockImport;
 import model.DAOProductStockImport;
 import model.DBConnect;
@@ -14,13 +11,14 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
 import java.io.IOException;
+import java.sql.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import model.AccountDAO;
-import java.sql.Date;
 
 public class productStockImportController extends HttpServlet {
+    private static final int PAGE_SIZE = 10; // Số lượng item mỗi trang
     private DAOProductStockImport daoProductStockImport;
     private AccountDAO daoAccount;
 
@@ -35,56 +33,48 @@ public class productStockImportController extends HttpServlet {
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         HttpSession session = request.getSession();
         Account account = (Account) session.getAttribute("account");
-        if (account == null) {
+        if (account == null || account.getRole() == 1) {
             response.sendError(HttpServletResponse.SC_FORBIDDEN, "You do not have permission to access this page.");
             return;
         }
-        if (account.getRole() == 1) {
-            response.sendError(HttpServletResponse.SC_FORBIDDEN, "You do not have permission to access this page.");
-            return;
-        }
-        
+
+        // Lấy thông tin tìm kiếm từ request
         String searchUsername = request.getParameter("searchUsername");
         String startDateStr = request.getParameter("startDate");
         String endDateStr = request.getParameter("endDate");
+        String sortOrder = request.getParameter("sortOrder");
+        String pageStr = request.getParameter("page");
         
+       
+
         List<ProductStockImport> stockImports;
         Map<Integer, String> accountUsernameMap = new HashMap<>();
-        
+
         try {
             if ((searchUsername != null && !searchUsername.isEmpty()) || 
                 (startDateStr != null && !startDateStr.isEmpty()) || 
                 (endDateStr != null && !endDateStr.isEmpty())) {
                 
-                // Search by username
                 if (searchUsername != null && !searchUsername.isEmpty()) {
                     List<Integer> accountIDs = daoAccount.findAccountIDsByUsername(searchUsername);
                     stockImports = daoProductStockImport.getProductStockImportsByAccountIDs(accountIDs);
-                    System.out.println("Searched username: " + searchUsername);
-                    System.out.println("Found accountIDs: " + accountIDs);
-                } 
-                // Search by date range
-                else if (startDateStr != null && !startDateStr.isEmpty() && endDateStr != null && !endDateStr.isEmpty()) {
+                } else if (startDateStr != null && !startDateStr.isEmpty() && endDateStr != null && !endDateStr.isEmpty()) {
                     Date startDate = Date.valueOf(startDateStr);
                     Date endDate = Date.valueOf(endDateStr);
                     stockImports = daoProductStockImport.getProductStockImportsByDateRange(startDate, endDate);
-                    System.out.println("Searched date range: " + startDateStr + " to " + endDateStr);
-                }
-                // Search by single date
-                else if (startDateStr != null && !startDateStr.isEmpty()) {
+                } else if (startDateStr != null && !startDateStr.isEmpty()) {
                     Date date = Date.valueOf(startDateStr);
                     stockImports = daoProductStockImport.getProductStockImportsByDate(date);
-                    System.out.println("Searched date: " + startDateStr);
-                }
-                else {
+                } else {
                     stockImports = daoProductStockImport.getAllProductStockImports();
                 }
             } else {
-                // No search parameters, fetch all
                 stockImports = daoProductStockImport.getAllProductStockImports();
             }
-            
-            // Populate the map with accountID and username
+
+
+
+            // Tạo map username
             for (ProductStockImport stockImport : stockImports) {
                 int accountID = stockImport.getAccountID();
                 if (!accountUsernameMap.containsKey(accountID)) {
@@ -93,14 +83,45 @@ public class productStockImportController extends HttpServlet {
                 }
             }
         } catch (Exception e) {
-            throw new ServletException("Error during search operation", e);
+            throw new ServletException("Error during search or pagination operation", e);
         }
+
+        // Mặc định là giảm dần nếu không có giá trị nào
+        if (sortOrder == null || (!sortOrder.equals("asc") && !sortOrder.equals("desc"))) {
+            sortOrder = "desc";
+        }
+
+        // Thay đổi sortOrder nếu cần thiết
+        try {
+            // Lấy dữ liệu sắp xếp theo sortOrder
+            stockImports = daoProductStockImport.getAllProductStockImportssort(sortOrder.toUpperCase());
+        } catch (Exception e) {
+            throw new ServletException("Error during sort operation", e);
+        }
+
+   // Phân trang
+    int page = 1;
+    int recordsPerPage = 10;
+    if (request.getParameter("page") != null) {
+        page = Integer.parseInt(request.getParameter("page"));
+    }
+    int totalRecords = stockImports.size();
+    int totalPages = (int) Math.ceil(totalRecords * 1.0 / recordsPerPage);
+
+    // Tính toán chỉ mục bắt đầu và kết thúc cho trang hiện tại
+    int start = (page - 1) * recordsPerPage;
+    int end = Math.min(start + recordsPerPage, totalRecords);
+
+    // Lấy danh sách đơn hàng cho trang hiện tại
+    List<ProductStockImport> paginatedOrderList = stockImports.subList(start, end);
         
-        // Add stockImports and accountUsernameMap to the request attributes
-        request.setAttribute("stockImports", stockImports);
+        
+        // Add stockImports, accountUsernameMap và thông tin phân trang vào request attributes
+        request.setAttribute("stockImports", paginatedOrderList);
         request.setAttribute("accountUsernameMap", accountUsernameMap);
-        System.out.println("accountUsernameMap: " + accountUsernameMap);
-        
+        request.setAttribute("currentPage", page);
+        request.setAttribute("totalPages", totalPages);
+
         // Forward to the JSP page
         request.getRequestDispatcher("staff/stockhistory.jsp").forward(request, response);
     }

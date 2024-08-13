@@ -45,7 +45,7 @@ public class DAOProducts extends MyDAO {
             
             while (rs.next()) {
                 Product product = new Product();
-                product.setProductID(rs.getInt("ProductID"));
+                product.setProductId(rs.getInt("ProductID"));
                 product.setProductName(rs.getString("ProductName"));
                 product.setOrigin(rs.getString("Origin"));
                 product.setMaterial(rs.getString("Material"));
