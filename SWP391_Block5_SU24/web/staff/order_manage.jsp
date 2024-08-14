@@ -211,10 +211,14 @@
                             <tr>
                                 <td>${order.orderID}</td>
                                 <td>${usernameMap[order.accountID]}</td> <!-- Assuming usernameMap contains usernames -->
+                                 <td hidden>${addressMap[order.accountID]}</td>
+                                 <td hidden>${phoneMap[order.accountID]}</td>
                                 <td>${order.orderDate}</td>
                                 <td>${order.status}</td>
                                 <td>
                                     <form action="Orderdetailcontroller" method="get">
+                                        <input type="hidden" name="adress" value="${addressMap[order.accountID]}" />
+                                         <input type="hidden" name="phone" value="${phoneMap[order.accountID]}" />
                                         <input type="hidden" name="status" value="${order.status}" />
                                         <input type="hidden" name="id" value="${order.orderID}" />
                                         <input type="hidden" name="service" value="detailService" />
