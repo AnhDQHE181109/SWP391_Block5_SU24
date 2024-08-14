@@ -41,6 +41,9 @@ protected void doGet(HttpServletRequest request, HttpServletResponse response)
         response.sendError(HttpServletResponse.SC_FORBIDDEN, "You do not have permission to access this page.");
         return;
     }
+//    }if(account.getRole() == 3){
+//        response.sendError(HttpServletResponse.SC_FORBIDDEN, "You do not have permission to access this page.");
+//    }
 
     String usernameSearch = request.getParameter("username");
     String orderDateSearch = request.getParameter("orderDate");
@@ -82,19 +85,30 @@ protected void doGet(HttpServletRequest request, HttpServletResponse response)
     // Lấy danh sách đơn hàng cho trang hiện tại
     List<Order> paginatedOrderList = orderList.subList(start, end);
 
-    // Populate username map for display
+    // Populate username and address map for display
     Map<Integer, String> usernameMap = new HashMap<>();
+    Map<Integer, String> addressMap = new HashMap<>();
+     Map<Integer, String> phoneMap = new HashMap<>();
     for (Order order : paginatedOrderList) {
         int accountID = order.getAccountID();
         String username = accountDAO.getUsernameByAccountID(accountID);
+        String address = accountDAO.getAdressByAccountID(accountID);
+        String phone = accountDAO.getPhoneByAccountID(accountID); 
         usernameMap.put(accountID, username);
+        addressMap.put(accountID, address);
+        phoneMap.put(accountID, phone) ; 
     }
 
     // Set attributes for the JSP
     request.setAttribute("orderList", paginatedOrderList);
     request.setAttribute("usernameMap", usernameMap);
+    request.setAttribute("addressMap", addressMap);
     request.setAttribute("currentPage", page);
     request.setAttribute("totalPages", totalPages);
+     request.setAttribute("phoneMap", phoneMap);
+     
+     System.out.println("phoneMap"+phoneMap);
+
 
     // Forward request and response to the JSP page
     request.getRequestDispatcher("staff/order_manage.jsp").forward(request, response);

@@ -166,6 +166,10 @@
         <div class="col-md-12">
             <div class="tile">
                 <h3 class="tile-title">Order Details</h3>
+                <div><div<th>Adress : </th> <td><c:out value="${adress}"/></td> </div>
+                <div>  <th>phone number  : </th> <c:out value="${phone}"/></td></div>
+                
+               
                 <table border="1" class="table table-bordered">
                     <thead class="thead-dark">
                         <tr>
@@ -174,6 +178,7 @@
                             <th>Size</th>
                             <th>Color</th>
                             <th>Sale Price</th>
+                             
                             <th>Status</th>
                         </tr>
                     </thead>
@@ -188,7 +193,9 @@
                                 <td><c:out value="${stock.size}"/></td>
                                 <td><c:out value="${stock.color}"/></td>
                                 <td><c:out value="${detail.salePrice}"/></td>
+                                 
                                 <td><c:out value="${status}"/></td>
+                                
                             </tr>
                         </c:forEach>
                     </tbody>
