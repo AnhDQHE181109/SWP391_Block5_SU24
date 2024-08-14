@@ -72,7 +72,36 @@
                 alert('An error occurred while updating the brand. Please try again later.');
             });
         }
+        
+        function validateInput() {
+            const inputField = document.getElementById('brandName').value.trim();
+            const errorMessage = document.getElementById('error-message');
+            const specialCharPattern = /[!@#$%^&*(),.?":{}|<>]/;
+            const numberPattern = /\d/;
+
+            if (inputField === '') {
+                errorMessage.textContent = 'This field cannot be empty.';
+                return false;
+            }
+
+            if (numberPattern.test(inputField)) {
+                errorMessage.textContent = 'Numbers are not allowed.';
+                return false;
+            }
+
+            if (specialCharPattern.test(inputField)) {
+                errorMessage.textContent = 'Special characters are not allowed.';
+                return false;
+            }
+
+            errorMessage.textContent = '';  // Clear error message if no errors
+            return true;
+        }
+
+         
     </script>
+
+
 </head>
 
 <body>
@@ -129,13 +158,14 @@
     <c:if test="${not empty errorMessage}">
         <p style="color: red;">${errorMessage}</p>
     </c:if>
-    <form action="BrandController" method="post" onsubmit="return validateForm()">
-        <input type="hidden" name="brandId" value="${brand != null ? brand.brandId : ''}"/>
-        <label for="brandName">Brand Name:</label>
-        <input type="text" id="brandName" name="brandName" value="${brand != null ? brand.brandName : ''}" required/>
-        <input type="hidden" name="action" value="${brand != null ? 'update' : 'insert'}"/>
-        <button type="submit">${brand != null ? "Update Brand" : "Add Brand"}</button>
-    </form>
+<form action="BrandController" method="post" onsubmit="return validateInput()">
+    <input type="hidden" name="brandId" value="${brand != null ? brand.brandId : ''}"/>
+    <label for="brandName">Brand Name:</label>
+    <input type="text" id="brandName" name="brandName" value="${brand != null ? brand.brandName : ''}" required/>
+    <div id="error-message" style="color: red;"></div>
+    <input type="hidden" name="action" value="${brand != null ? 'update' : 'insert'}"/>
+    <button type="submit">${brand != null ? "Update Brand" : "Add Brand"}</button>
+</form>
     <a href="BrandController?action=list">Back to Brand List</a>
     
         </div>
