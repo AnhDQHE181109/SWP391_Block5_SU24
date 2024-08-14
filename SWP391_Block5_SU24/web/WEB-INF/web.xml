@@ -48,6 +48,14 @@
         <servlet-name>productStockImportController</servlet-name>
         <servlet-class>Controller.productStockImportController</servlet-class>
     </servlet>
+    <servlet>
+        <servlet-name>BrandController</servlet-name>
+        <servlet-class>Controller.BrandController</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>CategoryController</servlet-name>
+        <servlet-class>Controller.CategoryController</servlet-class>
+    </servlet>
     <servlet-mapping>
         <servlet-name>ProductsController</servlet-name>
         <url-pattern>/ProductsController</url-pattern>
@@ -131,5 +139,13 @@
     <servlet-mapping>
         <servlet-name>productStockImportController</servlet-name>
         <url-pattern>/productStockImport</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>BrandController</servlet-name>
+        <url-pattern>/BrandController</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>CategoryController</servlet-name>
+        <url-pattern>/CategoryController</url-pattern>
     </servlet-mapping>
 </web-app>

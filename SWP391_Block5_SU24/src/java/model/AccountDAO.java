@@ -274,4 +274,50 @@ public boolean updateAccount(int accountId, String newEmail, String newPhoneNumb
         return accountIDs;
     }
     
+       public String getAdressByAccountID(int accountID) {
+        String username = null;
+        String sql = "SELECT [Address] FROM Accounts WHERE accountID = ?";
+        try {
+            ps = con.prepareStatement(sql);
+            ps.setInt(1, accountID);
+            rs = ps.executeQuery();
+            if (rs.next()) {
+                username = rs.getString("Address");
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            try {
+                if (rs != null) rs.close();
+                if (ps != null) ps.close();
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+        return username;
+    }
+       
+              public String getPhoneByAccountID(int accountID) {
+        String username = null;
+        String sql = "SELECT [PhoneNumber] FROM Accounts WHERE accountID = ?";
+        try {
+            ps = con.prepareStatement(sql);
+            ps.setInt(1, accountID);
+            rs = ps.executeQuery();
+            if (rs.next()) {
+                username = rs.getString("PhoneNumber");
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            try {
+                if (rs != null) rs.close();
+                if (ps != null) ps.close();
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+        return username;
+    }
+    
 }
