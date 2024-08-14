@@ -136,30 +136,43 @@
                 </div>
             </form>
 
-            <!-- List of Brands -->
-            <div class="table-responsive">
-                <table class="table table-striped table-bordered">
-                    <thead>
-                        <tr>
-                            <th>ID</th>
-                            <th>Name</th>
-                            <th>Actions</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <c:forEach var="brand" items="${brands}">
-                            <tr>
-                                <td>${brand.brandId}</td>
-                                <td>${brand.brandName}</td>
-                                <td>
-                                    <button class="btn btn-warning btn-sm" onclick="editBrand('${brand.brandId}', '${brand.brandName}')">Edit</button>
-                                    <a href="BrandController?action=delete&brandId=${brand.brandId}" class="btn btn-danger btn-sm" onclick="return confirm('Are you sure?');">Delete</a>
-                                </td>
-                            </tr>
-                        </c:forEach>
-                    </tbody>
-                </table>
-            </div>
+<!-- List of Brands -->
+<div class="table-responsive">
+    <table class="table table-striped table-bordered table-hover">
+        <thead class="thead-dark">
+            <tr>
+                <th>ID</th>
+                <th>Name</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            <c:forEach var="brand" items="${brands}">
+                <tr>
+                    <td>${brand.brandId}</td>
+                    <td>${brand.brandName}</td>
+                    <td>
+                        <div class="btn-group" role="group">
+                            <form action="BrandController" method="get" style="display:inline;">
+                                <input type="hidden" name="brandId" value="${brand.brandId}" />
+                                <input type="hidden" name="action" value="edit" />
+                                <button type="submit" class="btn btn-warning btn-sm">
+                                    <i class="fas fa-edit"></i> Edit
+                                </button>
+                            </form>
+                            <a href="BrandController?action=delete&brandId=${brand.brandId}" 
+                               class="btn btn-danger btn-sm" 
+                               onclick="return confirm('Are you sure?');">
+                               <i class="fas fa-trash-alt"></i> Delete
+                            </a>
+                        </div>
+                    </td>
+                </tr>
+            </c:forEach>
+        </tbody>
+    </table>
+</div>
+
 
             <a href="BrandController?action=new" class="btn btn-success">Add New Brand</a>
         </div>
