@@ -53,41 +53,41 @@
         }
 
         function updateAccount(event) {
-            event.preventDefault(); // Prevent form submission
+    event.preventDefault(); // Prevent form submission
 
-            const formData = new FormData(event.target);
-            const accountId = formData.get('accountId');
-            const newEmail = formData.get('email');
-            const newPhoneNumber = formData.get('phoneNumber');
-            const newAddress = formData.get('address');
+    const formData = new FormData(event.target);
+    const accountId = formData.get('accountId');
+    const newEmail = formData.get('email');
+    const newPhoneNumber = formData.get('phoneNumber');
+    const newAddress = formData.get('address');
 
-            fetch('updateAccount', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/x-www-form-urlencoded',
-                },
-                body: new URLSearchParams({
-                    id: accountId,
-                    email: newEmail,
-                    phoneNumber: newPhoneNumber,
-                    address: newAddress
-                })
-            })
-            .then(response => {
-                if (response.ok) {
-                    alert('Account updated successfully!');
-                    location.reload(); // Reload to see the changes
-                } else {
-                    return response.text().then(text => {
-                        throw new Error(text)
-                    });
-                }
-            })
-            .catch(error => {
-                console.error('Error updating account:', error);
-                alert('An error occurred while updating the account. Please try again later.');
+    fetch('updateAccount', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/x-www-form-urlencoded',
+        },
+        body: new URLSearchParams({
+            id: accountId,
+            email: newEmail,
+            phoneNumber: newPhoneNumber,
+            address: newAddress
+        })
+    })
+    .then(response => {
+        if (response.ok) {
+            alert('Account updated successfully!');
+            location.reload(); // Reload to see the changes
+        } else {
+            return response.text().then(text => {
+                alert(text);
             });
         }
+    })
+    .catch(error => {
+        console.error('Error updating account:', error);
+        alert('An error occurred while updating the account. Please try again later.');
+    });
+}
     </script>
     </head>
 
@@ -316,9 +316,7 @@
                                     <td><%= account.getEmail() %></td>
                                     <td><%= account.getAddress() %></td>
                                     <td><%= account.getRole() %></td>
-                                    <td>
-                                        <button class="btn btn-primary btn-sm" onclick="editAccount(<%= account.getAccountID() %>, '<%= account.getUsername() %>', '<%= account.getEmail() %>', '<%= account.getPhoneNumber() %>', '<%= account.getAddress() %>', <%= account.getRole() %>)">Edit</button>
-                                    </td>
+                                    
                                 </tr>
                                 <% } %>
                             </tbody>

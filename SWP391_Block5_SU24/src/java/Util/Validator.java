@@ -3,7 +3,7 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
  */
 package Util;
-
+import model.AccountDAO;
 /**
  *
  * @author Long
@@ -20,6 +20,16 @@ public class Validator {
 
     public boolean isValidEmail(String email) {
         return email != null && email.matches("^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,}$");
+    }
+    
+    public boolean isEmailUnique(String email) {
+        AccountDAO accountDAO = new AccountDAO();
+        return !accountDAO.isEmailTaken(email);
+    }
+
+    public boolean isPhoneNumberUnique(String phoneNumber) {
+        AccountDAO accountDAO = new AccountDAO();
+        return !accountDAO.isPhoneNumberTaken(phoneNumber);
     }
 
     public boolean isValidPhoneNumber(String phoneNumber) {
