@@ -178,7 +178,16 @@ CREATE TABLE ProductImages (
 	CONSTRAINT FK_ProductImages_Stock FOREIGN KEY (StockID) REFERENCES Stock(StockID)
 );
 GO
-
+--Create NotificationAlert table
+CREATE TABLE NotificationAlert (
+    notiID INT IDENTITY(0,1) PRIMARY KEY,
+	accountID INT,
+	notidate DATE,
+	noti_message TEXT,
+	noti_status BIT,
+	noti_path TEXT,
+	FOREIGN KEY (accountID) REFERENCES Accounts(accountID)
+);
 -- Create Wishlist table, referencing StockID instead of ProductID
 CREATE TABLE Wishlist (
     WishlistID INT IDENTITY(1,1) PRIMARY KEY,
