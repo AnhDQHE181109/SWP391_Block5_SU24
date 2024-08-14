@@ -107,9 +107,9 @@
                                 </div> 
                                 <div class="col-md-4" style="display: flex; justify-content: center; align-items: center;">
                                     <!-- Button for sorting -->
-                                    <button onclick="sortTableByNameAscendingDescending()" class="btn btn-primary btn-sm" id="sortButton">
+                                    <!-- <button onclick="sortTableByNameAscendingDescending()" class="btn btn-primary btn-sm" id="sortButton">
                                         <i class="fas fa-sort-amount-down"></i> Sort by Name (Asc)
-                                    </button>
+                                    </button> -->
                                 </div>
                                 <div class="col-md-4" style="display: flex; justify-content: flex-end; align-items: center;">
                                     <input type="text" id="searchInput" class="form-control" placeholder="Search by name.." style="margin-right: 5px;">
