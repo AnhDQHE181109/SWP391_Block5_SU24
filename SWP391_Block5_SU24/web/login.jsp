@@ -16,37 +16,37 @@
         <link href="https://fonts.googleapis.com/css?family=Rokkitt:100,300,400,700" rel="stylesheet">
 
         <!-- Animate.css -->
-        <link rel="stylesheet" href="css/animate.css">
+        <link rel="stylesheet" href="${pageContext.request.contextPath}/css/animate.css">
         <!-- Icomoon Icon Fonts-->
-        <link rel="stylesheet" href="css/icomoon.css">
+        <link rel="stylesheet" href="${pageContext.request.contextPath}/css/icomoon.css">
         <!-- Ion Icon Fonts-->
-        <link rel="stylesheet" href="css/ionicons.min.css">
+        <link rel="stylesheet" href="${pageContext.request.contextPath}/css/ionicons.min.css">
         <!-- Bootstrap  -->
-        <link rel="stylesheet" href="css/bootstrap.min.css">
+        <link rel="stylesheet" href="${pageContext.request.contextPath}/css/bootstrap.min.css">
 
         <!-- Magnific Popup -->
-        <link rel="stylesheet" href="css/magnific-popup.css">
+        <link rel="stylesheet" href="${pageContext.request.contextPath}/css/magnific-popup.css">
 
         <!-- Flexslider  -->
-        <link rel="stylesheet" href="css/flexslider.css">
+        <link rel="stylesheet" href="${pageContext.request.contextPath}/css/flexslider.css">
 
         <!-- Owl Carousel -->
-        <link rel="stylesheet" href="css/owl.carousel.min.css">
-        <link rel="stylesheet" href="css/owl.theme.default.min.css">
+        <link rel="stylesheet" href="${pageContext.request.contextPath}/css/owl.carousel.min.css">
+        <link rel="stylesheet" href="${pageContext.request.contextPath}/css/owl.theme.default.min.css">
 
         <!-- Date Picker -->
-        <link rel="stylesheet" href="css/bootstrap-datepicker.css">
+        <link rel="stylesheet" href="${pageContext.request.contextPath}/css/bootstrap-datepicker.css">
         <!-- Flaticons  -->
-        <link rel="stylesheet" href="fonts/flaticon/font/flaticon.css">
+        <link rel="stylesheet" href="${pageContext.request.contextPath}/fonts/flaticon/font/flaticon.css">
 
         <!-- Theme style  -->
-        <link rel="stylesheet" href="css/style.css">
+        <link rel="stylesheet" href="${pageContext.request.contextPath}/css/style.css">
         <style>
             .idiv{
                 align-items: center;
                 display:flex;
                 justify-content: flex-end;
-                background-image: url(images/Banner.png);
+                background-image: url(${pageContext.request.contextPath}/images/Banner.png);
                 background-position: 50% 50%;
                 background-size: contain;
                 background-repeat: no-repeat;
