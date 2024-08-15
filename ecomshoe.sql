@@ -208,10 +208,10 @@ GO
 -- Insert data into Accounts
 INSERT INTO Accounts (Username, Hash, PhoneNumber, Email, Address, Role, Salt, Status)
 VALUES 
-('johndoe', 'NqmCu0KLyfdegTojOpWmaAC8gODT1EfFxKtyJ9tfwUDneUmaWlo7TiaWJYzGnaWaYcWsUtytBL/iqltP+MLvVA==', '123-456-7890', 'johndoe@example.com', '123 Main St, Anytown, USA', 1, 'jMxFrhzK+pkZRnCz7jEkew=='),
-('janedoe', 'NqmCu0KLyfdegTojOpWmaAC8gODT1EfFxKtyJ9tfwUDneUmaWlo7TiaWJYzGnaWaYcWsUtytBL/iqltP+MLvVA==', '987-654-3210', 'janedoe@example.com', '456 Elm St, Othertown, USA', 2, 'jMxFrhzK+pkZRnCz7jEkew=='),
-('alice', 'NqmCu0KLyfdegTojOpWmaAC8gODT1EfFxKtyJ9tfwUDneUmaWlo7TiaWJYzGnaWaYcWsUtytBL/iqltP+MLvVA==', '555-123-4567', 'alice@example.com', '789 Maple St, Sometown, USA', 3, 'jMxFrhzK+pkZRnCz7jEkew=='),
-('long', 'NqmCu0KLyfdegTojOpWmaAC8gODT1EfFxKtyJ9tfwUDneUmaWlo7TiaWJYzGnaWaYcWsUtytBL/iqltP+MLvVA==', '555-123-4567', 'alice@example.com', '789 Maple St, Sometown, USA', 2, 'jMxFrhzK+pkZRnCz7jEkew==');
+('johndoe', 'NqmCu0KLyfdegTojOpWmaAC8gODT1EfFxKtyJ9tfwUDneUmaWlo7TiaWJYzGnaWaYcWsUtytBL/iqltP+MLvVA==', '123-456-7890', 'johndoe@example.com', '123 Main St, Anytown, USA', 1, 'jMxFrhzK+pkZRnCz7jEkew==', 0),
+('janedoe', 'NqmCu0KLyfdegTojOpWmaAC8gODT1EfFxKtyJ9tfwUDneUmaWlo7TiaWJYzGnaWaYcWsUtytBL/iqltP+MLvVA==', '987-654-3210', 'janedoe@example.com', '456 Elm St, Othertown, USA', 2, 'jMxFrhzK+pkZRnCz7jEkew==', 0),
+('alice', 'NqmCu0KLyfdegTojOpWmaAC8gODT1EfFxKtyJ9tfwUDneUmaWlo7TiaWJYzGnaWaYcWsUtytBL/iqltP+MLvVA==', '555-123-4567', 'alice@example.com', '789 Maple St, Sometown, USA', 3, 'jMxFrhzK+pkZRnCz7jEkew==', 0),
+('long', 'NqmCu0KLyfdegTojOpWmaAC8gODT1EfFxKtyJ9tfwUDneUmaWlo7TiaWJYzGnaWaYcWsUtytBL/iqltP+MLvVA==', '555-123-4567', 'alica@example.com', '789 Maple St, Sometown, USA', 2, 'jMxFrhzK+pkZRnCz7jEkew==', 0);
 
 
 
