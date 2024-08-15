@@ -71,7 +71,6 @@
                                 <ul>
                                     <li class="active"><a href="index.jsp">Home</a></li>
                                     <li class="has-dropdown">
-                                        <a href="men.html">Men</a>
                                         <ul class="dropdown">
                                             <li><a href="product-detail.html">Product Detail</a></li>
                                             <li><a href="cart.html">Shopping Cart</a></li>
@@ -80,7 +79,7 @@
                                             <li><a href="add-to-wishlist.html">Wishlist</a></li>
                                         </ul>
                                     </li>
-                                    <li><a href="women.html">Women</a></li>
+                                    <li><a href="products.jsp">Products</a></li>
                                     <li><a href="about.html">About</a></li>
                                     <li><a href="contact.html">Contact</a></li>
                                     <%if(session.getAttribute("account")!=null){
@@ -141,7 +140,7 @@
                                 </div>
                             </div>
                         </li>
-                        <li style="background-image: url(images/img_bg_2.jpg);">
+                        <li style="background-image: url(images/slider-images.jpg);">
                             <div class="overlay"></div>
                             <div class="container-fluid">
                                 <div class="row">
@@ -196,7 +195,7 @@
                             <div class="featured">
                                 <a href="#" class="featured-img" style="background-image: url(images/men.jpg);"></a>
                                 <div class="desc">
-                                    <h2><a href="#">Shop Men's Collection</a></h2>
+                                    <h2><a href="#">Shop Nike's Collection</a></h2>
                                 </div>
                             </div>
                         </div>
@@ -204,7 +203,7 @@
                             <div class="featured">
                                 <a href="#" class="featured-img" style="background-image: url(images/women.jpg);"></a>
                                 <div class="desc">
-                                    <h2><a href="#">Shop Women's Collection</a></h2>
+                                    <h2><a href="#">Shop Puma's Collection</a></h2>
                                 </div>
                             </div>
                         </div>
