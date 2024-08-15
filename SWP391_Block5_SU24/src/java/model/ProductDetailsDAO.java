@@ -92,29 +92,28 @@ public class ProductDetailsDAO extends DBConnect {
     }
 
     public boolean addProduct(Product product) {
-    boolean isSuccess = false; 
-    try {
-        String sql = "INSERT INTO Products (ProductName, Origin, Material, Price, CategoryID, BrandID) VALUES (?, ?, ?, ?, ?, ?)";
-        PreparedStatement ps = conn.prepareStatement(sql);
-        ps.setString(1, product.getProductName());
-        ps.setString(2, product.getOrigin());
-        ps.setString(3, product.getMaterial());
-        ps.setDouble(4, product.getPrice());
-        ps.setInt(5, product.getCategoryId());
-        ps.setInt(6, product.getBrandId());
+        boolean isSuccess = false;
+        try {
+            String sql = "INSERT INTO Products (ProductName, Origin, Material, Price, CategoryID, BrandID) VALUES (?, ?, ?, ?, ?, ?)";
+            PreparedStatement ps = conn.prepareStatement(sql);
+            ps.setString(1, product.getProductName());
+            ps.setString(2, product.getOrigin());
+            ps.setString(3, product.getMaterial());
+            ps.setDouble(4, product.getPrice());
+            ps.setInt(5, product.getCategoryId());
+            ps.setInt(6, product.getBrandId());
 
-        int rowsAffected = ps.executeUpdate(); // Execute the update and get the number of affected rows
-        if (rowsAffected > 0) {
-            isSuccess = true; // If one or more rows were affected, the insert was successful
+            int rowsAffected = ps.executeUpdate(); // Execute the update and get the number of affected rows
+            if (rowsAffected > 0) {
+                isSuccess = true; // If one or more rows were affected, the insert was successful
+            }
+
+            ps.close();
+        } catch (Exception e) {
+            System.out.println("Error inserting product: " + e.getMessage());
         }
-
-        ps.close();
-    } catch (Exception e) {
-        System.out.println("Error inserting product: " + e.getMessage());
+        return isSuccess;
     }
-    return isSuccess; 
-}
-
 
     public boolean updateProduct(Product product) {
         String sql = "UPDATE Products SET productName = ?, origin = ?, material = ?, price = ?, brandId = ?, categoryId = ? WHERE productId = ?";
@@ -217,38 +216,72 @@ public class ProductDetailsDAO extends DBConnect {
     }
 
     public boolean isProductNameExists(String productName, int productId) {
-    boolean exists = false;
-    String sql = "SELECT COUNT(*) FROM Products WHERE productName = ? AND productId != ?";
-    try {
-        PreparedStatement ps = conn.prepareStatement(sql);
-        ps.setString(1, productName);
-        ps.setInt(2, productId);
-        ResultSet rs = ps.executeQuery();
-        if (rs.next()) {
-            exists = rs.getInt(1) > 0;
+        boolean exists = false;
+        String sql = "SELECT COUNT(*) FROM Products WHERE productName = ? AND productId != ?";
+        try {
+            PreparedStatement ps = conn.prepareStatement(sql);
+            ps.setString(1, productName);
+            ps.setInt(2, productId);
+            ResultSet rs = ps.executeQuery();
+            if (rs.next()) {
+                exists = rs.getInt(1) > 0;
+            }
+            rs.close();
+            ps.close();
+        } catch (SQLException e) {
+            e.printStackTrace();
         }
-        rs.close();
-        ps.close();
-    } catch (SQLException e) {
-        e.printStackTrace();
+        return exists;
     }
-    return exists;
-}
+
     public boolean isProductNameExists(String productName) {
-    boolean exists = false;
-    String sql = "SELECT COUNT(*) FROM Products WHERE productName = ?";
-    try {
-        PreparedStatement ps = conn.prepareStatement(sql);
-        ps.setString(1, productName);
-        ResultSet rs = ps.executeQuery();
-        if (rs.next()) {
-            exists = rs.getInt(1) > 0;
+        boolean exists = false;
+        String sql = "SELECT COUNT(*) FROM Products WHERE productName = ?";
+        try {
+            PreparedStatement ps = conn.prepareStatement(sql);
+            ps.setString(1, productName);
+            ResultSet rs = ps.executeQuery();
+            if (rs.next()) {
+                exists = rs.getInt(1) > 0;
+            }
+            rs.close();
+            ps.close();
+        } catch (SQLException e) {
+            e.printStackTrace();
         }
-        rs.close();
-        ps.close();
-    } catch (SQLException e) {
-        e.printStackTrace();
+        return exists;
     }
-    return exists;
+    
+    public List<Product> getProductStocks(int productID) {
+
+        String sql = "select s.StockID, p.ProductID, p.ProductName, Size, Color, StockQuantity\n"
+                + "from Products p, Stock s\n"
+                + "where p.ProductID = s.ProductID and p.productID = ?";
+
+        Product product = null;
+        List<Product> productsStocksList = new ArrayList<>();
+
+        try {
+            PreparedStatement ps = conn.prepareStatement(sql);
+            ps.setInt(1, productID);
+
+            ResultSet rs = ps.executeQuery();
+            while (rs.next()) {
+                product = new Product(rs.getInt(1), rs.getInt(2), rs.getString(3), rs.getInt(4),
+                        rs.getString(5), rs.getInt(6));
+                productsStocksList.add(product);
+            }
+
+            if (rs != null) {
+                rs.close();
+            }
+            if (ps != null) {
+                ps.close();
+            }
+        } catch (SQLException e) {
+            System.out.println("getProductsStocks(): " + e);
+        }
+
+        return productsStocksList;
     }
 }

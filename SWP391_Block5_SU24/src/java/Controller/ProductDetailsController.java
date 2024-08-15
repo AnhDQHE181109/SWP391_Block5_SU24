@@ -55,7 +55,13 @@ public class ProductDetailsController extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        processRequest(request, response);
+        response.setContentType("text/html;charset=UTF-8");
+        PrintWriter out = response.getWriter();
+        
+        String productID = request.getParameter("productID");
+        if (productID != null) {
+            
+        }
     }
 
     /**
