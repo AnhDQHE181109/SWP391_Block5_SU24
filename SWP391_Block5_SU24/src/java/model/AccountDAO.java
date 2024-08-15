@@ -79,7 +79,8 @@ public class AccountDAO extends MyDAO {
                 String address = rs.getString("Address");
                 int role = rs.getInt("Role");
                 String salt = rs.getString("Salt");
-                account = new Account(accountID, username, hash, phoneNumber, email, address, salt, role);
+                Boolean status = rs.getBoolean("Status");
+                account = new Account(accountID, username, hash, phoneNumber, email, address, salt, role, status);
             }
         } catch (Exception e) {
             e.printStackTrace();
@@ -102,7 +103,8 @@ public class AccountDAO extends MyDAO {
                 String address = rs.getString("Address");
                 int role = rs.getInt("Role");
                 String salt = rs.getString("Salt");
-                account = new Account(accountID, username, hash, phoneNumber, email, address, salt, role);
+                Boolean status = rs.getBoolean("Status");
+                account = new Account(accountID, username, hash, phoneNumber, email, address, salt, role, status);
             }
         } catch (Exception e) {
             e.printStackTrace();
