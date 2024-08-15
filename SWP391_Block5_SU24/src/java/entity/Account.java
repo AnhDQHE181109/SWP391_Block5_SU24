@@ -17,6 +17,7 @@ public class Account {
     private String address;
     private String salt;
     private int role;
+    private boolean status;
 
     public Account(int accountID, String username, String hash, String phoneNumber, String email, String address, String salt, int role) {
         this.accountID = accountID;
@@ -27,6 +28,26 @@ public class Account {
         this.address = address;
         this.salt = salt;
         this.role = role;
+    }
+
+    public Account(int accountID, String username, String hash, String phoneNumber, String email, String address, String salt, int role, boolean status) {
+        this.accountID = accountID;
+        this.username = username;
+        this.hash = hash;
+        this.phoneNumber = phoneNumber;
+        this.email = email;
+        this.address = address;
+        this.salt = salt;
+        this.role = role;
+        this.status = status;
+    }
+
+    public boolean isStatus() {
+        return status;
+    }
+
+    public void setStatus(boolean status) {
+        this.status = status;
     }
 
     public Account() {
