@@ -76,7 +76,13 @@ public class LoginController extends HttpServlet {
         String password = request.getParameter("password");
         int role = Integer.parseInt(request.getParameter("role"));
         AccountDAO adao = new AccountDAO();
-        if (adao.validateAccount(username, password, role) == 1) { //return 1 login successful
+        if (adao.validateAccount(username, password) == 1) { //return 1 login successful
+            if (!adao.getAccount(username).isStatus()) {
+                request.setAttribute("error_active", "true");
+                request.setAttribute("username", username);
+                response.sendRedirect("login.jsp?error=Account is available");
+                return;
+            }
             Cookie loginCookie = new Cookie("user", username);
             loginCookie.setMaxAge(30 * 60);
             response.addCookie(loginCookie);
@@ -95,25 +101,18 @@ public class LoginController extends HttpServlet {
                     response.sendRedirect("manager_home.jsp");
                     break;
                 }
+                case 4: {
+                    response.sendRedirect("");
+                    break;
+                }
                 default: {
                     response.sendRedirect("login.jsp");
                     break;
                 }
             }
-        } else if (adao.validateAccount(username, password, role) == 3) { //return 3 username or password is incorrect
+        } else if (adao.validateAccount(username, password) == 2) { //return 2 login failed
             request.setAttribute("username", username);
-            if (role == 1) {
-                request.getRequestDispatcher("login.jsp?error=Username or password is incorrect.").forward(request, response);
-            } else {
-                response.sendRedirect("login-staff.jsp?error=Username or password is incorrect.");
-            }
-        } else if (adao.validateAccount(username, password, role) == 2) { //return 2 right account information but wronng role
-            request.setAttribute("username", username);
-            if (role == 1) {
-                response.sendRedirect("login.jsp?error=Incorrect permission.");
-            } else {
-                response.sendRedirect("login-staff.jsp?error=Incorrect permission.");
-            }
+            response.sendRedirect("login.jsp?error=Wrong username or password.");
         }
     }
 

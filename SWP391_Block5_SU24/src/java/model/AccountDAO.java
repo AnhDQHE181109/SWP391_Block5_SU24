@@ -30,6 +30,7 @@ public class AccountDAO extends MyDAO {
                 String address = rs.getString("Address");
                 int role = rs.getInt("Role");
                 String salt = rs.getString("Salt");
+                Boolean status = rs.getBoolean("Status");
                 Account account = new Account(accountID, username, hash, phoneNumber, email, address, salt, role);
                 accountList.add(account);
             }
@@ -38,30 +39,30 @@ public class AccountDAO extends MyDAO {
         }
         return accountList;
     }
-    
+
     public List<Account> getAccountsByRole(int role) {
-    String sql = "SELECT * FROM Accounts WHERE Role = ?";
-    List<Account> accountList = new ArrayList<>();
-    try {
-        ps = con.prepareStatement(sql);
-        ps.setInt(1, role);
-        rs = ps.executeQuery();
-        while (rs.next()) {
-            int accountID = rs.getInt("AccountID");
-            String username = rs.getString("Username");
-            String hash = rs.getString("Hash");
-            String phoneNumber = rs.getString("PhoneNumber");
-            String email = rs.getString("Email");
-            String address = rs.getString("Address");
-            String salt = rs.getString("Salt");
-            Account account = new Account(accountID, username, hash, phoneNumber, email, address, salt, role);
-            accountList.add(account);
+        String sql = "SELECT * FROM Accounts WHERE Role = ?";
+        List<Account> accountList = new ArrayList<>();
+        try {
+            ps = con.prepareStatement(sql);
+            ps.setInt(1, role);
+            rs = ps.executeQuery();
+            while (rs.next()) {
+                int accountID = rs.getInt("AccountID");
+                String username = rs.getString("Username");
+                String hash = rs.getString("Hash");
+                String phoneNumber = rs.getString("PhoneNumber");
+                String email = rs.getString("Email");
+                String address = rs.getString("Address");
+                String salt = rs.getString("Salt");
+                Account account = new Account(accountID, username, hash, phoneNumber, email, address, salt, role);
+                accountList.add(account);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
         }
-    } catch (Exception e) {
-        e.printStackTrace();
+        return accountList;
     }
-    return accountList;
-}
 
     public Account getAccount(String username) {
         String sql = "SELECT * FROM Accounts WHERE Username = ?";
@@ -85,6 +86,7 @@ public class AccountDAO extends MyDAO {
         }
         return account;
     }
+
     public Account getAccountbyEmail(String email) {
         String sql = "SELECT * FROM Accounts WHERE Email = ?";
         Account account = null;
@@ -108,7 +110,7 @@ public class AccountDAO extends MyDAO {
         return account;
     }
 
-    public int validateAccount(String username, String password, int role) {
+    public int validateAccount(String username, String password) {
         String query = "SELECT * FROM Accounts WHERE Username = ?";
         try {
             ps = con.prepareStatement(query);
@@ -119,20 +121,13 @@ public class AccountDAO extends MyDAO {
                 String storedSalt = rs.getString("Salt");
                 String hashedPassword = EncryptionHelper.hashPassword(password, storedSalt);
                 if (hashedPassword.equals(storedHash)) {
-                    int storedRole = rs.getInt("Role");
-                    if (role == 1 && storedRole == role) {
-                        return 1; // Login successful customer
-                    } else if ((storedRole == 2 || storedRole == 3) && role != 1) {
-                        return 1; //Login successful staff and manager
-                    } else {
-                        return 2; // Role mismatch
-                    }
+                    return 1;
                 }
             }
         } catch (Exception e) {
             e.printStackTrace();
         }
-        return 3; // Login failed
+        return 2; // Login failed
     }
 
     public boolean isEmailTaken(String email) {
@@ -199,23 +194,22 @@ public class AccountDAO extends MyDAO {
         return false;
     }
 
-    
-public boolean updateAccount(int accountId, String newEmail, String newPhoneNumber, String newAddress) {
-    String sql = "UPDATE Accounts SET Email = ?, PhoneNumber = ?, Address = ? WHERE AccountID = ?";
-    try {
-        ps = con.prepareStatement(sql);
-        ps.setString(1, newEmail);
-        ps.setString(2, newPhoneNumber);
-        ps.setString(3, newAddress);
-        ps.setInt(4, accountId);
-        int rowsAffected = ps.executeUpdate();
-        return rowsAffected > 0;
-    } catch (Exception e) {
-        e.printStackTrace();
+    public boolean updateAccount(int accountId, String newEmail, String newPhoneNumber, String newAddress) {
+        String sql = "UPDATE Accounts SET Email = ?, PhoneNumber = ?, Address = ? WHERE AccountID = ?";
+        try {
+            ps = con.prepareStatement(sql);
+            ps.setString(1, newEmail);
+            ps.setString(2, newPhoneNumber);
+            ps.setString(3, newAddress);
+            ps.setInt(4, accountId);
+            int rowsAffected = ps.executeUpdate();
+            return rowsAffected > 0;
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return false;
     }
-    return false;
-}
-    
+
     public void changePassword(String email, String newpass, String salt) {
         String sql = "UPDATE Accounts SET Hash = ?, Salt = ? WHERE Email = ?";
         try {
@@ -229,7 +223,7 @@ public boolean updateAccount(int accountId, String newEmail, String newPhoneNumb
         }
     }
 
-   public String getUsernameByAccountID(int accountID) {
+    public String getUsernameByAccountID(int accountID) {
         String username = null;
         String sql = "SELECT username FROM Accounts WHERE accountID = ?";
         try {
@@ -243,8 +237,12 @@ public boolean updateAccount(int accountId, String newEmail, String newPhoneNumb
             e.printStackTrace();
         } finally {
             try {
-                if (rs != null) rs.close();
-                if (ps != null) ps.close();
+                if (rs != null) {
+                    rs.close();
+                }
+                if (ps != null) {
+                    ps.close();
+                }
             } catch (Exception e) {
                 e.printStackTrace();
             }
@@ -252,29 +250,33 @@ public boolean updateAccount(int accountId, String newEmail, String newPhoneNumb
         return username;
     }
 
-   // Tìm accountID theo username, có thể nhập một vài ký tự ở bất kỳ vị trí nào
+    // Tìm accountID theo username, có thể nhập một vài ký tự ở bất kỳ vị trí nào
     public List<Integer> findAccountIDsByUsername(String usernamePattern) throws Exception {
         List<Integer> accountIDs = new ArrayList<>();
         String query = "SELECT accountID FROM Accounts WHERE username LIKE ?";
-        
+
         try {
             ps = con.prepareStatement(query);
             ps.setString(1, "%" + usernamePattern + "%"); // Thêm '%' vào cả đầu và cuối
             rs = ps.executeQuery();
-            
+
             while (rs.next()) {
                 accountIDs.add(rs.getInt("accountID"));
             }
         } finally {
             // Đảm bảo đóng ResultSet, PreparedStatement
-            if (rs != null) rs.close();
-            if (ps != null) ps.close();
+            if (rs != null) {
+                rs.close();
+            }
+            if (ps != null) {
+                ps.close();
+            }
         }
-        
+
         return accountIDs;
     }
-    
-       public String getAdressByAccountID(int accountID) {
+
+    public String getAdressByAccountID(int accountID) {
         String username = null;
         String sql = "SELECT [Address] FROM Accounts WHERE accountID = ?";
         try {
@@ -288,16 +290,20 @@ public boolean updateAccount(int accountId, String newEmail, String newPhoneNumb
             e.printStackTrace();
         } finally {
             try {
-                if (rs != null) rs.close();
-                if (ps != null) ps.close();
+                if (rs != null) {
+                    rs.close();
+                }
+                if (ps != null) {
+                    ps.close();
+                }
             } catch (Exception e) {
                 e.printStackTrace();
             }
         }
         return username;
     }
-       
-              public String getPhoneByAccountID(int accountID) {
+
+    public String getPhoneByAccountID(int accountID) {
         String username = null;
         String sql = "SELECT [PhoneNumber] FROM Accounts WHERE accountID = ?";
         try {
@@ -311,13 +317,17 @@ public boolean updateAccount(int accountId, String newEmail, String newPhoneNumb
             e.printStackTrace();
         } finally {
             try {
-                if (rs != null) rs.close();
-                if (ps != null) ps.close();
+                if (rs != null) {
+                    rs.close();
+                }
+                if (ps != null) {
+                    ps.close();
+                }
             } catch (Exception e) {
                 e.printStackTrace();
             }
         }
         return username;
     }
-    
+
 }
