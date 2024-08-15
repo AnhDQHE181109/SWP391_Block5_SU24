@@ -5,12 +5,6 @@
 <%@page import = "jakarta.servlet.http.HttpSession" %>
 
 <!DOCTYPE html>
-<% Account account = (Account) session.getAttribute("account");
-  if (account == null) { %>
-    <h1 style="color:red">You do not have permission to visit this page!</h1> 
-  <% } else if (account.getRole() == 1) { %>
-    <h1 style="color:red">You do not have permission to visit this page!</h1> 
-  <% } else { %>
 <html lang="en">
 
     <head>
@@ -508,7 +502,7 @@
             }
 
             function logout() {
-                window.location.href = 'index.jsp';
+                window.location.href = 'LogoutController';
             }
 
             function cancelLogout() {
@@ -652,4 +646,4 @@ if (alertMessage != null) { %>
     </body>
 
 </html>
-<% } %>
+

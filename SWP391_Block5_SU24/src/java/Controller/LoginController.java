@@ -58,7 +58,7 @@ public class LoginController extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        processRequest(request, response);
+        doPost(request, response);
     }
 
     /**
@@ -72,6 +72,10 @@ public class LoginController extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
+        if(request.getAttribute("auth_error")!=null){
+        response.sendRedirect("login.jsp");
+        return;
+        }
         String username = request.getParameter("username");
         String password = request.getParameter("password");
         int role = Integer.parseInt(request.getParameter("role"));
@@ -80,7 +84,7 @@ public class LoginController extends HttpServlet {
             if (!adao.getAccount(username).isStatus()) {
                 request.setAttribute("error_active", "true");
                 request.setAttribute("username", username);
-                response.sendRedirect("login.jsp?error=Account is available");
+                response.sendRedirect("login.jsp?error=Account is unavailable");
                 return;
             }
             Cookie loginCookie = new Cookie("user", username);
@@ -98,7 +102,7 @@ public class LoginController extends HttpServlet {
                     break;
                 }
                 case 3: {
-                    response.sendRedirect("manager_home.jsp");
+                    response.sendRedirect("manager/manager_home.jsp");
                     break;
                 }
                 case 4: {
