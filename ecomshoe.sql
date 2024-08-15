@@ -48,7 +48,8 @@ CREATE TABLE Accounts(
     Email NVARCHAR(100) UNIQUE NULL,
     Address NVARCHAR(200) NULL,
     Role INT NOT NULL,
-    Salt TEXT NOT NULL
+    Salt TEXT NOT NULL,
+	Status BIT DEFAULT 1
 );
 GO
 
@@ -79,8 +80,7 @@ CREATE TABLE Products (
     CategoryID INT NULL,
     BrandID INT NULL,
     ImageID INT NULL,
-	ProductStatus int NOT NULL,
-	Gender NVARCHAR(200) NOT NULL,
+	ProductStatus BIT NOT NULL,
     CONSTRAINT FK_Products_Categories FOREIGN KEY (CategoryID) REFERENCES Categories(CategoryID),
     CONSTRAINT FK_Products_Brand FOREIGN KEY (BrandID) REFERENCES Brand(BrandID)
 );
@@ -206,13 +206,13 @@ USE ECommerceStore;
 GO
 
 -- Insert data into Accounts
-INSERT INTO Accounts (Username, Hash, PhoneNumber, Email, Address, Role, Salt)
+INSERT INTO Accounts (Username, Hash, PhoneNumber, Email, Address, Role, Salt, Status)
 VALUES 
-('john_doe', 'hashed_password1', '1234567890', 'john@example.com', '123 Elm Street', 1, 'salt1'),
-('jane_doe', 'hashed_password2', '0987654321', 'jane@example.com', '456 Oak Avenue', 2, 'salt2'),
 ('johndoe', 'NqmCu0KLyfdegTojOpWmaAC8gODT1EfFxKtyJ9tfwUDneUmaWlo7TiaWJYzGnaWaYcWsUtytBL/iqltP+MLvVA==', '123-456-7890', 'johndoe@example.com', '123 Main St, Anytown, USA', 1, 'jMxFrhzK+pkZRnCz7jEkew=='),
 ('janedoe', 'NqmCu0KLyfdegTojOpWmaAC8gODT1EfFxKtyJ9tfwUDneUmaWlo7TiaWJYzGnaWaYcWsUtytBL/iqltP+MLvVA==', '987-654-3210', 'janedoe@example.com', '456 Elm St, Othertown, USA', 2, 'jMxFrhzK+pkZRnCz7jEkew=='),
-('alice', 'NqmCu0KLyfdegTojOpWmaAC8gODT1EfFxKtyJ9tfwUDneUmaWlo7TiaWJYzGnaWaYcWsUtytBL/iqltP+MLvVA==', '555-123-4567', 'alice@example.com', '789 Maple St, Sometown, USA', 3, 'jMxFrhzK+pkZRnCz7jEkew==');
+('alice', 'NqmCu0KLyfdegTojOpWmaAC8gODT1EfFxKtyJ9tfwUDneUmaWlo7TiaWJYzGnaWaYcWsUtytBL/iqltP+MLvVA==', '555-123-4567', 'alice@example.com', '789 Maple St, Sometown, USA', 3, 'jMxFrhzK+pkZRnCz7jEkew=='),
+('long', 'NqmCu0KLyfdegTojOpWmaAC8gODT1EfFxKtyJ9tfwUDneUmaWlo7TiaWJYzGnaWaYcWsUtytBL/iqltP+MLvVA==', '555-123-4567', 'alice@example.com', '789 Maple St, Sometown, USA', 2, 'jMxFrhzK+pkZRnCz7jEkew==');
+
 
 
 -- Insert data into Categories
@@ -230,11 +230,11 @@ VALUES
 ('Puma',0);
 
 -- Insert data into Products
-INSERT INTO Products (ProductName, Origin, Material, Price, TotalQuantity, CategoryID, BrandID, ImageID,	ProductStatus, Gender )
+INSERT INTO Products (ProductName, Origin, Material, Price, TotalQuantity, CategoryID, BrandID, ImageID, ProductStatus)
 VALUES 
-('Air Max 2021', 'Vietnam', 'Leather', 150.00, 100, 1, 1, 2,0,'male'),
-('Ultraboost 21', 'Germany', 'Synthetic', 180.00, 200, 1, 2, 3,0,'female'),
-('Suede Classic', 'Vietnam', 'Suede', 120.00, 150, 1, 3, 4,0,'male');
+('Air Max 2021', 'Vietnam', 'Leather', 150.00, 100, 1, 1, 2, 0),
+('Ultraboost 21', 'Germany', 'Synthetic', 180.00, 200, 1, 2, 3, 0),
+('Suede Classic', 'Vietnam', 'Suede', 120.00, 150, 1, 3, 4, 0);
 
 -- Insert data into ProductStockImport
 INSERT INTO ProductStockImport (AccountID, ImportDate)

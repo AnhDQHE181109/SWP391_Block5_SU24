@@ -323,7 +323,7 @@
                                 <button name="role" value="1" style='border:0px; text-align:center; background-color: #88c8bc;border-radius: 2px;display:flex;color:white;justify-content:center; width: 85%;' type="submit">SIGN UP</button>
                             </form>
                             <div style="justify-content: space-between;display:flex; width:100%;align-items: center">
-                                <a style='padding-left:7.5%'></a> <a href="login-staff.jsp" style='padding-right:7.5%'>Employee Login</a></div>
+                                <a style='padding-left:7.5%'></a>
                         </div>
                         <div style="justify-content:center; text-align: center; display:flex; padding: 22px 30px;">
                             Already have an account? &nbsp;<a href='login.jsp'>Log In</a>
