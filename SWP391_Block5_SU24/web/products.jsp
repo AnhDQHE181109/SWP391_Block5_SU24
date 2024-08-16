@@ -1,6 +1,17 @@
 <!DOCTYPE HTML>
 <%@ page import="entity.Account" %>
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
+<%@ page import="model.ProductDetailsDAO" %>
+<%@ page import="entity.Product" %>
+<%@ page import="entity.Brand" %>
+<%@ page import="entity.Category" %>
+<%@ page import="java.util.List" %>
+<%
+    ProductDetailsDAO pDAO = new ProductDetailsDAO();
+    List<Product> products = pDAO.getAllProducts();
+    List<Brand> brandList = pDAO.getAllBrands();
+    List<Category> categoryList = pDAO.getAllCategories();
+%>
 <html>
     <head>
         <title>Footwear - Free Bootstrap 4 Template by Colorlib</title>
@@ -177,11 +188,9 @@
                                     <div class="side border mb-1">
                                         <h3>Brand</h3>
                                         <ul>
-                                            <li><a href="#">Nike</a></li>
-                                            <li><a href="#">Adidas</a></li>
-                                            <li><a href="#">Merrel</a></li>
-                                            <li><a href="#">Gucci</a></li>
-                                            <li><a href="#">Skechers</a></li>
+                                            <% for(Brand brand : brandList) { %>
+                                            <li><a href="#"><%= brand.getBrandName() %></a></li>
+                                            <% } %>
                                         </ul>
                                     </div>
                                 </div>
@@ -219,13 +228,11 @@
                                 </div>
                                 <div class="col-sm-12">
                                     <div class="side border mb-1">
-                                        <h3>Style</h3>
+                                        <h3>Category</h3>
                                         <ul>
-                                            <li><a href="#">Slip Ons</a></li>
-                                            <li><a href="#">Boots</a></li>
-                                            <li><a href="#">Sandals</a></li>
-                                            <li><a href="#">Lace Ups</a></li>
-                                            <li><a href="#">Oxfords</a></li>
+                                            <% for(Category category : categoryList) { %>
+                                            <li><a href="#"><%= category.getCategoryName() %></a></li>
+                                            <% } %>
                                         </ul>
                                     </div>
                                 </div>
