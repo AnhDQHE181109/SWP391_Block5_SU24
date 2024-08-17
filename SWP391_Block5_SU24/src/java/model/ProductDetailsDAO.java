@@ -13,6 +13,7 @@ import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
 import java.sql.PreparedStatement;
+import java.util.stream.Collectors;
 
 /**
  *
@@ -24,10 +25,12 @@ public class ProductDetailsDAO extends DBConnect {
         List<Product> products = new ArrayList<>();
         try {
             String sql = "SELECT p.ProductID, p.ProductName, p.Origin, p.Material, p.Price, p.TotalQuantity, "
-                    + "c.CategoryName, b.BrandName, p.ImageID "
+                    + "c.CategoryName, b.BrandName, pi.ImageURL "
                     + "FROM Products p "
                     + "LEFT JOIN Categories c ON p.CategoryID = c.CategoryID "
-                    + "LEFT JOIN Brand b ON p.BrandID = b.BrandID";
+                    + "LEFT JOIN Brand b ON p.BrandID = b.BrandID "
+                    + "LEFT JOIN Stock s ON p.ProductID = s.ProductID "
+                    + "LEFT JOIN ProductImages pi ON s.StockID = pi.StockID";
             Statement st = conn.createStatement();
             ResultSet rs = st.executeQuery(sql);
             while (rs.next()) {
@@ -40,7 +43,7 @@ public class ProductDetailsDAO extends DBConnect {
                 p.setTotalQuantity(rs.getInt("TotalQuantity"));
                 p.setCategoryName(rs.getString("CategoryName"));
                 p.setBrandName(rs.getString("BrandName"));
-                p.setImageId(rs.getInt("ImageID"));
+                p.setImageUrl(rs.getString("ImageURL")); // Add this line
                 products.add(p);
             }
             rs.close();
@@ -251,7 +254,7 @@ public class ProductDetailsDAO extends DBConnect {
         }
         return exists;
     }
-    
+
     public List<Product> getProductStocks(int productID) {
 
         String sql = "select s.StockID, p.ProductID, p.ProductName, Size, Color, StockQuantity\n"
@@ -284,4 +287,106 @@ public class ProductDetailsDAO extends DBConnect {
 
         return productsStocksList;
     }
+
+    public List<String> getAllColors() {
+        List<String> colors = new ArrayList<>();
+        String sql = "SELECT DISTINCT Color FROM Stock";
+        try {
+            Statement st = conn.createStatement();
+            ResultSet rs = st.executeQuery(sql);
+            while (rs.next()) {
+                colors.add(rs.getString("Color"));
+            }
+            rs.close();
+            st.close();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return colors;
+    }
+
+    public List<String> getAllMaterials() {
+        List<String> materials = new ArrayList<>();
+        String sql = "SELECT DISTINCT Material FROM Products";
+        try {
+            Statement st = conn.createStatement();
+            ResultSet rs = st.executeQuery(sql);
+            while (rs.next()) {
+                materials.add(rs.getString("Material"));
+            }
+            rs.close();
+            st.close();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return materials;
+    }
+
+    public List<Integer> getAllSizes() {
+        List<Integer> sizes = new ArrayList<>();
+        String sql = "SELECT DISTINCT Size FROM Stock";
+        try {
+            Statement st = conn.createStatement();
+            ResultSet rs = st.executeQuery(sql);
+            while (rs.next()) {
+                sizes.add(rs.getInt("Size"));
+            }
+            rs.close();
+            st.close();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return sizes;
+    }
+    public List<Product> getFilteredProducts(List<Integer> brandIds, List<Integer> categoryIds, List<String> colors, List<Integer> sizes, List<String> materials) {
+    List<Product> products = new ArrayList<>();
+    StringBuilder sql = new StringBuilder("SELECT p.ProductID, p.ProductName, p.Origin, p.Material, p.Price, p.TotalQuantity, ");
+    sql.append("c.CategoryName, b.BrandName, pi.ImageURL ");
+    sql.append("FROM Products p ");
+    sql.append("LEFT JOIN Categories c ON p.CategoryID = c.CategoryID ");
+    sql.append("LEFT JOIN Brand b ON p.BrandID = b.BrandID ");
+    sql.append("LEFT JOIN Stock s ON p.ProductID = s.ProductID ");
+    sql.append("LEFT JOIN ProductImages pi ON s.StockID = pi.StockID WHERE 1=1");
+
+    // Add filtering conditions based on selected filters
+    if (!brandIds.isEmpty()) {
+        sql.append(" AND p.BrandID IN (").append(brandIds.stream().map(String::valueOf).collect(Collectors.joining(","))).append(")");
+    }
+    if (!categoryIds.isEmpty()) {
+        sql.append(" AND p.CategoryID IN (").append(categoryIds.stream().map(String::valueOf).collect(Collectors.joining(","))).append(")");
+    }
+    if (!colors.isEmpty()) {
+        sql.append(" AND s.Color IN (").append(colors.stream().map(c -> "'" + c + "'").collect(Collectors.joining(","))).append(")");
+    }
+    if (!sizes.isEmpty()) {
+        sql.append(" AND s.Size IN (").append(sizes.stream().map(String::valueOf).collect(Collectors.joining(","))).append(")");
+    }
+    if (!materials.isEmpty()) {
+        sql.append(" AND p.Material IN (").append(materials.stream().map(m -> "'" + m + "'").collect(Collectors.joining(","))).append(")");
+    }
+
+    try {
+        Statement st = conn.createStatement();
+        ResultSet rs = st.executeQuery(sql.toString());
+        while (rs.next()) {
+            Product p = new Product();
+            p.setProductId(rs.getInt("ProductID"));
+            p.setProductName(rs.getString("ProductName"));
+            p.setOrigin(rs.getString("Origin"));
+            p.setMaterial(rs.getString("Material"));
+            p.setPrice(rs.getDouble("Price"));
+            p.setTotalQuantity(rs.getInt("TotalQuantity"));
+            p.setCategoryName(rs.getString("CategoryName"));
+            p.setBrandName(rs.getString("BrandName"));
+            p.setImageURL(rs.getString("ImageURL"));
+            products.add(p);
+        }
+        rs.close();
+        st.close();
+    } catch (SQLException e) {
+        e.printStackTrace();
+    }
+    return products;
+}
+
 }
