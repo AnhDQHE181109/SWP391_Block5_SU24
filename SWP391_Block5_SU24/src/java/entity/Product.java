@@ -28,6 +28,15 @@ public class Product {
     private String color;
     private int stockID;
     private int stockQuantity;
+    private String imageUrl;
+
+    public void setImageUrl(String imageUrl) {
+        this.imageUrl = imageUrl;
+    }
+
+    public String getImageUrl() {
+        return imageUrl;
+    }
 
     public Product() {
     }
