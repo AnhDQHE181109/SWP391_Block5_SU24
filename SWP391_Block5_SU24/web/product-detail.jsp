@@ -1,3 +1,8 @@
+<%@page contentType="text/html" pageEncoding="UTF-8"%>
+<%@taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
+<%@page import = "entity.*" %>
+<%@page import = "java.util.*" %>
+
 <!DOCTYPE HTML>
 <html>
 	<head>
@@ -114,47 +119,36 @@
 			</div>
 		</div>
 
-
+		<%
+			ProductDetails productDetails = (ProductDetails) request.getAttribute("productDetails");
+			List<ProductStockDetails> productsStocksList = (List<ProductStockDetails>) request.getAttribute("productsStocksList");
+			String selectedColor = (String) request.getAttribute("selectedColor");
+        %>
 		<div class="colorlib-product">
 			<div class="container">
 				<div class="row row-pb-lg product-detail-wrap">
 					<div class="col-sm-8">
 						<div class="owl-carousel" id="img-slider">
-							<div class="item">
-								<div class="product-entry border">
-									<a href="#" class="prod-img">
-										<img src="images/item-1.jpg" class="img-fluid" alt="Free html5 bootstrap 4 template">
-									</a>
-								</div>
-							</div>
-							<div class="item">
-								<div class="product-entry border">
-									<a href="#" class="prod-img">
-										<img src="images/item-2.jpg" class="img-fluid" alt="Free html5 bootstrap 4 template">
-									</a>
-								</div>
-							</div>
-							<div class="item">
-								<div class="product-entry border">
-									<a href="#" class="prod-img">
-										<img src="images/item-3.jpg" class="img-fluid" alt="Free html5 bootstrap 4 template">
-									</a>
-								</div>
-							</div>
-							<div class="item">
-								<div class="product-entry border">
-									<a href="#" class="prod-img">
-										<img src="images/item-4.jpg" class="img-fluid" alt="Free html5 bootstrap 4 template">
-									</a>
-								</div>
-							</div>
+							<% if (productsStocksList != null) { 
+								for (ProductStockDetails productStockDetail : productsStocksList) { %>
+									<div class="item">
+										<div class="product-entry border">
+											<a href="#" class="prod-img">
+												<img src="<%=productStockDetail.getImageURL() %>" class="img-fluid" alt="<%=productStockDetail.getColor() %>" width="800" height="800">
+											</a>
+										</div>
+									</div>
+							<% }
+							  } %>
 						</div>
 					</div>
+
 					<div class="col-sm-4">
 						<div class="product-desc">
-							<h3>Women's Boots Shoes Maca</h3>
+							<h3><%=productDetails.getProductName() %></h3>
+							<h4>Brand: <%=productDetails.getBrandName() %></h4>
 							<p class="price">
-								<span>$68.00</span> 
+								<span>$<%=productDetails.getPrice() %></span> 
 								<span class="rate">
 									<i class="icon-star-full"></i>
 									<i class="icon-star-full"></i>
@@ -169,8 +163,15 @@
 							<div class="block-26 mb-4">
 								<h4>Color</h4>
 						   	  <ul>
-							  	<li><a href="#">M</a></li>
-							  	<li><a href="#">W</a></li>
+								<%  if (productsStocksList == null || productsStocksList.isEmpty()) { %>
+									<p>Error, no colors available for this product!</p>
+								<%
+									} else { 
+										for (ProductStockDetails productStockDetail : productsStocksList) { %>
+							  	<li><a id="<%=productStockDetail.getColor() %>_<%=productStockDetail.getProductID() %>" 
+									href="ProductDetailsController?productID=<%=productStockDetail.getProductID() %>&selectedColor=<%=productStockDetail.getColor() %>"><%=productStockDetail.getColor() %></a></li>
+								<%  	}
+									} %>
 						   	  </ul>
 							</div>
 							
@@ -178,23 +179,19 @@
 								<div class="block-26 mb-2">
 									<h4>Size</h4>
 				               <ul>
-				                  <li><a href="#">7</a></li>
-				                  <li><a href="#">7.5</a></li>
-				                  <li><a href="#">8</a></li>
-				                  <li><a href="#">8.5</a></li>
-				                  <li><a href="#">9</a></li>
-				                  <li><a href="#">9.5</a></li>
-				                  <li><a href="#">10</a></li>
-				                  <li><a href="#">10.5</a></li>
-				                  <li><a href="#">11</a></li>
-				                  <li><a href="#">11.5</a></li>
-				                  <li><a href="#">12</a></li>
-				                  <li><a href="#">12.5</a></li>
-				                  <li><a href="#">13</a></li>
-				                  <li><a href="#">13.5</a></li>
-				                  <li><a href="#">14</a></li>
+								  <% if (selectedColor != null) {
+										for (ProductStockDetails productStockDetail : productsStocksList) {
+											if (selectedColor.equalsIgnoreCase(productStockDetail.getColor())) { %>
+				                  <li><a id="" href="#"><%=productStockDetail.getSize() %></a></li>
+								  <%    	}
+										} 
+									 } %>
 				               </ul>
-				            </div>
+				            	</div>
+							</div>
+
+							<div>
+								<p>Available products: </p>
 							</div>
                      <div class="input-group mb-4">
                      	<span class="input-group-btn">
@@ -202,7 +199,7 @@
                            <i class="icon-minus2"></i>
                         	</button>
                     		</span>
-                     	<input type="text" id="quantity" name="quantity" class="form-control input-number" value="1" min="1" max="100" onfocusout="validateQuantity()">
+                     	<input type="text" id="quantity" name="quantity" class="form-control input-number" value="1" min="1" max="100" readonly onfocusout="validateQuantity()">
                      	<span class="input-group-btn ml-1">
                         	<button type="button" class="quantity-right-plus btn" data-type="plus" data-field="">
                              <i class="icon-plus2"></i>
@@ -548,6 +545,15 @@ Copyright &copy;<script>document.write(new Date().getFullYear());</script> All r
 				alert("Quantity can't be more than the stock available!");
 			}
         }
+
+		function setSelectedColor(colorButton) {
+			document.getElementById(colorButton).setAttribute("style", "background: #616161;");
+		}
+
+		<% String selectedColorButton = (String) request.getAttribute("selectedColorButton");
+		   if (selectedColorButton != null) { %>
+			document.getElementById('<%=selectedColorButton %>').setAttribute("style", "background: #616161;");
+		<% } %>
 
 	</script>
 
