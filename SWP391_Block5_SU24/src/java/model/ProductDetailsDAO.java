@@ -406,6 +406,32 @@ public class ProductDetailsDAO extends DBConnect {
         return productSizes;
     }
 
+    public void addProductToWishlist(int accountID, int stockID) {
+
+        String sql = "insert into Wishlist(AccountID, StockID, DateAdded)\n"
+                + "values (?, ?, getdate())";
+
+        ProductStockDetails productSize = null;
+        List<ProductStockDetails> productSizes = new ArrayList<>();
+
+        try {
+            PreparedStatement ps = conn.prepareStatement(sql);
+            ps.setInt(1, accountID);
+            ps.setInt(2, stockID);
+
+            ResultSet rs = ps.executeQuery();
+
+            if (rs != null) {
+                rs.close();
+            }
+            if (ps != null) {
+                ps.close();
+            }
+        } catch (SQLException e) {
+            System.out.println("addProductToWishlist(): " + e);
+        }
+    }
+
     public List<String> getAllColors() {
         List<String> colors = new ArrayList<>();
         String sql = "SELECT DISTINCT Color FROM Stock";
