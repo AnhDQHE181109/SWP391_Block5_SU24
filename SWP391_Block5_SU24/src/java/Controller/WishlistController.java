@@ -65,18 +65,25 @@ public class WishlistController extends HttpServlet {
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         HttpSession session = request.getSession();
-        Account account = (Account) session.getAttribute("account");
+    Account account = (Account) session.getAttribute("account");
 
-        if (account != null) {
-            int accountId = account.getAccountID(); // Now this method will work
-            WishlistDAO wishlistDAO = new WishlistDAO();
-            List<Product> wishlistItems = wishlistDAO.getWishlistItems(accountId);
-            request.setAttribute("wishlistItems", wishlistItems);
-            RequestDispatcher dispatcher = request.getRequestDispatcher("wishlist.jsp");
-            dispatcher.forward(request, response);
+    if (account != null) {
+        WishlistDAO wishlistDAO = new WishlistDAO();
+        String search = request.getParameter("search");
+        List<Product> wishlistItems;
+
+        if (search != null && !search.trim().isEmpty()) {
+            wishlistItems = wishlistDAO.searchWishlistItemsByName(account.getAccountID(), search);
         } else {
-            response.sendRedirect("login.jsp");
-}
+            wishlistItems = wishlistDAO.getWishlistItems(account.getAccountID());
+        }
+
+        request.setAttribute("wishlistItems", wishlistItems);
+        RequestDispatcher dispatcher = request.getRequestDispatcher("customer/wishlist.jsp");
+        dispatcher.forward(request, response);
+    } else {
+        response.sendRedirect("../login.jsp");
+    }
     }
 
     /**

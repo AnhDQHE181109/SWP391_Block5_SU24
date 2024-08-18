@@ -156,4 +156,13 @@
         <servlet-name>ShoppingCartController</servlet-name>
         <url-pattern>/shoppingCart</url-pattern>
     </servlet-mapping>
+    <servlet>
+        <servlet-name>WishlistController</servlet-name>
+        <servlet-class>Controller.WishlistController</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>WishlistController</servlet-name>
+        <url-pattern>/WishlistController</url-pattern>
+    </servlet-mapping>
+    
 </web-app>

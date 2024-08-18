@@ -50,4 +50,28 @@ public class WishlistDAO extends MyDAO{
     }
     return wishlistItems;
 }
+    
+   public List<Product> searchWishlistItemsByName(int accountId, String search) {
+    List<Product> wishlistItems = new ArrayList<>();
+    String sql = "SELECT p.* FROM Wishlist w JOIN Stock s ON w.StockID = s.StockID "
+               + "JOIN Products p ON s.ProductID = p.ProductID WHERE w.AccountID = ? AND p.ProductName LIKE ?";
+
+    try (Connection con = this.con;
+         PreparedStatement ps = con.prepareStatement(sql)) {
+        
+        ps.setInt(1, accountId);
+        ps.setString(2, "%" + search + "%");
+
+        try (ResultSet rs = ps.executeQuery()) {
+            while (rs.next()) {
+                Product product = new Product();
+                // Map the result set to the product entity
+                wishlistItems.add(product);
+            }
+        }
+    } catch (SQLException e) {
+        e.printStackTrace();
+    }
+    return wishlistItems;
+    }
 }

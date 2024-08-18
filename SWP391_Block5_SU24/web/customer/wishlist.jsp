@@ -20,18 +20,31 @@
     <link href="https://fonts.googleapis.com/css?family=Rokkitt:100,300,400,700" rel="stylesheet">
     
     <!-- Include your existing CSS files -->
-    <link rel="stylesheet" href="css/animate.css">
-    <link rel="stylesheet" href="css/icomoon.css">
-    <link rel="stylesheet" href="css/ionicons.min.css">
-    <link rel="stylesheet" href="css/bootstrap.min.css">
-    <link rel="stylesheet" href="css/magnific-popup.css">
-    <link rel="stylesheet" href="css/flexslider.css">
-    <link rel="stylesheet" href="css/owl.carousel.min.css">
-    <link rel="stylesheet" href="css/owl.theme.default.min.css">
-    <link rel="stylesheet" href="css/bootstrap-datepicker.css">
-    <link rel="stylesheet" href="fonts/flaticon/font/flaticon.css">
-    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="../css/animate.css">
+    <link rel="stylesheet" href="../css/icomoon.css">
+    <link rel="stylesheet" href="../css/ionicons.min.css">
+    <link rel="stylesheet" href="../css/bootstrap.min.css">
+    <link rel="stylesheet" href="../css/magnific-popup.css">
+    <link rel="stylesheet" href="../css/flexslider.css">
+    <link rel="stylesheet" href="../css/owl.carousel.min.css">
+    <link rel="stylesheet" href="../css/owl.theme.default.min.css">
+    <link rel="stylesheet" href="../css/bootstrap-datepicker.css">
+    <link rel="stylesheet" href="../fonts/flaticon/font/flaticon.css">
+    <link rel="stylesheet" href="../css/style.css">
 
+    
+    <script>
+        function validateSearch() {
+            var searchInput = document.getElementById("search-input").value;
+            var regex = /^[a-zA-Z0-9\-]+$/; // Cho phép chỉ nhập ký tự chữ, số, và dấu gạch ngang
+
+            if (!regex.test(searchInput)) {
+                alert("Invalid input");
+                return false;
+            }
+            return true;
+        }
+    </script>
 </head>
 <body>
     
@@ -39,53 +52,14 @@
 
 <div id="page">
     <nav class="colorlib-nav" role="navigation">
-        <div class="top-menu">
-            <div class="container">
-                <div class="row">
-                    <div class="col-sm-7 col-md-9">
-                        <div id="colorlib-logo"><a href="index.jsp">Footwear</a></div>
-                    </div>
-                    <div class="col-sm-5 col-md-3">
-                        <form action="#" class="search-wrap">
-                            <div class="form-group d-flex">
-                                <input type="search" class="form-control search" placeholder="Search">
-                                <button class="btn btn-primary submit-search" type="submit" style="margin-left: 5px;">
-                                    <i class="icon-search"></i>
-                                </button>
-                            </div>
-                        </form>
-                    </div>
-                </div>
-                <div class="row">
-                    <div class="col-sm-12 text-left menu-1">
-                        <ul>
-                            <li><a href="index.jsp">Home</a></li>
-                            <li class="has-dropdown">
-                                <a href="men.html">Men</a>
-                                <ul class="dropdown">
-                                    <li><a href="product-detail.html">Product Detail</a></li>
-                                    <li><a href="cart.html">Shopping Cart</a></li>
-                                    <li><a href="checkout.html">Checkout</a></li>
-                                    <li><a href="order-complete.html">Order Complete</a></li>
-                                    <li><a href="wishlist.jsp">Wishlist</a></li>
-                                </ul>
-                            </li>
-                            <li><a href="women.html">Women</a></li>
-                            <li><a href="about.html">About</a></li>
-                            <li><a href="contact.html">Contact</a></li>
-                            <li class="cart"><a href="cart.html"><i class="icon-shopping-cart"></i> Cart [0]</a></li>
-                        </ul>
-                    </div>
-                </div>
-            </div>
-        </div>
+        <!-- Navigation content -->
     </nav>
 
     <div class="breadcrumbs">
         <div class="container">
             <div class="row">
                 <div class="col">
-                    <p class="bread"><span><a href="index.jsp">Home</a></span> / <span>Wishlist</span></p>
+                    <p class="bread"><span><a href="../index.jsp">Home</a></span> / <span>Wishlist</span></p>
                 </div>
             </div>
         </div>
@@ -96,17 +70,17 @@
             <% 
                 Account account = (Account) session.getAttribute("account");
                 if (account == null) {
-                    response.sendRedirect("login.jsp");
+                    response.sendRedirect("../login.jsp");
                 }
             %>
 
-            <!-- Flex container for search and sort options -->
+            <!-- Thanh tìm kiếm và sắp xếp -->
             <div class="row mb-4">
                 <div class="col-md-12 d-flex justify-content-between">
                     <!-- Search bar -->
-                    <form action="#" class="search-wrap d-flex">
+                    <form action="WishlistController" method="get" class="search-wrap d-flex" onsubmit="return validateSearch()">
                         <div class="form-group d-flex">
-                            <input type="search" class="form-control search" placeholder="Search">
+                            <input type="search" id="search-input" name="search" class="form-control search" placeholder="Seach">
                             <button class="btn btn-primary submit-search" type="submit" style="margin-left: 5px;">
                                 <i class="icon-search"></i>
                             </button>
@@ -115,10 +89,10 @@
 
                     <!-- Sorting options -->
                     <form method="get" action="WishlistController" class="d-flex align-items-center">
-                        <label for="sort" class="mr-2">Sort By:</label>
+                        <label for="sort" class="mr-2">Sắp xếp theo:</label>
                         <select name="sort" id="sort" class="form-control" onchange="this.form.submit()">
-                            <option value="name">Name</option>
-                            <option value="price">Price</option>
+                            <option value="name">Tên</option>
+                            <option value="price">Giá</option>
                         </select>
                     </form>
                 </div>
@@ -128,26 +102,26 @@
                 <div class="col-md-12">
                     <div class="product-name d-flex">
                         <div class="one-forth text-left px-4">
-                            <span>Product Details</span>
+                            <span>Chi tiết sản phẩm</span>
                         </div>
                         <div class="one-eight text-center">
-                            <span>Price</span>
+                            <span>Giá</span>
                         </div>
                         <div class="one-eight text-center">
-                            <span>Size</span>
+                            <span>Kích thước</span>
                         </div>
                         <div class="one-eight text-center">
-                            <span>Color</span>
+                            <span>Màu sắc</span>
                         </div>
                         <div class="one-eight text-center">
-                            <span>Add to Cart</span>
+                            <span>Thêm vào giỏ</span>
                         </div>
                         <div class="one-eight text-center px-4">
-                            <span>Remove</span>
+                            <span>Xóa</span>
                         </div>
                     </div>
 
-                    <!-- Display wishlist items dynamically -->
+                    <!-- Hiển thị các sản phẩm trong wishlist -->
                     <c:if test="${wishlistItems != null && !wishlistItems.isEmpty()}">
                         <c:forEach var="item" items="${wishlistItems}">
                             <div class="product-cart d-flex">
@@ -174,7 +148,7 @@
                                 </div>
                                 <div class="one-eight text-center">
                                     <div class="display-tc">
-                                        <a href="CartController?action=add&stockId=${item.stockID}" class="btn btn-primary">Add to Cart</a>
+                                        <a href="CartController?action=add&stockId=${item.stockID}" class="btn btn-primary">Thêm vào giỏ</a>
                                     </div>
                                 </div>
                                 <div class="one-eight text-center">
@@ -186,9 +160,9 @@
                         </c:forEach>
                     </c:if>
 
-                    <!-- If the wishlist is empty -->
+                    <!-- Nếu wishlist trống -->
                     <c:if test="${wishlistItems == null || wishlistItems.isEmpty()}">
-                        <p>Your wishlist is empty.</p>
+                        <p>Danh sách yêu thích của bạn trống.</p>
                     </c:if>
                 </div>
             </div>
