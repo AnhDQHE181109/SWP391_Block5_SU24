@@ -98,7 +98,7 @@ public class LoginController extends HttpServlet {
                     break;
                 }
                 case 2: {
-                    response.sendRedirect("Ordercontroller");
+                    response.sendRedirect("stocksManager");
                     break;
                 }
                 case 3: {

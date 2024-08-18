@@ -17,8 +17,6 @@ public class DAOBrand extends MyDAO {
                 Brand brand = new Brand();
                 brand.setBrandId(rs.getInt("brandId"));
                 brand.setBrandName(rs.getString("brandName"));
-                brand.setBrandstatus(rs.getInt("brandStatus")); // Fixed field name
-
                 brands.add(brand);
             }
         } catch (SQLException e) {
@@ -40,7 +38,6 @@ public class DAOBrand extends MyDAO {
                 brand = new Brand();
                 brand.setBrandId(rs.getInt("brandId"));
                 brand.setBrandName(rs.getString("brandName"));
-                brand.setBrandstatus(rs.getInt("brandStatus")); // Fixed field name
             }
         } catch (SQLException e) {
             e.printStackTrace();
@@ -114,13 +111,11 @@ public class DAOBrand extends MyDAO {
         }
     }
 
-    public void updateBrandStatus(Brand brand) {
-        xSql = "UPDATE Brand SET brandStatus = ? WHERE brandId = ?"; // Removed square brackets
+    public void deleteBrand(int brandId) {
+        xSql = "DELETE FROM Brand WHERE brandId = ?";
         try {
             ps = con.prepareStatement(xSql);
-            ps.setInt(1, brand.getBrandstatus()); // Corrected method name
-            ps.setInt(2, brand.getBrandId());
-
+            ps.setInt(1, brandId);
             ps.executeUpdate();
         } catch (SQLException e) {
             e.printStackTrace();
@@ -128,12 +123,11 @@ public class DAOBrand extends MyDAO {
             closeResources();
         }
     }
-
-    // Removed deleteBrand method as per your request
     
+       // Method to search brands by name
     public List<Brand> searchBrands(String keyword) {
         List<Brand> brands = new ArrayList<>();
-        String sql = "SELECT * FROM Brand WHERE brandName LIKE ?";
+        String sql = "SELECT * FROM Brand WHERE [BrandName] LIKE ?";
         
         try {
             ps = con.prepareStatement(sql);
@@ -142,8 +136,8 @@ public class DAOBrand extends MyDAO {
             
             while (rs.next()) {
                 Brand brand = new Brand();
-                brand.setBrandId(rs.getInt("brandId")); // Fixed field name
-                brand.setBrandName(rs.getString("brandName")); // Fixed field name
+                brand.setBrandId(rs.getInt("BrandID"));
+                brand.setBrandName(rs.getString("BrandName"));
                 brands.add(brand);
             }
         } catch (SQLException e) {

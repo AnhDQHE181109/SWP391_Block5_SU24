@@ -5,7 +5,6 @@
 package model;
 
 import entity.Product;
-import entity.Stock;
 import java.util.ArrayList;
 import java.util.List;
 import java.sql.PreparedStatement;
@@ -19,50 +18,44 @@ import java.util.HashMap;
  */
 public class StocksManagementDAO extends DBConnect {
 
-public static void main(String[] args) {
-    StocksManagementDAO smDAO = new StocksManagementDAO();
+    public static void main(String[] args) {
+        StocksManagementDAO smDAO = new StocksManagementDAO();
+//        List<Product> productsStocksList = smDAO.getProductsStocks();
+//        for (Product product : productsStocksList) {
+//            System.out.println(product);
+//        }
+//        smDAO.logAccount(3);
 
-    // Tạo một danh sách các Stock đã được cập nhật
-    List<Stock> updatedStocks = new ArrayList<>();
-    
-    // Tạo một Stock mới (giả sử stockID là 5)
-    Stock stock = new Stock(5, 1, 45, "White", 20);
-    // Trong đó: 5 là stockID, 1 là productID, 45 là size, "White" là color, 20 là stockQuantity
-    
-    updatedStocks.add(stock);
-
-    // Gọi phương thức logUpdatedStocks với accountID là 3
-    smDAO.logUpdatedStocks(3, updatedStocks);
-}
-
+        List<Product> loggedProducts = new ArrayList<>();
+        Product prod = new Product(5, 1, 45, "White", 20);
+        loggedProducts.add(prod);
+        smDAO.logUpdatedProducts(3, loggedProducts);
+    }
 
     public List<Product> getAllProducts() {
-        String sql = "SELECT p.ProductID, ProductName, Origin, Material, Price, TotalQuantity, "
-                + "CategoryID, BrandID, ImageID, ProductStatus, BrandName, CategoryName, ImageURL "
-                + "FROM Products p "
-                + "JOIN Brand b ON b.BrandID = p.BrandID "
-                + "JOIN Categories c ON c.CategoryID = p.CategoryID "
-                + "JOIN ProductImages pi ON p.ImageID = pi.ImageID";
 
+        String sql = "select p.ProductID, BrandName, ProductName, CategoryName, ImageURL\n"
+                + "from Products p, ProductImages pi, Brand b, Categories c\n"
+                + "where p.ImageID = pi.ImageID and b.BrandID = p.BrandID and c.CategoryID = p.CategoryID";
+
+        Product product = null;
         List<Product> list = new ArrayList<>();
 
-        try (PreparedStatement ps = conn.prepareStatement(sql);
-             ResultSet rs = ps.executeQuery()) {
+        try {
+            PreparedStatement ps = conn.prepareStatement(sql);
 
+            ResultSet rs = ps.executeQuery();
             while (rs.next()) {
-                Product product = new Product(
-                    rs.getInt("ProductID"),
-                    rs.getString("ProductName"),
-                    rs.getString("Origin"),
-                    rs.getString("Material"),
-                    rs.getDouble("Price"),
-                    rs.getInt("TotalQuantity"),
-                    rs.getInt("CategoryID"),
-                    rs.getInt("BrandID"),
-                    rs.getInt("ImageID"),
-                    rs.getInt("ProductStatus")
-                );
+                product = new Product(rs.getInt(1), rs.getString(2), rs.getString(3), 
+                        rs.getString(4), rs.getString(5));
                 list.add(product);
+            }
+
+            if (rs != null) {
+                rs.close();
+            }
+            if (ps != null) {
+                ps.close();
             }
         } catch (SQLException e) {
             System.out.println("getAllProducts(): " + e);
@@ -70,38 +63,38 @@ public static void main(String[] args) {
 
         return list;
     }
-public List<Product> getProductsStocks() {
-    String sql = "SELECT s.StockID, p.ProductID, p.ProductName, p.Origin, p.Material, p.Price, "
-            + "s.Size, s.Color, s.StockQuantity, p.CategoryID, p.BrandID, p.ImageID, p.ProductStatus "
-            + "FROM Products p JOIN Stock s ON p.ProductID = s.ProductID";
 
-    List<Product> productsStocksList = new ArrayList<>();
+    public List<Product> getProductsStocks() {
 
-    try (PreparedStatement ps = conn.prepareStatement(sql);
-         ResultSet rs = ps.executeQuery()) {
+        String sql = "select s.StockID, p.ProductID, p.ProductName, Size, Color, StockQuantity\n"
+                + "from Products p, Stock s\n"
+                + "where p.ProductID = s.ProductID";
 
-        while (rs.next()) {
-            Product product = new Product(
-                rs.getInt("ProductID"),
-                rs.getString("ProductName"),
-                rs.getString("Origin"),
-                rs.getString("Material"),
-                rs.getDouble("Price"),
-                rs.getInt("StockQuantity"), // Using StockQuantity instead of TotalQuantity
-                rs.getInt("CategoryID"),
-                rs.getInt("BrandID"),
-                rs.getInt("ImageID"),
-                rs.getInt("ProductStatus")
-            );
+        Product product = null;
+        List<Product> productsStocksList = new ArrayList<>();
 
-            productsStocksList.add(product);
+        try {
+            PreparedStatement ps = conn.prepareStatement(sql);
+
+            ResultSet rs = ps.executeQuery();
+            while (rs.next()) {
+                product = new Product(rs.getInt(1), rs.getInt(2), rs.getString(3), rs.getInt(4),
+                        rs.getString(5), rs.getInt(6));
+                productsStocksList.add(product);
+            }
+
+            if (rs != null) {
+                rs.close();
+            }
+            if (ps != null) {
+                ps.close();
+            }
+        } catch (SQLException e) {
+            System.out.println("getProductsStocks(): " + e);
         }
-    } catch (SQLException e) {
-        System.out.println("getProductsStocks(): " + e);
-    }
 
-    return productsStocksList;
-}
+        return productsStocksList;
+    }
 
     public void setProductStock(int stockID, int quantity) {
 
@@ -127,40 +120,37 @@ public List<Product> getProductsStocks() {
         }
     }
 
-public Product getProductStockByStockID(int stockID) {
-    String sql = "SELECT s.StockID, p.ProductID, p.ProductName, p.Origin, p.Material, p.Price, "
-            + "s.Size, s.Color, s.StockQuantity, p.CategoryID, p.BrandID, p.ImageID, p.ProductStatus "
-            + "FROM Products p JOIN Stock s ON p.ProductID = s.ProductID "
-            + "WHERE s.StockID = ?";
+    public Product getProductStockByStockID(int stockID) {
 
-    Product product = null;
+        String sql = "select s.StockID, p.ProductID, Size, Color, StockQuantity\n"
+                + "from Products p, Stock s\n"
+                + "where p.ProductID = s.ProductID and s.StockID = ?";
 
-    try (PreparedStatement ps = conn.prepareStatement(sql)) {
-        ps.setInt(1, stockID);
-        
-        try (ResultSet rs = ps.executeQuery()) {
+        Product product = null;
+
+        try {
+            PreparedStatement ps = conn.prepareStatement(sql);
+            ps.setInt(1, stockID);
+
+            ResultSet rs = ps.executeQuery();
             if (rs.next()) {
-                product = new Product(
-                    rs.getInt("ProductID"),
-                    rs.getString("ProductName"),
-                    rs.getString("Origin"),
-                    rs.getString("Material"),
-                    rs.getDouble("Price"),
-                    rs.getInt("StockQuantity"), // Using StockQuantity instead of TotalQuantity
-                    rs.getInt("CategoryID"),
-                    rs.getInt("BrandID"),
-                    rs.getInt("ImageID"),
-                    rs.getInt("ProductStatus")
-                );
-
+                product = new Product(rs.getInt(1), rs.getInt(2), rs.getInt(3), rs.getString(4),
+                        rs.getInt(5));
+                return product;
             }
-        }
-    } catch (SQLException e) {
-        System.out.println("getProductStockByStockID(): " + e);
-    }
 
-    return product;
-}
+            if (rs != null) {
+                rs.close();
+            }
+            if (ps != null) {
+                ps.close();
+            }
+        } catch (SQLException e) {
+            System.out.println("getProductStockByStockID(): " + e);
+        }
+
+        return product;
+    }
 
     public String getProductNameByID(int productID) {
 
@@ -248,16 +238,27 @@ public Product getProductStockByStockID(int stockID) {
         }
     }
 
-    public boolean checkIfStockExists(int productID, int size, String color) {
-        String sql = "SELECT * FROM Stock WHERE ProductID = ? AND Size = ? AND Color = ?";
+    public Boolean checkIfStockExists(int size, String color) {
 
-        try (PreparedStatement ps = conn.prepareStatement(sql)) {
-            ps.setInt(1, productID);
-            ps.setInt(2, size);
-            ps.setString(3, color);
+        String sql = "select Size, Color\n"
+                + "from Stock\n"
+                + "where Size = ? and Color = ?";
 
-            try (ResultSet rs = ps.executeQuery()) {
-                return rs.next();
+        try {
+            PreparedStatement ps = conn.prepareStatement(sql);
+            ps.setInt(1, size);
+            ps.setString(2, color);
+
+            ResultSet rs = ps.executeQuery();
+            if (rs.next()) {
+                return true;
+            }
+
+            if (rs != null) {
+                rs.close();
+            }
+            if (ps != null) {
+                ps.close();
             }
         } catch (SQLException e) {
             System.out.println("checkIfStockExists(): " + e);
@@ -341,50 +342,29 @@ public Product getProductStockByStockID(int stockID) {
         }
     }
 
-    // Log methods can remain largely the same, but adjust to use the new Product structure
     public void logUpdatedProducts(int accountID, List<Product> loggedProducts) {
         int importID = logAccountAndGetImportID(accountID);
-        System.out.println("logUpdatedProducts(): accountID: " + accountID + ", importID: " + importID);
+        //Debugging
+        System.out.println("logUpdatedProducts(): " + "accountID: " + accountID);
+        System.out.println("logUpdatedProducts(): " + "importID: " + importID);
         for (Product product : loggedProducts) {
-            logUserUpdateActivity(product.getProductId(), importID, product.getTotalQuantity());
-        }
-    }
-    
-       // User activity logging functions
-    public int logStockImport(int accountID) {
-        String sql = "INSERT INTO ProductStockImport(AccountID, ImportDate) VALUES (?, GETDATE()); SELECT SCOPE_IDENTITY()";
-
-        try (PreparedStatement ps = conn.prepareStatement(sql)) {
-            ps.setInt(1, accountID);
-            try (ResultSet rs = ps.executeQuery()) {
-                if (rs.next()) {
-                    return rs.getInt(1);
-                }
-            }
-        } catch (SQLException e) {
-            System.out.println("logStockImport(): " + e);
-        }
-
-        return -1;
-    }
-
-    public void logStockImportDetail(int stockID, int importID, int stockQuantity) {
-        String sql = "INSERT INTO StockImportDetail(StockID, ImportID, StockQuantity) VALUES (?, ?, ?)";
-
-        try (PreparedStatement ps = conn.prepareStatement(sql)) {
-            ps.setInt(1, stockID);
-            ps.setInt(2, importID);
-            ps.setInt(3, stockQuantity);
-            ps.executeUpdate();
-        } catch (SQLException e) {
-            System.out.println("logStockImportDetail(): " + e);
+            int stockID = product.getStockID();
+            int stockQuantity = product.getStockQuantity();
+            logUserUpdateActivity(stockID, importID, stockQuantity);
         }
     }
 
-    public void logUpdatedStocks(int accountID, List<Stock> updatedStocks) {
-        int importID = logStockImport(accountID);
-        for (Stock stock : updatedStocks) {
-            logStockImportDetail(stock.getStockID(), importID, stock.getStockQuantity());
+    public void logUpdatedProducts(int accountID, int importID, List<Product> loggedProducts) {
+        //Debugging
+        System.out.println("logUpdatedProducts(): " + "accountID: " + accountID);
+        System.out.println("logUpdatedProducts(): " + "importID: " + importID);
+        for (Product product : loggedProducts) {
+            int stockID = product.getStockID();
+            int productID = product.getProductId();
+            int size = product.getSize();
+            String color = product.getColor();
+            int stockQuantity = product.getStockQuantity();
+            logUserUpdateActivity(stockID, importID, stockQuantity);
         }
     }
 }

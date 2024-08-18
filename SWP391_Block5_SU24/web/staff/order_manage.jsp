@@ -168,8 +168,8 @@
             <div class="row">
                 <div class="col-md-12">
                     <form action="Ordercontroller" method="get">
-                        <label for="username">orderid</label>
-                        <input type="text" id="orderid" name="orderid" />
+                        <label for="username">Username:</label>
+                        <input type="text" id="username" name="username" />
 
                         <label for="orderDate">Order Date:</label>
                         <input type="date" id="orderDate" name="orderDate" />
@@ -177,11 +177,9 @@
                         <label for="status">Status:</label>
                         <select id="status" name="status">
                             <option value="">All</option>
-                            <option value="0">Pending</option>
-                            <option value="1">processing</option>
-                            <option value="2">shipping</option>
-                            <option value="3">done</option>
-                            <option value="4">Cancelled</option>
+                            <option value="Pending">Pending</option>
+                            <option value="Shipping">Shipping</option>
+                            <option value="Cancelled">Cancelled</option>
                         </select>
 
                         <label for="startDate">Start Date:</label>
@@ -189,12 +187,6 @@
 
                         <label for="endDate">End Date:</label>
                         <input type="date" id="endDate" name="endDate" />
-                        
-                           <select name="sortOrder">
-                        <option value="desc">Ngày đặt hàng giảm dần</option>
-                        <option value="asc">Ngày đặt hàng tăng dần</option>
-                    </select>
-
 
                         <button type="submit">Search</button>
                     </form>
@@ -215,14 +207,6 @@
                         </tr>
                     </thead>
                     <tbody>
-                        
-                                    <c:forEach var="order" items="${orders}">
-                <tr>
-                    <td>${order.id}</td>
-                    <td>${order.orderDate}</td>
-                    <td>${order.status}</td>
-                </tr>
-            </c:forEach>
                         <c:forEach var="order" items="${orderList}">
                             <tr>
                                 <td>${order.orderID}</td>
@@ -230,16 +214,7 @@
                                  <td hidden>${addressMap[order.accountID]}</td>
                                  <td hidden>${phoneMap[order.accountID]}</td>
                                 <td>${order.orderDate}</td>
-                                <td>
-                                <c:choose>
-                                    <c:when test="${order.status == 0}">Pending</c:when>
-                                    <c:when test="${order.status == 1}">Processing</c:when>
-                                    <c:when test="${order.status == 2}">Shipping</c:when>
-                                    <c:when test="${order.status == 3}">Done</c:when>
-                                    <c:when test="${order.status == 4}">Cancelled</c:when>
-                                    <c:otherwise>Unknown</c:otherwise>
-                                </c:choose>
-                            </td>
+                                <td>${order.status}</td>
                                 <td>
                                     <form action="Orderdetailcontroller" method="get">
                                         <input type="hidden" name="adress" value="${addressMap[order.accountID]}" />

@@ -7,18 +7,8 @@ package entity;
 public class Brand {
     private int brandId;
     private String brandName;
-    private int brandstatus ; 
 
-    public Brand() {
-    }
 
-    public Brand(int brandId, String brandName, int brandstatus) {
-        this.brandId = brandId;
-        this.brandName = brandName;
-        this.brandstatus = brandstatus;
-    }
-
- 
     public int getBrandId() {
         return brandId;
     }
@@ -35,19 +25,6 @@ public class Brand {
         this.brandName = brandName;
     }
 
-    public int getBrandstatus() {
-        return brandstatus;
-    }
-
-    public void setBrandstatus(int brandstatus) {
-        this.brandstatus = brandstatus;
-    }
-
-    @Override
-    public String toString() {
-        return "Brand{" + "brandId=" + brandId + ", brandName=" + brandName + ", brandstatus=" + brandstatus + '}';
-    }
- 
     
 
 }
