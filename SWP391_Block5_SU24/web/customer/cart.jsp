@@ -1,3 +1,8 @@
+<%@page contentType="text/html" pageEncoding="UTF-8"%>
+<%@taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
+<%@page import = "entity.*" %>
+<%@page import = "java.util.*" %>
+
 <!DOCTYPE HTML>
 <html>
 	<head>
@@ -9,31 +14,31 @@
 	<link href="https://fonts.googleapis.com/css?family=Rokkitt:100,300,400,700" rel="stylesheet">
 	
 	<!-- Animate.css -->
-	<link rel="stylesheet" href="css/animate.css">
+	<link rel="stylesheet" href="${pageContext.request.contextPath}/css/animate.css">
 	<!-- Icomoon Icon Fonts-->
-	<link rel="stylesheet" href="css/icomoon.css">
+	<link rel="stylesheet" href="${pageContext.request.contextPath}/css/icomoon.css">
 	<!-- Ion Icon Fonts-->
-	<link rel="stylesheet" href="css/ionicons.min.css">
+	<link rel="stylesheet" href="${pageContext.request.contextPath}/css/ionicons.min.css">
 	<!-- Bootstrap  -->
-	<link rel="stylesheet" href="css/bootstrap.min.css">
+	<link rel="stylesheet" href="${pageContext.request.contextPath}/css/bootstrap.min.css">
 
 	<!-- Magnific Popup -->
-	<link rel="stylesheet" href="css/magnific-popup.css">
+	<link rel="stylesheet" href="${pageContext.request.contextPath}/css/magnific-popup.css">
 
 	<!-- Flexslider  -->
-	<link rel="stylesheet" href="css/flexslider.css">
+	<link rel="stylesheet" href="${pageContext.request.contextPath}/css/flexslider.css">
 
 	<!-- Owl Carousel -->
-	<link rel="stylesheet" href="css/owl.carousel.min.css">
-	<link rel="stylesheet" href="css/owl.theme.default.min.css">
+	<link rel="stylesheet" href="${pageContext.request.contextPath}/css/owl.carousel.min.css">
+	<link rel="stylesheet" href="${pageContext.request.contextPath}/css/owl.theme.default.min.css">
 	
 	<!-- Date Picker -->
-	<link rel="stylesheet" href="css/bootstrap-datepicker.css">
+	<link rel="stylesheet" href="${pageContext.request.contextPath}/css/bootstrap-datepicker.css">
 	<!-- Flaticons  -->
-	<link rel="stylesheet" href="fonts/flaticon/font/flaticon.css">
+	<link rel="stylesheet" href="${pageContext.request.contextPath}/fonts/flaticon/font/flaticon.css">
 
 	<!-- Theme style  -->
-	<link rel="stylesheet" href="css/style.css">
+	<link rel="stylesheet" href="${pageContext.request.contextPath}/css/style.css">
 
 	</head>
 	<body>
@@ -142,6 +147,12 @@
 								<span>Product Details</span>
 							</div>
 							<div class="one-eight text-center">
+								<span>Color</span>
+							</div>
+							<div class="one-eight text-center">
+								<span>Size</span>
+							</div>
+							<div class="one-eight text-center">
 								<span>Price</span>
 							</div>
 							<div class="one-eight text-center">
@@ -154,22 +165,58 @@
 								<span>Remove</span>
 							</div>
 						</div>
+
+						<% 
+							List<ShoppingCartItem> cartItems = (List<ShoppingCartItem>) request.getAttribute("cartItems");
+							
+						%>
 						<div class="product-cart d-flex">
+							<% if (cartItems != null) { 
+								for (ShoppingCartItem cartItem : cartItems) { %>
 							<div class="one-forth">
-								<div class="product-img" style="background-image: url(images/item-6.jpg);">
+								<div class="product-img" style="background-image: url(${pageContext.request.contextPath}/<%=cartItem.getImageURL() %>);">
 								</div>
 								<div class="display-tc">
-									<h3>Product Name</h3>
-								</div>
-							</div>
-							<div class="one-eight text-center">
-								<div class="display-tc">
-									<span class="price">$68.00</span>
+									<h3><%=cartItem.getProductName() %></h3>
 								</div>
 							</div>
 							<div class="one-eight text-center">
 								<div class="display-tc">
-									<input type="text" id="quantity" name="quantity" class="form-control input-number text-center" value="1" min="1" max="100">
+									<span class="color"><%=cartItem.getColor() %></span>
+								</div>
+							</div>
+							<div class="one-eight text-center">
+								<div class="display-tc">
+									<span class="size"><%=cartItem.getSize() %></span>
+								</div>
+							</div>
+							<div class="one-eight text-center">
+								<div class="display-tc">
+									<span class="price">$<%=cartItem.getPrice() %></span>
+								</div>
+							</div>
+							<div class="one-eight text-center">
+								<div class="display-tc">
+									<span>
+										<button type="button" class="items-count sub" style="cursor:pointer;" data-type="minus" data-field="">
+										<i class="icon-minus2"></i>
+										</button>
+									</span>
+										
+									<!-- <span>
+										<input type="text" id="quantity" name="quantity" size="2" class="form-control input-number text-center" value="1" min="1" max="100">
+									</span> -->
+
+									<span><%=cartItem.getQuantity() %></span>
+									
+									<span>
+										<button type="button" class="items-count add" style="cursor:pointer;" data-type="plus" data-field="">
+										<i class="icon-plus2"></i>
+										</button>
+									</span>
+									
+										
+									
 								</div>
 							</div>
 							<div class="one-eight text-center">
@@ -182,10 +229,14 @@
 									<a href="#" class="closed"></a>
 								</div>
 							</div>
+
+							<% }
+						 } %>
 						</div>
-						<div class="product-cart d-flex">
+
+						<!-- <div class="product-cart d-flex">
 							<div class="one-forth">
-								<div class="product-img" style="background-image: url(images/item-7.jpg);">
+								<div class="product-img" style="background-image: url(${pageContext.request.contextPath}/images/item-7.jpg);">
 								</div>
 								<div class="display-tc">
 									<h3>Product Name</h3>
@@ -216,7 +267,7 @@
 						</div>
 						<div class="product-cart d-flex">
 							<div class="one-forth">
-								<div class="product-img" style="background-image: url(images/item-8.jpg);">
+								<div class="product-img" style="background-image: url(${pageContext.request.contextPath}/images/item-8.jpg);">
 								</div>
 								<div class="display-tc">
 									<h3>Product Name</h3>
@@ -266,7 +317,7 @@
 										<div class="sub">
 											<p><span>Subtotal:</span> <span>$200.00</span></p>
 											<p><span>Delivery:</span> <span>$0.00</span></p>
-											<p><span>Discount:</span> <span>$45.00</span></p>
+											<!-- <p><span>Discount:</span> <span>$45.00</span></p> -->
 										</div>
 										<div class="grand-total">
 											<p><span><strong>Total:</strong></span> <span>$450.00</span></p>
@@ -290,7 +341,7 @@
 					<div class="col-md-3 col-lg-3 mb-4 text-center">
 						<div class="product-entry border">
 							<a href="#" class="prod-img">
-								<img src="images/item-1.jpg" class="img-fluid" alt="Free html5 bootstrap 4 template">
+								<img src="${pageContext.request.contextPath}/images/item-1.jpg" class="img-fluid" alt="Free html5 bootstrap 4 template">
 							</a>
 							<div class="desc">
 								<h2><a href="#">Women's Boots Shoes Maca</a></h2>
@@ -301,7 +352,7 @@
 					<div class="col-md-3 col-lg-3 mb-4 text-center">
 						<div class="product-entry border">
 							<a href="#" class="prod-img">
-								<img src="images/item-2.jpg" class="img-fluid" alt="Free html5 bootstrap 4 template">
+								<img src="${pageContext.request.contextPath}/images/item-2.jpg" class="img-fluid" alt="Free html5 bootstrap 4 template">
 							</a>
 							<div class="desc">
 								<h2><a href="#">Women's Minam Meaghan</a></h2>
@@ -312,7 +363,7 @@
 					<div class="col-md-3 col-lg-3 mb-4 text-center">
 						<div class="product-entry border">
 							<a href="#" class="prod-img">
-								<img src="images/item-3.jpg" class="img-fluid" alt="Free html5 bootstrap 4 template">
+								<img src="${pageContext.request.contextPath}/images/item-3.jpg" class="img-fluid" alt="Free html5 bootstrap 4 template">
 							</a>
 							<div class="desc">
 								<h2><a href="#">Men's Taja Commissioner</a></h2>
@@ -323,7 +374,7 @@
 					<div class="col-md-3 col-lg-3 mb-4 text-center">
 						<div class="product-entry border">
 							<a href="#" class="prod-img">
-								<img src="images/item-4.jpg" class="img-fluid" alt="Free html5 bootstrap 4 template">
+								<img src="${pageContext.request.contextPath}/images/item-4.jpg" class="img-fluid" alt="Free html5 bootstrap 4 template">
 							</a>
 							<div class="desc">
 								<h2><a href="#">Russ Men's Sneakers</a></h2>
@@ -417,28 +468,28 @@ Copyright &copy;<script>document.write(new Date().getFullYear());</script> All r
 	</div>
 	
 	<!-- jQuery -->
-	<script src="js/jquery.min.js"></script>
+	<script src="${pageContext.request.contextPath}/js/jquery.min.js"></script>
    <!-- popper -->
-   <script src="js/popper.min.js"></script>
+   <script src="${pageContext.request.contextPath}/js/popper.min.js"></script>
    <!-- bootstrap 4.1 -->
-   <script src="js/bootstrap.min.js"></script>
+   <script src="${pageContext.request.contextPath}/js/bootstrap.min.js"></script>
    <!-- jQuery easing -->
-   <script src="js/jquery.easing.1.3.js"></script>
+   <script src="${pageContext.request.contextPath}/js/jquery.easing.1.3.js"></script>
 	<!-- Waypoints -->
-	<script src="js/jquery.waypoints.min.js"></script>
+	<script src="${pageContext.request.contextPath}/js/jquery.waypoints.min.js"></script>
 	<!-- Flexslider -->
-	<script src="js/jquery.flexslider-min.js"></script>
+	<script src="${pageContext.request.contextPath}/js/jquery.flexslider-min.js"></script>
 	<!-- Owl carousel -->
-	<script src="js/owl.carousel.min.js"></script>
+	<script src="${pageContext.request.contextPath}/js/owl.carousel.min.js"></script>
 	<!-- Magnific Popup -->
-	<script src="js/jquery.magnific-popup.min.js"></script>
-	<script src="js/magnific-popup-options.js"></script>
+	<script src="${pageContext.request.contextPath}/js/jquery.magnific-popup.min.js"></script>
+	<script src="${pageContext.request.contextPath}/js/magnific-popup-options.js"></script>
 	<!-- Date Picker -->
-	<script src="js/bootstrap-datepicker.js"></script>
+	<script src="${pageContext.request.contextPath}/js/bootstrap-datepicker.js"></script>
 	<!-- Stellar Parallax -->
-	<script src="js/jquery.stellar.min.js"></script>
+	<script src="${pageContext.request.contextPath}/js/jquery.stellar.min.js"></script>
 	<!-- Main -->
-	<script src="js/main.js"></script>
+	<script src="${pageContext.request.contextPath}/js/main.js"></script>
 
 	</body>
 </html>

@@ -31,14 +31,14 @@
         <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.4.1/font/bootstrap-icons.css" rel="stylesheet">
 
         <!-- Libraries Stylesheet -->
-        <link href="../lib/owlcarousel/assets/owl.carousel.min.css" rel="stylesheet">
-        <link href="../lib/tempusdominus/css/tempusdominus-bootstrap-4.min.css" rel="stylesheet" />
+        <link href="${pageContext.request.contextPath}/../lib/owlcarousel/assets/owl.carousel.min.css" rel="stylesheet">
+        <link href="${pageContext.request.contextPath}/../lib/tempusdominus/css/tempusdominus-bootstrap-4.min.css" rel="stylesheet" />
 
         <!-- Customized Bootstrap Stylesheet -->
-        <link href="../css/bootstrap.min.css" rel="stylesheet">
+        <link href="${pageContext.request.contextPath}/../css/bootstrap.min.css" rel="stylesheet">
 
         <!-- Template Stylesheet -->
-        <link href="../css/manager.css" rel="stylesheet">
+        <link href="${pageContext.request.contextPath}/../css/manager.css" rel="stylesheet">
 
         <script>
         function editAccount(accountId, username, email, phoneNumber, address, role) {
