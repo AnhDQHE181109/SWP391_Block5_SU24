@@ -22,6 +22,8 @@ public class MyDAO extends DBConnect {
   public MyDAO() {
      con = conn;
   }
+  
+  
   public void finalize() {
      try {
         if(con != null) con.close();
@@ -30,5 +32,7 @@ public class MyDAO extends DBConnect {
         e.printStackTrace();
      }
   }
+  
+  
 
 }
