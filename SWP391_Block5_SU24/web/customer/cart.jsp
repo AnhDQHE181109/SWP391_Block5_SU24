@@ -147,6 +147,12 @@
 								<span>Product Details</span>
 							</div>
 							<div class="one-eight text-center">
+								<span>Color</span>
+							</div>
+							<div class="one-eight text-center">
+								<span>Size</span>
+							</div>
+							<div class="one-eight text-center">
 								<span>Price</span>
 							</div>
 							<div class="one-eight text-center">
@@ -159,22 +165,58 @@
 								<span>Remove</span>
 							</div>
 						</div>
+
+						<% 
+							List<ShoppingCartItem> cartItems = (List<ShoppingCartItem>) request.getAttribute("cartItems");
+							
+						%>
 						<div class="product-cart d-flex">
+							<% if (cartItems != null) { 
+								for (ShoppingCartItem cartItem : cartItems) { %>
 							<div class="one-forth">
-								<div class="product-img" style="background-image: url(${pageContext.request.contextPath}/images/item-6.jpg);">
+								<div class="product-img" style="background-image: url(${pageContext.request.contextPath}/<%=cartItem.getImageURL() %>);">
 								</div>
 								<div class="display-tc">
-									<h3>Product Name</h3>
-								</div>
-							</div>
-							<div class="one-eight text-center">
-								<div class="display-tc">
-									<span class="price">$68.00</span>
+									<h3><%=cartItem.getProductName() %></h3>
 								</div>
 							</div>
 							<div class="one-eight text-center">
 								<div class="display-tc">
-									<input type="text" id="quantity" name="quantity" class="form-control input-number text-center" value="1" min="1" max="100">
+									<span class="color"><%=cartItem.getColor() %></span>
+								</div>
+							</div>
+							<div class="one-eight text-center">
+								<div class="display-tc">
+									<span class="size"><%=cartItem.getSize() %></span>
+								</div>
+							</div>
+							<div class="one-eight text-center">
+								<div class="display-tc">
+									<span class="price">$<%=cartItem.getPrice() %></span>
+								</div>
+							</div>
+							<div class="one-eight text-center">
+								<div class="display-tc">
+									<span>
+										<button type="button" class="items-count sub" style="cursor:pointer;" data-type="minus" data-field="">
+										<i class="icon-minus2"></i>
+										</button>
+									</span>
+										
+									<!-- <span>
+										<input type="text" id="quantity" name="quantity" size="2" class="form-control input-number text-center" value="1" min="1" max="100">
+									</span> -->
+
+									<span><%=cartItem.getQuantity() %></span>
+									
+									<span>
+										<button type="button" class="items-count add" style="cursor:pointer;" data-type="plus" data-field="">
+										<i class="icon-plus2"></i>
+										</button>
+									</span>
+									
+										
+									
 								</div>
 							</div>
 							<div class="one-eight text-center">
@@ -187,8 +229,12 @@
 									<a href="#" class="closed"></a>
 								</div>
 							</div>
+
+							<% }
+						 } %>
 						</div>
-						<div class="product-cart d-flex">
+
+						<!-- <div class="product-cart d-flex">
 							<div class="one-forth">
 								<div class="product-img" style="background-image: url(${pageContext.request.contextPath}/images/item-7.jpg);">
 								</div>
