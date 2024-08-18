@@ -20,17 +20,17 @@
     <link href="https://fonts.googleapis.com/css?family=Rokkitt:100,300,400,700" rel="stylesheet">
     
     <!-- Include your existing CSS files -->
-    <link rel="stylesheet" href="../css/animate.css">
-    <link rel="stylesheet" href="../css/icomoon.css">
-    <link rel="stylesheet" href="../css/ionicons.min.css">
-    <link rel="stylesheet" href="../css/bootstrap.min.css">
-    <link rel="stylesheet" href="../css/magnific-popup.css">
-    <link rel="stylesheet" href="../css/flexslider.css">
-    <link rel="stylesheet" href="../css/owl.carousel.min.css">
-    <link rel="stylesheet" href="../css/owl.theme.default.min.css">
-    <link rel="stylesheet" href="../css/bootstrap-datepicker.css">
-    <link rel="stylesheet" href="../fonts/flaticon/font/flaticon.css">
-    <link rel="stylesheet" href="../css/style.css">
+    <link rel="stylesheet" href="${pageContext.request.contextPath}/css/animate.css">
+    <link rel="stylesheet" href="${pageContext.request.contextPath}/css/icomoon.css">
+    <link rel="stylesheet" href="${pageContext.request.contextPath}/css/ionicons.min.css">
+    <link rel="stylesheet" href="${pageContext.request.contextPath}/css/bootstrap.min.css">
+    <link rel="stylesheet" href="${pageContext.request.contextPath}/css/magnific-popup.css">
+    <link rel="stylesheet" href="${pageContext.request.contextPath}/css/flexslider.css">
+    <link rel="stylesheet" href="${pageContext.request.contextPath}/css/owl.carousel.min.css">
+    <link rel="stylesheet" href="${pageContext.request.contextPath}/css/owl.theme.default.min.css">
+    <link rel="stylesheet" href="${pageContext.request.contextPath}/css/bootstrap-datepicker.css">
+    <link rel="stylesheet" href="${pageContext.request.contextPath}/fonts/flaticon/font/flaticon.css">
+    <link rel="stylesheet" href="${pageContext.request.contextPath}/css/style.css">
 
     
     <script>
@@ -59,7 +59,7 @@
         <div class="container">
             <div class="row">
                 <div class="col">
-                    <p class="bread"><span><a href="../index.jsp">Home</a></span> / <span>Wishlist</span></p>
+                    <p class="bread"><span><a href="${pageContext.request.contextPath}/index.jsp">Home</a></span> / <span>Wishlist</span></p>
                 </div>
             </div>
         </div>
