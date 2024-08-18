@@ -13,7 +13,6 @@ import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -42,35 +41,32 @@ protected void doGet(HttpServletRequest request, HttpServletResponse response)
         response.sendError(HttpServletResponse.SC_FORBIDDEN, "You do not have permission to access this page.");
         return;
     }
+//    }if(account.getRole() == 3){
+//        response.sendError(HttpServletResponse.SC_FORBIDDEN, "You do not have permission to access this page.");
+//    }
 
-    String orderIdParam = request.getParameter("orderid");
-    List<Order> orderList = new ArrayList<>();
+    String usernameSearch = request.getParameter("username");
+    String orderDateSearch = request.getParameter("orderDate");
+    String statusSearch = request.getParameter("status");
+    String startDate = request.getParameter("startDate");
+    String endDate = request.getParameter("endDate");
 
-    if (orderIdParam != null && !orderIdParam.trim().isEmpty()) {
-        int orderId = Integer.parseInt(orderIdParam);
-        Order order = daoOrder.getOrderById(orderId, null);
-        if (order != null) {
-            orderList.add(order);
-        }
+    List<Order> orderList = null;
+
+    if (usernameSearch != null && !usernameSearch.trim().isEmpty()) {
+        orderList = daoOrder.getOrdersByUsername(usernameSearch);
+        
+    } else if (orderDateSearch != null && !orderDateSearch.trim().isEmpty()) {
+        orderList = daoOrder.getOrdersByDate(orderDateSearch);
+        
+    } else if (statusSearch != null && !statusSearch.trim().isEmpty()) {
+        orderList = daoOrder.getOrdersByStatus(statusSearch);
+        
+    } else if (startDate != null && !startDate.trim().isEmpty() && endDate != null && !endDate.trim().isEmpty()) {
+        orderList = daoOrder.getOrdersByDateRange(startDate, endDate);
+        
     } else {
-        String usernameSearch = request.getParameter("username");
-        String orderDateSearch = request.getParameter("orderDate");
-        String statusSearch = request.getParameter("status");
-        String startDate = request.getParameter("startDate");
-        String endDate = request.getParameter("endDate");
-        String sortOrder = request.getParameter("sortOrder");
-
-        if (usernameSearch != null && !usernameSearch.trim().isEmpty()) {
-            orderList = daoOrder.getOrdersByUsername(usernameSearch, sortOrder);
-        } else if (orderDateSearch != null && !orderDateSearch.trim().isEmpty()) {
-            orderList = daoOrder.getOrdersByDate(orderDateSearch, sortOrder);
-        } else if (statusSearch != null && !statusSearch.trim().isEmpty()) {
-            orderList = daoOrder.getOrdersByStatus(statusSearch, sortOrder);
-        } else if (startDate != null && !startDate.trim().isEmpty() && endDate != null && !endDate.trim().isEmpty()) {
-            orderList = daoOrder.getOrdersByDateRange(startDate, endDate, sortOrder);
-        } else {
-            orderList = daoOrder.getAllOrders(sortOrder);
-        }
+        orderList = daoOrder.getAllOrders();
     }
 
     // Phân trang
@@ -92,7 +88,7 @@ protected void doGet(HttpServletRequest request, HttpServletResponse response)
     // Populate username and address map for display
     Map<Integer, String> usernameMap = new HashMap<>();
     Map<Integer, String> addressMap = new HashMap<>();
-    Map<Integer, String> phoneMap = new HashMap<>();
+     Map<Integer, String> phoneMap = new HashMap<>();
     for (Order order : paginatedOrderList) {
         int accountID = order.getAccountID();
         String username = accountDAO.getUsernameByAccountID(accountID);
@@ -100,7 +96,7 @@ protected void doGet(HttpServletRequest request, HttpServletResponse response)
         String phone = accountDAO.getPhoneByAccountID(accountID); 
         usernameMap.put(accountID, username);
         addressMap.put(accountID, address);
-        phoneMap.put(accountID, phone);
+        phoneMap.put(accountID, phone) ; 
     }
 
     // Set attributes for the JSP
@@ -109,43 +105,19 @@ protected void doGet(HttpServletRequest request, HttpServletResponse response)
     request.setAttribute("addressMap", addressMap);
     request.setAttribute("currentPage", page);
     request.setAttribute("totalPages", totalPages);
-    request.setAttribute("phoneMap", phoneMap);
+     request.setAttribute("phoneMap", phoneMap);
+     
+     System.out.println("phoneMap"+phoneMap);
+
 
     // Forward request and response to the JSP page
     request.getRequestDispatcher("staff/order_manage.jsp").forward(request, response);
 }
 
 
-
     @Override
-protected void doPost(HttpServletRequest request, HttpServletResponse response)
-        throws ServletException, IOException {
-    String action = request.getParameter("action");
-    
-    if ("updateStatus".equals(action)) {
-        updateOrderStatus(request, response);
-    } else {
-        // Xử lý các hành động POST khác nếu cần
+    protected void doPost(HttpServletRequest request, HttpServletResponse response)
+            throws ServletException, IOException {
         doGet(request, response);
     }
-}
-
-private void updateOrderStatus(HttpServletRequest request, HttpServletResponse response)
-        throws ServletException, IOException {
-    int orderId = Integer.parseInt(request.getParameter("orderId"));
-    String newStatus = request.getParameter("newStatus");
-    
-    DAOOrder daoOrder = new DAOOrder();
-    int result = daoOrder.updateOrderStatus(orderId, newStatus);
-    
-    if (result > 0) {
-        // Cập nhật thành công
-            request.getRequestDispatcher("staff/order_manage.jsp").forward(request, response);
-    } else {
-        // Cập nhật thất bại
-        response.setContentType("application/json");
-        response.setCharacterEncoding("UTF-8");
-        response.getWriter().write("{\"success\": false, \"message\": \"Cập nhật trạng thái thất bại\"}");
-    }
-}
 }

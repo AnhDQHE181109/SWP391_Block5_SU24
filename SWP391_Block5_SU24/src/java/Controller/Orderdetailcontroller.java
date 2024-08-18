@@ -49,7 +49,7 @@ public class Orderdetailcontroller extends HttpServlet {
                 
                 // Get productID from stock and retrieve productName
                 int productId = stock.getProductID();
-                String productName = daoProduct.getProductNameById(productId);
+                String productName = daoProduct.getProductNameByID(productId);
                 productNameMap.put(productId, productName);
             }
             
@@ -72,7 +72,7 @@ public class Orderdetailcontroller extends HttpServlet {
             request.getRequestDispatcher("staff/orderdetail.jsp").forward(request, response);
  
         } else {
-            response.sendRedirect("staff/erro.jsp");
+            response.sendRedirect("staff/orderlist.jsp");
         }
     }
     

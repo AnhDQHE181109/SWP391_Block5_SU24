@@ -67,8 +67,8 @@ public class CategoryController extends HttpServlet {
             case "edit":
                 showEditForm(request, response);
                 break;
-            case "change":
-                changeCategoryStatus(request, response);
+            case "delete":
+                deleteCategory(request, response);
                 break;
             case "search":
                 searchCategory(request, response);
@@ -139,8 +139,7 @@ private void updateCategory(HttpServletRequest request, HttpServletResponse resp
         throws ServletException, IOException {
     int categoryId = Integer.parseInt(request.getParameter("categoryId"));
     String categoryName = request.getParameter("categoryName");
-    int categorystatus = Integer.parseInt(request.getParameter("categorystatus")) ; 
-    Category category = new Category(categoryId, categoryName,categorystatus);
+    Category category = new Category(categoryId, categoryName);
     
     if (categoryDAO.isCategoryNameExists(categoryName, categoryId)) {
         request.setAttribute("error", "Category name already exists");
@@ -155,19 +154,17 @@ private void updateCategory(HttpServletRequest request, HttpServletResponse resp
     }
 }
 
-private void changeCategoryStatus(HttpServletRequest request, HttpServletResponse response)
-        throws ServletException, IOException {
-    int categoryId = Integer.parseInt(request.getParameter("id"));
-    int newStatus = Integer.parseInt(request.getParameter("newStatus")); // Lấy trạng thái mới từ request
-    
-    if (categoryDAO.updateCategoryStatus(categoryId, newStatus)) {
-        response.sendRedirect(request.getContextPath() + "/CategoryController?action=list");
-    } else {
-        request.setAttribute("error", "Failed to change category status");
-        listCategories(request, response);
+    private void deleteCategory(HttpServletRequest request, HttpServletResponse response)
+            throws ServletException, IOException {
+        int categoryId = Integer.parseInt(request.getParameter("id"));
+        
+        if (categoryDAO.delete(categoryId)) {
+            response.sendRedirect(request.getContextPath() + "/CategoryController?action=list");
+        } else {
+            request.setAttribute("error", "Failed to delete category");
+            listCategories(request, response);
+        }
     }
-}
-
 
 private void searchCategory(HttpServletRequest request, HttpServletResponse response)
         throws ServletException, IOException {
