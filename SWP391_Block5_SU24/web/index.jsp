@@ -3,9 +3,16 @@
     Created on : Aug 11, 2024, 7:23:09 PM
     Author     : Long
 --%>
+<%@ page import="java.util.List" %>
+<%@ page import="model.ProductDetailsDAO" %>
+<%@ page import="entity.Product" %>
 <%@ page import="entity.Account" %>
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <!DOCTYPE html>
+<%
+    ProductDetailsDAO pDAO = new ProductDetailsDAO();
+    List<Product> bestSellers = pDAO.getBestSellers();
+%>
 <html>
     <head>
         <title>Footwear - Free Bootstrap 4 Template by Colorlib</title>
@@ -58,10 +65,11 @@
                                 <div id="colorlib-logo"><a href="index.jsp">Footwear</a></div>
                             </div>
                             <div class="col-sm-5 col-md-3">
-                                <form action="#" class="search-wrap">
-                                    <div class="form-group">
-                                        <input type="search" class="form-control search" placeholder="Search">
+                                <form action="products.jsp" method="get" class="search-wrap">
+                                    <div class="form-group position-relative">
+                                        <input type="search" name="query" id="search-bar" class="form-control search" placeholder="Search for products...">
                                         <button class="btn btn-primary submit-search text-center" type="submit"><i class="icon-search"></i></button>
+                                        <div id="suggestions" class="dropdown-menu" style="display: none; position: absolute; width: 100%;"></div>
                                     </div>
                                 </form>
                             </div>
@@ -73,16 +81,16 @@
                                     <li><a href="products.jsp">Products</a></li>
                                     <li><a href="about.html">About</a></li>
                                     <li><a href="contact.html">Contact</a></li>
-                                    <% if (session.getAttribute("account") != null) { %>
-                                        <li class="cart"><a href="WishlistController"><i class="fa fa-heart"></i> Wishlist</a></li>
-                                        <li class="cart"><a href="customer/cart.jsp"><i class="icon-shopping-cart"></i> Cart [0]</a></li>
-                                        <li class="cart"><a href="LogoutController">Logout</a></li>
-                                        <li class="cart"><i class="fa-regular fa-user"></i> <%= ((Account) session.getAttribute("account")).getUsername() %></li>
-                                    <% } else { %>
-                                        <li class="cart"><a href="signup.jsp">Sign Up</a></li>
-                                        <li class="cart"><a href="login.jsp">Login</a></li>
-                                        <li class="cart"><a href="customer/cart.jsp"><i class="icon-shopping-cart"></i> Cart [0]</a></li>
-                                    <% } %>
+                                        <% if (session.getAttribute("account") != null) { %>
+                                    <li class="cart"><a href="WishlistController"><i class="fa fa-heart"></i> Wishlist</a></li>
+                                    <li class="cart"><a href="customer/cart.jsp"><i class="icon-shopping-cart"></i> Cart [0]</a></li>
+                                    <li class="cart"><a href="LogoutController">Logout</a></li>
+                                    <li class="cart"><i class="fa-regular fa-user"></i> <%= ((Account) session.getAttribute("account")).getUsername() %></li>
+                                        <% } else { %>
+                                    <li class="cart"><a href="signup.jsp">Sign Up</a></li>
+                                    <li class="cart"><a href="login.jsp">Login</a></li>
+                                    <li class="cart"><a href="customer/cart.jsp"><i class="icon-shopping-cart"></i> Cart [0]</a></li>
+                                        <% } %>
                                 </ul>
                             </div>
                         </div>
@@ -211,190 +219,19 @@
                         </div>
                     </div>
                     <div class="row row-pb-md">
+                        <% for (Product product : bestSellers) { %>
                         <div class="col-lg-3 mb-4 text-center">
                             <div class="product-entry border">
                                 <a href="#" class="prod-img">
-                                    <img src="images/item-1.jpg" class="img-fluid" alt="Free html5 bootstrap 4 template">
+                                    <img src="<%= product.getImageURL() %>" class="img-fluid" alt="Product Image">
                                 </a>
                                 <div class="desc">
-                                    <h2><a href="#">Women's Boots Shoes Maca</a></h2>
-                                    <span class="price">$139.00</span>
+                                    <h2><a href="#"><%= product.getProductName() %></a></h2>
+                                    <span class="price"><%= product.getPrice() %></span>
                                 </div>
                             </div>
                         </div>
-                        <div class="col-lg-3 mb-4 text-center">
-                            <div class="product-entry border">
-                                <a href="#" class="prod-img">
-                                    <img src="images/item-2.jpg" class="img-fluid" alt="Free html5 bootstrap 4 template">
-                                </a>
-                                <div class="desc">
-                                    <h2><a href="#">Women's Minam Meaghan</a></h2>
-                                    <span class="price">$139.00</span>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="col-lg-3 mb-4 text-center">
-                            <div class="product-entry border">
-                                <a href="#" class="prod-img">
-                                    <img src="images/item-3.jpg" class="img-fluid" alt="Free html5 bootstrap 4 template">
-                                </a>
-                                <div class="desc">
-                                    <h2><a href="#">Men's Taja Commissioner</a></h2>
-                                    <span class="price">$139.00</span>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="col-lg-3 mb-4 text-center">
-                            <div class="product-entry border">
-                                <a href="#" class="prod-img">
-                                    <img src="images/item-4.jpg" class="img-fluid" alt="Free html5 bootstrap 4 template">
-                                </a>
-                                <div class="desc">
-                                    <h2><a href="#">Russ Men's Sneakers</a></h2>
-                                    <span class="price">$139.00</span>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="w-100"></div>
-                        <div class="col-lg-3 mb-4 text-center">
-                            <div class="product-entry border">
-                                <a href="#" class="prod-img">
-                                    <img src="images/item-5.jpg" class="img-fluid" alt="Free html5 bootstrap 4 template">
-                                </a>
-                                <div class="desc">
-                                    <h2><a href="#">Women's Boots Shoes Maca</a></h2>
-                                    <span class="price">$139.00</span>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="col-lg-3 mb-4 text-center">
-                            <div class="product-entry border">
-                                <a href="#" class="prod-img">
-                                    <img src="images/item-6.jpg" class="img-fluid" alt="Free html5 bootstrap 4 template">
-                                </a>
-                                <div class="desc">
-                                    <h2><a href="#">Women's Boots Shoes Maca</a></h2>
-                                    <span class="price">$139.00</span>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="col-lg-3 mb-4 text-center">
-                            <div class="product-entry border">
-                                <a href="#" class="prod-img">
-                                    <img src="images/item-7.jpg" class="img-fluid" alt="Free html5 bootstrap 4 template">
-                                </a>
-                                <div class="desc">
-                                    <h2><a href="#">Women's Boots Shoes Maca</a></h2>
-                                    <span class="price">$139.00</span>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="col-lg-3 mb-4 text-center">
-                            <div class="product-entry border">
-                                <a href="#" class="prod-img">
-                                    <img src="images/item-8.jpg" class="img-fluid" alt="Free html5 bootstrap 4 template">
-                                </a>
-                                <div class="desc">
-                                    <h2><a href="#">Women's Boots Shoes Maca</a></h2>
-                                    <span class="price">$139.00</span>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="w-100"></div>
-                        <div class="col-lg-3 mb-4 text-center">
-                            <div class="product-entry border">
-                                <a href="#" class="prod-img">
-                                    <img src="images/item-9.jpg" class="img-fluid" alt="Free html5 bootstrap 4 template">
-                                </a>
-                                <div class="desc">
-                                    <h2><a href="#">Women's Boots Shoes Maca</a></h2>
-                                    <span class="price">$139.00</span>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="col-lg-3 mb-4 text-center">
-                            <div class="product-entry border">
-                                <a href="#" class="prod-img">
-                                    <img src="images/item-10.jpg" class="img-fluid" alt="Free html5 bootstrap 4 template">
-                                </a>
-                                <div class="desc">
-                                    <h2><a href="#">Women's Boots Shoes Maca</a></h2>
-                                    <span class="price">$139.00</span>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="col-lg-3 mb-4 text-center">
-                            <div class="product-entry border">
-                                <a href="#" class="prod-img">
-                                    <img src="images/item-11.jpg" class="img-fluid" alt="Free html5 bootstrap 4 template">
-                                </a>
-                                <div class="desc">
-                                    <h2><a href="#">Women's Boots Shoes Maca</a></h2>
-                                    <span class="price">$139.00</span>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="col-lg-3 mb-4 text-center">
-                            <div class="product-entry border">
-                                <a href="#" class="prod-img">
-                                    <img src="images/item-12.jpg" class="img-fluid" alt="Free html5 bootstrap 4 template">
-                                </a>
-                                <div class="desc">
-                                    <h2><a href="#">Women's Boots Shoes Maca</a></h2>
-                                    <span class="price">$139.00</span>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="w-100"></div>
-                        <div class="col-lg-3 mb-4 text-center">
-                            <div class="product-entry border">
-                                <a href="#" class="prod-img">
-                                    <img src="images/item-13.jpg" class="img-fluid" alt="Free html5 bootstrap 4 template">
-                                </a>
-                                <div class="desc">
-                                    <h2><a href="#">Women's Boots Shoes Maca</a></h2>
-                                    <span class="price">$139.00</span>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="col-lg-3 mb-4 text-center">
-                            <div class="product-entry border">
-                                <a href="#" class="prod-img">
-                                    <img src="images/item-14.jpg" class="img-fluid" alt="Free html5 bootstrap 4 template">
-                                </a>
-                                <div class="desc">
-                                    <h2><a href="#">Women's Boots Shoes Maca</a></h2>
-                                    <span class="price">$139.00</span>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="col-lg-3 mb-4 text-center">
-                            <div class="product-entry border">
-                                <a href="#" class="prod-img">
-                                    <img src="images/item-15.jpg" class="img-fluid" alt="Free html5 bootstrap 4 template">
-                                </a>
-                                <div class="desc">
-                                    <h2><a href="#">Women's Boots Shoes Maca</a></h2>
-                                    <span class="price">$139.00</span>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="col-lg-3 mb-4 text-center">
-                            <div class="product-entry border">
-                                <a href="#" class="prod-img">
-                                    <img src="images/item-16.jpg" class="img-fluid" alt="Free html5 bootstrap 4 template">
-                                </a>
-                                <div class="desc">
-                                    <h2><a href="#">Women's Boots Shoes Maca</a></h2>
-                                    <span class="price">$139.00</span>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="row">
-                        <div class="col-md-12 text-center">
-                            <p><a href="products.jsp" class="btn btn-primary btn-lg">Shop All Products</a></p>
-                        </div>
+                        <% } %>
                     </div>
                 </div>
             </div>
@@ -494,7 +331,7 @@
                             <p>
                                 <span>
                                     Copyright &copy;<script>document.write(new Date().getFullYear());</script> All rights reserved | This template is made with <i class="icon-heart" aria-hidden="true"></i> by <a href="https://colorlib.com" target="_blank">Colorlib</a>
-                                    </span> 
+                                </span> 
                                 <span class="block">Demo Images: <a href="http://unsplash.co/" target="_blank">Unsplash</a> , <a href="http://pexels.com/" target="_blank">Pexels.com</a></span>
                             </p>
                         </div>
@@ -530,6 +367,39 @@
         <script src="js/jquery.stellar.min.js"></script>
         <!-- Main -->
         <script src="js/main.js"></script>
+        <script>
+                                        document.getElementById('search-bar').addEventListener('input', function () {
+                                            let query = this.value;
+                                            if (query.length > 0) {
+                                                fetchSuggestions(query);
+                                            } else {
+                                                document.getElementById('suggestions').style.display = 'none';
+                                            }
+                                        });
 
+                                        function fetchSuggestions(query) {
+                                            fetch('searchSuggestions?query=' + encodeURIComponent(query))
+                                                    .then(response => response.text())
+                                                    .then(data => {
+                                                        let suggestionsBox = document.getElementById('suggestions');
+                                                        suggestionsBox.innerHTML = data;
+                                                        if (data.trim().length > 0) {
+                                                            suggestionsBox.style.display = 'block';
+                                                            // Add click event to each suggestion
+                                                            suggestionsBox.querySelectorAll('.dropdown-item').forEach(item => {
+                                                                item.addEventListener('click', function () {
+                                                                    document.getElementById('search-bar').value = this.innerText.trim();
+                                                                    suggestionsBox.style.display = 'none';
+                                                                });
+                                                            });
+                                                        } else {
+                                                            suggestionsBox.style.display = 'none';
+                                                        }
+                                                    })
+                                                    .catch(error => {
+                                                        console.error('Error fetching suggestions:', error);
+                                                    });
+                                        }
+        </script>
     </body>
 </html>
