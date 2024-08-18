@@ -90,7 +90,9 @@ GO
 CREATE TABLE ProductStockImport (
     ImportID INT IDENTITY(1,1) PRIMARY KEY,
     AccountID INT NOT NULL,
-    ImportDate DATETIME NOT NULL
+    ImportDate DATETIME NOT NULL,
+	ImportAction  int  NOT NULL,
+	Actorname  NVARCHAR(50) NOT NULL
 );
 GO
 
@@ -99,7 +101,7 @@ CREATE TABLE Orders (
     OrderID INT IDENTITY(1,1) PRIMARY KEY,
     AccountID INT NULL,
     OrderDate DATETIME NULL,
-    Status NVARCHAR(50) NULL,
+    Status int NULL,
     CONSTRAINT FK_Orders_Accounts FOREIGN KEY (AccountID) REFERENCES Accounts(AccountID)
 );
 GO
@@ -133,7 +135,7 @@ CREATE TABLE Cart (
     AccountID INT NOT NULL,
     StockID INT NOT NULL,
     quantity INT NOT NULL,
-    discount DECIMAL(5,2) DEFAULT 0.00 NOT NULL,
+    DiscountID INT NOT NULL,
     date_added DATETIME DEFAULT GETDATE() NOT NULL,
     CONSTRAINT FK_Cart_Accounts FOREIGN KEY (AccountID) REFERENCES Accounts(AccountID),
     CONSTRAINT FK_Cart_Stock FOREIGN KEY (StockID) REFERENCES Stock(StockID)
@@ -208,10 +210,10 @@ GO
 -- Insert data into Accounts
 INSERT INTO Accounts (Username, Hash, PhoneNumber, Email, Address, Role, Salt, Status)
 VALUES 
-('johndoe', 'NqmCu0KLyfdegTojOpWmaAC8gODT1EfFxKtyJ9tfwUDneUmaWlo7TiaWJYzGnaWaYcWsUtytBL/iqltP+MLvVA==', '123-456-7890', 'johndoe@example.com', '123 Main St, Anytown, USA', 1, 'jMxFrhzK+pkZRnCz7jEkew==', 0),
-('janedoe', 'NqmCu0KLyfdegTojOpWmaAC8gODT1EfFxKtyJ9tfwUDneUmaWlo7TiaWJYzGnaWaYcWsUtytBL/iqltP+MLvVA==', '987-654-3210', 'janedoe@example.com', '456 Elm St, Othertown, USA', 2, 'jMxFrhzK+pkZRnCz7jEkew==', 0),
-('alice', 'NqmCu0KLyfdegTojOpWmaAC8gODT1EfFxKtyJ9tfwUDneUmaWlo7TiaWJYzGnaWaYcWsUtytBL/iqltP+MLvVA==', '555-123-4567', 'alice@example.com', '789 Maple St, Sometown, USA', 3, 'jMxFrhzK+pkZRnCz7jEkew==', 0),
-('long', 'NqmCu0KLyfdegTojOpWmaAC8gODT1EfFxKtyJ9tfwUDneUmaWlo7TiaWJYzGnaWaYcWsUtytBL/iqltP+MLvVA==', '555-123-4567', 'alica@example.com', '789 Maple St, Sometown, USA', 2, 'jMxFrhzK+pkZRnCz7jEkew==', 0);
+('johndoe', 'NqmCu0KLyfdegTojOpWmaAC8gODT1EfFxKtyJ9tfwUDneUmaWlo7TiaWJYzGnaWaYcWsUtytBL/iqltP+MLvVA==', '123-456-7890', 'johndoe@example.com', '123 Main St, Anytown, USA', 1, 'jMxFrhzK+pkZRnCz7jEkew==',1),
+('janedoe', 'NqmCu0KLyfdegTojOpWmaAC8gODT1EfFxKtyJ9tfwUDneUmaWlo7TiaWJYzGnaWaYcWsUtytBL/iqltP+MLvVA==', '987-654-3210', 'janedoe@example.com', '456 Elm St, Othertown, USA', 2, 'jMxFrhzK+pkZRnCz7jEkew==',0),
+('alice', 'NqmCu0KLyfdegTojOpWmaAC8gODT1EfFxKtyJ9tfwUDneUmaWlo7TiaWJYzGnaWaYcWsUtytBL/iqltP+MLvVA==', '555-123-4567', 'alice@example.com', '789 Maple St, Sometown, USA', 3, 'jMxFrhzK+pkZRnCz7jEkew==',0),
+('long', 'NqmCu0KLyfdegTojOpWmaAC8gODT1EfFxKtyJ9tfwUDneUmaWlo7TiaWJYzGnaWaYcWsUtytBL/iqltP+MLvVA==', '555-123-4567', 'long@example.com', '789 Maple St, Sometown, USA', 2, 'jMxFrhzK+pkZRnCz7jEkew==',0);
 
 
 
@@ -237,10 +239,11 @@ VALUES
 ('Suede Classic', 'Vietnam', 'Suede', 120.00, 150, 1, 3, 4, 0);
 
 -- Insert data into ProductStockImport
-INSERT INTO ProductStockImport (AccountID, ImportDate)
+INSERT INTO ProductStockImport (AccountID, ImportDate,ImportAction,Actorname)
 VALUES 
-(1, 12/3/2024),
-(2, 12/32/2024);
+(1, 12/3/2024,1,'johndoe' ),
+(2, 12/32/2024,0,'janedoe'),
+(3, 5/5/2024,2,'alice');
 
 -- Insert data into Stock
 INSERT INTO Stock (ProductID, Size, Color, StockQuantity, ImportID)
@@ -261,14 +264,14 @@ VALUES
 -- Insert data into Orders
 INSERT INTO Orders (AccountID, OrderDate, Status)
 VALUES 
-(1, GETDATE(), 'Pending'),
-(2, GETDATE(), 'Shipped');
+(1, GETDATE(), 0),
+(2, GETDATE(), 0);
 
 -- Insert data into Cart
-INSERT INTO Cart (AccountID, StockID, quantity, discount, date_added)
+INSERT INTO Cart (AccountID, StockID, quantity, DiscountID, date_added)
 VALUES 
-(1, 1, 2, 10.00, GETDATE()),
-(2, 3, 1, 5.00, GETDATE());
+(1, 1, 2, 1, GETDATE()),
+(2, 3, 1, 2, GETDATE());
 
 -- Insert data into Discounts
 INSERT INTO Discounts (product_id, discount_amount)
