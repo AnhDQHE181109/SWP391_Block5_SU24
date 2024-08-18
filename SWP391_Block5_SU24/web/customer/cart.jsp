@@ -1,3 +1,8 @@
+<%@page contentType="text/html" pageEncoding="UTF-8"%>
+<%@taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
+<%@page import = "entity.*" %>
+<%@page import = "java.util.*" %>
+
 <!DOCTYPE HTML>
 <html>
 	<head>
@@ -266,7 +271,7 @@
 										<div class="sub">
 											<p><span>Subtotal:</span> <span>$200.00</span></p>
 											<p><span>Delivery:</span> <span>$0.00</span></p>
-											<p><span>Discount:</span> <span>$45.00</span></p>
+											<!-- <p><span>Discount:</span> <span>$45.00</span></p> -->
 										</div>
 										<div class="grand-total">
 											<p><span><strong>Total:</strong></span> <span>$450.00</span></p>
