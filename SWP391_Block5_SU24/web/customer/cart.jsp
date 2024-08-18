@@ -265,6 +265,7 @@
 								</div>
 							</div>
 						</div>
+
 						<div class="product-cart d-flex">
 							<div class="one-forth">
 								<div class="product-img" style="background-image: url(${pageContext.request.contextPath}/images/item-8.jpg);">
@@ -293,15 +294,17 @@
 									<a href="#" class="closed"></a>
 								</div>
 							</div>
-						</div>
+						</div> -->
+
 					</div>
 				</div>
+
 				<div class="row row-pb-lg">
 					<div class="col-md-12">
 						<div class="total-wrap">
 							<div class="row">
 								<div class="col-sm-8">
-									<form action="#">
+									<!-- <form action="#">
 										<div class="row form-group">
 											<div class="col-sm-9">
 												<input type="text" name="quantity" class="form-control input-number" placeholder="Your Coupon Number...">
@@ -310,14 +313,14 @@
 												<input type="submit" value="Apply Coupon" class="btn btn-primary">
 											</div>
 										</div>
-									</form>
+									</form> -->
 								</div>
 								<div class="col-sm-4 text-center">
 									<div class="total">
 										<div class="sub">
 											<p><span>Subtotal:</span> <span>$200.00</span></p>
 											<p><span>Delivery:</span> <span>$0.00</span></p>
-											<!-- <p><span>Discount:</span> <span>$45.00</span></p> -->
+											<p><span>Discount:</span> <span>$45.00</span></p>
 										</div>
 										<div class="grand-total">
 											<p><span><strong>Total:</strong></span> <span>$450.00</span></p>
