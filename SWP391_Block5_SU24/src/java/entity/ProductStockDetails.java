@@ -23,6 +23,17 @@ public class ProductStockDetails {
         this.imageURL = imageURL;
     }
 
+    public ProductStockDetails(int productID, String color, String imageURL) {
+        this.productID = productID;
+        this.color = color;
+        this.imageURL = imageURL;
+    }
+
+    public ProductStockDetails(int size, int stockQuantity) {
+        this.size = size;
+        this.stockQuantity = stockQuantity;
+    }
+
     public int getProductID() {
         return productID;
     }

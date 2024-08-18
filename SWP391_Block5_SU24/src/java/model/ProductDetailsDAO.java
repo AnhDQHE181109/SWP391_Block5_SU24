@@ -335,6 +335,77 @@ public class ProductDetailsDAO extends DBConnect {
         return productsStocksList;
     }
 
+    public List<ProductStockDetails> getProductColors(int productID) {
+
+        String sql = "select distinct Color, s.ProductID, ImageURL\n"
+                + "from Stock s, ProductImages pi\n"
+                + "where s.StockID = pi.StockID and s.ProductID = ?";
+
+        ProductStockDetails productColor = null;
+        List<ProductStockDetails> productColors = new ArrayList<>();
+
+        try {
+            PreparedStatement ps = conn.prepareStatement(sql);
+            ps.setInt(1, productID);
+
+            ResultSet rs = ps.executeQuery();
+            while (rs.next()) {
+                String color = rs.getString("Color");
+                String imageURL = rs.getString("ImageURL");
+
+                productColor = new ProductStockDetails(productID, color, imageURL);
+                productColors.add(productColor);
+            }
+
+            if (rs != null) {
+                rs.close();
+            }
+            if (ps != null) {
+                ps.close();
+            }
+        } catch (SQLException e) {
+            System.out.println("getProductColors(): " + e);
+        }
+
+        return productColors;
+    }
+
+    public List<ProductStockDetails> getSizesByColorAndProductID(int productID, String color) {
+
+        String sql = "select Size, StockQuantity\n"
+                + "from Stock s\n"
+                + "where Color = ? and s.ProductID = ?";
+
+        ProductStockDetails productSize = null;
+        List<ProductStockDetails> productSizes = new ArrayList<>();
+
+        try {
+            PreparedStatement ps = conn.prepareStatement(sql);
+            ps.setString(1, color);
+            ps.setInt(2, productID);
+
+            ResultSet rs = ps.executeQuery();
+            while (rs.next()) {
+                int size = rs.getInt("Size");
+                int stockQuantity = rs.getInt("StockQuantity");
+
+                productSize = new ProductStockDetails(size, stockQuantity);
+                productSizes.add(productSize);
+            }
+
+            if (rs != null) {
+                rs.close();
+            }
+            if (ps != null) {
+                ps.close();
+            }
+        } catch (SQLException e) {
+            System.out.println("getSizesByColorAndProductID(): " + e);
+        }
+
+        return productSizes;
+    }
+
     public List<String> getAllColors() {
         List<String> colors = new ArrayList<>();
         String sql = "SELECT DISTINCT Color FROM Stock";

@@ -56,6 +56,10 @@
         <servlet-name>CategoryController</servlet-name>
         <servlet-class>Controller.CategoryController</servlet-class>
     </servlet>
+    <servlet>
+        <servlet-name>ShoppingCartController</servlet-name>
+        <servlet-class>Controller.ShoppingCartController</servlet-class>
+    </servlet>
     <servlet-mapping>
         <servlet-name>ProductsController</servlet-name>
         <url-pattern>/ProductsController</url-pattern>
@@ -147,5 +151,9 @@
     <servlet-mapping>
         <servlet-name>CategoryController</servlet-name>
         <url-pattern>/CategoryController</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>ShoppingCartController</servlet-name>
+        <url-pattern>/shoppingCart</url-pattern>
     </servlet-mapping>
 </web-app>
