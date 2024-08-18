@@ -577,4 +577,31 @@ public class ProductDetailsDAO extends DBConnect {
         return products;
     }
 
+    public List<Product> getBestSellers() {
+        List<Product> bestSellers = new ArrayList<>();
+        String sql = "SELECT p.ProductID, p.ProductName, p.Price, pi.ImageURL, SUM(od.Quantity) AS TotalQuantity "
+                + "FROM OrderDetails od "
+                + "JOIN Stock s ON od.StockID = s.StockID "
+                + "JOIN Products p ON s.ProductID = p.ProductID "
+                + "LEFT JOIN ProductImages pi ON s.StockID = pi.StockID "
+                + "WHERE od.OrderID IN (SELECT OrderID FROM Orders WHERE Status = 1) "
+                + // Use the correct integer value if Status is an integer
+                "GROUP BY p.ProductID, p.ProductName, p.Price, pi.ImageURL "
+                + "ORDER BY TotalQuantity DESC";
+
+        try (Statement st = conn.createStatement(); ResultSet rs = st.executeQuery(sql)) {
+            while (rs.next()) {
+                Product product = new Product();
+                product.setProductId(rs.getInt("ProductID"));
+                product.setProductName(rs.getString("ProductName"));
+                product.setPrice(rs.getDouble("Price"));
+                product.setImageURL(rs.getString("ImageURL"));
+                bestSellers.add(product);
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return bestSellers;
+    }
+
 }
