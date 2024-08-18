@@ -121,16 +121,19 @@
 
 		<%
 			ProductDetails productDetails = (ProductDetails) request.getAttribute("productDetails");
-			List<ProductStockDetails> productsStocksList = (List<ProductStockDetails>) request.getAttribute("productsStocksList");
+			List<ProductStockDetails> productColors = (List<ProductStockDetails>) request.getAttribute("productColors");
+			List<ProductStockDetails> productSizes = (List<ProductStockDetails>) request.getAttribute("productSizes");
 			String selectedColor = (String) request.getAttribute("selectedColor");
+
+
         %>
 		<div class="colorlib-product">
 			<div class="container">
 				<div class="row row-pb-lg product-detail-wrap">
 					<div class="col-sm-8">
 						<div class="owl-carousel" id="img-slider">
-							<% if (productsStocksList != null) { 
-								for (ProductStockDetails productStockDetail : productsStocksList) { %>
+							<% if (productColors != null) { 
+								for (ProductStockDetails productStockDetail : productColors) { %>
 									<div class="item">
 										<div class="product-entry border">
 											<a href="#" class="prod-img">
@@ -144,6 +147,8 @@
 					</div>
 
 					<div class="col-sm-4">
+						<form action="shoppingCart" method="post">
+
 						<div class="product-desc">
 							<h3><%=productDetails.getProductName() %></h3>
 							<h4>Brand: <%=productDetails.getBrandName() %></h4>
@@ -163,11 +168,11 @@
 							<div class="block-26 mb-4">
 								<h4>Color</h4>
 						   	  <ul>
-								<%  if (productsStocksList == null || productsStocksList.isEmpty()) { %>
+								<%  if (productColors == null || productColors.isEmpty()) { %>
 									<p>Error, no colors available for this product!</p>
 								<%
 									} else { 
-										for (ProductStockDetails productStockDetail : productsStocksList) { %>
+										for (ProductStockDetails productStockDetail : productColors) { %>
 							  	<li><a id="<%=productStockDetail.getColor() %>_<%=productStockDetail.getProductID() %>" 
 									href="ProductDetailsController?productID=<%=productStockDetail.getProductID() %>&selectedColor=<%=productStockDetail.getColor() %>"><%=productStockDetail.getColor() %></a></li>
 								<%  	}
@@ -178,14 +183,14 @@
 							<div class="size-wrap">
 								<div class="block-26 mb-2">
 									<h4>Size</h4>
-				               <ul>
-								  <% if (selectedColor != null) {
-										for (ProductStockDetails productStockDetail : productsStocksList) {
-											if (selectedColor.equalsIgnoreCase(productStockDetail.getColor())) { %>
-				                  <li><a id="" href="#"><%=productStockDetail.getSize() %></a></li>
-								  <%    	}
-										} 
-									 } %>
+				               <ul id="sizesList">
+								  <%	for (ProductStockDetails productStockDetail : productSizes) {
+										 int productID = productColors.get(0).getProductID(); %>
+				                  <li><a id="Size_<%=productStockDetail.getSize() %>" 
+									href="ProductDetailsController?productID=<%=productID %>&selectedColor=<%=selectedColor %>
+									&selectedSize=<%=productStockDetail.getSize() %>"><%=productStockDetail.getSize() %></a></li>
+								  <%	} 
+									  %>
 				               </ul>
 				            	</div>
 							</div>
@@ -193,25 +198,31 @@
 							<div>
 								<p>Available products: </p>
 							</div>
-                     <div class="input-group mb-4">
-                     	<span class="input-group-btn">
-                        	<button type="button" class="quantity-left-minus btn"  data-type="minus" data-field="">
-                           <i class="icon-minus2"></i>
-                        	</button>
-                    		</span>
-                     	<input type="text" id="quantity" name="quantity" class="form-control input-number" value="1" min="1" max="100" readonly onfocusout="validateQuantity()">
-                     	<span class="input-group-btn ml-1">
-                        	<button type="button" class="quantity-right-plus btn" data-type="plus" data-field="">
-                             <i class="icon-plus2"></i>
-                         </button>
-                     	</span>
-                  	</div>
-                  	<div class="row">
-	                  	<div class="col-sm-12 text-center">
-									<p class="addtocart"><a href="cart.html" class="btn btn-primary btn-addtocart"><i class="icon-shopping-cart"></i> Add to Cart</a></p>
+
+							<div class="input-group mb-4">
+								<span class="input-group-btn">
+									<button type="button" class="quantity-left-minus btn"  data-type="minus" data-field="">
+								<i class="icon-minus2"></i>
+									</button>
+									</span>
+								<input type="text" id="quantity" name="quantity" class="form-control input-number" value="1" min="1" max="10" readonly onfocusout="validateQuantity()">
+								<span class="input-group-btn ml-1">
+									<button type="button" class="quantity-right-plus btn" data-type="plus" data-field="">
+									<i class="icon-plus2"></i>
+								</button>
+								</span>
+							</div>
+
+							<div class="row">
+								<div class="col-sm-12 text-center">
+									<p class="addtocart"><button type="submit" class="btn btn-primary btn-addtocart"><span><i class="icon-shopping-cart"></i></span> Add to Cart</button></p>
 								</div>
 							</div>
+
 						</div>
+
+						</form>
+
 					</div>
 				</div>
 
@@ -507,7 +518,7 @@ Copyright &copy;<script>document.write(new Date().getFullYear());</script> All r
 		        
 		        // If is not undefined
 		            
-					if ($('#quantity').val() != 100) {
+					if ($('#quantity').val() != 10) {
 						$('#quantity').val(quantity + 1);
 					}
 		            
@@ -551,10 +562,26 @@ Copyright &copy;<script>document.write(new Date().getFullYear());</script> All r
 		}
 
 		<% String selectedColorButton = (String) request.getAttribute("selectedColorButton");
+		   String selectedSizeButton = (String) request.getAttribute("selectedSizeButton");
+
 		   if (selectedColorButton != null) { %>
 			document.getElementById('<%=selectedColorButton %>').setAttribute("style", "background: #616161;");
+		<% }
+		   if (selectedSizeButton != null) { %>
+			document.getElementById('<%=selectedSizeButton %>').setAttribute("style", "background: #616161;");
 		<% } %>
 
+	</script>
+
+	<script defer>
+		<%	String displayedImage = (String) request.getAttribute("displayedImage");
+		
+		if (displayedImage != null) {
+			int displayedImageInt = Integer.parseInt(displayedImage); %>
+			window.onload = function() {
+				$("#img-slider").trigger('to.owl.carousel', <%=displayedImageInt %>);
+			};
+		<% } %>
 	</script>
 
 
