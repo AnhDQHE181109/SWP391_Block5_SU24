@@ -406,6 +406,32 @@ public class ProductDetailsDAO extends DBConnect {
         return productSizes;
     }
 
+    public void addProductToWishlist(int accountID, int stockID) {
+
+        String sql = "insert into Wishlist(AccountID, StockID, DateAdded)\n"
+                + "values (?, ?, getdate())";
+
+        ProductStockDetails productSize = null;
+        List<ProductStockDetails> productSizes = new ArrayList<>();
+
+        try {
+            PreparedStatement ps = conn.prepareStatement(sql);
+            ps.setInt(1, accountID);
+            ps.setInt(2, stockID);
+
+            ResultSet rs = ps.executeQuery();
+
+            if (rs != null) {
+                rs.close();
+            }
+            if (ps != null) {
+                ps.close();
+            }
+        } catch (SQLException e) {
+            System.out.println("addProductToWishlist(): " + e);
+        }
+    }
+
     public List<String> getAllColors() {
         List<String> colors = new ArrayList<>();
         String sql = "SELECT DISTINCT Color FROM Stock";
@@ -456,6 +482,7 @@ public class ProductDetailsDAO extends DBConnect {
         }
         return sizes;
     }
+
     public List<Product> getFilteredProducts(List<Integer> brandIds, List<Integer> categoryIds, List<String> colors, List<Integer> sizes, List<String> materials, String query) {
         List<Product> products = new ArrayList<>();
         StringBuilder sql = new StringBuilder("SELECT p.ProductID, p.ProductName, p.Origin, p.Material, p.Price, p.TotalQuantity, ");
@@ -512,6 +539,38 @@ public class ProductDetailsDAO extends DBConnect {
             rs.close();
             ps.close();
 
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return products;
+    }
+
+    public List<Product> getNewArrivals() {
+        List<Product> products = new ArrayList<>();
+        String sql = "SELECT p.ProductID, p.ProductName, p.Origin, p.Material, p.Price, p.TotalQuantity, "
+                + "c.CategoryName, b.BrandName, pi.ImageURL "
+                + "FROM Products p "
+                + "LEFT JOIN Categories c ON p.CategoryID = c.CategoryID "
+                + "LEFT JOIN Brand b ON p.BrandID = b.BrandID "
+                + "LEFT JOIN Stock s ON p.ProductID = s.ProductID "
+                + "LEFT JOIN ProductImages pi ON s.StockID = pi.StockID "
+                + "INNER JOIN ProductStockImport psi ON s.ImportID = psi.ImportID "
+                + "WHERE DATEDIFF(DAY, psi.ImportDate, GETDATE()) <= 30";
+
+        try (Statement st = conn.createStatement(); ResultSet rs = st.executeQuery(sql)) {
+            while (rs.next()) {
+                Product p = new Product();
+                p.setProductId(rs.getInt("ProductID"));
+                p.setProductName(rs.getString("ProductName"));
+                p.setOrigin(rs.getString("Origin"));
+                p.setMaterial(rs.getString("Material"));
+                p.setPrice(rs.getDouble("Price"));
+                p.setTotalQuantity(rs.getInt("TotalQuantity"));
+                p.setCategoryName(rs.getString("CategoryName"));
+                p.setBrandName(rs.getString("BrandName"));
+                p.setImageURL(rs.getString("ImageURL"));
+                products.add(p);
+            }
         } catch (SQLException e) {
             e.printStackTrace();
         }

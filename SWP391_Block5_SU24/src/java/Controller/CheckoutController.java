@@ -4,27 +4,18 @@
  */
 package Controller;
 
+import java.io.IOException;
+import java.io.PrintWriter;
 import jakarta.servlet.ServletException;
-import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
-import jakarta.servlet.http.HttpSession;
-import jakarta.servlet.RequestDispatcher;
-import java.io.IOException;
-import java.util.List;
-
-import model.WishlistDAO;  // Adjust the package name based on your project structure
-import entity.Account;      // Adjust the package name based on your project structure
-import entity.Product;      // Adjust the package name based on your project structure
-import java.io.PrintWriter;
 
 /**
  *
- * @author nobbe
+ * @author ASUS
  */
-@WebServlet(name = "WishlistController", urlPatterns = {"/WishlistController"})
-public class WishlistController extends HttpServlet {
+public class CheckoutController extends HttpServlet {
 
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
@@ -43,10 +34,10 @@ public class WishlistController extends HttpServlet {
             out.println("<!DOCTYPE html>");
             out.println("<html>");
             out.println("<head>");
-            out.println("<title>Servlet WishlistController</title>");
+            out.println("<title>Servlet CheckoutController</title>");            
             out.println("</head>");
             out.println("<body>");
-            out.println("<h1>Servlet WishlistController at " + request.getContextPath() + "</h1>");
+            out.println("<h1>Servlet CheckoutController at " + request.getContextPath() + "</h1>");
             out.println("</body>");
             out.println("</html>");
         }
@@ -64,27 +55,10 @@ public class WishlistController extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        HttpSession session = request.getSession();
-        Account account = (Account) session.getAttribute("account");
-
-        if (account != null) {
-            WishlistDAO wishlistDAO = new WishlistDAO();
-            String search = request.getParameter("search");
-            List<Product> wishlistItems;
-
-            if (search != null && !search.trim().isEmpty()) {
-                wishlistItems = wishlistDAO.searchWishlistItemsByName(account.getAccountID(), search);
-            } else {
-                wishlistItems = wishlistDAO.getWishlistItems(account.getAccountID());
-            }
-
-            request.setAttribute("wishlistItems", wishlistItems);
-            System.out.println(wishlistItems.get(0).getProductName());
-            RequestDispatcher dispatcher = request.getRequestDispatcher("customer/wishlist.jsp");
-            dispatcher.forward(request, response);
-        } else {
-            response.sendRedirect("../login.jsp");
-        }
+        response.setContentType("text/html;charset=UTF-8");
+        PrintWriter out = response.getWriter();
+        
+        
     }
 
     /**

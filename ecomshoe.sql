@@ -136,7 +136,7 @@ CREATE TABLE Cart (
     StockID INT NOT NULL,
     quantity INT NOT NULL,
     DiscountID INT NOT NULL,
-    date_added DATETIME DEFAULT GETDATE() NOT NULL,
+    date_added DATE DEFAULT GETDATE() NOT NULL,
     CONSTRAINT FK_Cart_Accounts FOREIGN KEY (AccountID) REFERENCES Accounts(AccountID),
     CONSTRAINT FK_Cart_Stock FOREIGN KEY (StockID) REFERENCES Stock(StockID)
 );
@@ -158,7 +158,7 @@ CREATE TABLE Feedback (
     StockID INT NOT NULL,
     rating INT NULL,
     comment TEXT NULL,
-    created_at DATETIME DEFAULT GETDATE() NULL,
+    created_at DATE DEFAULT GETDATE() NULL,
     CONSTRAINT FK_Feedback_Accounts FOREIGN KEY (AccountID) REFERENCES Accounts(AccountID),
     CONSTRAINT FK_Feedback_Stock FOREIGN KEY (StockID) REFERENCES Stock(StockID)
 );
@@ -241,9 +241,9 @@ VALUES
 -- Insert data into ProductStockImport
 INSERT INTO ProductStockImport (AccountID, ImportDate,ImportAction,Actorname)
 VALUES 
-(1, 12/3/2024,1,'johndoe' ),
-(2, 12/32/2024,0,'janedoe'),
-(3, 5/5/2024,2,'alice');
+(1, '12/3/2024',1,'johndoe' ),
+(2, '12/12/2024',0,'janedoe'),
+(3, '5/5/2024',2,'alice');
 
 -- Insert data into Stock
 INSERT INTO Stock (ProductID, Size, Color, StockQuantity, ImportID)

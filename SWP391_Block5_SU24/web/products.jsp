@@ -190,7 +190,8 @@
                             <div class="breadcrumbs-img" style="background-image: url(images/cover-img-1.jpg);">
                             </div>
                             <div class="menu text-center">
-                                <p><a href="#">New Arrivals</a> <a href="#">Best Sellers</a></p>
+                                <a href="newarrival.jsp" class="btn btn-primary btn-lg">New Arrivals</a>
+
                             </div>
                         </div>
                     </div>
