@@ -10,6 +10,34 @@
 <%@ page import="java.util.Arrays" %>
 <%@ page import="java.util.ArrayList" %>
 <%@ page import="java.util.stream.Collectors" %>
+<style>
+    #suggestions {
+        border: 1px solid #ddd;
+        max-height: 300px;
+        overflow-y: auto;
+        z-index: 1000;
+        background-color: white;
+    }
+
+    #suggestions .dropdown-item {
+        cursor: pointer;
+        padding: 8px;
+        display: flex;
+        align-items: center;
+    }
+
+    #suggestions .dropdown-item img {
+        width: 50px;
+        height: 50px;
+        margin-right: 10px;
+        border-radius: 5px;
+    }
+
+    #suggestions .dropdown-item span {
+        flex-grow: 1;
+    }
+
+</style>
 <%
     ProductDetailsDAO pDAO = new ProductDetailsDAO();
     List<Brand> brandList = pDAO.getAllBrands();
@@ -29,8 +57,8 @@
     List<String> colors = (selectedColors != null) ? Arrays.asList(selectedColors) : new ArrayList<>();
     List<Integer> sizes = (selectedSizes != null) ? Arrays.stream(selectedSizes).map(Integer::parseInt).collect(Collectors.toList()) : new ArrayList<>();
     List<String> materials = (selectedMaterials != null) ? Arrays.asList(selectedMaterials) : new ArrayList<>();
-
-    List<Product> products = pDAO.getFilteredProducts(brandIds, categoryIds, colors, sizes, materials);
+    String query = request.getParameter("query");
+    List<Product> products = pDAO.getFilteredProducts(brandIds, categoryIds, colors, sizes, materials, query);
 %>
 <html>
     <head>
@@ -82,10 +110,11 @@
                                 <div id="colorlib-logo"><a href="index.jsp">Footwear</a></div>
                             </div>
                             <div class="col-sm-5 col-md-3">
-                                <form action="#" class="search-wrap">
-                                    <div class="form-group">
-                                        <input type="search" class="form-control search" placeholder="Search">
+                                <form action="products.jsp" method="get" class="search-wrap">
+                                    <div class="form-group position-relative">
+                                        <input type="search" name="query" id="search-bar" class="form-control search" placeholder="Search for products...">
                                         <button class="btn btn-primary submit-search text-center" type="submit"><i class="icon-search"></i></button>
+                                        <div id="suggestions" class="dropdown-menu" style="display: none; position: absolute; width: 100%;"></div>
                                     </div>
                                 </form>
                             </div>
@@ -175,7 +204,6 @@
                             <div class="featured">
                                 <div class="featured-img featured-img-2" style="background-image: url(images/img_bg_2.jpg);">
                                     <h2>Nike</h2>
-                                    <p><a href="#" class="btn btn-primary btn-lg">Shop now</a></p>
                                 </div>
                             </div>
                         </div>
@@ -183,7 +211,6 @@
                             <div class="featured">
                                 <div class="featured-img featured-img-2" style="background-image: url(images/women.jpg);">
                                     <h2>Puma</h2>
-                                    <p><a href="#" class="btn btn-primary btn-lg">Shop now</a></p>
                                 </div>
                             </div>
                         </div>
@@ -191,7 +218,6 @@
                             <div class="featured">
                                 <div class="featured-img featured-img-2" style="background-image: url(images/item-11.jpg);">
                                     <h2>Air forces</h2>
-                                    <p><a href="#" class="btn btn-primary btn-lg">Shop now</a></p>
                                 </div>
                             </div>
                         </div>
@@ -253,19 +279,6 @@
                                                 <li>
                                                     <input type="checkbox" name="color" value="<%= color %>" <%= (request.getParameterValues("color") != null && Arrays.asList(request.getParameterValues("color")).contains(color)) ? "checked" : "" %> />
                                                     <%= color %>
-                                                </li>
-                                                <% } %>
-                                            </ul>
-                                        </div>
-                                    </div>
-                                    <div class="col-sm-12">
-                                        <div class="side border mb-1">
-                                            <h3>Material</h3>
-                                            <ul>
-                                                <% for(String material : materialList) { %>
-                                                <li>
-                                                    <input type="checkbox" name="material" value="<%= material %>" <%= (request.getParameterValues("material") != null && Arrays.asList(request.getParameterValues("material")).contains(material)) ? "checked" : "" %> />
-                                                    <%= material %>
                                                 </li>
                                                 <% } %>
                                             </ul>
@@ -423,7 +436,7 @@
     <div class="gototop js-top">
         <a href="#" class="js-gotop"><i class="ion-ios-arrow-up"></i></a>
     </div>
-                        
+
     <!-- jQuery -->
     <script src="js/jquery.min.js"></script>
     <!-- popper -->
@@ -447,7 +460,41 @@
     <script src="js/jquery.stellar.min.js"></script>
     <!-- Main -->
     <script src="js/main.js"></script>
+    <script>
+                                    document.getElementById('search-bar').addEventListener('input', function () {
+                                        let query = this.value;
+                                        if (query.length > 0) {
+                                            fetchSuggestions(query);
+                                        } else {
+                                            document.getElementById('suggestions').style.display = 'none';
+                                        }
+                                    });
 
+                                    function fetchSuggestions(query) {
+                                        fetch('SearchSuggestionsServlet?query=' + encodeURIComponent(query))
+                                                .then(response => response.text())
+                                                .then(data => {
+                                                    let suggestionsBox = document.getElementById('suggestions');
+                                                    suggestionsBox.innerHTML = data;
+                                                    if (data.trim().length > 0) {
+                                                        suggestionsBox.style.display = 'block';
+                                                        // Add click event to each suggestion
+                                                        suggestionsBox.querySelectorAll('.dropdown-item').forEach(item => {
+                                                            item.addEventListener('click', function () {
+                                                                document.getElementById('search-bar').value = this.innerText.trim();
+                                                                suggestionsBox.style.display = 'none';
+                                                            });
+                                                        });
+                                                    } else {
+                                                        suggestionsBox.style.display = 'none';
+                                                    }
+                                                })
+                                                .catch(error => {
+                                                    console.error('Error fetching suggestions:', error);
+                                                });
+                                    }
+
+    </script>
 </body>
 </html>
 
