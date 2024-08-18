@@ -105,6 +105,7 @@ public class ProductDetailsController extends HttpServlet {
             request.setAttribute("productColors", productColors);
             request.setAttribute("productSizes", productSizes);
             request.setAttribute("selectedColor", selectedColor);
+            request.setAttribute("selectedSize", selectedSize);
             request.setAttribute("selectedColorButton", selectedColor + "_" + productIDin);
             request.setAttribute("selectedSizeButton", "Size_" + selectedSize);
             request.setAttribute("displayedImage", displayedImage + "");

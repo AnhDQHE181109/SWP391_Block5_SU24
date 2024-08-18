@@ -124,7 +124,7 @@
 			List<ProductStockDetails> productColors = (List<ProductStockDetails>) request.getAttribute("productColors");
 			List<ProductStockDetails> productSizes = (List<ProductStockDetails>) request.getAttribute("productSizes");
 			String selectedColor = (String) request.getAttribute("selectedColor");
-
+			String selectedSize = (String) request.getAttribute("selectedSize");
 
         %>
 		<div class="colorlib-product">
@@ -177,7 +177,10 @@
 									href="ProductDetailsController?productID=<%=productStockDetail.getProductID() %>&selectedColor=<%=productStockDetail.getColor() %>"><%=productStockDetail.getColor() %></a></li>
 								<%  	}
 									} %>
-						   	  </ul>
+						   	  </ul>	
+
+							  	<input type="text" name="selectedColor" value="<%=selectedColor %>" hidden>
+
 							</div>
 							
 							<div class="size-wrap">
@@ -192,11 +195,18 @@
 								  <%	} 
 									  %>
 				               </ul>
+
+							   <input type="text" name="selectedSize" value="<%=selectedSize %>" hidden>
+
 				            	</div>
 							</div>
 
 							<div>
-								<p>Available products: </p>
+								<% for (ProductStockDetails productSize : productSizes) {
+									if (Integer.parseInt(selectedSize) == productSize.getSize()) { %>
+										<p>Available products: <%=productSize.getStockQuantity() %></p>
+								<%	}
+								} %>
 							</div>
 
 							<div class="input-group mb-4">
