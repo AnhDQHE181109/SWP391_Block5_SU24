@@ -57,6 +57,10 @@
         <servlet-class>Controller.CategoryController</servlet-class>
     </servlet>
     <servlet>
+        <servlet-name>SearchSuggestionsServlet</servlet-name>
+        <servlet-class>Controller.SearchSuggestionsServlet</servlet-class>
+    </servlet>
+    <servlet>
         <servlet-name>ShoppingCartController</servlet-name>
         <servlet-class>Controller.ShoppingCartController</servlet-class>
     </servlet>
@@ -153,6 +157,10 @@
         <url-pattern>/CategoryController</url-pattern>
     </servlet-mapping>
     <servlet-mapping>
+        <servlet-name>SearchSuggestionsServlet</servlet-name>
+        <url-pattern>/SearchSuggestionsServlet</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
         <servlet-name>ShoppingCartController</servlet-name>
         <url-pattern>/shoppingCart</url-pattern>
     </servlet-mapping>
@@ -164,5 +172,5 @@
         <servlet-name>WishlistController</servlet-name>
         <url-pattern>/WishlistController</url-pattern>
     </servlet-mapping>
-    
+   
 </web-app>

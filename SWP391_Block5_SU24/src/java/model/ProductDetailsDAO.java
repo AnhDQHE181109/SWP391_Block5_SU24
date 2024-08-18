@@ -456,8 +456,7 @@ public class ProductDetailsDAO extends DBConnect {
         }
         return sizes;
     }
-
-    public List<Product> getFilteredProducts(List<Integer> brandIds, List<Integer> categoryIds, List<String> colors, List<Integer> sizes, List<String> materials) {
+    public List<Product> getFilteredProducts(List<Integer> brandIds, List<Integer> categoryIds, List<String> colors, List<Integer> sizes, List<String> materials, String query) {
         List<Product> products = new ArrayList<>();
         StringBuilder sql = new StringBuilder("SELECT p.ProductID, p.ProductName, p.Origin, p.Material, p.Price, p.TotalQuantity, ");
         sql.append("c.CategoryName, b.BrandName, pi.ImageURL ");
@@ -483,10 +482,20 @@ public class ProductDetailsDAO extends DBConnect {
         if (!materials.isEmpty()) {
             sql.append(" AND p.Material IN (").append(materials.stream().map(m -> "'" + m + "'").collect(Collectors.joining(","))).append(")");
         }
+        if (query != null && !query.isEmpty()) {
+            sql.append(" AND p.ProductName LIKE ?"); // Filter by product name
+        }
 
         try {
-            Statement st = conn.createStatement();
-            ResultSet rs = st.executeQuery(sql.toString());
+            PreparedStatement ps = conn.prepareStatement(sql.toString());
+
+            // If there's a search query, set it in the PreparedStatement
+            if (query != null && !query.isEmpty()) {
+                ps.setString(1, "%" + query + "%");
+            }
+
+            ResultSet rs = ps.executeQuery();
+
             while (rs.next()) {
                 Product p = new Product();
                 p.setProductId(rs.getInt("ProductID"));
@@ -501,7 +510,8 @@ public class ProductDetailsDAO extends DBConnect {
                 products.add(p);
             }
             rs.close();
-            st.close();
+            ps.close();
+
         } catch (SQLException e) {
             e.printStackTrace();
         }
