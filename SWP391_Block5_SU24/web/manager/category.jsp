@@ -125,65 +125,112 @@
 
         <!-- Content Start -->
         <div class="content p-4">
-            
-               <h1>Category List</h1>
-    
-    <c:if test="${not empty error}">
-        <p style="color: red;">${error}</p>
-    </c:if>
-    
-    <table>
-        
-<form action="CategoryController" method="get">
-    <input type="hidden" name="action" value="search">
-    <input type="text" name="searchTerm" placeholder="Search by category name">
-    <button type="submit">Search</button>
-</form>
-        <tr>
-            <th>ID</th>
-            <th>Name</th>
-            <th>Actions</th>
-        </tr>
-        <c:forEach var="category" items="${categories}">
-            <tr>
-                <td>${category.categoryId}</td>
-                <td>${category.categoryName}</td>
-                <td>
-                    <a href="CategoryController?action=edit&id=${category.categoryId}">Edit</a> |
-                    <a href="CategoryController?action=delete&id=${category.categoryId}" onclick="return confirm('Are you sure you want to delete this category?')">Delete</a>
-                </td>
-            </tr>
-        </c:forEach>
-    </table>
-    
-    <p><a href="CategoryController?action=showForm">Add New Category</a></p>
-        </div>
-        <!-- Content End -->
+    <!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Category List</title>
+    <!-- Include Bootstrap CSS -->
+    <link href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        .content {
+            padding: 20px;
+        }
+        .error-message {
+            color: red;
+            margin-bottom: 15px;
+        }
+        .table thead th {
+            background-color: #f8f9fa;
+            color: #343a40;
+        }
+        .table td, .table th {
+            vertical-align: middle;
+        }
+        .btn-change-status {
+            text-decoration: none;
+            margin: 0 5px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container content">
+        <h1 class="mb-4">Category List</h1>
 
-        <!-- Modal for Editing Brand -->
-        <div class="modal fade" id="editModal" tabindex="-1" aria-labelledby="editModalLabel" aria-hidden="true">
-            <div class="modal-dialog">
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <h5 class="modal-title" id="editModalLabel">Edit Brand</h5>
-                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                    </div>
-                    <form id="editForm" onsubmit="updateBrand(event)">
-                        <div class="modal-body">
-                            <input type="hidden" name="brandId"/>
-                            <div class="mb-3">
-                                <label for="brandName" class="form-label">Brand Name</label>
-                                <input type="text" class="form-control" id="brandName" name="brandName" required/>
-                            </div>
-                        </div>
-                        <div class="modal-footer">
-                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                            <button type="submit" class="btn btn-primary">Save changes</button>
-                        </div>
-                    </form>
+        <c:if test="${not empty error}">
+            <div class="error-message">
+                <p>${error}</p>
+            </div>
+        </c:if>
+
+        <form action="CategoryController" method="get" class="mb-4">
+            <input type="hidden" name="action" value="search">
+            <div class="input-group">
+                <input type="text" name="searchTerm" class="form-control" placeholder="Search by category name">
+                <div class="input-group-append">
+                    <button type="submit" class="btn btn-primary">Search</button>
                 </div>
             </div>
-        </div>
+        </form>
+
+        <table class="table table-bordered table-striped">
+            <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>Name</th>
+                    <th>Status</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                <c:forEach var="category" items="${categories}">
+                    <tr>
+                        <td>${category.categoryId}</td>
+                        <td>${category.categoryName}</td>
+                        <td>
+                            <c:choose>
+                                <c:when test="${category.categorystatus == 0}">Active</c:when>
+                                <c:otherwise>Deactive</c:otherwise>
+                            </c:choose>
+                        </td>
+                        <td>
+                            <a href="CategoryController?action=edit&id=${category.categoryId}" class="btn btn-warning btn-sm">Edit</a>
+                            <c:choose>
+                                <c:when test="${category.categorystatus == 0}">
+                                    <a href="CategoryController?action=change&id=${category.categoryId}&newStatus=1" 
+                                       class="btn btn-danger btn-sm btn-change-status" 
+                                       onclick="return confirm('Are you sure you want to change the status of this category to Deactive?')">
+                                       Change Status to Deactive
+                                    </a>
+                                </c:when>
+                                <c:otherwise>
+                                    <a href="CategoryController?action=change&id=${category.categoryId}&newStatus=0" 
+                                       class="btn btn-success btn-sm btn-change-status" 
+                                       onclick="return confirm('Are you sure you want to change the status of this category to Active?')">
+                                       Change Status to Active
+                                    </a>
+                                </c:otherwise>
+                            </c:choose>
+                        </td>
+                    </tr>
+                </c:forEach>
+            </tbody>
+        </table>
+
+        <p><a href="CategoryController?action=showForm" class="btn btn-primary">Add New Category</a></p>
+    </div>
+
+    <!-- Include Bootstrap JS and dependencies -->
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.2/dist/umd/popper.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+</body>
+</html>
+
+</div>
+
+
     </div>
 </body>
 

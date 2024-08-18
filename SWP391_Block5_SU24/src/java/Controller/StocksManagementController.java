@@ -6,6 +6,7 @@ package Controller;
 
 import entity.Account;
 import entity.Product;
+import entity.Stock;
 import java.io.IOException;
 import java.io.PrintWriter;
 import jakarta.servlet.ServletException;
@@ -21,45 +22,13 @@ import model.StocksManagementDAO;
 
 public class StocksManagementController extends HttpServlet {
 
+    
+    List<Stock> outOfStocksListbylist = new ArrayList<>();
     List<Product> outOfStocksList = new ArrayList<>();
     int loggedImportID = 0;
     List<Product> loggedProducts = new ArrayList<>();
+        List<Stock> loggedStock = new ArrayList<>();
 
-    /**
-     * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
-     * methods.
-     *
-     * @param request servlet request
-     * @param response servlet response
-     * @throws ServletException if a servlet-specific error occurs
-     * @throws IOException if an I/O error occurs
-     */
-    protected void processRequest(HttpServletRequest request, HttpServletResponse response)
-            throws ServletException, IOException {
-        response.setContentType("text/html;charset=UTF-8");
-        try (PrintWriter out = response.getWriter()) {
-            /* TODO output your page here. You may use following sample code. */
-            out.println("<!DOCTYPE html>");
-            out.println("<html>");
-            out.println("<head>");
-            out.println("<title>Servlet StocksManagementController</title>");
-            out.println("</head>");
-            out.println("<body>");
-            out.println("<h1>Servlet StocksManagementController at " + request.getContextPath() + "</h1>");
-            out.println("</body>");
-            out.println("</html>");
-        }
-    }
-
-    // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
-    /**
-     * Handles the HTTP <code>GET</code> method.
-     *
-     * @param request servlet request
-     * @param response servlet response
-     * @throws ServletException if a servlet-specific error occurs
-     * @throws IOException if an I/O error occurs
-     */
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
@@ -167,7 +136,7 @@ public class StocksManagementController extends HttpServlet {
 
             }
 
-            if (smDAO.checkIfStockExists(size, color)) {
+            if (smDAO.checkIfStockExists(product,size, color)) {
 //                List<Product> productsList = smDAO.getAllProducts();
 //                List<Product> productsStocksList = smDAO.getProductsStocks();
 
@@ -257,10 +226,10 @@ public class StocksManagementController extends HttpServlet {
             //Debugging
             System.out.println("confirmYes: " + confirmYes);
 
-            for (Product product : outOfStocksList) {
-                smDAO.setProductStock(product.getStockID(), 0);
-                product.setStockQuantity(0);
-                loggedProducts.add(product);
+            for (Stock stock  : outOfStocksListbylist) {
+                smDAO.setProductStock(stock.getStockID(), 0);
+                stock.setStockQuantity(0);
+                loggedStock.add(stock);
             }
             outOfStocksList.clear();
             smDAO.logUpdatedProducts(accountID, loggedImportID, loggedProducts);
@@ -352,11 +321,6 @@ public class StocksManagementController extends HttpServlet {
         request.getRequestDispatcher("staff/stocksManager.jsp").forward(request, response);
     }
 
-    /**
-     * Returns a short description of the servlet.
-     *
-     * @return a String containing servlet description
-     */
     @Override
     public String getServletInfo() {
         return "Short description";

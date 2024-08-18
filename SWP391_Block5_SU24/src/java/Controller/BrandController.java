@@ -1,7 +1,3 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/JSP_Servlet/Servlet.java to edit this template
- */
 package Controller;
 
 import entity.Account;
@@ -22,7 +18,7 @@ import model.DAOBrand;
  */
 public class BrandController extends HttpServlet {
 
-     private DAOBrand brandDAO;
+    private DAOBrand brandDAO;
 
     @Override
     public void init() throws ServletException {
@@ -32,24 +28,18 @@ public class BrandController extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        
-        
-        
-        
-            HttpSession session = request.getSession();
-    Account account = (Account) session.getAttribute("account");
-    if (account == null) {
-        response.sendError(HttpServletResponse.SC_FORBIDDEN, "You do not have permission to access this page.");
-        return;
-    }
-    if (account.getRole() == 1) {
-        response.sendError(HttpServletResponse.SC_FORBIDDEN, "You do not have permission to access this page.");
-        return;
-    }
-    if (account.getRole() == 2) {
-        response.sendError(HttpServletResponse.SC_FORBIDDEN, "You do not have permission to access this page.");
-        return;
-    }
+
+        HttpSession session = request.getSession();
+        Account account = (Account) session.getAttribute("account");
+        if (account == null) {
+            response.sendError(HttpServletResponse.SC_FORBIDDEN, "You do not have permission to access this page.");
+            return;
+        }
+        if (account.getRole() == 1 || account.getRole() == 2) {
+            response.sendError(HttpServletResponse.SC_FORBIDDEN, "You do not have permission to access this page.");
+            return;
+        }
+
         String action = request.getParameter("action");
 
         switch (action) {
@@ -59,8 +49,8 @@ public class BrandController extends HttpServlet {
             case "edit":
                 showEditForm(request, response);
                 break;
-            case "delete":
-                deleteBrand(request, response);
+            case "change":
+                updateBrandStatus(request, response);
                 break;
             case "new":
                 showNewForm(request, response);
@@ -97,7 +87,7 @@ public class BrandController extends HttpServlet {
         List<Brand> brands = brandDAO.getAllBrands();
         request.setAttribute("brands", brands);
         request.getRequestDispatcher("manager/Brand.jsp").forward(request, response);
-        System.out.println("brands"+brands);
+        System.out.println("brands" + brands);
     }
 
     private void showNewForm(HttpServletRequest request, HttpServletResponse response)
@@ -113,7 +103,6 @@ public class BrandController extends HttpServlet {
         request.getRequestDispatcher("manager/brand-form.jsp").forward(request, response);
     }
 
- 
     private void insertBrand(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         String brandName = request.getParameter("brandName");
         if (brandDAO.brandExists(brandName)) {
@@ -146,14 +135,21 @@ public class BrandController extends HttpServlet {
         brandDAO.updateBrand(brand);
         response.sendRedirect("BrandController?action=list");
     }
-    private void deleteBrand(HttpServletRequest request, HttpServletResponse response)
+
+    private void updateBrandStatus(HttpServletRequest request, HttpServletResponse response)
             throws IOException {
         int brandId = Integer.parseInt(request.getParameter("brandId"));
-        brandDAO.deleteBrand(brandId);
+        int status = Integer.parseInt(request.getParameter("status")); // Assuming status is passed as a parameter
+
+        Brand brand = new Brand();
+        brand.setBrandId(brandId);
+        brand.setBrandstatus(status); // Assuming setBrandStatus is available in the Brand class
+        brandDAO.updateBrandStatus(brand);
+
         response.sendRedirect("BrandController?action=list");
     }
-    
-        private void searchBrands(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+
+    private void searchBrands(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         String keyword = request.getParameter("keyword");
         List<Brand> brands = brandDAO.searchBrands(keyword);
         request.setAttribute("brands", brands);

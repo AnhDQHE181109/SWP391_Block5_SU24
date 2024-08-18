@@ -139,38 +139,46 @@
 <!-- List of Brands -->
 <div class="table-responsive">
     <table class="table table-striped table-bordered table-hover">
-        <thead class="thead-dark">
+    <thead class="thead-dark">
+        <tr>
+            <th>ID</th>
+            <th>Name</th>
+            <th>Status</th>             
+            <th>Actions</th>
+        </tr>
+    </thead>
+    <tbody>
+        <c:forEach var="brand" items="${brands}">
             <tr>
-                <th>ID</th>
-                <th>Name</th>
-                <th>Actions</th>
+                <td>${brand.brandId}</td>
+                <td>${brand.brandName}</td>
+                <td>
+                    <c:choose>
+                        <c:when test="${brand.brandstatus == 0}">Active</c:when>
+                        <c:otherwise>Not Active</c:otherwise>
+                    </c:choose>
+                </td>
+                <td>
+                    <div class="btn-group" role="group">
+                        <form action="BrandController" method="get" style="display:inline;">
+                            <input type="hidden" name="brandId" value="${brand.brandId}" />
+                            <input type="hidden" name="action" value="edit" />
+                            <button type="submit" class="btn btn-warning btn-sm">
+                                <i class="fas fa-edit"></i> Edit
+                            </button>
+                        </form>
+                        <a href="BrandController?action=change&brandId=${brand.brandId}&status=${brand.brandstatus == 0 ? 1 : 0}" 
+                          class="btn btn-danger btn-sm" 
+                          onclick="return confirm('Are you sure?');">
+                          <i class="fas fa-exchange-alt"></i> Change
+                       </a>
+                    </div>
+                </td>
             </tr>
-        </thead>
-        <tbody>
-            <c:forEach var="brand" items="${brands}">
-                <tr>
-                    <td>${brand.brandId}</td>
-                    <td>${brand.brandName}</td>
-                    <td>
-                        <div class="btn-group" role="group">
-                            <form action="BrandController" method="get" style="display:inline;">
-                                <input type="hidden" name="brandId" value="${brand.brandId}" />
-                                <input type="hidden" name="action" value="edit" />
-                                <button type="submit" class="btn btn-warning btn-sm">
-                                    <i class="fas fa-edit"></i> Edit
-                                </button>
-                            </form>
-                            <a href="BrandController?action=delete&brandId=${brand.brandId}" 
-                               class="btn btn-danger btn-sm" 
-                               onclick="return confirm('Are you sure?');">
-                               <i class="fas fa-trash-alt"></i> Delete
-                            </a>
-                        </div>
-                    </td>
-                </tr>
-            </c:forEach>
-        </tbody>
-    </table>
+        </c:forEach>
+    </tbody>
+</table>
+
 </div>
 
 

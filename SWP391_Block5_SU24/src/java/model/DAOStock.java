@@ -96,4 +96,32 @@ public class DAOStock extends MyDAO {
         }
         return stock;
     }
+    
+    // Reduce stock quantity
+public boolean reduceStockQuantity(int stockID, int quantity) {
+    // First, get the current stock quantity
+    Stock stock = getStockById(stockID);
+    if (stock == null) {
+        return false; // Stock with the given ID does not exist
+    }
+    
+    // Check if the reduction is possible
+    int newQuantity = stock.getStockQuantity() - quantity;
+    if (newQuantity < 0) {
+        return false; // Not enough stock to reduce
+    }
+
+    // Update the stock quantity
+    String sql = "UPDATE stock SET stockQuantity = ? WHERE stockID = ?";
+    try (PreparedStatement ps = con.prepareStatement(sql)) {
+        ps.setInt(1, newQuantity);
+        ps.setInt(2, stockID);
+        return ps.executeUpdate() > 0;
+    } catch (SQLException e) {
+        e.printStackTrace();
+        return false;
+    }
+}
+
+    
 }
