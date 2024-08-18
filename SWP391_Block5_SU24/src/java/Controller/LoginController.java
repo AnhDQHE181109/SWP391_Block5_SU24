@@ -106,7 +106,7 @@ public class LoginController extends HttpServlet {
                     break;
                 }
                 case 4: {
-                    response.sendRedirect("");
+                    response.sendRedirect("admin/manage_acc.jsp");
                     break;
                 }
                 default: {
