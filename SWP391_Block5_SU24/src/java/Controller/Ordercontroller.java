@@ -31,20 +31,6 @@ protected void doGet(HttpServletRequest request, HttpServletResponse response)
     DAOOrder daoOrder = new DAOOrder();
     AccountDAO accountDAO = new AccountDAO();
 
-    HttpSession session = request.getSession();
-    Account account = (Account) session.getAttribute("account");
-    if (account == null) {
-        response.sendError(HttpServletResponse.SC_FORBIDDEN, "You do not have permission to access this page.");
-        return;
-    }
-    if (account.getRole() == 1) {
-        response.sendError(HttpServletResponse.SC_FORBIDDEN, "You do not have permission to access this page.");
-        return;
-    }
-//    }if(account.getRole() == 3){
-//        response.sendError(HttpServletResponse.SC_FORBIDDEN, "You do not have permission to access this page.");
-//    }
-
     String usernameSearch = request.getParameter("username");
     String orderDateSearch = request.getParameter("orderDate");
     String statusSearch = request.getParameter("status");

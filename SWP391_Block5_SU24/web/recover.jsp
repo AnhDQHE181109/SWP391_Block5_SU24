@@ -7,6 +7,7 @@
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <!DOCTYPE html>
 <html>
+    <%if(session.getAttribute("auth")==null||!session.getAttribute("auth").equals("true")){response.sendRedirect("login.jsp?error=You do not have permission to access the page!");}%>
     <head>
         <title>Footwear - Free Bootstrap 4 Template by Colorlib</title>
         <meta charset="utf-8">

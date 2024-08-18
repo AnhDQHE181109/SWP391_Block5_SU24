@@ -13,7 +13,6 @@ public class DBConnect {
             Class.forName("com.microsoft.sqlserver.jdbc.SQLServerDriver");
             //connection
             conn = DriverManager.getConnection(url, user, password);
-            System.out.println("connected");
         }
         catch(ClassNotFoundException ex){
             ex.printStackTrace();

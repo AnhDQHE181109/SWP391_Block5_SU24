@@ -24,8 +24,8 @@ import jakarta.servlet.http.HttpSession;
  *
  * @author Long
  */
-@WebFilter(filterName = "ManagerFilterController", urlPatterns = {"/manager/*", "/AccountManagementController", "/BrandController", "/CategoryController", "/EditProductController"})
-public class ManagerFilterController implements Filter {
+@WebFilter(filterName = "StaffFilterController", urlPatterns = {"/staff/*", "/Ordercontroller","/Orderdetailcontroller"})
+public class StaffFilterController implements Filter {
 
     private static final boolean debug = true;
 
@@ -34,13 +34,13 @@ public class ManagerFilterController implements Filter {
     // configured. 
     private FilterConfig filterConfig = null;
 
-    public ManagerFilterController() {
+    public StaffFilterController() {
     }
 
     private void doBeforeProcessing(ServletRequest request, ServletResponse response)
             throws IOException, ServletException {
         if (debug) {
-            log("ManagerFilterController:DoBeforeProcessing");
+            log("StaffFilterController:DoBeforeProcessing");
         }
 
         // Write code here to process the request and/or response before
@@ -68,7 +68,7 @@ public class ManagerFilterController implements Filter {
     private void doAfterProcessing(ServletRequest request, ServletResponse response)
             throws IOException, ServletException {
         if (debug) {
-            log("ManagerFilterController:DoAfterProcessing");
+            log("StaffFilterController:DoAfterProcessing");
         }
 
         // Write code here to process the request and/or response after
@@ -104,28 +104,25 @@ public class ManagerFilterController implements Filter {
             throws IOException, ServletException {
 
         if (debug) {
-            log("ManagerFilterController:doFilter()");
+            log("StaffFilterController:doFilter()");
         }
 
         HttpServletRequest httpRequest = (HttpServletRequest) request;
         HttpServletResponse httpResponse = (HttpServletResponse) response;
         HttpSession session = httpRequest.getSession(false);
-        boolean isManager = false;
+        boolean isStaff = false;
         if (session.getAttribute("account") != null) {
             Account temp = (Account) session.getAttribute("account");
-            isManager = (temp.getRole() == 3);
+            isStaff = (temp.getRole() == 2);
         }
-        boolean isLoggedIn = (session.getAttribute("account") != null && isManager);
+        boolean isLoggedIn = (session.getAttribute("account") != null && isStaff);
         if (isLoggedIn) {
-            // the admin is already logged in and he's trying to login again
-            // then forwards to the admin's homepage
             chain.doFilter(request, response);
             return;
-        } else if (session.getAttribute("account") != null && !isManager) {
+        } else if (session.getAttribute("account") != null && !isStaff) {
             Account temp = (Account) session.getAttribute("account");
             switch (temp.getRole()) {
                 case 1: {
-                    request.setAttribute("auth_error", "true");
                     String contextPath = httpRequest.getContextPath();
                     httpResponse.sendRedirect(contextPath + "/index.jsp?auth_error=true");
                     break;
@@ -155,13 +152,12 @@ public class ManagerFilterController implements Filter {
                 }
             }
         } else {
-            // the manager is not logged in, so authentication is required
-            // forwards to the Login page
+            System.out.println("1");
             String contextPath = httpRequest.getContextPath();
+            System.out.println("2");
             httpResponse.sendRedirect(contextPath + "/login.jsp?auth_error=true");
             return;
         }
-
     }
 
     /**
@@ -193,7 +189,7 @@ public class ManagerFilterController implements Filter {
         this.filterConfig = filterConfig;
         if (filterConfig != null) {
             if (debug) {
-                log("ManagerFilterController:Initializing filter");
+                log("StaffFilterController:Initializing filter");
             }
         }
     }
@@ -204,9 +200,9 @@ public class ManagerFilterController implements Filter {
     @Override
     public String toString() {
         if (filterConfig == null) {
-            return ("ManagerFilterController()");
+            return ("StaffFilterController()");
         }
-        StringBuffer sb = new StringBuffer("ManagerFilterController(");
+        StringBuffer sb = new StringBuffer("StaffFilterController(");
         sb.append(filterConfig);
         sb.append(")");
         return (sb.toString());
