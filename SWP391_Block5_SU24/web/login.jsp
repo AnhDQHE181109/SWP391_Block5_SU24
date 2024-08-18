@@ -198,6 +198,9 @@
                             <% if ("true".equals(request.getAttribute("signup_success"))) { %>
                             <p style="color:#4ac421; padding-left:7.5%" class="error">Sign up successful!</p>
                             <% } %>
+                            <% if ("true".equals(request.getParameter("auth_error"))) { %>
+                            <p style="color:red; padding-left:7.5%" class="error">Please login to access the page!</p>
+                            <% } %>
                             <%
                             String error = request.getParameter("error");
                             if(!(error==null)){%>

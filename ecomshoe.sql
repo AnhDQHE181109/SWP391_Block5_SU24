@@ -90,7 +90,7 @@ GO
 CREATE TABLE ProductStockImport (
     ImportID INT IDENTITY(1,1) PRIMARY KEY,
     AccountID INT NOT NULL,
-    ImportDate DATETIME NOT NULL,
+    ImportDate DATETIME DEFAULT GETDATE() NOT NULL,
 	ImportAction  int  NOT NULL,
 	Actorname  NVARCHAR(50) NOT NULL
 );

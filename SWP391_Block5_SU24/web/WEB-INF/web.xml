@@ -21,16 +21,8 @@
         <servlet-class>Controller.AccountController</servlet-class>
     </servlet>
     <servlet>
-        <servlet-name>ProductsController</servlet-name>
-        <servlet-class>Controller.ProductsController</servlet-class>
-    </servlet>
-    <servlet>
         <servlet-name>EditProductController</servlet-name>
         <servlet-class>Controller.EditProductController</servlet-class>
-    </servlet>
-    <servlet>
-        <servlet-name>DeleteProductController</servlet-name>
-        <servlet-class>Controller.DeleteProductController</servlet-class>
     </servlet>
     <servlet>
         <servlet-name>LogoutController</servlet-name>
@@ -64,18 +56,6 @@
         <servlet-name>ShoppingCartController</servlet-name>
         <servlet-class>Controller.ShoppingCartController</servlet-class>
     </servlet>
-    <servlet-mapping>
-        <servlet-name>ProductsController</servlet-name>
-        <url-pattern>/ProductsController</url-pattern>
-    </servlet-mapping>
-    <servlet>
-        <servlet-name>AddProductController</servlet-name>
-        <servlet-class>Controller.AddProductController</servlet-class>
-    </servlet>
-    <servlet-mapping>
-        <servlet-name>AddProductController</servlet-name>
-        <url-pattern>/AddProductController</url-pattern>
-    </servlet-mapping>
     <servlet-mapping>
         <servlet-name>LoginController</servlet-name>
         <url-pattern>/LoginController</url-pattern>
@@ -111,10 +91,6 @@
     <servlet-mapping>
         <servlet-name>EditProductController</servlet-name>
         <url-pattern>/EditProductController</url-pattern>
-    </servlet-mapping>
-    <servlet-mapping>
-        <servlet-name>DeleteProductController</servlet-name>
-        <url-pattern>/DeleteProductController</url-pattern>
     </servlet-mapping>
     <servlet-mapping>
         <servlet-name>LogoutController</servlet-name>
@@ -172,5 +148,4 @@
         <servlet-name>WishlistController</servlet-name>
         <url-pattern>/WishlistController</url-pattern>
     </servlet-mapping>
-   
 </web-app>

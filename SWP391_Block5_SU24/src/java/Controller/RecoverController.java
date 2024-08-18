@@ -82,6 +82,7 @@ public class RecoverController extends HttpServlet {
             request.setAttribute("error_recover_code", "true");
             request.getRequestDispatcher("login.jsp").forward(request, response);
         } else {
+            session.setAttribute("auth", "true");
             request.getRequestDispatcher("recover.jsp").forward(request, response);
         }
     }
