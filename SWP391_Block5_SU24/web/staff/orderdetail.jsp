@@ -193,26 +193,44 @@
                                 <td><c:out value="${stock.size}"/></td>
                                 <td><c:out value="${stock.color}"/></td>
                                 <td><c:out value="${detail.salePrice}"/></td>
+                                <td hidden=""><c:out value="${stock.productID}"/></td>
                                  
-                                <td><c:out value="${status}"/></td>
+                                                                <td>
+                                <c:choose>
+                                    <c:when test="${status == 0}">Pending</c:when>
+                                    <c:when test="${status == 1}">Processing</c:when>
+                                    <c:when test="${status == 2}">Shipping</c:when>
+                                    <c:when test="${status == 3}">Done</c:when>
+                                    <c:when test="${status == 4}">Cancelled</c:when>
+                                    <c:otherwise>Unknown</c:otherwise>
+                                </c:choose>
+                            </td>
                                 
                             </tr>
-                        </c:forEach>
+                        
                     </tbody>
                 </table>
                 
                 <div class="text-center mt-4">
-                    <c:if test="${status == 'Pending'}">
+                    <c:if test="${status == '0'}">
                         <form action="Orderdetailcontroller" method="post" class="form-inline justify-content-center">
                             <input type="hidden" name="orderId" value="<c:out value="${orderDetailList[0].orderID}"/>"/>
-                            <input type="hidden" name="newStatus" value="Shipping"/>
+                            <input type="hidden" name="newStatus" value="1"/>
                             <button type="submit" class="btn btn-primary">Confirm Order</button>
                         </form>
                     </c:if>
                     
-                    <c:if test="${status != 'Pending'}">
-                        <a href="shipcontroller" class="btn btn-secondary">Go to Shipping</a>
+                    <c:if test="${status == '1'}">
+                        <form action="ConfirmOrderController" method="post" class="form-inline justify-content-center">
+                            <input type="hidden" name="stockID" value="<c:out value="${stock.stockID}"/>"/>
+                            <input type="hidden" name="quantity" value="<c:out value="${detail.quantity}"/>"/>
+                            <input type="hidden" name="orderID" value="<c:out value="${orderDetailList[0].orderID}"/>"/>
+                            <button type="submit" class="btn btn-primary">Confirm</button>
+                        </form>
+                        <a href="shipcontroller" class="btn btn-secondary">Deny</a>
                     </c:if>
+
+</c:forEach>
 
                     <!-- Back Button -->
                     <div class="mt-3">

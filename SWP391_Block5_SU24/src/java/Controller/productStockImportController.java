@@ -58,15 +58,22 @@ public class productStockImportController extends HttpServlet {
                 if (searchUsername != null && !searchUsername.isEmpty()) {
                     List<Integer> accountIDs = daoAccount.findAccountIDsByUsername(searchUsername);
                     stockImports = daoProductStockImport.getProductStockImportsByAccountIDs(accountIDs);
-                } else if (startDateStr != null && !startDateStr.isEmpty() && endDateStr != null && !endDateStr.isEmpty()) {
+                } 
+                
+                else if (startDateStr != null && !startDateStr.isEmpty() && endDateStr != null && !endDateStr.isEmpty()) {
                     Date startDate = Date.valueOf(startDateStr);
                     Date endDate = Date.valueOf(endDateStr);
                     stockImports = daoProductStockImport.getProductStockImportsByDateRange(startDate, endDate);
-                } else if (startDateStr != null && !startDateStr.isEmpty()) {
+                }
+                
+                else if (startDateStr != null && !startDateStr.isEmpty()) {
                     Date date = Date.valueOf(startDateStr);
                     stockImports = daoProductStockImport.getProductStockImportsByDate(date);
-                } else {
+                }
+                
+                else {
                     stockImports = daoProductStockImport.getAllProductStockImports();
+
                 }
             } else {
                 stockImports = daoProductStockImport.getAllProductStockImports();

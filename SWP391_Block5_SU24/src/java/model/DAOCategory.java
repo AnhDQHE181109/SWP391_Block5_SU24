@@ -39,6 +39,24 @@ public class DAOCategory extends MyDAO {
         }
         return false;
     }
+    
+       
+// Method to update the status of a category by its ID
+    public boolean updateCategoryStatus(int categoryId, int newStatus) {
+        xSql = "UPDATE Categories SET [CategoryStatus] = ? WHERE categoryId = ?"; // SQL query to update the status
+        
+        try {
+            ps = con.prepareStatement(xSql); // Prepare the statement
+            ps.setInt(1, newStatus); // Set the new status parameter
+            ps.setInt(2, categoryId); // Set the CategoryID parameter
+            int rowsAffected = ps.executeUpdate(); // Execute the update
+            return rowsAffected > 0; // Return true if the update was successful
+        } catch (Exception e) {
+            e.printStackTrace(); // Handle any SQL exceptions
+            return false;
+        } 
+    }
+
 
     // Delete a category
     public boolean delete(int categoryId) {
@@ -61,7 +79,7 @@ public class DAOCategory extends MyDAO {
             ps.setInt(1, categoryId);
             rs = ps.executeQuery();
             if (rs.next()) {
-                return new Category(rs.getInt("CategoryID"), rs.getString("CategoryName"));
+                return new Category(rs.getInt("CategoryID"), rs.getString("CategoryName") ,rs.getInt("categorystatus") );
             }
         } catch (Exception e) {
             e.printStackTrace();
@@ -77,7 +95,7 @@ public class DAOCategory extends MyDAO {
             ps = con.prepareStatement(xSql);
             rs = ps.executeQuery();
             while (rs.next()) {
-                categories.add(new Category(rs.getInt("CategoryID"), rs.getString("CategoryName")));
+                categories.add(new Category(rs.getInt("CategoryID"), rs.getString("CategoryName") ,rs.getInt("categorystatus") )); 
             }
         } catch (Exception e) {
             e.printStackTrace();
@@ -110,13 +128,16 @@ public class DAOCategory extends MyDAO {
             ps.setString(1, "%" + searchTerm + "%");
             rs = ps.executeQuery();
             while (rs.next()) {
-                categories.add(new Category(rs.getInt("CategoryID"), rs.getString("CategoryName")));
+                 categories.add(new Category(rs.getInt("CategoryID"), rs.getString("CategoryName") ,rs.getInt("categorystatus") )); 
             }
         } catch (Exception e) {
             e.printStackTrace();
         }
         return categories;
     }
+
+
+
     
     
 }

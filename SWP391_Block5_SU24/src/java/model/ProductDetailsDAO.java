@@ -23,12 +23,11 @@ import java.util.stream.Collectors;
  */
 public class ProductDetailsDAO extends DBConnect {
 
+
     public List<Product> getAllProducts() {
         List<Product> products = new ArrayList<>();
         try {
-            String sql = "SELECT p.ProductID, p.ProductName, p.Origin, p.Material, p.Price, p.TotalQuantity, "
-                    + "c.CategoryName, b.BrandName, pi.ImageURL "
-                    + "FROM Products p "
+            String sql = "SELECT p.*, c.CategoryName, b.BrandName FROM Products p "
                     + "LEFT JOIN Categories c ON p.CategoryID = c.CategoryID "
                     + "LEFT JOIN Brand b ON p.BrandID = b.BrandID "
                     + "LEFT JOIN Stock s ON p.ProductID = s.ProductID "
@@ -43,9 +42,10 @@ public class ProductDetailsDAO extends DBConnect {
                 p.setMaterial(rs.getString("Material"));
                 p.setPrice(rs.getDouble("Price"));
                 p.setTotalQuantity(rs.getInt("TotalQuantity"));
-                p.setCategoryName(rs.getString("CategoryName"));
-                p.setBrandName(rs.getString("BrandName"));
-                p.setImageUrl(rs.getString("ImageURL")); // Add this line
+                p.setCategoryID(rs.getInt("CategoryID"));
+                p.setBrandID(rs.getInt("BrandID"));
+                p.setImageID(rs.getInt("ImageID"));
+                p.setProductStatus(rs.getInt("ProductStatus"));
                 products.add(p);
             }
             rs.close();
@@ -66,6 +66,7 @@ public class ProductDetailsDAO extends DBConnect {
                 Brand brand = new Brand();
                 brand.setBrandId(rs.getInt("BrandId"));
                 brand.setBrandName(rs.getString("BrandName"));
+                brand.setBrandstatus(rs.getInt("brandstatus"));
                 list.add(brand);
             }
             rs.close();
@@ -86,6 +87,7 @@ public class ProductDetailsDAO extends DBConnect {
                 Category category = new Category();
                 category.setCategoryId(rs.getInt("CategoryId"));
                 category.setCategoryName(rs.getString("CategoryName"));
+                category.setCategorystatus(rs.getInt("categorystatus"));
                 list.add(category);
             }
             rs.close();
@@ -97,48 +99,51 @@ public class ProductDetailsDAO extends DBConnect {
     }
 
     public boolean addProduct(Product product) {
-        boolean isSuccess = false;
+        boolean isSuccess = false; 
         try {
-            String sql = "INSERT INTO Products (ProductName, Origin, Material, Price, CategoryID, BrandID) VALUES (?, ?, ?, ?, ?, ?)";
+            String sql = "INSERT INTO Products (ProductName, Origin, Material, Price, TotalQuantity, CategoryID, BrandID, ImageID, ProductStatus) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)";
             PreparedStatement ps = conn.prepareStatement(sql);
             ps.setString(1, product.getProductName());
             ps.setString(2, product.getOrigin());
             ps.setString(3, product.getMaterial());
             ps.setDouble(4, product.getPrice());
-            ps.setInt(5, product.getCategoryId());
-            ps.setInt(6, product.getBrandId());
+            ps.setInt(5, product.getTotalQuantity());
+            ps.setInt(6, product.getCategoryID());
+            ps.setInt(7, product.getBrandID());
+            ps.setInt(8, product.getImageID());
+            ps.setInt(9, product.getProductStatus());
 
-            int rowsAffected = ps.executeUpdate(); // Execute the update and get the number of affected rows
+            int rowsAffected = ps.executeUpdate();
             if (rowsAffected > 0) {
-                isSuccess = true; // If one or more rows were affected, the insert was successful
+                isSuccess = true;
             }
 
             ps.close();
         } catch (Exception e) {
             System.out.println("Error inserting product: " + e.getMessage());
         }
-        return isSuccess;
+        return isSuccess; 
     }
 
-    public boolean updateProduct(Product product) {
-        String sql = "UPDATE Products SET productName = ?, origin = ?, material = ?, price = ?, brandId = ?, categoryId = ? WHERE productId = ?";
-        try (
-                PreparedStatement ps = conn.prepareStatement(sql)) {
 
+    public boolean updateProduct(Product product) {
+        String sql = "UPDATE Products SET ProductName = ?, Origin = ?, Material = ?, Price = ?, TotalQuantity = ?, CategoryID = ?, BrandID = ?, ImageID = ?, ProductStatus = ? WHERE ProductID = ?";
+        try (PreparedStatement ps = conn.prepareStatement(sql)) {
             ps.setString(1, product.getProductName());
             ps.setString(2, product.getOrigin());
             ps.setString(3, product.getMaterial());
             ps.setDouble(4, product.getPrice());
-            ps.setInt(5, product.getBrandId());
-            ps.setInt(6, product.getCategoryId());
-            ps.setInt(7, product.getProductId());
+            ps.setInt(5, product.getTotalQuantity());
+            ps.setInt(6, product.getCategoryID());
+            ps.setInt(7, product.getBrandID());
+            ps.setInt(8, product.getImageID());
+            ps.setInt(9, product.getProductStatus());
+            ps.setInt(10, product.getProductId());
 
             int rowsUpdated = ps.executeUpdate();
             return rowsUpdated > 0;
-
         } catch (SQLException e) {
             e.printStackTrace();
-//        return false;
         }
         return false;
     }
@@ -195,7 +200,7 @@ public class ProductDetailsDAO extends DBConnect {
         return false;
     }
 
-    public Product getProductById(int productId) {
+ public Product getProductById(int productId) {
         Product product = null;
         try {
             String sql = "SELECT * FROM Products WHERE ProductID = ?";
@@ -210,9 +215,11 @@ public class ProductDetailsDAO extends DBConnect {
                 product.setOrigin(rs.getString("Origin"));
                 product.setMaterial(rs.getString("Material"));
                 product.setPrice(rs.getDouble("Price"));
-                product.setCategoryId(rs.getInt("CategoryID"));
-                product.setBrandId(rs.getInt("BrandID"));
-                // Set other fields if necessary
+                product.setTotalQuantity(rs.getInt("TotalQuantity"));
+                product.setCategoryID(rs.getInt("CategoryID"));
+                product.setBrandID(rs.getInt("BrandID"));
+                product.setImageID(rs.getInt("ImageID"));
+                product.setProductStatus(rs.getInt("ProductStatus"));
             }
         } catch (SQLException e) {
             e.printStackTrace();

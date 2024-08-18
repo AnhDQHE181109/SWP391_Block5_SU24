@@ -56,6 +56,11 @@ public class StockImportDetail implements Serializable {
         this.stockQuantity = stockQuantity;
     }
 
+    @Override
+    public String toString() {
+        return "StockImportDetail{" + "stockImportDetailID=" + stockImportDetailID + ", stockID=" + stockID + ", importID=" + importID + ", stockQuantity=" + stockQuantity + '}';
+    }
+
       
 
     
