@@ -70,27 +70,19 @@
                             <div class="col-sm-12 text-left menu-1">
                                 <ul>
                                     <li class="active"><a href="index.jsp">Home</a></li>
-                                    <li class="has-dropdown">
-                                        <ul class="dropdown">
-                                            <li><a href="product-detail.html">Product Detail</a></li>
-                                            <li><a href="cart.html">Shopping Cart</a></li>
-                                            <li><a href="checkout.html">Checkout</a></li>
-                                            <li><a href="order-complete.html">Order Complete</a></li>
-                                            <li><a href="add-to-wishlist.html">Wishlist</a></li>
-                                        </ul>
-                                    </li>
                                     <li><a href="products.jsp">Products</a></li>
                                     <li><a href="about.html">About</a></li>
                                     <li><a href="contact.html">Contact</a></li>
-                                    <%if(session.getAttribute("account")!=null){
-                                    Account account = (Account) session.getAttribute("account");
-                                    %>
-                                    <li class = "cart" id="lsbtn"><a href="LogoutController">Logout</a></li>
-                                    <li class = "cart"><i class="fa-regular fa-user"> </i> <%= account.getUsername()%></li>
-                                    <%}else{%>
-                                    <li class = "cart" id="lsbtn"><a href="signup.jsp">Sign Up</a></li>
-                                    <li class = "cart" id="lsbtn"><a href="login.jsp">Login</a></li><%}%>
-                                    <li class="cart"><a href="cart.html"><i class="icon-shopping-cart"></i> Cart [0]</a></li>
+                                    <% if (session.getAttribute("account") != null) { %>
+                                        <li class="cart"><a href="WishlistController"><i class="fa fa-heart"></i> Wishlist</a></li>
+                                        <li class="cart"><a href="cart.jsp"><i class="icon-shopping-cart"></i> Cart [0]</a></li>
+                                        <li class="cart"><a href="LogoutController">Logout</a></li>
+                                        <li class="cart"><i class="fa-regular fa-user"></i> <%= ((Account) session.getAttribute("account")).getUsername() %></li>
+                                    <% } else { %>
+                                        <li class="cart"><a href="signup.jsp">Sign Up</a></li>
+                                        <li class="cart"><a href="login.jsp">Login</a></li>
+                                        <li class="cart"><a href="cart.jsp"><i class="icon-shopping-cart"></i> Cart [0]</a></li>
+                                    <% } %>
                                 </ul>
                             </div>
                         </div>

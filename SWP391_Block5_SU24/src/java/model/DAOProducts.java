@@ -33,38 +33,6 @@ public class DAOProducts extends MyDAO {
         return productName;
     }
 
-    // Method to get products by name
-    public List<Product> getProductsByName(String productName) {
-        List<Product> productList = new ArrayList<>();
-        xSql = "SELECT * FROM Products WHERE ProductName LIKE ?";
-        
-        try {
-            ps = con.prepareStatement(xSql);
-            ps.setString(1, "%" + productName + "%");
-            rs = ps.executeQuery();
-            
-            while (rs.next()) {
-                Product product = new Product();
-                product.setProductId(rs.getInt("ProductID"));
-                product.setProductName(rs.getString("ProductName"));
-                product.setOrigin(rs.getString("Origin"));
-                product.setMaterial(rs.getString("Material"));
-                product.setPrice(rs.getDouble("Price"));
-                product.setTotalQuantity(rs.getInt("TotalQuantity"));
-                product.setCategoryID(rs.getInt("CategoryID"));
-                product.setBrandID(rs.getInt("BrandID"));
-                product.setImageID(rs.getInt("ImageID"));
-                
-                productList.add(product);
-            }
-        } catch (SQLException e) {
-            e.printStackTrace();
-            System.out.println("Error getting products by name: " + productName + ". Error: " + e.getMessage());
-        } finally {
-            closeResources();
-        }
-        return productList;
-    }
 
     // Method to close resources
     private void closeResources() {
