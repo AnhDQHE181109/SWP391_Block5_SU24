@@ -43,7 +43,7 @@ public class WishlistController extends HttpServlet {
             out.println("<!DOCTYPE html>");
             out.println("<html>");
             out.println("<head>");
-            out.println("<title>Servlet WishlistController</title>");            
+            out.println("<title>Servlet WishlistController</title>");
             out.println("</head>");
             out.println("<body>");
             out.println("<h1>Servlet WishlistController at " + request.getContextPath() + "</h1>");
@@ -65,25 +65,25 @@ public class WishlistController extends HttpServlet {
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         HttpSession session = request.getSession();
-    Account account = (Account) session.getAttribute("account");
+        Account account = (Account) session.getAttribute("account");
 
-    if (account != null) {
-        WishlistDAO wishlistDAO = new WishlistDAO();
-        String search = request.getParameter("search");
-        List<Product> wishlistItems;
+        if (account != null) {
+            WishlistDAO wishlistDAO = new WishlistDAO();
+            String search = request.getParameter("search");
+            List<Product> wishlistItems;
 
-        if (search != null && !search.trim().isEmpty()) {
-            wishlistItems = wishlistDAO.searchWishlistItemsByName(account.getAccountID(), search);
+            if (search != null && !search.trim().isEmpty()) {
+                wishlistItems = wishlistDAO.searchWishlistItemsByName(account.getAccountID(), search);
+            } else {
+                wishlistItems = wishlistDAO.getWishlistItems(account.getAccountID());
+            }
+
+            request.setAttribute("wishlistItems", wishlistItems);
+            RequestDispatcher dispatcher = request.getRequestDispatcher("customer/wishlist.jsp");
+            dispatcher.forward(request, response);
         } else {
-            wishlistItems = wishlistDAO.getWishlistItems(account.getAccountID());
+            response.sendRedirect("../login.jsp");
         }
-
-        request.setAttribute("wishlistItems", wishlistItems);
-        RequestDispatcher dispatcher = request.getRequestDispatcher("customer/wishlist.jsp");
-        dispatcher.forward(request, response);
-    } else {
-        response.sendRedirect("../login.jsp");
-    }
     }
 
     /**
