@@ -100,7 +100,7 @@ GO
 CREATE TABLE Orders (
     OrderID INT IDENTITY(1,1) PRIMARY KEY,
     AccountID INT NULL,
-    OrderDate DATETIME NULL,
+    OrderDate DATE NULL,
     Status int NULL,
     CONSTRAINT FK_Orders_Accounts FOREIGN KEY (AccountID) REFERENCES Accounts(AccountID)
 );
@@ -264,8 +264,8 @@ VALUES
 -- Insert data into Orders
 INSERT INTO Orders (AccountID, OrderDate, Status)
 VALUES 
-(1, GETDATE(), 0),
-(2, GETDATE(), 0);
+(1, '2024-05-13', 0),
+(2, '2024-08-18', 0);
 
 -- Insert data into Cart
 INSERT INTO Cart (AccountID, StockID, quantity, DiscountID, date_added)
