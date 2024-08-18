@@ -43,7 +43,7 @@ public class WishlistController extends HttpServlet {
             out.println("<!DOCTYPE html>");
             out.println("<html>");
             out.println("<head>");
-            out.println("<title>Servlet WishlistController</title>");            
+            out.println("<title>Servlet WishlistController</title>");
             out.println("</head>");
             out.println("<body>");
             out.println("<h1>Servlet WishlistController at " + request.getContextPath() + "</h1>");
