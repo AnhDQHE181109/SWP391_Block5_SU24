@@ -4,12 +4,15 @@
  */
 package Controller;
 
+import entity.ShoppingCartItem;
 import java.io.IOException;
 import java.io.PrintWriter;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import java.util.List;
+import model.ShoppingCartDAO;
 
 /**
  *
@@ -34,7 +37,7 @@ public class ShoppingCartController extends HttpServlet {
             out.println("<!DOCTYPE html>");
             out.println("<html>");
             out.println("<head>");
-            out.println("<title>Servlet ShoppingCartController</title>");            
+            out.println("<title>Servlet ShoppingCartController</title>");
             out.println("</head>");
             out.println("<body>");
             out.println("<h1>Servlet ShoppingCartController at " + request.getContextPath() + "</h1>");
@@ -55,7 +58,15 @@ public class ShoppingCartController extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        processRequest(request, response);
+        response.setContentType("text/html;charset=UTF-8");
+        PrintWriter out = response.getWriter();
+
+        ShoppingCartDAO scDAO = new ShoppingCartDAO();
+
+        List<ShoppingCartItem> cartItems = scDAO.getCartItemsByAccountID(1);
+
+        request.setAttribute("cartItems", cartItems);
+        request.getRequestDispatcher("customer/cart.jsp").forward(request, response);
     }
 
     /**
