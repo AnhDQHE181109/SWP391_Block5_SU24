@@ -26,12 +26,33 @@ import model.DAOOrder;
  */
 public class Ordercontroller extends HttpServlet {
 
-    @Override
-    protected void doGet(HttpServletRequest request, HttpServletResponse response)
-            throws ServletException, IOException {
-        DAOOrder daoOrder = new DAOOrder();
-        AccountDAO accountDAO = new AccountDAO();
+@Override
+protected void doGet(HttpServletRequest request, HttpServletResponse response)
+        throws ServletException, IOException {
+    DAOOrder daoOrder = new DAOOrder();
+    AccountDAO accountDAO = new AccountDAO();
 
+    HttpSession session = request.getSession();
+    Account account = (Account) session.getAttribute("account");
+    if (account == null) {
+        response.sendError(HttpServletResponse.SC_FORBIDDEN, "You do not have permission to access this page.");
+        return;
+    }
+    if (account.getRole() == 1) {
+        response.sendError(HttpServletResponse.SC_FORBIDDEN, "You do not have permission to access this page.");
+        return;
+    }
+
+    String orderIdParam = request.getParameter("orderid");
+    List<Order> orderList = new ArrayList<>();
+
+    if (orderIdParam != null && !orderIdParam.trim().isEmpty()) {
+        int orderId = Integer.parseInt(orderIdParam);
+        Order order = daoOrder.getOrderById(orderId, null);
+        if (order != null) {
+            orderList.add(order);
+        }
+    } else {
         String usernameSearch = request.getParameter("username");
         String orderDateSearch = request.getParameter("orderDate");
         String statusSearch = request.getParameter("status");
@@ -90,65 +111,10 @@ public class Ordercontroller extends HttpServlet {
     request.setAttribute("totalPages", totalPages);
     request.setAttribute("phoneMap", phoneMap);
 
-        } else if (orderDateSearch != null && !orderDateSearch.trim().isEmpty()) {
-            orderList = daoOrder.getOrdersByDate(orderDateSearch);
+    // Forward request and response to the JSP page
+    request.getRequestDispatcher("staff/order_manage.jsp").forward(request, response);
+}
 
-        } else if (statusSearch != null && !statusSearch.trim().isEmpty()) {
-            orderList = daoOrder.getOrdersByStatus(statusSearch);
-
-        } else if (startDate != null && !startDate.trim().isEmpty() && endDate != null && !endDate.trim().isEmpty()) {
-            orderList = daoOrder.getOrdersByDateRange(startDate, endDate);
-
-        } else {
-            orderList = daoOrder.getAllOrders();
-        }
-
-        // Phân trang
-        int page = 1;
-        int recordsPerPage = 10;
-        if (request.getParameter("page") != null) {
-            page = Integer.parseInt(request.getParameter("page"));
-        }
-        int totalRecords = orderList.size();
-        int totalPages = (int) Math.ceil(totalRecords * 1.0 / recordsPerPage);
-
-        // Tính toán chỉ mục bắt đầu và kết thúc cho trang hiện tại
-        int start = (page - 1) * recordsPerPage;
-        int end = Math.min(start + recordsPerPage, totalRecords);
-
-        // Lấy danh sách đơn hàng cho trang hiện tại
-        List<Order> paginatedOrderList = orderList.subList(start, end);
-
-        // Populate username and address map for display
-        Map<Integer, String> usernameMap = new HashMap<>();
-        Map<Integer, String> addressMap = new HashMap<>();
-        Map<Integer, String> phoneMap = new HashMap<>();
-        for (Order order : paginatedOrderList) {
-            int accountID = order.getAccountID();
-            String username = accountDAO.getUsernameByAccountID(accountID);
-            String address = accountDAO.getAdressByAccountID(accountID);
-            String phone = accountDAO.getPhoneByAccountID(accountID);
-            usernameMap.put(accountID, username);
-            addressMap.put(accountID, address);
-            phoneMap.put(accountID, phone);
-        }
-
-        // Set attributes for the JSP
-        request.setAttribute("orderList", paginatedOrderList);
-        request.setAttribute("usernameMap", usernameMap);
-        request.setAttribute("addressMap", addressMap);
-        request.setAttribute("currentPage", page);
-        request.setAttribute("totalPages", totalPages);
-        request.setAttribute("phoneMap", phoneMap);
-        HttpSession session = request.getSession();
-        System.out.println("phoneMap" + phoneMap);
-        if("true".equals(session.getAttribute("auth_error"))){
-        request.setAttribute("auth_error", "true");
-        session.setAttribute("auth_error", "false");
-        }
-        // Forward request and response to the JSP page
-        request.getRequestDispatcher("staff/order_manage.jsp").forward(request, response);
-    }
 
 
     @Override
