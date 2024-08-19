@@ -225,7 +225,7 @@
 
 							<div class="row">
 								<div class="col-sm-12 text-center">
-									<p class="addtocart"><button type="submit" class="btn btn-primary btn-addtocart"><span><i class="icon-shopping-cart"></i></span> Add to Cart</button> <a href=""><i class="bi bi-arrow-up-left-square-fill"></i></a></p>
+									<p class="addtocart"><button type="submit" class="btn btn-primary btn-addtocart"><span><i class="icon-shopping-cart"></i></span> Add to Cart</button> <a href="ProductDetailsController?addToWishlistProduct=<%=productColors.get(0).getProductID() %>&addToWishlistColor=<%=selectedColor %>&addToWishlistSize=<%=selectedSize %>"><i class="icon-heart"></i></a></p>
 								</div>
 							</div>
 

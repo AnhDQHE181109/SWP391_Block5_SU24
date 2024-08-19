@@ -432,6 +432,69 @@ public class ProductDetailsDAO extends DBConnect {
         }
     }
 
+    public int getStockIDbyColorAndSizeAndProductID(String color, int size, int productID) {
+
+        String sql = "select StockID\n"
+                + "from Stock\n"
+                + "where Color = ? and Size = ? and ProductID = ?";
+
+        int stockID = 0;
+
+        try {
+            PreparedStatement ps = conn.prepareStatement(sql);
+            ps.setString(1, color);
+            ps.setInt(2, size);
+            ps.setInt(3, productID);
+
+            ResultSet rs = ps.executeQuery();
+            if (rs.next()) {
+                return rs.getInt("StockID");
+            }
+
+            if (rs != null) {
+                rs.close();
+            }
+            if (ps != null) {
+                ps.close();
+            }
+        } catch (SQLException e) {
+            System.out.println("getStockIDbyColorAndSizeAndProductID(): " + e);
+        }
+
+        return stockID;
+    }
+
+    public boolean getWishlistItemExists(int accountID, int stockID) {
+
+        String sql = "select AccountID, StockID\n"
+                + "from Wishlist\n"
+                + "where AccountID = ? and StockID = ?";
+
+        boolean wishlistItemExists = false;
+
+        try {
+            PreparedStatement ps = conn.prepareStatement(sql);
+            ps.setInt(1, accountID);
+            ps.setInt(2, stockID);
+
+            ResultSet rs = ps.executeQuery();
+            if (rs.next()) {
+                return true;
+            }
+
+            if (rs != null) {
+                rs.close();
+            }
+            if (ps != null) {
+                ps.close();
+            }
+        } catch (SQLException e) {
+            System.out.println("getWishlistItemExists(): " + e);
+        }
+
+        return wishlistItemExists;
+    }
+
     public List<String> getAllColors() {
         List<String> colors = new ArrayList<>();
         String sql = "SELECT DISTINCT Color FROM Stock";
