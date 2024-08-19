@@ -6,7 +6,7 @@
 
 <!DOCTYPE html>
 <html lang="en">
-
+    <%Account account = (Account) session.getAttribute("account");%>
     <head>
         <title>Stocks management</title>
         <meta charset="utf-8">
