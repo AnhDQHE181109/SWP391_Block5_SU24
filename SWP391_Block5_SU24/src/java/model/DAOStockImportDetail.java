@@ -11,7 +11,7 @@ import java.util.List;
 public class DAOStockImportDetail extends MyDAO {
 
     // Create a new stock import detail
-    public boolean create(StockImportDetail stockImportDetail) {
+    public boolean createnew(StockImportDetail stockImportDetail) {
         String sql = "INSERT INTO StockImportDetail (stockID, [ImportID], stockQuantity) VALUES (?, ?, ?)";
         try {
             ps = con.prepareStatement(sql);
