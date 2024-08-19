@@ -120,7 +120,7 @@
                                     <div class="product-img" style="background-image: url(${pageContext.request.contextPath}/<%= product.getImageURL() %>);">
                                     </div>
                                     <div class="display-tc">
-                                        <h3><%= product.getProductName() %></h3>
+                                        <h3><a href="${pageContext.request.contextPath}/ProductDetailsController?productID=<%=product.getProductId() %>"><%= product.getProductName() %></a></h3>
                                     </div>
                                 </div>
                                 <div class="one-eight text-center">
