@@ -74,36 +74,41 @@ public class ShoppingCartController extends HttpServlet {
             return;
         }
         int accountID = account.getAccountID();
-        
+
         ShoppingCartDAO scDAO = new ShoppingCartDAO();
         ProductDetailsDAO pdDAO = new ProductDetailsDAO();
-        
+
+        String removalConfirmation = null;
         String quantityUpdateFor = request.getParameter("quantityUpdateFor");
         String quantityAmountIn = request.getParameter("quantityAmount");
         if (quantityUpdateFor != null) {
             quantityUpdateFor = quantityUpdateFor.replaceAll("[^-?0-9]+", "");
-            
+
             int updatedStockID = Integer.parseInt(quantityUpdateFor);
             int quantityAmount = Integer.parseInt(quantityAmountIn);
-            
-            if (updatedStockID == 0) {
-                
+
+            if (quantityAmount == 0) {
+                removalConfirmation = "confirmRemoval_" + updatedStockID;
+            } else {
+                scDAO.setCartQuantity(quantityAmount, accountID, updatedStockID);
             }
-            
-            scDAO.setCartQuantity(quantityAmount, accountID, updatedStockID);
+
         }
-        
+
         String removedProduct = request.getParameter("removedProduct");
         if (removedProduct != null) {
+            int removedProductStockID = Integer.parseInt(removedProduct);
             
+            scDAO.removeProductFromCart(accountID, removedProductStockID);
         }
-        
+
         int cartItemsCount = pdDAO.getCartItemsCount(accountID);
 
         List<ShoppingCartItem> cartItems = scDAO.getCartItemsByAccountID(accountID);
 
         request.setAttribute("cartItemsCount", cartItemsCount);
         request.setAttribute("cartItems", cartItems);
+        request.setAttribute("removalConfirmation", removalConfirmation);
         request.getRequestDispatcher("customer/cart.jsp").forward(request, response);
     }
 
@@ -159,7 +164,7 @@ public class ShoppingCartController extends HttpServlet {
                 out.println("</script>");
                 return;
             }
-            scDAO.setCartQuantity(quantityInCart + quantity , accountID, stockID);
+            scDAO.setCartQuantity(quantityInCart + quantity, accountID, stockID);
         } else if (quantityInCart >= 10) {
             out.println("<script type=\"text/javascript\">");
             out.println("alert(\"You've achieved the maximum amount for ordering such variant, please contact us if you want to order more than 10!\")");

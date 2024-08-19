@@ -250,8 +250,8 @@
 											  <p>Size: <strong><%=cartItem.getSize() %></strong> | Color: <strong><%=cartItem.getColor() %></strong></p>
 											</div>
 											<div class="modal-footer">
-											  <button type="button" class="btn btn-success">Yes</button>
-											  <button type="button" class="btn btn-danger">No</button>
+											  <button type="button" class="btn btn-success" onclick="location.href='shoppingCart?removedProduct=<%=cartItem.getStockID() %>';">Yes</button>
+											  <button type="button" class="btn btn-danger" data-dismiss="modal">No</button>
 											</div>
 										  </div>
 									  </div>
@@ -350,7 +350,7 @@
 									<div class="total">
 										<div class="sub">
 											<p><span>Subtotal:</span> <span>$200.00</span></p>
-											<p><span>Delivery:</span> <span>$0.00</span></p>
+											<!-- <p><span>Delivery:</span> <span>$0.00</span></p> -->
 											<p><span>Discount:</span> <span>$45.00</span></p>
 										</div>
 										<div class="grand-total">
@@ -529,14 +529,14 @@ Copyright &copy;<script>document.write(new Date().getFullYear());</script> All r
 		
 		// If is not undefined
 	  
-			// Increment
-			if(quantity>1){
+			// Decrement
+			if(quantity>0){
 				document.getElementById(quantityBox).innerHTML = quantity - 1;
 				location.href = "shoppingCart?quantityUpdateFor=" + decrementButton + "&quantityAmount=" + document.getElementById(quantityBox).innerHTML;
 			}
 	
 			
-}
+	}
 
 			function openPopup(popupID) {
                 // Display the popup
@@ -587,6 +587,11 @@ Copyright &copy;<script>document.write(new Date().getFullYear());</script> All r
 	<script src="${pageContext.request.contextPath}/js/jquery.stellar.min.js"></script>
 	<!-- Main -->
 	<script src="${pageContext.request.contextPath}/js/main.js"></script>
+
+	<% String removalConfirmation = (String) request.getAttribute("removalConfirmation");
+	if (removalConfirmation != null) { %>
+		<script>openModal('<%=removalConfirmation %>');</script>
+	<% } %>
 
 	</body>
 </html>
