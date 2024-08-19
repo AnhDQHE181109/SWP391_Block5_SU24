@@ -117,7 +117,7 @@
                             %>
                             <div class="product-cart d-flex">
                                 <div class="one-forth">
-                                    <div class="product-img" style="background-image: url(<%= product.getImageURL() %>);">
+                                    <div class="product-img" style="background-image: url(${pageContext.request.contextPath}/<%= product.getImageURL() %>);">
                                     </div>
                                     <div class="display-tc">
                                         <h3><%= product.getProductName() %></h3>
@@ -142,7 +142,7 @@
                                     <div class="display-tc">
                                         <form action="${pageContext.request.contextPath}/RemoveWishlistController" method="post">
                                             <input type="hidden" name="stockId" value="<%= product.getStockID() %>">
-                                            <button type="submit" class="btn btn-danger btn-remove-wishlist">Remove</button>
+    <button type=                           <button type="submit" class="btn btn-danger btn-remove-wishlist">Remove</button>
                                         </form>
                                     </div>
                                 </div>
