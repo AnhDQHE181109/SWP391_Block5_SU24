@@ -1,4 +1,5 @@
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <%@page import="model.DAOBrand" %>
 <%@page import="entity.Brand" %>
 <%@page import="java.util.List" %>
@@ -7,7 +8,7 @@
 
 <head>
     <meta charset="utf-8">
-    <title>Brand Management - Bootstrap Admin Template</title>
+    <title>Discount Management - Bootstrap Admin Template</title>
     <meta content="width=device-width, initial-scale=1.0" name="viewport">
     
     <!-- Favicon -->
@@ -24,7 +25,7 @@
     
     <!-- Libraries Stylesheet -->
     <link href="lib/owlcarousel/assets/owl.carousel.min.css" rel="stylesheet">
-    <link href="lib/tempusdominus/css/tempusdominus-bootstrap-4.min.css" rel="stylesheet" />
+    <link href="lib/tempusdominus/css/tempusdominus-bootstrap-4.min.css" rel="stylesheet">
     
     <!-- Customized Bootstrap Stylesheet -->
     <link href="css/bootstrap.min.css" rel="stylesheet">
@@ -72,40 +73,12 @@
                 alert('An error occurred while updating the brand. Please try again later.');
             });
         }
-        
-        function validateInput() {
-            const inputField = document.getElementById('brandName').value.trim();
-            const errorMessage = document.getElementById('error-message');
-            const specialCharPattern = /[!@#$%^&*(),.?":{}|<>]/;
-            const numberPattern = /\d/;
-
-            if (inputField === '') {
-                errorMessage.textContent = 'This field cannot be empty.';
-                return false;
-            }
-
-            if (numberPattern.test(inputField)) {
-                errorMessage.textContent = 'Numbers are not allowed.';
-                return false;
-            }
-
-            if (specialCharPattern.test(inputField)) {
-                errorMessage.textContent = 'Special characters are not allowed.';
-                return false;
-            }
-
-            errorMessage.textContent = '';  // Clear error message if no errors
-            return true;
-        }
-
-         
     </script>
-
-
 </head>
 
 <body>
-    <div class="container-fluid position-relative bg-light">
+    
+    <div class="container-fluid position-relative bg-light" style="padding-left: 250px;">
         <!-- Sidebar Start -->
         <div class="sidebar pe-4 pb-3">
             <nav class="navbar bg-light navbar-light">
@@ -151,48 +124,99 @@
             </nav>
         </div>
         <!-- Sidebar End -->
-
-        <!-- Content Start -->
-        <div class="content p-4">
-            
-    <h1>${brand != null ? "Edit Brand" : "Add New Brand"}</h1>
-    <c:if test="${not empty errorMessage}">
-        <p style="color: red;">${errorMessage}</p>
-    </c:if>
-<form action="BrandController" method="post" onsubmit="return validateInput()">
-    <input type="hidden" name="brandId" value="${brand != null ? brand.brandId : ''}"/>
-    <label for="brandName">Brand Name:</label>
-    <input type="text" id="brandName" name="brandName" value="${brand != null ? brand.brandName : ''}" required/>
-    <div id="error-message" style="color: red;"></div>
-    <input type="hidden" name="action" value="${brand != null ? 'update' : 'insert'}"/>
-    <button type="submit">${brand != null ? "Update Brand" : "Add Brand"}</button>
-</form>
-    <a href="BrandController?action=list">Back to Brand List</a>
-    
-        </div>
-        <!-- Content End -->
-
-        <!-- Modal for Editing Brand -->
-        <div class="modal fade" id="editModal" tabindex="-1" aria-labelledby="editModalLabel" aria-hidden="true">
-            <div class="modal-dialog">
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <h5 class="modal-title" id="editModalLabel">Edit Brand</h5>
-                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        
+        <div class="container mt-4">
+            <!-- Header for Discount Management -->
+            <header class="mb-4">
+                <h1>Discount Management</h1>
+                <form action="DiscountServlet" method="get" class="mb-4">
+                    <input type="hidden" name="action" value="search">
+                    <div class="mb-3">
+                        <label for="product_name" class="form-label">Search by Product Name:</label>
+                        <input type="text" id="product_name" name="product_name" class="form-control" placeholder="Enter product name" />
                     </div>
-                    <form id="editForm" onsubmit="updateBrand(event)">
-                        <div class="modal-body">
-                            <input type="hidden" name="brandId"/>
-                            <div class="mb-3">
-                                <label for="brandName" class="form-label">Brand Name</label>
-                                <input type="text" class="form-control" id="brandName" name="brandName" required/>
+                    <button type="submit" class="btn btn-primary">Search</button>
+                </form>
+<!--                <a href="DiscountServlet?action=showadform" class="btn btn-primary">Add New Discount</a>-->
+            </header>
+
+            <!-- Discount List Table -->
+            <section>
+                <c:if test="${not empty discountList}">
+                    <table class="table table-striped table-bordered">
+                        <thead>
+                            <tr>
+                                <th>Discount ID</th>
+                                <th>Product ID</th>
+                                <th>Discount Amount</th>
+                                <th>Product Name</th>
+                                <th>Actions</th> <!-- Column for Edit Button -->
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <c:forEach var="discount" items="${discountList}">
+                                <c:set var="product" value="${productMap[discount.productID]}" />
+                                <tr>
+                                    <td>${discount.discountID}</td>
+                                    <td>${discount.productID}</td>
+                                    <td>${discount.discountAmount}</td>
+                                    <td>${product.productName}</td>
+                                    <td>
+                                        <!-- Edit Button -->
+                                        <a href="DiscountServlet?action=showeditform&discountID=${discount.discountID}&productname=${product.productName}" class="btn btn-warning">Edit</a>
+                                    </td>
+                                </tr>
+                            </c:forEach>
+                        </tbody>
+                    </table>
+
+                    <!-- Pagination Controls -->
+                    <nav aria-label="Page navigation">
+                        <ul class="pagination">
+                            <c:if test="${currentPage > 1}">
+                                <li class="page-item">
+                                    <a class="page-link" href="DiscountServlet?action=list&page=${currentPage - 1}">&laquo; Previous</a>
+                                </li>
+                            </c:if>
+
+                            <c:forEach var="pageNum" begin="1" end="${totalPages}">
+                                <li class="page-item <c:if test="${pageNum == currentPage}">active</c:if>">
+                                    <a class="page-link" href="DiscountServlet?action=list&page=${pageNum}">${pageNum}</a>
+                                </li>
+                            </c:forEach>
+
+                            <c:if test="${currentPage < totalPages}">
+                                <li class="page-item">
+                                    <a class="page-link" href="DiscountServlet?action=list&page=${currentPage + 1}">Next &raquo;</a>
+                                </li>
+                            </c:if>
+                        </ul>
+                    </nav>
+                </c:if>
+            </section>
+
+            <!-- Edit Modal -->
+            <div class="modal fade" id="editModal" tabindex="-1" aria-labelledby="editModalLabel" aria-hidden="true">
+                <div class="modal-dialog">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title" id="editModalLabel">Edit Brand</h5>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                        </div>
+                        <form id="editForm" onsubmit="updateBrand(event)">
+                            <div class="modal-body">
+                                <input type="hidden" name="brandId">
+                                <div class="mb-3">
+                                    <label for="brandName" class="form-label">Brand Name</label>
+                                    <input type="text" class="form-control" id="brandName" name="brandName" required>
+                                </div>
                             </div>
-                        </div>
-                        <div class="modal-footer">
-                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                            <button type="submit" class="btn btn-primary">Save changes</button>
-                        </div>
-                    </form>
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                                <button type="submit" class="btn btn-primary">Save changes</button>
+                            </div>
+                        </form>
+                    </div>
                 </div>
             </div>
         </div>

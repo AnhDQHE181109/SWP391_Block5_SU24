@@ -129,19 +129,27 @@
                             <div class="col-sm-12 text-left menu-1">
                                 <ul>
                                     <li class="active"><a href="index.jsp">Home</a></li>
-                                    <li><a href="products.jsp">Products</a></li>
+                                    <li><a class="active" href="products.jsp">Products</a></li>
                                     <li><a href="about.html">About</a></li>
                                     <li><a href="contact.html">Contact</a></li>
-                                        <% if (session.getAttribute("account") != null) { %>
-                                    <li class="cart"><a href="wishlist.jsp"><i class="fa fa-heart"></i> Wishlist</a></li>
-                                    <li class="cart"><a href="customer/cart.jsp"><i class="icon-shopping-cart"></i> Cart [0]</a></li>
-                                    <li class="cart"><a href="LogoutController">Logout</a></li>
-                                    <li class="cart"><i class="fa-regular fa-user"></i> <%= ((Account) session.getAttribute("account")).getUsername() %></li>
-                                        <% } else { %>
-                                    <li class="cart"><a href="signup.jsp">Sign Up</a></li>
-                                    <li class="cart"><a href="login.jsp">Login</a></li>
-                                    <li class="cart"><a href="customer/cart.jsp"><i class="icon-shopping-cart"></i> Cart [0]</a></li>
-                                        <% } %>
+                     <% if (session.getAttribute("account") != null) { %>
+                                        <li class="cart"><a href="wishlist.jsp"><i class="fa fa-heart"></i> Wishlist</a></li>
+                                        <%
+                                        int accountID = 0;
+                                        Account account = (Account)session.getAttribute("account");
+                                        if (account != null) {
+                                            accountID = account.getAccountID();
+                                        }
+                                        int cartItemsCount = pDAO.getCartItemsCount(accountID);
+								    %>
+                                        <li class="cart"><a href="shoppingCart"><i class="icon-shopping-cart"></i> Cart [<%=cartItemsCount %>]</a></li>
+                                        <li class="cart"><a href="LogoutController">Logout</a></li>
+                                        <li class="cart"><i class="fa-regular fa-user"></i> <%= ((Account) session.getAttribute("account")).getUsername() %></li>
+                                    <% } else { %>
+                                        <li class="cart"><a href="signup.jsp">Sign Up</a></li>
+                                        <li class="cart"><a href="login.jsp">Login</a></li>
+                                        <li class="cart"><a href="shoppingCart"><i class="icon-shopping-cart"></i> Cart [0]</a></li>
+                                    <% } %>
 
                                 </ul>
                             </div>

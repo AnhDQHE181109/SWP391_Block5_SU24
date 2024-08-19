@@ -67,9 +67,6 @@ public class ShoppingCartDAO extends DBConnect {
         String sql = "insert into Cart(AccountID, StockID, quantity, DiscountID, date_added)\n"
                 + "values (?, ?, ?, ?, getdate())";
 
-        ProductStockDetails productSize = null;
-        List<ProductStockDetails> productSizes = new ArrayList<>();
-
         try {
             PreparedStatement ps = conn.prepareStatement(sql);
             ps.setInt(1, accountID);
@@ -150,6 +147,37 @@ public class ShoppingCartDAO extends DBConnect {
         }
 
         return discountID;
+    }
+
+    public int getCartQuantityOfStockID(int accountID, int stockID) {
+
+        String sql = "select StockID, quantity\n"
+                + "from Cart\n"
+                + "where AccountID = ? and StockID = ?";
+
+        int quantity = 0;
+
+        try {
+            PreparedStatement ps = conn.prepareStatement(sql);
+            ps.setInt(1, accountID);
+            ps.setInt(2, stockID);
+
+            ResultSet rs = ps.executeQuery();
+            if (rs.next()) {
+                return rs.getInt(2);
+            }
+
+            if (rs != null) {
+                rs.close();
+            }
+            if (ps != null) {
+                ps.close();
+            }
+        } catch (SQLException e) {
+            System.out.println("getCartQuantityOfStockID(): " + e);
+        }
+
+        return quantity;
     }
 
 }

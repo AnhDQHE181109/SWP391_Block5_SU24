@@ -1,4 +1,5 @@
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <%@page import="model.DAOBrand" %>
 <%@page import="entity.Brand" %>
 <%@page import="java.util.List" %>
@@ -7,7 +8,7 @@
 
 <head>
     <meta charset="utf-8">
-    <title>Brand Management - Bootstrap Admin Template</title>
+    <title>Discount Management - Bootstrap Admin Template</title>
     <meta content="width=device-width, initial-scale=1.0" name="viewport">
     
     <!-- Favicon -->
@@ -24,7 +25,7 @@
     
     <!-- Libraries Stylesheet -->
     <link href="lib/owlcarousel/assets/owl.carousel.min.css" rel="stylesheet">
-    <link href="lib/tempusdominus/css/tempusdominus-bootstrap-4.min.css" rel="stylesheet" />
+    <link href="lib/tempusdominus/css/tempusdominus-bootstrap-4.min.css" rel="stylesheet">
     
     <!-- Customized Bootstrap Stylesheet -->
     <link href="css/bootstrap.min.css" rel="stylesheet">
@@ -72,40 +73,12 @@
                 alert('An error occurred while updating the brand. Please try again later.');
             });
         }
-        
-        function validateInput() {
-            const inputField = document.getElementById('brandName').value.trim();
-            const errorMessage = document.getElementById('error-message');
-            const specialCharPattern = /[!@#$%^&*(),.?":{}|<>]/;
-            const numberPattern = /\d/;
-
-            if (inputField === '') {
-                errorMessage.textContent = 'This field cannot be empty.';
-                return false;
-            }
-
-            if (numberPattern.test(inputField)) {
-                errorMessage.textContent = 'Numbers are not allowed.';
-                return false;
-            }
-
-            if (specialCharPattern.test(inputField)) {
-                errorMessage.textContent = 'Special characters are not allowed.';
-                return false;
-            }
-
-            errorMessage.textContent = '';  // Clear error message if no errors
-            return true;
-        }
-
-         
     </script>
-
-
 </head>
 
 <body>
-    <div class="container-fluid position-relative bg-light">
+    
+    <div class="container-fluid position-relative bg-light" style="padding-left: 250px;">
         <!-- Sidebar Start -->
         <div class="sidebar pe-4 pb-3">
             <nav class="navbar bg-light navbar-light">
@@ -132,12 +105,11 @@
                             <a href="element.html" class="dropdown-item">Other Elements</a>
                         </div>
                     </div>
-                    <a href="${pageContext.request.contextPath}/BrandController?action=list" class="nav-item nav-link"><i class="fa fa-th me-2"></i>Brand </a>
-                    <a href="${pageContext.request.contextPath}/CategoryController" class="nav-item nav-link"><i class="fa fa-th me-2"></i>Category</a>
-                    <a href="${pageContext.request.contextPath}/DiscountServlet?action=list" class="nav-item nav-link"><i class="fa fa-th me-2"></i>Discount</a>
+                    <a href="BrandController?action=list" class="nav-item nav-link"><i class="fa fa-th me-2"></i>Brand </a>
+                    <a href="CategoryController" class="nav-item nav-link"><i class="fa fa-th me-2"></i>Category</a>
                     <a href="addStaffAccount.jsp" class="nav-item nav-link"><i class="fa fa-keyboard me-2"></i>Forms</a>
                     <a href="manager_table.jsp" class="nav-item nav-link"><i class="fa fa-table me-2"></i>Tables</a>
-                    <a href="productmanage.jsp" class="nav-item nav-link"><i class="fa fa-chart-bar me-2"></i>Products</a>
+                    <a href="chart.html" class="nav-item nav-link"><i class="fa fa-chart-bar me-2"></i>Charts</a>
                     <div class="nav-item dropdown">
                         <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown"><i class="far fa-file-alt me-2"></i>Pages</a>
                         <div class="dropdown-menu bg-transparent border-0">
@@ -151,51 +123,61 @@
             </nav>
         </div>
         <!-- Sidebar End -->
+        
+<head>
+    <meta charset="UTF-8">
+    <title>Edit Discount</title>
+    <link rel="stylesheet" type="text/css" href="path/to/your/styles.css"> <!-- Thay đổi đường dẫn nếu cần -->
+    <script type="text/javascript">
+        function validateForm() {
+            var discountAmount = document.getElementById("discount_amount").value;
 
-        <!-- Content Start -->
-        <div class="content p-4">
-            
-    <h1>${brand != null ? "Edit Brand" : "Add New Brand"}</h1>
-    <c:if test="${not empty errorMessage}">
-        <p style="color: red;">${errorMessage}</p>
-    </c:if>
-<form action="BrandController" method="post" onsubmit="return validateInput()">
-    <input type="hidden" name="brandId" value="${brand != null ? brand.brandId : ''}"/>
-    <label for="brandName">Brand Name:</label>
-    <input type="text" id="brandName" name="brandName" value="${brand != null ? brand.brandName : ''}" required/>
-    <div id="error-message" style="color: red;"></div>
-    <input type="hidden" name="action" value="${brand != null ? 'update' : 'insert'}"/>
-    <button type="submit">${brand != null ? "Update Brand" : "Add Brand"}</button>
-</form>
-    <a href="BrandController?action=list">Back to Brand List</a>
-    
-        </div>
-        <!-- Content End -->
+            // Kiểm tra không được để rỗng
+            if (discountAmount.trim() === "") {
+                alert("Discount amount cannot be empty or contain only spaces.");
+                return false;
+            }
 
-        <!-- Modal for Editing Brand -->
-        <div class="modal fade" id="editModal" tabindex="-1" aria-labelledby="editModalLabel" aria-hidden="true">
-            <div class="modal-dialog">
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <h5 class="modal-title" id="editModalLabel">Edit Brand</h5>
-                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                    </div>
-                    <form id="editForm" onsubmit="updateBrand(event)">
-                        <div class="modal-body">
-                            <input type="hidden" name="brandId"/>
-                            <div class="mb-3">
-                                <label for="brandName" class="form-label">Brand Name</label>
-                                <input type="text" class="form-control" id="brandName" name="brandName" required/>
-                            </div>
-                        </div>
-                        <div class="modal-footer">
-                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                            <button type="submit" class="btn btn-primary">Save changes</button>
-                        </div>
-                    </form>
-                </div>
-            </div>
-        </div>
+            // Kiểm tra không được là ký tự đặc biệt và chữ
+            var numberPattern = /^[0-9]+$/;
+            if (!numberPattern.test(discountAmount)) {
+                alert("Discount amount must be a number and cannot contain letters or special characters.");
+                return false;
+            }
+
+            // Kiểm tra không được quá 100
+            if (parseInt(discountAmount) > 100) {
+                alert("Discount amount cannot be more than 100.");
+                return false;
+            }
+
+            return true; // Nếu tất cả kiểm tra đều ok, cho phép gửi form
+        }
+    </script>
+</head>
+<body>
+    <h2>Edit Discount for ${productName}</h2> <!-- Display the product name here -->
+
+    <c:choose>
+        <c:when test="${not empty discountList}">
+            <form action="DiscountServlet" method="post" onsubmit="return validateForm();">
+                <input type="hidden" name="action" value="update">
+                <input type="hidden" name="discountID" value="${discountList.discountID}">
+
+                <input type="hidden" id="product_id" name="product_id" value="${discountList.productID}" readonly><br><br>
+
+                <label for="product_name">Product Name:</label>
+                <input type="text" id="product_name" name="product_name" value="${productname}" readonly><br><br> <!-- New field for product name -->
+
+                <label for="discount_amount">Discount Amount:</label>
+                <input type="text" id="discount_amount" name="discount_amount" value="${discountList.discountAmount}"><br><br>
+
+                <input type="submit" value="Update Discount">
+                <div><a href="DiscountServlet?action=list">Cancel</a></div>
+            </form>
+        </c:when>
+    </c:choose>
+</body>
     </div>
 </body>
 

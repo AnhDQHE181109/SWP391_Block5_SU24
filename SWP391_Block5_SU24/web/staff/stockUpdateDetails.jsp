@@ -162,73 +162,96 @@
             </div>
                          
     <div class="row">
-        <div class="col-md-12">
-            <div class="tile">
-                <h3 class="tile-title">Stock Update Details</h3>
-                <table class="table table-bordered">
-                    <thead>
-                        <tr>
-                            <th>Stock Import Detail ID</th>
-                            <th>Stock ID</th>
-                            <th>Import ID</th>
-                            <th>Product ID</th>
-                            <th>Import Size</th>
-                            <th>Import Color</th>
-                            <th>Import Stock Quantity</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <c:choose>
-                            <c:when test="${not empty stockImportDetails}">
-                                <c:forEach var="detail" items="${stockImportDetails}">
-                                    <tr>
-                                        <!-- Displaying Stock Import Detail Information -->
-                                        <td><c:out value="${detail.stockImportDetailID}" /></td>
-                                        <td><c:out value="${detail.stockID}" /></td>
-                                        <td><c:out value="${detail.importID}" /></td>
-                                        <td>
-                                            <!-- Fetching Product ID from Stock -->
-                                            <c:choose>
-                                                <c:when test="${not empty stockDetailsMap[detail.stockID]}">
-                                                    <c:out value="${stockDetailsMap[detail.stockID].getProductID()}" />
-                                                </c:when>
-                                                <c:otherwise>N/A</c:otherwise>
-                                            </c:choose>
-                                        </td>
-                                        <td>
-                                            <!-- Fetching Import Size from Stock -->
-                                            <c:choose>
-                                                <c:when test="${not empty stockDetailsMap[detail.stockID]}">
-                                                    <c:out value="${stockDetailsMap[detail.stockID].getSize()}" />
-                                                </c:when>
-                                                <c:otherwise>N/A</c:otherwise>
-                                            </c:choose>
-                                        </td>
-                                        <td>
-                                            <!-- Fetching Import Color from Stock -->
-                                            <c:choose>
-                                                <c:when test="${not empty stockDetailsMap[detail.stockID]}">
-                                                    <c:out value="${stockDetailsMap[detail.stockID].getColor()}" />
-                                                </c:when>
-                                                <c:otherwise>N/A</c:otherwise>
-                                            </c:choose>
-                                        </td>
-                                        <td><c:out value="${detail.stockQuantity}" /></td>
-                                    </tr>
-                                </c:forEach>
-                            </c:when>
-                            <c:otherwise>
-                                <tr>
-                                    <td colspan="7">No details available for this import ID.</td>
-                                </tr>
-                            </c:otherwise>
-                        </c:choose>
-                    </tbody>
-                </table>
-                <a href="productStockImport" class="btn btn-primary">Return</a>
+    <div class="col-md-12">
+        <div class="tile">
+            <h3 class="tile-title">Stock Update Details</h3>
+            
+            <!-- Hiển thị thông tin ProductStockImport -->
+            <div class="product-stock-import-info">
+                <h4>Import Information</h4>
+                <p><strong>Import ID:</strong> <c:out value="${productStockImport.importID}" /></p>
+                <p><strong>Account ID:</strong> <c:out value="${productStockImport.accountID}" /></p>
+                    <p><strong>Username:</strong> <c:out value="${username}" /></p>
+                <p><strong>Import Date:</strong> <c:out value="${productStockImport.importDate}" /></p>
+                    <p><strong>Import Action:</strong> 
+        <c:choose>
+            <c:when test="${productStockImport.importAction == 0}">
+                Nhập hàng
+            </c:when>
+            <c:when test="${productStockImport.importAction == 1}">
+                Xuất hàng
+            </c:when>
+            <c:otherwise>
+                Unknown
+            </c:otherwise>
+        </c:choose>
+    </p>
+                <p><strong>Actor Name:</strong> <c:out value="${productStockImport.actorname}" /></p>
             </div>
+
+            <table class="table table-bordered">
+                <thead>
+                    <tr>
+                        <th>Stock Import Detail ID</th>
+                        <th>Stock ID</th>
+                        <th>Import ID</th>
+                        <th>Product ID</th>
+                        <th>Import Size</th>
+                        <th>Import Color</th>
+                        <th>Import Stock Quantity</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <c:choose>
+                        <c:when test="${not empty stockImportDetails}">
+                            <c:forEach var="detail" items="${stockImportDetails}">
+                                <tr>
+                                    <!-- Displaying Stock Import Detail Information -->
+                                    <td><c:out value="${detail.stockImportDetailID}" /></td>
+                                    <td><c:out value="${detail.stockID}" /></td>
+                                    <td><c:out value="${detail.importID}" /></td>
+                                    <td>
+                                        <c:choose>
+                                            <c:when test="${not empty stockDetailsMap[detail.stockID]}">
+                                                <c:out value="${stockDetailsMap[detail.stockID].getProductID()}" />
+                                            </c:when>
+                                            <c:otherwise>N/A</c:otherwise>
+                                        </c:choose>
+                                    </td>
+                                    <td>
+                                        <c:choose>
+                                            <c:when test="${not empty stockDetailsMap[detail.stockID]}">
+                                                <c:out value="${stockDetailsMap[detail.stockID].getSize()}" />
+                                            </c:when>
+                                            <c:otherwise>N/A</c:otherwise>
+                                        </c:choose>
+                                    </td>
+                                    <td>
+                                        <c:choose>
+                                            <c:when test="${not empty stockDetailsMap[detail.stockID]}">
+                                                <c:out value="${stockDetailsMap[detail.stockID].getColor()}" />
+                                            </c:when>
+                                            <c:otherwise>N/A</c:otherwise>
+                                        </c:choose>
+                                    </td>
+                                    <td><c:out value="${detail.stockQuantity}" /></td>
+                                </tr>
+                            </c:forEach>
+                        </c:when>
+                        <c:otherwise>
+                            <tr>
+                                <td colspan="7">No details available for this import ID.</td>
+                            </tr>
+                        </c:otherwise>
+                    </c:choose>
+                </tbody>
+            </table>
+            <a href="productStockImport" class="btn btn-primary">Return</a>
         </div>
     </div>
+</div>
+            
+
 
 
                     </div>

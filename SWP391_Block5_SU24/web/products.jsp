@@ -7,6 +7,7 @@
 <%@ page import="entity.Category" %>
 <%@ page import="java.util.List" %>
 <%@ page import="entity.Color" %>
+<%@ page import="entity.*" %>
 <%@ page import="java.util.Arrays" %>
 <%@ page import="java.util.ArrayList" %>
 <%@ page import="java.util.stream.Collectors" %>
@@ -143,7 +144,15 @@
                                         <%}else{%>
                                     <li class = "cart" id="lsbtn"><a href="signup.jsp">Sign Up</a></li>
                                     <li class = "cart" id="lsbtn"><a href="login.jsp">Login</a></li><%}%>
-                                    <li class="cart"><a href="cart.html"><i class="icon-shopping-cart"></i> Cart [0]</a></li>
+                                    <%
+                                        Account account = (Account) session.getAttribute("account");
+                                        int accountID = 0;
+                                        if (account != null) {
+                                            accountID = account.getAccountID();
+                                        }
+                                        int cartItemsCount = pDAO.getCartItemsCount(accountID);
+								    %>
+                                    <li class="cart"><a href="shoppingCart"><i class="icon-shopping-cart"></i> Cart [<%=cartItemsCount %>]</a></li>
                                 </ul>
                             </div>
                         </div>
@@ -297,11 +306,11 @@
                             <% for (Product product : products) { %>
                             <div class="col-lg-4 mb-4 text-center">
                                 <div class="product-entry border">
-                                    <a href="#" class="prod-img">
+                                    <a href="ProductDetailsController?productID=<%=product.getProductId() %>" class="prod-img">
                                         <img src="<%= product.getImageURL() %>" class="img-fluid" alt="Product Image">
                                     </a>
                                     <div class="desc">
-                                        <h2><a href="#"><%= product.getProductName() %></a></h2>
+                                        <h2><a href="ProductDetailsController?productID=<%=product.getProductId() %>"><%= product.getProductName() %></a></h2>
                                         <span class="price"><%= product.getPrice() %></span>
                                     </div>
                                 </div>
