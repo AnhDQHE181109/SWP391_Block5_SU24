@@ -41,6 +41,20 @@ public class WishlistDAO extends MyDAO {
         return wishlistItems;
     }
 
+    public boolean removeProductFromWishlist(int accountId, int stockId) {
+    String sql = "DELETE FROM Wishlist WHERE AccountID = ? AND StockID = ?";
+    try (PreparedStatement ps = con.prepareStatement(sql)) {
+        ps.setInt(1, accountId);
+        ps.setInt(2, stockId);
+        int rowsAffected = ps.executeUpdate();
+        return rowsAffected > 0;
+    } catch (SQLException e) {
+        e.printStackTrace();
+        return false;
+    }
+}
+
+    
     public List<Product> searchWishlistItemsByName(int accountId, String search) {
         List<Product> wishlistItems = new ArrayList<>();
         String sql = "SELECT p.ProductID, p.ProductName, p.Price, p.ImageURL, s.Size, s.Color "
