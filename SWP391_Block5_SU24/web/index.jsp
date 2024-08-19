@@ -133,7 +133,7 @@
                                     <li><a href="about.html">About</a></li>
                                     <li><a href="contact.html">Contact</a></li>
                      <% if (session.getAttribute("account") != null) { %>
-                                        <li class="cart"><a href="wishlist.jsp"><i class="fa fa-heart"></i> Wishlist</a></li>
+                                        <li class="cart"><a href="customer/wishlist.jsp"><i class="fa fa-heart"></i> Wishlist</a></li>
                                         <%
                                         int accountID = 0;
                                         Account account = (Account)session.getAttribute("account");
