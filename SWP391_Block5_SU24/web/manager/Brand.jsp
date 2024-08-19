@@ -144,7 +144,6 @@
             <tr>
                 <th>ID</th>
                 <th>Name</th>
-                <th>Status</th>
                 <th>Actions</th>
             </tr>
         </thead>
@@ -153,10 +152,8 @@
                 <tr>
                     <td>${brand.brandId}</td>
                     <td>${brand.brandName}</td>
-                    <td>${brand.brandstatus == 0 ? 'Active' : 'Deactive'}</td>
                     <td>
                         <div class="btn-group" role="group">
-                            <!-- Edit Form -->
                             <form action="BrandController" method="get" style="display:inline;">
                                 <input type="hidden" name="brandId" value="${brand.brandId}" />
                                 <input type="hidden" name="action" value="edit" />
@@ -164,16 +161,11 @@
                                     <i class="fas fa-edit"></i> Edit
                                 </button>
                             </form>
-                            <!-- Status Change Form -->
-                            <form action="BrandController" method="post" style="display:inline;" 
-                                  onsubmit="return confirmStatusChange(this, ${brand.brandstatus});">
-                                <input type="hidden" name="brandId" value="${brand.brandId}" />
-                                <input type="hidden" name="action" value="updatestatus" />
-                                <input type="hidden" name="brandstatus" value="${brand.brandstatus == 0 ? 1 : 0}" />
-                                <button type="submit" class="btn btn-danger btn-sm">
-                                    <i class="fas fa-exchange-alt"></i> Change Status
-                                </button>
-                            </form>
+                            <a href="BrandController?action=delete&brandId=${brand.brandId}" 
+                               class="btn btn-danger btn-sm" 
+                               onclick="return confirm('Are you sure?');">
+                               <i class="fas fa-trash-alt"></i> Delete
+                            </a>
                         </div>
                     </td>
                 </tr>
@@ -181,15 +173,6 @@
         </tbody>
     </table>
 </div>
-
-<script>
-    function confirmStatusChange(form, currentStatus) {
-        var newStatus = currentStatus == 0 ? 'deactivate' : 'activate';
-        return confirm(`Are you sure you want to ${newStatus} this brand?`);
-    }
-</script>
-
-
 
 
             <a href="BrandController?action=new" class="btn btn-success">Add New Brand</a>

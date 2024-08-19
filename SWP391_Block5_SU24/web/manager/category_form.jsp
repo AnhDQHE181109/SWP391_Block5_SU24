@@ -7,7 +7,7 @@
 
 <head>
     <meta charset="utf-8">
-    <title>Category Management - Bootstrap Admin Template</title>
+    <title>Brand Management - Bootstrap Admin Template</title>
     <meta content="width=device-width, initial-scale=1.0" name="viewport">
     
     <!-- Favicon -->
@@ -32,36 +32,34 @@
     <!-- Template Stylesheet -->
     <link href="css/manager.css" rel="stylesheet">
     
-    
-    
     <!-- JavaScript -->
     <script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0/dist/js/bootstrap.bundle.min.js"></script>
     
     <script>
-        function editCategory(categoryId, categoryName) {
-            document.querySelector('#editForm [name="categoryId"]').value = categoryId;
-            document.querySelector('#editForm #categoryName').value = categoryName;
+        function editBrand(brandId, brandName) {
+            document.querySelector('#editForm [name="brandId"]').value = brandId;
+            document.querySelector('#editForm #brandName').value = brandName;
             $('#editModal').modal('show');
         }
         
-        function updateCategory(event) {
+        function updateBrand(event) {
             event.preventDefault(); // Prevent form submission
             
             const formData = new FormData(event.target);
-            const categoryId = formData.get('categoryId');
-            const categoryName = formData.get('categoryName');
+            const brandId = formData.get('brandId');
+            const brandName = formData.get('brandName');
             
-            fetch('CategoryController?action=update', {
+            fetch('BrandController?action=update', {
                 method: 'POST',
                 body: new URLSearchParams({
-                    categoryId: categoryId,
-                    categoryName: categoryName
+                    id: brandId,
+                    name: brandName
                 })
             })
             .then(response => {
                 if (response.ok) {
-                    alert('Category updated successfully!');
+                    alert('Brand updated successfully!');
                     location.reload(); // Reload to see the changes
                 } else {
                     return response.text().then(text => {
@@ -70,38 +68,10 @@
                 }
             })
             .catch(error => {
-                console.error('Error updating category:', error);
-                alert('An error occurred while updating the category. Please try again later.');
+                console.error('Error updating brand:', error);
+                alert('An error occurred while updating the brand. Please try again later.');
             });
         }
-        
-        function validateForm() {
-        const categoryName = document.getElementById('categoryName').value;
-        
-        // Kiểm tra trường nhập liệu không được rỗng
-        if (categoryName.trim() === '') {
-            alert('Category Name cannot be empty.');
-            return false;
-        }
-        
-        // Kiểm tra không cho phép ký tự đặc biệt và số
-        const invalidCharacters = /[^a-zA-Z\s]/;
-        if (invalidCharacters.test(categoryName)) {
-            alert('Category Name cannot contain special characters or numbers.');
-            return false;
-        }
-        
-        // Kiểm tra không cho phép dấu cách liên tục
-        const multipleSpaces = /\s{2,}/;
-        if (multipleSpaces.test(categoryName)) {
-            alert('Category Name cannot contain consecutive spaces.');
-            return false;
-        }
-        
-        // Nếu tất cả các kiểm tra đều pass
-        return true;
-    }
-        
     </script>
 </head>
 
@@ -125,11 +95,29 @@
                 </div>
                 <div class="navbar-nav w-100">
                     <a href="manager_home.jsp" class="nav-item nav-link"><i class="fa fa-tachometer-alt me-2"></i>Dashboard</a>
-                    <a href="${pageContext.request.contextPath}/CategoryController?action=list" class="nav-item nav-link"><i class="fa fa-th me-2"></i>Category</a>
+                    <div class="nav-item dropdown">
+                        <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown"><i class="fa fa-laptop me-2"></i>Elements</a>
+                        <div class="dropdown-menu bg-transparent border-0">
+                            <a href="button.html" class="dropdown-item">Buttons</a>
+                            <a href="typography.html" class="dropdown-item">Typography</a>
+                            <a href="element.html" class="dropdown-item">Other Elements</a>
+                        </div>
+                    </div>
+                    <a href="${pageContext.request.contextPath}/BrandController?action=list" class="nav-item nav-link"><i class="fa fa-th me-2"></i>Brand </a>
+                    <a href="${pageContext.request.contextPath}/CategoryController" class="nav-item nav-link"><i class="fa fa-th me-2"></i>Category</a>
                     <a href="${pageContext.request.contextPath}/DiscountServlet?action=list" class="nav-item nav-link"><i class="fa fa-th me-2"></i>Discount</a>
                     <a href="addStaffAccount.jsp" class="nav-item nav-link"><i class="fa fa-keyboard me-2"></i>Forms</a>
                     <a href="manager_table.jsp" class="nav-item nav-link"><i class="fa fa-table me-2"></i>Tables</a>
                     <a href="productmanage.jsp" class="nav-item nav-link"><i class="fa fa-chart-bar me-2"></i>Products</a>
+                    <div class="nav-item dropdown">
+                        <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown"><i class="far fa-file-alt me-2"></i>Pages</a>
+                        <div class="dropdown-menu bg-transparent border-0">
+                            <a href="signin.html" class="dropdown-item">Sign In</a>
+                            <a href="signup.html" class="dropdown-item">Sign Up</a>
+                            <a href="404.html" class="dropdown-item">404 Error</a>
+                            <a href="blank.html" class="dropdown-item">Blank Page</a>
+                        </div>
+                    </div>
                 </div>
             </nav>
         </div>
@@ -137,51 +125,44 @@
 
         <!-- Content Start -->
         <div class="content p-4">
-            <h1>${empty category.categoryId ? 'Create' : 'Edit'} Category</h1>
             
-            <c:if test="${not empty error}">
-                <p id="error" class="error">${error}</p>
-            </c:if>
-            
-            <form action="CategoryController" method="post" onsubmit="return validateForm()">
-                <input type="hidden" name="action" value="${empty category.categoryId ? 'create' : 'update'}">
-
-                <c:if test="${not empty category.categoryId}">
-                    <input type="hidden" name="categoryId" value="${category.categoryId}">
-                </c:if>
-
-                <label for="categoryName">Category Name:</label>
-                <input type="text" id="categoryName" name="categoryName" value="${category.categoryName}" required>
-
-                <label for="categoryStatus">Category Status:</label>
-                <select id="categoryStatus" name="categoryStatus" required>
-                    <option value="1" ${category.categoryStatus == 1 ? 'selected' : ''}>Active</option>
-                    <option value="0" ${category.categoryStatus != 1 ? 'selected' : ''}>Inactive</option>
-                </select>
-
-                <input type="submit" value="${empty category.categoryId ? 'Create' : 'Update'} Category">
-            </form>
-
-
-            
-            <p><a href="CategoryController?action=list">Back to Category List</a></p>
+  <h1>${empty category.categoryId ? 'Create' : 'Edit'} Category</h1>
+    
+    <c:if test="${not empty error}">
+        <p id="error" class="error">${error}</p>
+    </c:if>
+    
+    <form action="CategoryController" method="post" onsubmit="return validateForm()">
+        <input type="hidden" name="action" value="${empty category.categoryId ? 'create' : 'update'}">
+        <c:if test="${not empty category.categoryId}">
+            <input type="hidden" name="categoryId" value="${category.categoryId}">
+        </c:if>
+        
+        <label for="categoryName">Category Name:</label>
+        <input type="text" id="categoryName" name="categoryName" value="${category.categoryName}" required>
+        
+        <input type="submit" value="${empty category.categoryId ? 'Create' : 'Update'} Category">
+    </form>
+    
+    <p><a href="CategoryController?action=list">Back to Category List</a></p>
+    
         </div>
         <!-- Content End -->
 
-        <!-- Modal for Editing Category -->
+        <!-- Modal for Editing Brand -->
         <div class="modal fade" id="editModal" tabindex="-1" aria-labelledby="editModalLabel" aria-hidden="true">
             <div class="modal-dialog">
                 <div class="modal-content">
                     <div class="modal-header">
-                        <h5 class="modal-title" id="editModalLabel">Edit Category</h5>
+                        <h5 class="modal-title" id="editModalLabel">Edit Brand</h5>
                         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                     </div>
-                    <form id="editForm" onsubmit="updateCategory(event)">
+                    <form id="editForm" onsubmit="updateBrand(event)">
                         <div class="modal-body">
-                            <input type="hidden" name="categoryId"/>
+                            <input type="hidden" name="brandId"/>
                             <div class="mb-3">
-                                <label for="categoryName" class="form-label">Category Name</label>
-                                <input type="text" class="form-control" id="categoryName" name="categoryName" required/>
+                                <label for="brandName" class="form-label">Brand Name</label>
+                                <input type="text" class="form-control" id="brandName" name="brandName" required/>
                             </div>
                         </div>
                         <div class="modal-footer">

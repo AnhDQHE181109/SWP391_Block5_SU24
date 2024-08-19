@@ -7,18 +7,15 @@ package entity;
 public class Category {
     private int categoryId;
     private String categoryName;
-    private int CategoryStatus ; 
 
-    public Category() {
-    }
-
-    public Category(int categoryId, String categoryName, int CategoryStatus) {
+    public Category(int categoryId, String categoryName) {
         this.categoryId = categoryId;
         this.categoryName = categoryName;
-        this.CategoryStatus = CategoryStatus;
     }
-
     
+    public Category() {
+        
+    }
 
     public int getCategoryId() {
         return categoryId;
@@ -36,19 +33,11 @@ public class Category {
         this.categoryName = categoryName;
     }
 
-    public int getCategoryStatus() {
-        return CategoryStatus;
-    }
-
-    public void setCategoryStatus(int CategoryStatus) {
-        this.CategoryStatus = CategoryStatus;
-    }
-
     @Override
     public String toString() {
-        return "Category{" + "categoryId=" + categoryId + ", categoryName=" + categoryName + ", CategoryStatus=" + CategoryStatus + '}';
+        return "Category{" + "categoryId=" + categoryId + ", categoryName=" + categoryName + '}';
     }
 
-
+    
 
 }
