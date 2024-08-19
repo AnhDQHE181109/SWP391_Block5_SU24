@@ -111,7 +111,7 @@ public class StaffFilterController implements Filter {
         HttpServletResponse httpResponse = (HttpServletResponse) response;
         HttpSession session = httpRequest.getSession(false);
         boolean isStaff = false;
-        if (session.getAttribute("account") != null) {
+        if (session!=null && session.getAttribute("account") != null) {
             Account temp = (Account) session.getAttribute("account");
             isStaff = (temp.getRole() == 2);
         }

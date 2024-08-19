@@ -111,7 +111,7 @@ public class AdminFilterController implements Filter {
         HttpServletResponse httpResponse = (HttpServletResponse) response;
         HttpSession session = httpRequest.getSession(false);
         boolean isAdmin = false;
-        if (session.getAttribute("account") != null) {
+        if (session!=null && session.getAttribute("account") != null) {
             Account temp = (Account) session.getAttribute("account");
             isAdmin = (temp.getRole() == 4);
         }

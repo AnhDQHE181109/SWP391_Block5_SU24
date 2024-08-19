@@ -111,7 +111,7 @@ public class ManagerFilterController implements Filter {
         HttpServletResponse httpResponse = (HttpServletResponse) response;
         HttpSession session = httpRequest.getSession(false);
         boolean isManager = false;
-        if (session.getAttribute("account") != null) {
+        if (session!=null && session.getAttribute("account") != null) {
             Account temp = (Account) session.getAttribute("account");
             isManager = (temp.getRole() == 3);
         }
