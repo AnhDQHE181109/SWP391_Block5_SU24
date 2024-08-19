@@ -17,6 +17,8 @@ public class DAOBrand extends MyDAO {
                 Brand brand = new Brand();
                 brand.setBrandId(rs.getInt("brandId"));
                 brand.setBrandName(rs.getString("brandName"));
+                brand.setBrandstatus(rs.getInt("brandstatus"));
+
                 brands.add(brand);
             }
         } catch (SQLException e) {
@@ -148,6 +150,21 @@ public class DAOBrand extends MyDAO {
         
         return brands;
     }
+    
+    public void updateBrandStatus(int brandId, int brandStatus) {
+    xSql = "UPDATE Brand SET brandstatus = ? WHERE brandId = ?";
+    try {
+        ps = con.prepareStatement(xSql);
+        ps.setInt(1, brandStatus);
+        ps.setInt(2, brandId);
+        ps.executeUpdate();
+    } catch (SQLException e) {
+        e.printStackTrace();
+    } finally {
+        closeResources();
+    }
+}
+
 
     private void closeResources() {
         try {

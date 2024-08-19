@@ -68,6 +68,7 @@ public class BrandController extends HttpServlet {
             case "search":
                 searchBrands(request, response);
                 break;
+
             default:
                 listBrands(request, response);
                 break;
@@ -86,6 +87,10 @@ public class BrandController extends HttpServlet {
             case "update":
                 updateBrand(request, response);
                 break;
+            case "updatestatus":
+                updateBrandstatus(request, response);
+                break;
+
             default:
                 listBrands(request, response);
                 break;
@@ -145,7 +150,21 @@ public class BrandController extends HttpServlet {
         brand.setBrandName(brandName);
         brandDAO.updateBrand(brand);
         response.sendRedirect("BrandController?action=list");
+        System.out.println("brand: "+brand);
     }
+private void updateBrandstatus(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+    try {
+        int brandId = Integer.parseInt(request.getParameter("brandId"));
+        int brandstatus = Integer.parseInt(request.getParameter("brandstatus")); // Fix here
+
+        brandDAO.updateBrandStatus(brandId,brandstatus);
+        response.sendRedirect("BrandController?action=list");
+    } catch (NumberFormatException e) {
+        request.setAttribute("errorMessage", "Invalid input.");
+        request.getRequestDispatcher("manager/Brand.jsp").forward(request, response);
+    }
+}
+
     private void deleteBrand(HttpServletRequest request, HttpServletResponse response)
             throws IOException {
         int brandId = Integer.parseInt(request.getParameter("brandId"));
