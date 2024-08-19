@@ -155,7 +155,7 @@ public class ShoppingCartDAO extends DBConnect {
                 + "from Cart\n"
                 + "where AccountID = ? and StockID = ?";
 
-        int quantity = 0;
+        int quantity = -1;
 
         try {
             PreparedStatement ps = conn.prepareStatement(sql);
@@ -178,6 +178,55 @@ public class ShoppingCartDAO extends DBConnect {
         }
 
         return quantity;
+    }
+
+    public void setCartQuantity(int quantity, int accountID, int stockID) {
+
+        String sql = "update Cart\n"
+                + "set quantity = ?\n"
+                + "where AccountID = ? and StockID = ?";
+
+        try {
+            PreparedStatement ps = conn.prepareStatement(sql);
+            ps.setInt(1, quantity);
+            ps.setInt(2, accountID);
+            ps.setInt(3, stockID);
+
+            ResultSet rs = ps.executeQuery();
+
+            if (rs != null) {
+                rs.close();
+            }
+            if (ps != null) {
+                ps.close();
+            }
+        } catch (SQLException e) {
+            System.out.println("setCartQuantity(): " + e);
+        }
+    }
+
+    public void removeProductFromCart(int accountID, int stockID) {
+
+        String sql = "delete\n"
+                + "from Cart\n"
+                + "where AccountID = ? and StockID = ?";
+
+        try {
+            PreparedStatement ps = conn.prepareStatement(sql);
+            ps.setInt(1, accountID);
+            ps.setInt(2, stockID);
+
+            ResultSet rs = ps.executeQuery();
+
+            if (rs != null) {
+                rs.close();
+            }
+            if (ps != null) {
+                ps.close();
+            }
+        } catch (SQLException e) {
+            System.out.println("removeProductFromCart(): " + e);
+        }
     }
 
 }

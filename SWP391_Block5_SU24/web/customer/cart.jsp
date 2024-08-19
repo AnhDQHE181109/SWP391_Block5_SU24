@@ -179,10 +179,14 @@
 						<div class="product-cart d-flex">
 							
 							<div class="one-forth">
-								<div class="product-img" style="background-image: url(${pageContext.request.contextPath}/<%=cartItem.getImageURL() %>);">
-								</div>
+								<!-- <div class="product-img" style="background-image: url(${pageContext.request.contextPath}/<%=cartItem.getImageURL() %>);">
+									<a href="ProductDetailsController?productID=<%=cartItem.getProductID() %>"></a>
+								</div> -->
+								<a class="product-img" href="ProductDetailsController?productID=<%=cartItem.getProductID() %>&selectedColor=<%=cartItem.getColor() %>&selectedSize=<%=cartItem.getSize() %>">
+									<img class="product-img" src="${pageContext.request.contextPath}/<%=cartItem.getImageURL() %>"></a>
+								
 								<div class="display-tc">
-									<h3><%=cartItem.getProductName() %></h3>
+									<h3><a href="ProductDetailsController?productID=<%=cartItem.getProductID() %>&selectedColor=<%=cartItem.getColor() %>&selectedSize=<%=cartItem.getSize() %>"><%=cartItem.getProductName() %></a></h3>
 								</div>
 							</div>
 							<div class="one-eight text-center">
@@ -220,8 +224,6 @@
 										</button>
 									</span>
 									
-										
-									
 								</div>
 							</div>
 							<div class="one-eight text-center">
@@ -231,7 +233,30 @@
 							</div>
 							<div class="one-eight text-center">
 								<div class="display-tc">
-									<a href="#" class="closed"></a>
+									<a href="#" onclick="openModal('confirmRemoval_<%=cartItem.getStockID() %>')" class="closed"></a>
+
+									<div id="confirmRemoval_<%=cartItem.getStockID() %>" class="modal fade" tabindex="-1" role="dialog" style="display: none;">
+									  <div class="modal-dialog modal-dialog-centered" role="document">
+										  <div class="modal-content">
+											<div class="modal-header">
+											  <h5 class="modal-title">Removing product from your shopping cart</h5>
+											  <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+												<span aria-hidden="true">&times;</span>
+											  </button>
+											</div>
+											<div class="modal-body">
+											  <img class="product-img" src="${pageContext.request.contextPath}/<%=cartItem.getImageURL() %>"></a>
+											  <h2>Are you sure you want to remove <strong><%=cartItem.getProductName() %></strong> ?</h2>
+											  <p>Size: <strong><%=cartItem.getSize() %></strong> | Color: <strong><%=cartItem.getColor() %></strong></p>
+											</div>
+											<div class="modal-footer">
+											  <button type="button" class="btn btn-success">Yes</button>
+											  <button type="button" class="btn btn-danger">No</button>
+											</div>
+										  </div>
+									  </div>
+									</div>
+
 								</div>
 							</div>
 
@@ -478,20 +503,19 @@ Copyright &copy;<script>document.write(new Date().getFullYear());</script> All r
 
 	<script>
 		function incrementQuantity(incrementButton, quantityBox){
-
+			// Get the field name
 			var quantitiy=0;
 		
-				// Get the field name
+				// If is not undefined		
 				var quantity = parseInt(document.getElementById(quantityBox).innerHTML);
 				
-				// If is not undefined
-					
+				// Increment
 					if (parseInt(document.getElementById(quantityBox).innerHTML) != 10) {
 						document.getElementById(quantityBox).innerHTML = quantity + 1;
+						location.href = "shoppingCart?quantityUpdateFor=" + incrementButton + "&quantityAmount=" + document.getElementById(quantityBox).innerHTML;
 					}
-					
 				
-					// Increment
+					
 				
 			
 	}
@@ -508,10 +532,36 @@ Copyright &copy;<script>document.write(new Date().getFullYear());</script> All r
 			// Increment
 			if(quantity>1){
 				document.getElementById(quantityBox).innerHTML = quantity - 1;
+				location.href = "shoppingCart?quantityUpdateFor=" + decrementButton + "&quantityAmount=" + document.getElementById(quantityBox).innerHTML;
 			}
 	
-	
+			
 }
+
+			function openPopup(popupID) {
+                // Display the popup
+                document.getElementById(popupID).style.display = "block";
+            }
+
+            function closePopup(popupID) {
+                // Hide the popup
+                document.getElementById(popupID).style.display = "none";
+            }
+
+			function openModal(modalID) {
+                // Display the modal
+                $('#' + modalID).modal('show');
+            }
+
+            function closeModal(modalID) {
+                // Hide the modal
+                $('#' + modalID).modal('hide');
+            }
+
+			function showRemovalDialog(modalID) {
+
+			}
+
 	</script>
 	
 	<!-- jQuery -->

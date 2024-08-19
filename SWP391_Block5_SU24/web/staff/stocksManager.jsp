@@ -518,6 +518,7 @@
                 // Hide the popup
                 document.getElementById(popupID).style.display = "none";
             }
+            
             function searchProductsByName() {
                 var input, filter, table, tr, td, i, txtValue;
                 input = document.getElementById("searchInput");
