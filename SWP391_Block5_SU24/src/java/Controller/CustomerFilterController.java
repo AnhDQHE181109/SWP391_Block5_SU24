@@ -111,6 +111,11 @@ public class CustomerFilterController implements Filter {
         HttpServletResponse httpResponse = (HttpServletResponse) response;
         HttpSession session = httpRequest.getSession(false);
         boolean isCustomer = false;
+        if (session == null) {
+            String contextPath = httpRequest.getContextPath();
+            httpResponse.sendRedirect(contextPath + "/login.jsp?auth_error=true");
+            return;
+        }
         if (session!=null && session.getAttribute("account") != null) {
             Account temp = (Account) session.getAttribute("account");
             isCustomer = (temp.getRole() == 1);
