@@ -15,7 +15,6 @@
 %>
 <html>
     <head>
-
         <title>Footwear - Free Bootstrap 4 Template by Colorlib</title>
         <script src="https://kit.fontawesome.com/c630e9f862.js" crossorigin="anonymous"></script>
         <meta charset="utf-8">
@@ -55,11 +54,11 @@
     <style>
         .alert {
             padding: 20px;
-            background-color: #f44336; 
+            background-color: #f44336;
             color: white;
             margin-bottom: 15px;
             position: fixed;
-            
+
             width:100%;
             z-index: 9999;
         }
@@ -78,12 +77,30 @@
         .closebtn:hover {
             color: black;
         }
+        .alert-timer {
+            height: 5px;
+            background-color: #f1f1f1;
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 100%;           
+        }
+
+        .alert-timer-fill {
+            height: 100%;
+            background-color: orange; /* Green */
+            width: 100%;
+            transition: width 5s linear;
+        }
     </style>
     <body>
         <%if("true".equals(request.getParameter("auth_error"))){%>
-        <div class="alert">
+        <div class="alert" id="alertDiv">
             <span class="closebtn" onclick="this.parentElement.style.display = 'none';">&times;</span>
             You do not have permission to access this pages.
+            <div class="alert-timer">
+                <div class="alert-timer-fill" id="timerFill"></div>
+            </div>
         </div>
         <%}%>
         <div class="colorlib-loader"></div>
@@ -101,7 +118,9 @@
                                     <div class="form-group position-relative">
                                         <input type="search" name="query" id="search-bar" class="form-control search" placeholder="Search for products...">
                                         <button class="btn btn-primary submit-search text-center" type="submit"><i class="icon-search"></i></button>
-                                        <div id="suggestions" class="dropdown-menu" style="display: none; position: absolute; width: 100%;"></div>
+                                        <div id="suggestions" class="dropdown-menu" style="display: none;
+                                             position: absolute;
+                                             width: 100%;"></div>
                                     </div>
                                 </form>
                             </div>
@@ -110,19 +129,27 @@
                             <div class="col-sm-12 text-left menu-1">
                                 <ul>
                                     <li class="active"><a href="index.jsp">Home</a></li>
-                                    <li><a href="products.jsp">Products</a></li>
+                                    <li><a class="active" href="products.jsp">Products</a></li>
                                     <li><a href="about.html">About</a></li>
                                     <li><a href="contact.html">Contact</a></li>
-                                        <% if (session.getAttribute("account") != null) { %>
-                                    <li class="cart"><a href="customer/wishlist.jsp"><i class="fa fa-heart"></i> Wishlist</a></li>
-                                    <li class="cart"><a href="customer/cart.jsp"><i class="icon-shopping-cart"></i> Cart [0]</a></li>
-                                    <li class="cart"><a href="LogoutController">Logout</a></li>
-                                    <li class="cart"><i class="fa-regular fa-user"></i> <%= ((Account) session.getAttribute("account")).getUsername() %></li>
-                                        <% } else { %>
-                                    <li class="cart"><a href="signup.jsp">Sign Up</a></li>
-                                    <li class="cart"><a href="login.jsp">Login</a></li>
-                                    <li class="cart"><a href="customer/cart.jsp"><i class="icon-shopping-cart"></i> Cart [0]</a></li>
-                                        <% } %>
+                     <% if (session.getAttribute("account") != null) { %>
+                                        <li class="cart"><a href="wishlist.jsp"><i class="fa fa-heart"></i> Wishlist</a></li>
+                                        <%
+                                        int accountID = 0;
+                                        Account account = (Account)session.getAttribute("account");
+                                        if (account != null) {
+                                            accountID = account.getAccountID();
+                                        }
+                                        int cartItemsCount = pDAO.getCartItemsCount(accountID);
+								    %>
+                                        <li class="cart"><a href="shoppingCart"><i class="icon-shopping-cart"></i> Cart [<%=cartItemsCount %>]</a></li>
+                                        <li class="cart"><a href="LogoutController">Logout</a></li>
+                                        <li class="cart"><i class="fa-regular fa-user"></i> <%= ((Account) session.getAttribute("account")).getUsername() %></li>
+                                    <% } else { %>
+                                        <li class="cart"><a href="signup.jsp">Sign Up</a></li>
+                                        <li class="cart"><a href="login.jsp">Login</a></li>
+                                        <li class="cart"><a href="shoppingCart"><i class="icon-shopping-cart"></i> Cart [0]</a></li>
+                                    <% } %>
 
                                 </ul>
                             </div>
@@ -401,12 +428,27 @@
         <!-- Main -->
         <script src="js/main.js"></script>
         <script>
+                                        function startAlertTimer() {
+                                            const timerFill = document.getElementById('timerFill');
+                                            const alertBox = document.getElementById('alertDiv');
+
+                                            // Start the timer
+                                            setTimeout(function () {
+                                                alertBox.style.display = 'none'; // Hide the alert
+                                            }, 5000);
+
+                                            // Start the progress bar animation
+                                            timerFill.style.width = '0%';
+                                        }
+
+                                        // Start the timer when the page loads
+                                        window.onload = startAlertTimer;
                                         document.getElementById('search-bar').addEventListener('input', function () {
                                             let query = this.value;
                                             if (query.length > 0) {
                                                 fetchSuggestions(query);
                                             } else {
-                                                document.getElementById('suggestions').style.display = 'none';
+                                                document.getElementById('alertDiv').style.display = 'none';
                                             }
                                         });
 

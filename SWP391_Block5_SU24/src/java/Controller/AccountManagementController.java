@@ -16,6 +16,7 @@ import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import jakarta.servlet.http.HttpSession;
 
 /**
  *
@@ -37,7 +38,7 @@ public class AccountManagementController extends HttpServlet {
             throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
          AccountDAO accountDAO = new AccountDAO();
-        
+        HttpSession session = request.getSession();
         // Get staff accounts (assuming role 2 is for staff)
         List<Account> staffAccounts = accountDAO.getAccountsByRole(2);
         request.setAttribute("staffAccounts", staffAccounts);
@@ -45,9 +46,12 @@ public class AccountManagementController extends HttpServlet {
         // Get user accounts (assuming role 1 is for users)
         List<Account> userAccounts = accountDAO.getAccountsByRole(1);
         request.setAttribute("userAccounts", userAccounts);
-        
+        if("true".equals(session.getAttribute("auth_error"))){
+        request.setAttribute("auth_error", "true");
+        session.setAttribute("auth_error", "false");
+        }
         // Forward to the JSP page
-        request.getRequestDispatcher("manager/manager_table.jsp").forward(request, response);
+        request.getRequestDispatcher("admin/manage_acc.jsp").forward(request, response);
     }
 
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">

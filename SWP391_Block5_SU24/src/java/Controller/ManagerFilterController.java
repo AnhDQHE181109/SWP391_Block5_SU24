@@ -136,9 +136,9 @@ public class ManagerFilterController implements Filter {
                     break;
                 }
                 case 2: {
-                    request.setAttribute("auth_error", "true");
+                    session.setAttribute("auth_error", "true");
                     String contextPath = httpRequest.getContextPath();
-                    httpResponse.sendRedirect(contextPath + "/OrderController");
+                    httpResponse.sendRedirect(contextPath + "/Ordercontroller");
                     break;
                 }
                 case 3: {
@@ -148,7 +148,7 @@ public class ManagerFilterController implements Filter {
                     break;
                 }
                 case 4: {
-                    request.setAttribute("auth_error", "true");
+                    session.setAttribute("auth_error", "true");
                     String contextPath = httpRequest.getContextPath();
                     httpResponse.sendRedirect(contextPath + "/AccountManagementController");
                     break;

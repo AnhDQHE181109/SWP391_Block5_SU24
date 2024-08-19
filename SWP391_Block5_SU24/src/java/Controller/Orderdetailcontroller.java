@@ -17,7 +17,7 @@ import jakarta.servlet.http.HttpServletResponse;
 import model.DAOOrder;
 import model.DAOOrderDetail;
 import model.DAOStock;
-import model.DAOProducts;
+import model.DAOProduct;
 
 public class Orderdetailcontroller extends HttpServlet {
 
@@ -40,7 +40,7 @@ public class Orderdetailcontroller extends HttpServlet {
             Map<Integer, String> productNameMap = new HashMap<>();  // Map to hold productID and productName
             
             DAOStock daoStock = new DAOStock();
-            DAOProducts daoProduct = new DAOProducts();  // Assuming this exists to fetch product names
+            DAOProduct daoProduct = new DAOProduct();  // Assuming this exists to fetch product names
             
             for (OrderDetail orderDetail : orderDetailList) {
                 int stockId = orderDetail.getStockID();
@@ -49,7 +49,7 @@ public class Orderdetailcontroller extends HttpServlet {
                 
                 // Get productID from stock and retrieve productName
                 int productId = stock.getProductID();
-                String productName = daoProduct.getProductNameByID(productId);
+                String productName = daoProduct.getProductNameById(productId);
                 productNameMap.put(productId, productName);
             }
             
@@ -72,7 +72,7 @@ public class Orderdetailcontroller extends HttpServlet {
             request.getRequestDispatcher("staff/orderdetail.jsp").forward(request, response);
  
         } else {
-            response.sendRedirect("staff/orderlist.jsp");
+            response.sendRedirect("staff/erro.jsp");
         }
     }
     

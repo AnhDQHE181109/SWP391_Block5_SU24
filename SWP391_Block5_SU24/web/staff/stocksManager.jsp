@@ -6,7 +6,7 @@
 
 <!DOCTYPE html>
 <html lang="en">
-
+    <%Account account = (Account) session.getAttribute("account");%>
     <head>
         <title>Stocks management</title>
         <meta charset="utf-8">
@@ -518,6 +518,7 @@
                 // Hide the popup
                 document.getElementById(popupID).style.display = "none";
             }
+            
             function searchProductsByName() {
                 var input, filter, table, tr, td, i, txtValue;
                 input = document.getElementById("searchInput");
