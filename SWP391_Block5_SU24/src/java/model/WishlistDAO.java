@@ -12,7 +12,7 @@ public class WishlistDAO extends MyDAO {
 
     public List<Product> getWishlistItems(int accountId) {
     List<Product> wishlistItems = new ArrayList<>();
-    String sql = "SELECT p.ProductID, p.ProductName, p.Price, pi.ImageURL, s.Size, s.Color, s.StockID "
+    String sql = "SELECT p.ProductID, p.ProductName, p.Price, pi.ImageURL, s.Size, s.Color, s.StockID, w.DateAdded "
                + "FROM Wishlist w "
                + "JOIN Stock s ON w.StockID = s.StockID "
                + "JOIN Products p ON s.ProductID = p.ProductID "
@@ -32,6 +32,7 @@ public class WishlistDAO extends MyDAO {
             product.setSize(rs.getInt("Size"));
             product.setColor(rs.getString("Color"));
             product.setStockID(rs.getInt("StockID")); // Set the stock ID
+            product.setDateAdded(rs.getTimestamp("DateAdded"));
             wishlistItems.add(product);
         }
     } catch (Exception e) {

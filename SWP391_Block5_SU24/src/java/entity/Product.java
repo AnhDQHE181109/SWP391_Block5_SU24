@@ -4,6 +4,8 @@
  */
 package entity;
 
+import java.util.Date;
+
 
 /**
  *
@@ -29,6 +31,7 @@ public class Product {
     private int stockID;
     private int stockQuantity;
     private String imageUrl;
+    private Date dateAdded;
 
     public void setImageUrl(String imageUrl) {
         this.imageUrl = imageUrl;
@@ -231,6 +234,14 @@ public class Product {
 
     public void setStockQuantity(int stockQuantity) {
         this.stockQuantity = stockQuantity;
+    }
+    
+    public Date getDateAdded() {
+        return dateAdded;
+    }
+    
+    public void setDateAdded(Date dateAdded) {
+        this.dateAdded = dateAdded;
     }
 
     @Override

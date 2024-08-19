@@ -1,8 +1,3 @@
-<%-- 
-    Document   : index.jsp
-    Created on : Aug 11, 2024, 7:23:09 PM
-    Author     : nobbe
---%>
 <%@ page import="java.util.List" %>
 <%@ page import="java.util.ArrayList" %>
 <%@ page import="entity.Product" %>
@@ -45,19 +40,6 @@
         <link rel="stylesheet" href="${pageContext.request.contextPath}/css/bootstrap-datepicker.css">
         <link rel="stylesheet" href="${pageContext.request.contextPath}/fonts/flaticon/font/flaticon.css">
         <link rel="stylesheet" href="${pageContext.request.contextPath}/css/style.css">
-        <style>
-            #search-bar {
-                width: 50%; /* Adjust the width to make it smaller */
-                margin-bottom: 10px; /* Add some space below the search bar */
-            }
-
-            .input-group {
-                max-width: 300px; /* Control the overall size of the search input group */
-                margin: 0 auto; /* Center the search bar horizontally */
-            }
-
-        </style>
-        
     </head>
     <body>
 
@@ -107,6 +89,9 @@
                                 <div class="one-eight text-center">
                                     <span>Color</span>
                                 </div>
+                                <div class="one-eight text-center">
+                                    <span>Date</span>
+                                </div>
                                 <div class="one-eight text-center px-4">
                                     <span>Actions</span>
                                 </div>
@@ -120,7 +105,7 @@
                                     <div class="product-img" style="background-image: url(${pageContext.request.contextPath}/<%= product.getImageURL() %>);">
                                     </div>
                                     <div class="display-tc">
-                                        <h3><a href="${pageContext.request.contextPath}/ProductDetailsController?productID=<%=product.getProductId() %>"><%= product.getProductName() %></a></h3>
+                                        <a href="${pageContext.request.contextPath}/ProductDetailsController?productID=<%=product.getProductId() %>"><h3><%= product.getProductName() %></h3></a>
                                     </div>
                                 </div>
                                 <div class="one-eight text-center">
@@ -140,9 +125,14 @@
                                 </div>
                                 <div class="one-eight text-center">
                                     <div class="display-tc">
+                                        <span class="date"><%= product.getDateAdded() %></span>
+                                    </div>
+                                </div>
+                                <div class="one-eight text-center">
+                                    <div class="display-tc">
                                         <form action="${pageContext.request.contextPath}/RemoveWishlistController" method="post">
                                             <input type="hidden" name="stockId" value="<%= product.getStockID() %>">
-    <button type=                           <button type="submit" class="btn btn-danger btn-remove-wishlist">Remove</button>
+                                            <button type="submit" class="btn btn-danger btn-remove-wishlist">Remove</button>
                                         </form>
                                     </div>
                                 </div>
