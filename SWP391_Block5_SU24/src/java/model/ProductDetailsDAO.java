@@ -6,6 +6,7 @@ package model;
 
 import entity.Brand;
 import entity.Category;
+import entity.Feedback;
 import entity.Product;
 import entity.ProductDetails;
 import entity.ProductStockDetails;
@@ -259,9 +260,10 @@ public class ProductDetailsDAO extends DBConnect {
 
     public ProductDetails getProductDetails(int productID) {
 
-        String sql = "select ProductID, ProductName, Origin, Material, Price, TotalQuantity, CategoryName, BrandName, ProductStatus\n"
-                + "from Products p, Categories cat, Brand b\n"
-                + "where p.CategoryID = cat.CategoryID and p.BrandID = b.BrandID and p.ProductID = ?";
+        String sql = "select ProductID, ProductName, Origin, Material, Price, TotalQuantity, CategoryName, BrandName, discount_amount, ProductStatus\n"
+                + "from Products p, Categories cat, Brand b, Discounts dis\n"
+                + "where p.CategoryID = cat.CategoryID and p.BrandID = b.BrandID and "
+                + "p.ProductID = dis.discount_id and p.ProductID = ?";
 
         ProductDetails productDetails = null;
 
@@ -278,10 +280,11 @@ public class ProductDetailsDAO extends DBConnect {
                 int totalQuantity = rs.getInt("TotalQuantity");
                 String categoryName = rs.getString("CategoryName");
                 String brandName = rs.getString("BrandName");
+                double discountAmount = rs.getDouble("discount_amount");
                 int productStatus = rs.getInt("ProductStatus");
 
                 productDetails = new ProductDetails(productID, productName, origin, material, price,
-                        totalQuantity, categoryName, brandName, productStatus);
+                        totalQuantity, categoryName, brandName, discountAmount, productStatus);
             }
 
             if (rs != null) {
@@ -523,6 +526,47 @@ public class ProductDetailsDAO extends DBConnect {
         }
 
         return cartItemsCount;
+    }
+
+    public List<Feedback> getFeedbacksForProductID(int productID) {
+
+        String sql = "select ProductID, acc.AccountID, Username, Color, Size, rating, comment, created_at\n"
+                + "from Feedback fb, Stock s, Accounts acc\n"
+                + "where fb.StockID = s.StockID and acc.AccountID = fb.AccountID and ProductID = ?";
+
+        Feedback feedback = null;
+        List<Feedback> feedbacksList = new ArrayList<>();
+
+        try {
+            PreparedStatement ps = conn.prepareStatement(sql);
+            ps.setInt(1, productID);
+
+            ResultSet rs = ps.executeQuery();
+            while (rs.next()) {
+                int accountID = rs.getInt("AccountID");
+                String username = rs.getString("Username");
+                String color = rs.getString("Color");
+                int size = rs.getInt("Size");
+                int rating = rs.getInt("rating");
+                String comment = rs.getString("comment");
+                java.sql.Date createdAt = rs.getDate("created_at");
+
+                feedback = new Feedback(productID, accountID, username, color, size,
+                        rating, comment, createdAt);
+                feedbacksList.add(feedback);
+            }
+
+            if (rs != null) {
+                rs.close();
+            }
+            if (ps != null) {
+                ps.close();
+            }
+        } catch (SQLException e) {
+            System.out.println("getFeedbacksForProductID(): " + e);
+        }
+
+        return feedbacksList;
     }
 
     public List<String> getAllColors() {

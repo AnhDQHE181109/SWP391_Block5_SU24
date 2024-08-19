@@ -156,7 +156,8 @@
 							<h3><%=productDetails.getProductName() %></h3>
 							<h4>Brand: <%=productDetails.getBrandName() %></h4>
 							<p class="price">
-								<span>$<%=productDetails.getPrice() %></span> 
+								<% double discountedPriced = productDetails.getPrice() - ((productDetails.getPrice() * productDetails.getDiscountAmount()) / 100); %>
+								<span><s><em>$<%=productDetails.getPrice() %></em></s>  $<%=discountedPriced %></span> 
 								<span class="rate">
 									<i class="icon-star-full"></i>
 									<i class="icon-star-full"></i>
@@ -166,7 +167,7 @@
 									(74 Rating)
 								</span>
 							</p>
-							<p>Even the all-powerful Pointing has no control about the blind texts it is an almost unorthographic life One day however a small line of blind text by the name of Lorem Ipsum decided to leave for the far World of Grammar.</p>
+							<!-- <p>Even the all-powerful Pointing has no control about the blind texts it is an almost unorthographic life One day however a small line of blind text by the name of Lorem Ipsum decided to leave for the far World of Grammar.</p> -->
 
 							<div class="block-26 mb-4">
 								<h4>Color</h4>
@@ -248,19 +249,19 @@
 								<div class="bd-example bd-example-tabs">
 								  <ul class="nav nav-pills mb-3" id="pills-tab" role="tablist">
 
-								    <li class="nav-item">
-								      <a class="nav-link active" id="pills-description-tab" data-toggle="pill" href="#pills-description" role="tab" aria-controls="pills-description" aria-expanded="true">Description</a>
+								    <!-- <li class="nav-item">
+								      <a class="nav-link" id="pills-description-tab" data-toggle="pill" href="#pills-description" role="tab" aria-controls="pills-description" aria-expanded="true">Description</a>
 								    </li>
 								    <li class="nav-item">
 								      <a class="nav-link" id="pills-manufacturer-tab" data-toggle="pill" href="#pills-manufacturer" role="tab" aria-controls="pills-manufacturer" aria-expanded="true">Manufacturer</a>
-								    </li>
+								    </li> -->
 								    <li class="nav-item">
-								      <a class="nav-link" id="pills-review-tab" data-toggle="pill" href="#pills-review" role="tab" aria-controls="pills-review" aria-expanded="true">Review</a>
+								      <a class="nav-link active" id="pills-review-tab" data-toggle="pill" href="#pills-review" role="tab" aria-controls="pills-review" aria-expanded="true">Review</a>
 								    </li>
 								  </ul>
 
 								  <div class="tab-content" id="pills-tabContent">
-								    <div class="tab-pane border fade show active" id="pills-description" role="tabpanel" aria-labelledby="pills-description-tab">
+								    <div class="tab-pane border fade" id="pills-description" role="tabpanel" aria-labelledby="pills-description-tab">
 								      <p>Even the all-powerful Pointing has no control about the blind texts it is an almost unorthographic life One day however a small line of blind text by the name of Lorem Ipsum decided to leave for the far World of Grammar.</p>
 										<p>When she reached the first hills of the Italic Mountains, she had a last view back on the skyline of her hometown Bookmarksgrove, the headline of Alphabet Village and the subline of her own road, the Line Lane. Pityful a rethoric question ran over her cheek, then she continued her way.</p>
 										<ul>
@@ -277,31 +278,40 @@
 										<p>When she reached the first hills of the Italic Mountains, she had a last view back on the skyline of her hometown Bookmarksgrove, the headline of Alphabet Village and the subline of her own road, the Line Lane. Pityful a rethoric question ran over her cheek, then she continued her way.</p>
 								    </div>
 
-								    <div class="tab-pane border fade" id="pills-review" role="tabpanel" aria-labelledby="pills-review-tab">
+								    <div class="tab-pane border fade show active" id="pills-review" role="tabpanel" aria-labelledby="pills-review-tab">
 								      <div class="row">
 								   		<div class="col-md-8">
-								   			<h3 class="head">23 Reviews</h3>
-								   			<div class="review">
-										   		<div class="user-img" style="background-image: url(images/person1.jpg)"></div>
-										   		<div class="desc">
-										   			<h4>
-										   				<span class="text-left">Jacob Webb</span>
-										   				<span class="text-right">14 March 2018</span>
-										   			</h4>
-										   			<p class="star">
-										   				<span>
-										   					<i class="icon-star-full"></i>
-										   					<i class="icon-star-full"></i>
-										   					<i class="icon-star-full"></i>
-										   					<i class="icon-star-half"></i>
-										   					<i class="icon-star-empty"></i>
-									   					</span>
-									   					<span class="text-right"><a href="#" class="reply"><i class="icon-reply"></i></a></span>
-										   			</p>
-										   			<p>When she reached the first hills of the Italic Mountains, she had a last view back on the skyline of her hometown Bookmarksgrov</p>
-										   		</div>
-										   	</div>
-										   	<div class="review">
+											<% List<Feedback> feedbacksList = (List<Feedback>) request.getAttribute("feedbacksList");
+												if (feedbacksList != null) { %>
+								   			<h3 class="head"><%=feedbacksList.size() %> review(s)</h3>
+											<% for (Feedback feedback : feedbacksList) { %>
+													<div class="review">
+														<!-- <div class="user-img" style="background-image: url(images/person1.jpg)"></div> -->
+														<div class="desc">
+															<h4>
+																<span class="text-left"><%=feedback.getUsername() %></span>
+																<span class="text-right"><%=feedback.getCreatedAt() %></span>
+															</h4>
+															<p class="star">
+																<span>
+																	<% for (int i = 0; i < feedback.getRating(); i++) { %>
+																		<i class="icon-star-full"></i>
+																	<% } %>
+																	
+																	<!-- <i class="icon-star-full"></i>
+																	<i class="icon-star-full"></i>
+																	<i class="icon-star-half"></i>
+																	<i class="icon-star-empty"></i> -->
+																</span>
+																<!-- <span class="text-right"><a href="#" class="reply"><i class="icon-reply"></i></a></span> -->
+															</p>
+															<p><%=feedback.getComment() %></p>
+														</div>
+													</div>
+											<%		}  
+												} %>
+
+										   	<!-- <div class="review">
 										   		<div class="user-img" style="background-image: url(images/person2.jpg)"></div>
 										   		<div class="desc">
 										   			<h4>
@@ -340,9 +350,9 @@
 										   			</p>
 										   			<p>When she reached the first hills of the Italic Mountains, she had a last view back on the skyline of her hometown Bookmarksgrov</p>
 										   		</div>
-										   	</div>
+										   	</div> -->
 								   		</div>
-								   		<div class="col-md-4">
+								   		<!-- <div class="col-md-4">
 								   			<div class="rating-wrap">
 									   			<h3 class="head">Give a Review</h3>
 									   			<div class="wrap">
@@ -403,7 +413,7 @@
 										   			</p>
 										   		</div>
 									   		</div>
-								   		</div>
+								   		</div> -->
 								   	</div>
 								    </div>
 								  </div>

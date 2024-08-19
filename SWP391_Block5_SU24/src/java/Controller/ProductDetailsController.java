@@ -5,6 +5,7 @@
 package Controller;
 
 import entity.Account;
+import entity.Feedback;
 import java.io.IOException;
 import java.io.PrintWriter;
 import jakarta.servlet.ServletException;
@@ -91,6 +92,7 @@ public class ProductDetailsController extends HttpServlet {
 
             ProductDetails productDetails = pdDAO.getProductDetails(productID);
             List<ProductStockDetails> productColors = pdDAO.getProductColors(productID);
+            List<Feedback> feedbacksList = pdDAO.getFeedbacksForProductID(productID);
             
             int cartItemsCount = pdDAO.getCartItemsCount(accountID);
 
@@ -113,6 +115,7 @@ public class ProductDetailsController extends HttpServlet {
             }
 
             request.setAttribute("productDetails", productDetails);
+            request.setAttribute("feedbacksList", feedbacksList);
             request.setAttribute("productColors", productColors);
             request.setAttribute("productSizes", productSizes);
             request.setAttribute("cartItemsCount", cartItemsCount);
