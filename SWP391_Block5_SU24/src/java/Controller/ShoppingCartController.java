@@ -103,12 +103,26 @@ public class ShoppingCartController extends HttpServlet {
         }
 
         int cartItemsCount = pdDAO.getCartItemsCount(accountID);
+        
+        String shippingType = request.getParameter("shippingType");
+        double shippingFee = 0;
+        if (shippingType != null) {
+            if (shippingType.equalsIgnoreCase("ecoRadioBox")) {
+                shippingFee = 0.0;
+            } else {
+                shippingFee = 15.0;
+            }
+        } else {
+            shippingType = "ecoRadioBox";
+        }
 
         List<ShoppingCartItem> cartItems = scDAO.getCartItemsByAccountID(accountID);
 
         request.setAttribute("cartItemsCount", cartItemsCount);
         request.setAttribute("cartItems", cartItems);
         request.setAttribute("removalConfirmation", removalConfirmation);
+        request.setAttribute("shippingFee", shippingFee);
+        request.setAttribute("shippingType", shippingType);
         request.getRequestDispatcher("customer/cart.jsp").forward(request, response);
     }
 

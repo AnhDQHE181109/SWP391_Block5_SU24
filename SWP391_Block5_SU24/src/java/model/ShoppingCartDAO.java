@@ -20,10 +20,10 @@ public class ShoppingCartDAO extends DBConnect {
 
     public List<ShoppingCartItem> getCartItemsByAccountID(int accountID) {
 
-        String sql = "select p.ProductID, s.StockID, p.ProductName, Color, Size, Price, quantity, ImageURL\n"
-                + "from Stock s, Products p, Cart cart, ProductImages pi\n"
+        String sql = "select p.ProductID, s.StockID, p.ProductName, Color, Size, Price, quantity, discount_amount, ImageURL\n"
+                + "from Stock s, Products p, Cart cart, ProductImages pi, Discounts dis\n"
                 + "where s.ProductID = p.ProductID and s.StockID = cart.StockID and\n"
-                + "pi.StockID = s.StockID and cart.AccountID = ?";
+                + "pi.StockID = s.StockID and p.ProductID = dis.product_id and cart.AccountID = ?";
 
         ShoppingCartItem cartItem = null;
         List<ShoppingCartItem> cartItems = new ArrayList<>();
@@ -41,9 +41,10 @@ public class ShoppingCartDAO extends DBConnect {
                 int size = rs.getInt("Size");
                 double price = rs.getDouble("Price");
                 int quantity = rs.getInt("quantity");
+                double discountAmount = rs.getDouble("discount_amount");
                 String imageURL = rs.getString("ImageURL");
 
-                cartItem = new ShoppingCartItem(productID, stockID, productName, color, size, price, quantity, imageURL);
+                cartItem = new ShoppingCartItem(productID, stockID, productName, color, size, price, quantity, discountAmount, imageURL);
                 cartItems.add(cartItem);
             }
 
