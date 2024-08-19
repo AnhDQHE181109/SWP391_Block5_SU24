@@ -73,26 +73,26 @@
                         </div>
                     </div>
                 </div>
-                
-                
-            <div class="colorlib-product">
-                <div class="container">
-                    <div class="row">
-                        <div class="col-md-20 text-center">
-                            <form method="get" action="wishlist.jsp">
-                                <label for="sort">Sort by:</label>
-                                <select name="sort" id="sort" onchange="this.form.submit()">
-                                    <option value="name_asc" <%= request.getParameter("sort") != null && request.getParameter("sort").equals("name_asc") ? "selected" : "" %>>Name: A-Z</option>
-                                    <option value="name_desc" <%= request.getParameter("sort") != null && request.getParameter("sort").equals("name_desc") ? "selected" : "" %>>Name: Z-A</option>
-                                    <option value="price_asc" <%= request.getParameter("sort") != null && request.getParameter("sort").equals("price_asc") ? "selected" : "" %>>Price: Low to High</option>
-                                    <option value="price_desc" <%= request.getParameter("sort") != null && request.getParameter("sort").equals("price_desc") ? "selected" : "" %>>Price: High to Low</option>
-                                    <option value="date_desc" <%= request.getParameter("sort") != null && request.getParameter("sort").equals("date_desc") ? "selected" : "" %>>Date: Latest</option>
-                                    <option value="date_asc" <%= request.getParameter("sort") != null && request.getParameter("sort").equals("date_asc") ? "selected" : "" %>>Date: Earliest</option>
-                                </select>
-                            </form>
+
+
+                <div class="colorlib-product">
+                    <div class="container">
+                        <div class="row">
+                            <div class="col-md-20 text-center">
+                                <form method="get" action="wishlist.jsp">
+                                    <label for="sort">Sort by:</label>
+                                    <select name="sort" id="sort" onchange="this.form.submit()">
+                                        <option value="name_asc" <%= request.getParameter("sort") != null && request.getParameter("sort").equals("name_asc") ? "selected" : "" %>>Name: A-Z</option>
+                                        <option value="name_desc" <%= request.getParameter("sort") != null && request.getParameter("sort").equals("name_desc") ? "selected" : "" %>>Name: Z-A</option>
+                                        <option value="price_asc" <%= request.getParameter("sort") != null && request.getParameter("sort").equals("price_asc") ? "selected" : "" %>>Price: Low to High</option>
+                                        <option value="price_desc" <%= request.getParameter("sort") != null && request.getParameter("sort").equals("price_desc") ? "selected" : "" %>>Price: High to Low</option>
+                                        <option value="date_desc" <%= request.getParameter("sort") != null && request.getParameter("sort").equals("date_desc") ? "selected" : "" %>>Date: Latest</option>
+                                        <option value="date_asc" <%= request.getParameter("sort") != null && request.getParameter("sort").equals("date_asc") ? "selected" : "" %>>Date: Earliest</option>
+                                    </select>
+                                </form>
+                            </div>
                         </div>
                     </div>
-                </div>
                     <div class="row row-pb-lg"></div>
                     <div class="row row-pb-lg">
                         <div class="col-md-12">
@@ -150,6 +150,13 @@
                                 </div>
                                 <div class="one-eight text-center">
                                     <div class="display-tc">
+                                        <form action="${pageContext.request.contextPath}/shoppingCart" method="post">
+                                            <input type="hidden" name="selectedColor" value="<%= product.getColor() %>">
+                                            <input type="hidden" name="selectedSize" value="<%= product.getSize() %>">
+                                            <input type="hidden" name="selectedProductID" value="<%= product.getProductId() %>">
+                                            <input type="hidden" name="quantity" value="1"> <!-- Default to 1 -->
+                                            <button type="submit" class="btn btn-primary">Add to Cart</button>
+                                        </form>
                                         <form action="${pageContext.request.contextPath}/RemoveWishlistController" method="post">
                                             <input type="hidden" name="stockId" value="<%= product.getStockID() %>">
                                             <button type="submit" class="btn btn-danger btn-remove-wishlist">Remove</button>
@@ -189,22 +196,22 @@
 
         <!-- Add the search functionality -->
         <script>
-            function searchProducts() {
-                const searchTerm = document.getElementById('search-bar').value;
-                if (searchTerm.length > 0) {
-                    $.ajax({
-                        type: 'GET',
-                        url: '${pageContext.request.contextPath}/SearchSuggestionsServlet',
-                        data: { query: searchTerm },
-                        success: function(response) {
-                            $('#suggestions').empty();
-                            $('#suggestions').append(response); // Append the HTML suggestions
-                        }
-                    });
-                } else {
-                    $('#suggestions').empty(); // Clear suggestions if the search bar is empty
-                }
-            }
+                                        function searchProducts() {
+                                            const searchTerm = document.getElementById('search-bar').value;
+                                            if (searchTerm.length > 0) {
+                                                $.ajax({
+                                                    type: 'GET',
+                                                    url: '${pageContext.request.contextPath}/SearchSuggestionsServlet',
+                                                    data: {query: searchTerm},
+                                                    success: function (response) {
+                                                        $('#suggestions').empty();
+                                                        $('#suggestions').append(response); // Append the HTML suggestions
+                                                    }
+                                                });
+                                            } else {
+                                                $('#suggestions').empty(); // Clear suggestions if the search bar is empty
+                                            }
+                                        }
         </script>
 
     </body>
