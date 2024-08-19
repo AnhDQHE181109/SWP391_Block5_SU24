@@ -77,6 +77,12 @@ public class RemoveWishlistController extends HttpServlet {
         if (loggedInUser != null) {
             int accountId = loggedInUser.getAccountID();
             System.out.println("Removing item with StockID: " + stockId + " for AccountID: " + accountId);
+            
+            // Check if stockId is correctly set
+            if(stockId == 0) {
+                System.out.println("Error: StockID is 0, likely an issue with form submission.");
+            }
+
             WishlistDAO wishlistDAO = new WishlistDAO();
             wishlistDAO.removeFromWishlist(accountId, stockId);
         }
