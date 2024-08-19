@@ -60,10 +60,6 @@
         <servlet-name>CheckoutController</servlet-name>
         <servlet-class>Controller.CheckoutController</servlet-class>
     </servlet>
-    <servlet>
-        <servlet-name>RemoveFromWishlistServlet</servlet-name>
-        <servlet-class>Controller.RemoveFromWishlistServlet</servlet-class>
-    </servlet>
     <servlet-mapping>
         <servlet-name>LoginController</servlet-name>
         <url-pattern>/LoginController</url-pattern>
@@ -151,9 +147,5 @@
     <servlet-mapping>
         <servlet-name>CheckoutController</servlet-name>
         <url-pattern>/CheckoutController</url-pattern>
-    </servlet-mapping>
-    <servlet-mapping>
-        <servlet-name>RemoveFromWishlistServlet</servlet-name>
-        <url-pattern>/RemoveFromWishlistServlet</url-pattern>
     </servlet-mapping>
 </web-app>

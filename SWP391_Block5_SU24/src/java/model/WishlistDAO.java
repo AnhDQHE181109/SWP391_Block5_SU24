@@ -39,40 +39,7 @@ public class WishlistDAO extends MyDAO {
             e.printStackTrace();
         }
         return wishlistItems;
-    }
-
-    public boolean removeProductFromWishlist(int accountId, int stockId) {
-    String sql = "DELETE FROM Wishlist WHERE AccountID = ? AND StockID = ?";
-    if (con == null) {
-        System.err.println("Database connection is null.");
-        return false;
-    }
-    try {
-        if (con.isClosed()) {
-            System.err.println("Database connection is closed.");
-            return false;
-        }
-    } catch (SQLException e) {
-        e.printStackTrace();
-        return false;
-    }
-
-    try (PreparedStatement ps = con.prepareStatement(sql)) {
-        ps.setInt(1, accountId);
-        ps.setInt(2, stockId);
-
-        System.out.println("Executing query: " + ps.toString());
-
-        int rowsAffected = ps.executeUpdate();
-        System.out.println("Rows affected: " + rowsAffected);
-
-        return rowsAffected > 0;
-    } catch (SQLException e) {
-        System.err.println("SQL Exception: " + e.getMessage());
-        e.printStackTrace();
-        return false;
-    }
-}
+   }
 
     
     public List<Product> searchWishlistItemsByName(int accountId, String search) {

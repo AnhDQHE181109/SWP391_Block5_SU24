@@ -1,3 +1,7 @@
+<%@ page import="java.sql.Connection" %>
+<%@ page import="java.sql.DriverManager" %>
+<%@ page import="java.sql.PreparedStatement" %>
+<%@ page import="java.sql.SQLException" %>
 <%@ page import="java.util.List" %>
 <%@ page import="java.util.ArrayList" %>
 <%@ page import="entity.Product" %>
@@ -8,19 +12,40 @@
 <%
     // Initialize the wishlistItems variable
     List<Product> wishlistItems = new ArrayList<>();
+    WishlistDAO wishlistDAO = new WishlistDAO(); // Declare only once
 
     // Retrieve the account ID from the session using the correct attribute name
     Account loggedInUser = (Account) session.getAttribute("account");
     if (loggedInUser == null) {
         out.println("No user logged in, redirecting to login page...");
-        response.sendRedirect("../login.jsp");
+        response.sendRedirect("login.jsp");
         return; // Stop further execution of JSP
     } else {
         int accountId = loggedInUser.getAccountID();
-        WishlistDAO wishlistDAO = new WishlistDAO();
         wishlistItems = wishlistDAO.getWishlistItems(accountId); // Use the already initialized variable
     }
+
+    // Check if a product is being removed from the wishlist
+    String removeStockID = request.getParameter("removeStockID");
+    if (removeStockID != null && !removeStockID.isEmpty()) {
+        try {
+            int stockID = Integer.parseInt(removeStockID);
+            Connection connection = DriverManager.getConnection("jdbc:sqlserver://localhost:1433;databaseName=ECommerceStore", "sa", "sa");
+            String deleteSQL = "DELETE FROM Wishlist WHERE AccountID = ? AND StockID = ?";
+            PreparedStatement preparedStatement = connection.prepareStatement(deleteSQL);
+            preparedStatement.setInt(1, loggedInUser.getAccountID());
+            preparedStatement.setInt(2, stockID);
+            preparedStatement.executeUpdate();
+            preparedStatement.close();
+            connection.close();
+            // Refresh the wishlist items after deletion
+            wishlistItems = wishlistDAO.getWishlistItems(loggedInUser.getAccountID());
+        } catch (SQLException e) {
+            out.println("Error: " + e.getMessage());
+        }
+    }
 %>
+
 
 <html>
     <head>
@@ -98,43 +123,45 @@
                                 </div>
                             </div>
 
-                            <%
-                                for (Product product : wishlistItems) {
-                            %>
-                            <div class="product-cart d-flex" id="product-<%= product.getProductId() %>">
-                                <div class="one-forth">
-                                    <div class="product-img" style="background-image: url(<%= product.getImageURL() %>);">
-                                    </div>
-                                    <div class="display-tc">
-                                        <h3><%= product.getProductName() %></h3>
-                                    </div>
+                        <%
+                            for (Product product : wishlistItems) {
+                        %>
+                        <div class="product-cart d-flex">
+                            <div class="one-forth">
+                                <div class="product-img" style="background-image: url(${pageContext.request.contextPath}/<%= product.getImageURL() %>);">
                                 </div>
-                                <div class="one-eight text-center">
-                                    <div class="display-tc">
-                                        <span class="price">$<%= product.getPrice() %></span>
-                                    </div>
-                                </div>
-                                <div class="one-eight text-center">
-                                    <div class="display-tc">
-                                        <span class="size"><%= product.getSize() %></span>
-                                    </div>
-                                </div>
-                                <div class="one-eight text-center">
-                                    <div class="display-tc">
-                                        <span class="color"><%= product.getColor() %></span>
-                                    </div>
-                                </div>
-                                <div class="one-eight text-center">
-                                    <div class="display-tc">
-                                        <button class="btn btn-primary btn-add-cart">Add to Cart</button>
-                                        <button class="btn btn-danger btn-remove-wishlist" onclick="removeFromWishlist(<%= product.getStockID() %>)">Remove</button>
-
-                                    </div>
+                                <div class="display-tc">
+                                    <h3><%= product.getProductName() %></h3>
                                 </div>
                             </div>
-                            <%
-                                }
-                            %>
+                            <div class="one-eight text-center">
+                                <div class="display-tc">
+                                    <span class="price">$<%= product.getPrice() %></span>
+                                </div>
+                            </div>
+                            <div class="one-eight text-center">
+                                <div class="display-tc">
+                                    <span class="size"><%= product.getSize() %></span>
+                                </div>
+                            </div>
+                            <div class="one-eight text-center">
+                                <div class="display-tc">
+                                    <span class="color"><%= product.getColor() %></span>
+                                </div>
+                            </div>
+                            <div class="one-eight text-center">
+                                <div class="display-tc">
+                                    <!-- Add a form for removing the item -->
+                                    <form method="post" action="wishlist.jsp">
+                                        <input type="hidden" name="removeStockID" value="<%= product.getStockID() %>">
+                                        <button type="submit" class="btn btn-danger btn-remove-wishlist">Remove</button>
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
+                        <%
+                            }
+                        %>
                         </div>
                     </div>
                 </div>
