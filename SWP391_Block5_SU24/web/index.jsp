@@ -52,7 +52,33 @@
         <link rel="stylesheet" href="css/style.css">
 
     </head>
+    <style>
+        .alert {
+            padding: 20px;
+            background-color: #f44336; 
+            color: white;
+            margin-bottom: 15px;
+            position: fixed;
+            
+            width:100%;
+            z-index: 9999;
+        }
 
+        .closebtn {
+            margin-left: 15px;
+            color: white;
+            font-weight: bold;
+            float: right;
+            font-size: 22px;
+            line-height: 20px;
+            cursor: pointer;
+            transition: 0.3s;
+        }
+
+        .closebtn:hover {
+            color: black;
+        }
+    </style>
     <body>
         <%if("true".equals(request.getParameter("auth_error"))){%>
         <div class="alert">
@@ -87,16 +113,16 @@
                                     <li><a href="products.jsp">Products</a></li>
                                     <li><a href="about.html">About</a></li>
                                     <li><a href="contact.html">Contact</a></li>
-                     <% if (session.getAttribute("account") != null) { %>
-                                        <li class="cart"><a href="wishlist.jsp"><i class="fa fa-heart"></i> Wishlist</a></li>
-                                        <li class="cart"><a href="customer/cart.jsp"><i class="icon-shopping-cart"></i> Cart [0]</a></li>
-                                        <li class="cart"><a href="LogoutController">Logout</a></li>
-                                        <li class="cart"><i class="fa-regular fa-user"></i> <%= ((Account) session.getAttribute("account")).getUsername() %></li>
-                                    <% } else { %>
-                                        <li class="cart"><a href="signup.jsp">Sign Up</a></li>
-                                        <li class="cart"><a href="login.jsp">Login</a></li>
-                                        <li class="cart"><a href="customer/cart.jsp"><i class="icon-shopping-cart"></i> Cart [0]</a></li>
-                                    <% } %>
+                                        <% if (session.getAttribute("account") != null) { %>
+                                    <li class="cart"><a href="wishlist.jsp"><i class="fa fa-heart"></i> Wishlist</a></li>
+                                    <li class="cart"><a href="customer/cart.jsp"><i class="icon-shopping-cart"></i> Cart [0]</a></li>
+                                    <li class="cart"><a href="LogoutController">Logout</a></li>
+                                    <li class="cart"><i class="fa-regular fa-user"></i> <%= ((Account) session.getAttribute("account")).getUsername() %></li>
+                                        <% } else { %>
+                                    <li class="cart"><a href="signup.jsp">Sign Up</a></li>
+                                    <li class="cart"><a href="login.jsp">Login</a></li>
+                                    <li class="cart"><a href="customer/cart.jsp"><i class="icon-shopping-cart"></i> Cart [0]</a></li>
+                                        <% } %>
 
                                 </ul>
                             </div>
