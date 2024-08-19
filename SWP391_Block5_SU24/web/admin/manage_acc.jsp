@@ -8,6 +8,7 @@
 <%@ page import="model.AccountDAO" %>
 <%@ page import="entity.Account" %>
 <%@ page import="java.util.List" %>
+
 <!DOCTYPE html>
 <html lang="en">
 
@@ -61,7 +62,7 @@
     const newPhoneNumber = formData.get('phoneNumber');
     const newAddress = formData.get('address');
 
-    fetch('${pageContext.request.contextPath}/updateAccount', {
+    fetch('${pageContext.request.contextPath}/AccountManagementController', {
         method: 'POST',
         headers: {
             'Content-Type': 'application/x-www-form-urlencoded',

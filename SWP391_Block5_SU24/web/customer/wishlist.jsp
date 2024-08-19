@@ -1,7 +1,8 @@
-<%@ page import="java.sql.Connection" %>
-<%@ page import="java.sql.DriverManager" %>
-<%@ page import="java.sql.PreparedStatement" %>
-<%@ page import="java.sql.SQLException" %>
+<%-- 
+    Document   : index.jsp
+    Created on : Aug 11, 2024, 7:23:09 PM
+    Author     : nobbe
+--%>
 <%@ page import="java.util.List" %>
 <%@ page import="java.util.ArrayList" %>
 <%@ page import="entity.Product" %>
@@ -12,7 +13,6 @@
 <%
     // Initialize the wishlistItems variable
     List<Product> wishlistItems = new ArrayList<>();
-    WishlistDAO wishlistDAO = new WishlistDAO(); // Declare only once
 
     // Retrieve the account ID from the session using the correct attribute name
     Account loggedInUser = (Account) session.getAttribute("account");
@@ -22,30 +22,10 @@
         return; // Stop further execution of JSP
     } else {
         int accountId = loggedInUser.getAccountID();
+        WishlistDAO wishlistDAO = new WishlistDAO();
         wishlistItems = wishlistDAO.getWishlistItems(accountId); // Use the already initialized variable
     }
-
-    // Check if a product is being removed from the wishlist
-    String removeStockID = request.getParameter("removeStockID");
-    if (removeStockID != null && !removeStockID.isEmpty()) {
-        try {
-            int stockID = Integer.parseInt(removeStockID);
-            Connection connection = DriverManager.getConnection("jdbc:sqlserver://localhost:1433;databaseName=ECommerceStore", "sa", "sa");
-            String deleteSQL = "DELETE FROM Wishlist WHERE AccountID = ? AND StockID = ?";
-            PreparedStatement preparedStatement = connection.prepareStatement(deleteSQL);
-            preparedStatement.setInt(1, loggedInUser.getAccountID());
-            preparedStatement.setInt(2, stockID);
-            preparedStatement.executeUpdate();
-            preparedStatement.close();
-            connection.close();
-            // Refresh the wishlist items after deletion
-            wishlistItems = wishlistDAO.getWishlistItems(loggedInUser.getAccountID());
-        } catch (SQLException e) {
-            out.println("Error: " + e.getMessage());
-        }
-    }
 %>
-
 
 <html>
     <head>
@@ -65,6 +45,19 @@
         <link rel="stylesheet" href="${pageContext.request.contextPath}/css/bootstrap-datepicker.css">
         <link rel="stylesheet" href="${pageContext.request.contextPath}/fonts/flaticon/font/flaticon.css">
         <link rel="stylesheet" href="${pageContext.request.contextPath}/css/style.css">
+        <style>
+            #search-bar {
+                width: 50%; /* Adjust the width to make it smaller */
+                margin-bottom: 10px; /* Add some space below the search bar */
+            }
+
+            .input-group {
+                max-width: 300px; /* Control the overall size of the search input group */
+                margin: 0 auto; /* Center the search bar horizontally */
+            }
+
+        </style>
+        
     </head>
     <body>
 
@@ -87,18 +80,14 @@
 
             <!-- Search Bar with Icon -->
             <div class="container">
-                <div class="row">
-                    <div class="col-md-12">
+                <div class="row justify-content-center">
+                    <div class="col-md-12 text-center">
                         <div class="input-group mb-3">
-                            <input type="text" id="search-bar" class="form-control" placeholder="Search for product..." onkeyup="searchProducts()">
-                            <div class="input-group-append">
-                                <span class="input-group-text"><i class="icon-search"></i></span>
-                            </div>
+                            <input type="text" id="search-bar" class="form-control" placeholder="Search for more products..." onkeyup="searchProducts()">
+                            <div id="suggestions" class="list-group"></div>
                         </div>
-                        <div id="suggestions" class="list-group"></div>
                     </div>
                 </div>
-            </div>
 
             <div class="colorlib-product">
                 <div class="container">
@@ -123,45 +112,44 @@
                                 </div>
                             </div>
 
-                        <%
-                            for (Product product : wishlistItems) {
-                        %>
-                        <div class="product-cart d-flex">
-                            <div class="one-forth">
-                                <div class="product-img" style="background-image: url(${pageContext.request.contextPath}/<%= product.getImageURL() %>);">
+                            <%
+                                for (Product product : wishlistItems) {
+                            %>
+                            <div class="product-cart d-flex">
+                                <div class="one-forth">
+                                    <div class="product-img" style="background-image: url(<%= product.getImageURL() %>);">
+                                    </div>
+                                    <div class="display-tc">
+                                        <h3><%= product.getProductName() %></h3>
+                                    </div>
                                 </div>
-                                <div class="display-tc">
-                                    <h3><%= product.getProductName() %></h3>
+                                <div class="one-eight text-center">
+                                    <div class="display-tc">
+                                        <span class="price">$<%= product.getPrice() %></span>
+                                    </div>
+                                </div>
+                                <div class="one-eight text-center">
+                                    <div class="display-tc">
+                                        <span class="size"><%= product.getSize() %></span>
+                                    </div>
+                                </div>
+                                <div class="one-eight text-center">
+                                    <div class="display-tc">
+                                        <span class="color"><%= product.getColor() %></span>
+                                    </div>
+                                </div>
+                                <div class="one-eight text-center">
+                                    <div class="display-tc">
+                                        <form action="${pageContext.request.contextPath}/RemoveWishlistController" method="post">
+                                            <input type="hidden" name="stockId" value="<%= product.getStockID() %>">
+                                            <button type="submit" class="btn btn-danger btn-remove-wishlist">Remove</button>
+                                        </form>
+                                    </div>
                                 </div>
                             </div>
-                            <div class="one-eight text-center">
-                                <div class="display-tc">
-                                    <span class="price">$<%= product.getPrice() %></span>
-                                </div>
-                            </div>
-                            <div class="one-eight text-center">
-                                <div class="display-tc">
-                                    <span class="size"><%= product.getSize() %></span>
-                                </div>
-                            </div>
-                            <div class="one-eight text-center">
-                                <div class="display-tc">
-                                    <span class="color"><%= product.getColor() %></span>
-                                </div>
-                            </div>
-                            <div class="one-eight text-center">
-                                <div class="display-tc">
-                                    <!-- Add a form for removing the item -->
-                                    <form method="post" action="wishlist.jsp">
-                                        <input type="hidden" name="removeStockID" value="<%= product.getStockID() %>">
-                                        <button type="submit" class="btn btn-danger btn-remove-wishlist">Remove</button>
-                                    </form>
-                                </div>
-                            </div>
-                        </div>
-                        <%
-                            }
-                        %>
+                            <%
+                                }
+                            %>
                         </div>
                     </div>
                 </div>
@@ -196,7 +184,7 @@
                 if (searchTerm.length > 0) {
                     $.ajax({
                         type: 'GET',
-                        url: 'SearchSuggestionsServlet',
+                        url: '${pageContext.request.contextPath}/SearchSuggestionsServlet',
                         data: { query: searchTerm },
                         success: function(response) {
                             $('#suggestions').empty();
@@ -207,27 +195,6 @@
                     $('#suggestions').empty(); // Clear suggestions if the search bar is empty
                 }
             }
-            
-            function removeFromWishlist(stockId) {
-        const accountId = <%= loggedInUser.getAccountID() %>; // Get the account ID from the session
-
-        $.ajax({
-            type: 'POST',
-            url: 'RemoveFromWishlistServlet',
-            data: {
-                accountId: accountId,
-                stockId: stockId
-            },
-            success: function(response) {
-                if (response.trim() === "success") {
-                    // Remove the product from the DOM
-                    $('#product-' + stockId).remove();
-                } else {
-                    alert('Failed to remove the product from your wishlist. Please try again.');
-                }
-            }
-        });
-    }
         </script>
 
     </body>
