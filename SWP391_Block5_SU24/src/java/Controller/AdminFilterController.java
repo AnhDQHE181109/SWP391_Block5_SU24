@@ -150,7 +150,7 @@ public class AdminFilterController implements Filter {
                 case 4: {
                     request.setAttribute("auth_error", "true");
                     String contextPath = httpRequest.getContextPath();
-                    httpResponse.sendRedirect(contextPath + "/AccountManagementController");
+                    httpResponse.sendRedirect(contextPath + "/admin/manage_acc.jsp?auth_error=true");
                     break;
                 }
                 default: {

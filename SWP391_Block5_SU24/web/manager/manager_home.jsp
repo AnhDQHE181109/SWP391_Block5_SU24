@@ -45,7 +45,6 @@
             color: white;
             margin-bottom: 15px;
             position: fixed;
-
             width:100%;
             z-index: 9999;
         }
@@ -81,7 +80,7 @@
         }
     </style>
     <body>
-        <%if("true".equals(request.getParamter("auth_error"))){%>
+        <%if("true".equals(request.getParameter("auth_error"))){%>
         <div class="alert" id="alertDiv">
             <span class="closebtn" onclick="this.parentElement.style.display = 'none';">&times;</span>
             You do not have permission to access this pages.
