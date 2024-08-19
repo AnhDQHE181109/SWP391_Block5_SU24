@@ -157,7 +157,7 @@
 							<h4>Brand: <%=productDetails.getBrandName() %></h4>
 							<p class="price">
 								<% double discountedPriced = productDetails.getPrice() - ((productDetails.getPrice() * productDetails.getDiscountAmount()) / 100); %>
-								<span><s><em>$<%=productDetails.getPrice() %></em></s>  $<%=discountedPriced %></span> 
+								<span><s><em>$<%=productDetails.getPrice() %></em></s>   $<%=discountedPriced %>   <b style="font-size: 15px;">(-<%=productDetails.getDiscountAmount() %>% off)</b></span> 
 								<span class="rate">
 									<i class="icon-star-full"></i>
 									<i class="icon-star-full"></i>

@@ -181,6 +181,36 @@ public class ShoppingCartDAO extends DBConnect {
         return quantity;
     }
 
+    public int getStockQuantityOfStockID(int stockID) {
+
+        String sql = "select StockID, StockQuantity \n"
+                + "from Stock s\n"
+                + "where StockID = ?";
+
+        int quantity = -1;
+
+        try {
+            PreparedStatement ps = conn.prepareStatement(sql);
+            ps.setInt(1, stockID);
+
+            ResultSet rs = ps.executeQuery();
+            if (rs.next()) {
+                return rs.getInt(2);
+            }
+
+            if (rs != null) {
+                rs.close();
+            }
+            if (ps != null) {
+                ps.close();
+            }
+        } catch (SQLException e) {
+            System.out.println("getStockQuantityOfStockID(): " + e);
+        }
+
+        return quantity;
+    }
+
     public void setCartQuantity(int quantity, int accountID, int stockID) {
 
         String sql = "update Cart\n"
