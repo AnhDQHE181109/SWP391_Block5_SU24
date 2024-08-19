@@ -3,7 +3,7 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
  */
 package entity;
-
+import java.util.Date;
 
 public class Products {
 
@@ -17,6 +17,7 @@ public class Products {
     private int  BrandID;
     private int ImageID ; 
     private int ProductStatus;
+    private Date dateAdded;
 
     // Constructor không tham số
     public Products() {
