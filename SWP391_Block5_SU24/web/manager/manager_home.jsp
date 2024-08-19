@@ -5,6 +5,9 @@
 --%>
 
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
+<%@ page import="java.util.List" %>
+<%@ page import="entity.Product" %>
+<%@ page import="model.WishlistDAO" %>
 <!DOCTYPE html>
 <html lang="en">
 
@@ -312,73 +315,45 @@
                 <div class="container-fluid pt-4 px-4">
                     <div class="bg-light text-center rounded p-4">
                         <div class="d-flex align-items-center justify-content-between mb-4">
-                            <h6 class="mb-0">Recent Salse</h6>
+                            <h6 class="mb-0">Preferred Products</h6>
                             <a href="">Show All</a>
                         </div>
                         <div class="table-responsive">
                             <table class="table text-start align-middle table-bordered table-hover mb-0">
                                 <thead>
                                     <tr class="text-dark">
-                                        <th scope="col"><input class="form-check-input" type="checkbox"></th>
-                                        <th scope="col">Date</th>
-                                        <th scope="col">Invoice</th>
-                                        <th scope="col">Customer</th>
-                                        <th scope="col">Amount</th>
-                                        <th scope="col">Status</th>
-                                        <th scope="col">Action</th>
+                                        <th scope="col">Product Details</th>
+                                        <th scope="col">Color</th>
+                                        <th scope="col">Size</th>
+                                        <th scope="col">Wishlisted</th>
                                     </tr>
                                 </thead>
                                 <tbody>
+                                    <% 
+                                        WishlistDAO wishlistDAO = new WishlistDAO();
+                                        List<Product> preferredProducts = wishlistDAO.getTopWishlistedProducts();
+                                        for (Product product : preferredProducts) {
+                                    %>
                                     <tr>
-                                        <td><input class="form-check-input" type="checkbox"></td>
-                                        <td>01 Jan 2045</td>
-                                        <td>INV-0123</td>
-                                        <td>Jhon Doe</td>
-                                        <td>$123</td>
-                                        <td>Paid</td>
-                                        <td><a class="btn btn-sm btn-primary" href="">Detail</a></td>
+                                        <td>
+                                            <div class="d-flex align-items-center">
+                                                <img src="${pageContext.request.contextPath}/<%= product.getImageURL() %>" alt="<%= product.getProductName() %>" style="width: 50px; height: 50px;" class="rounded-circle">
+                                                <div class="ms-3">
+                                                    <h6 class="mb-0"><%= product.getProductName() %></h6>
+                                                </div>
+                                            </div>
+                                        </td>
+                                        <td><%= product.getColor() %></td>
+                                        <td><%= product.getSize() %></td>
+                                        <td><%= product.getWishlistedCount() %> people</td>
                                     </tr>
-                                    <tr>
-                                        <td><input class="form-check-input" type="checkbox"></td>
-                                        <td>01 Jan 2045</td>
-                                        <td>INV-0123</td>
-                                        <td>Jhon Doe</td>
-                                        <td>$123</td>
-                                        <td>Paid</td>
-                                        <td><a class="btn btn-sm btn-primary" href="">Detail</a></td>
-                                    </tr>
-                                    <tr>
-                                        <td><input class="form-check-input" type="checkbox"></td>
-                                        <td>01 Jan 2045</td>
-                                        <td>INV-0123</td>
-                                        <td>Jhon Doe</td>
-                                        <td>$123</td>
-                                        <td>Paid</td>
-                                        <td><a class="btn btn-sm btn-primary" href="">Detail</a></td>
-                                    </tr>
-                                    <tr>
-                                        <td><input class="form-check-input" type="checkbox"></td>
-                                        <td>01 Jan 2045</td>
-                                        <td>INV-0123</td>
-                                        <td>Jhon Doe</td>
-                                        <td>$123</td>
-                                        <td>Paid</td>
-                                        <td><a class="btn btn-sm btn-primary" href="">Detail</a></td>
-                                    </tr>
-                                    <tr>
-                                        <td><input class="form-check-input" type="checkbox"></td>
-                                        <td>01 Jan 2045</td>
-                                        <td>INV-0123</td>
-                                        <td>Jhon Doe</td>
-                                        <td>$123</td>
-                                        <td>Paid</td>
-                                        <td><a class="btn btn-sm btn-primary" href="">Detail</a></td>
-                                    </tr>
+                                    <% } %>
                                 </tbody>
                             </table>
                         </div>
                     </div>
                 </div>
+
                 <!-- Recent Sales End -->
 
 
@@ -563,9 +538,9 @@
                         document.getElementById('alertDiv').style.display = 'none';
                     }
                 });
-    </script>
+        </script>
     </body>
-        
+
 
 
 
