@@ -13,14 +13,15 @@ public class DAOProductStockImport extends MyDAO {
         super();
     }
 
-    // Method to add a ProductStockImport to the database
+ // Method to add a ProductStockImport to the database
     public boolean addProductStockImport(ProductStockImport stockImport) {
-        xSql = "INSERT INTO ProductStockImport (AccountID, ImportDate) VALUES (?, ?)";
+        xSql = "INSERT INTO ProductStockImport (AccountID,ImportDate, ImportAction, Actorname) VALUES (?, GETDATE(), ?, ?)";
         
         try {
             ps = con.prepareStatement(xSql);
             ps.setInt(1, stockImport.getAccountID());
-            ps.setDate(2, new Date(stockImport.getImportDate().getTime()));
+            ps.setInt(2, stockImport.getImportAction());
+            ps.setString(3, stockImport.getActorname());
 
             int rowsAffected = ps.executeUpdate();
             return rowsAffected > 0;
@@ -32,6 +33,9 @@ public class DAOProductStockImport extends MyDAO {
         }
         return false;
     }
+
+
+
 
     // Method to retrieve all ProductStockImport records
     public List<ProductStockImport> getAllProductStockImports() {
@@ -47,6 +51,9 @@ public class DAOProductStockImport extends MyDAO {
                 stockImport.setImportID(rs.getInt("ImportID"));
                 stockImport.setAccountID(rs.getInt("AccountID"));
                 stockImport.setImportDate(rs.getDate("ImportDate"));
+                stockImport.setImportAction(rs.getInt("ImportAction"));
+                stockImport.setActorname(rs.getString("Actorname"));
+
 
                 stockImports.add(stockImport);
             }
@@ -59,7 +66,34 @@ public class DAOProductStockImport extends MyDAO {
         return stockImports;
     }
     
-    
+        // Method to retrieve all ProductStockImport records
+    public List<ProductStockImport> getAllProductStockImportsTOP1() {
+        List<ProductStockImport> stockImports = new ArrayList<>();
+        xSql = "SELECT TOP 1* FROM ProductStockImport ORDER BY [ImportID] DESC";
+        
+        try {
+            ps = con.prepareStatement(xSql);
+            rs = ps.executeQuery();
+
+            while (rs.next()) {
+                ProductStockImport stockImport = new ProductStockImport();
+                stockImport.setImportID(rs.getInt("ImportID"));
+                stockImport.setAccountID(rs.getInt("AccountID"));
+                stockImport.setImportDate(rs.getDate("ImportDate"));
+                stockImport.setImportAction(rs.getInt("ImportAction"));
+                stockImport.setActorname(rs.getString("Actorname"));
+
+
+                stockImports.add(stockImport);
+            }
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+        } finally {
+            closeResources();
+        }
+        return stockImports;
+    }
 
     // Method to update a ProductStockImport record
     public boolean updateProductStockImport(ProductStockImport stockImport) {
@@ -115,6 +149,8 @@ public class DAOProductStockImport extends MyDAO {
                 stockImport.setImportID(rs.getInt("ImportID"));
                 stockImport.setAccountID(rs.getInt("AccountID"));
                 stockImport.setImportDate(rs.getDate("ImportDate"));
+                stockImport.setImportAction(rs.getInt("ImportAction"));
+                stockImport.setActorname(rs.getString("Actorname"));
             }
 
         } catch (SQLException e) {
