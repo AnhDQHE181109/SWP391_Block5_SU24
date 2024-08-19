@@ -68,6 +68,10 @@
         <servlet-name>ConfirmOrderController</servlet-name>
         <servlet-class>Controller.ConfirmOrderController</servlet-class>
     </servlet>
+    <servlet>
+        <servlet-name>DiscountServlet</servlet-name>
+        <servlet-class>Controller.DiscountServlet</servlet-class>
+    </servlet>
     <servlet-mapping>
         <servlet-name>LoginController</servlet-name>
         <url-pattern>/LoginController</url-pattern>
@@ -155,5 +159,9 @@
     <servlet-mapping>
         <servlet-name>ConfirmOrderController</servlet-name>
         <url-pattern>/ConfirmOrderController</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>DiscountServlet</servlet-name>
+        <url-pattern>/DiscountServlet</url-pattern>
     </servlet-mapping>
 </web-app>
