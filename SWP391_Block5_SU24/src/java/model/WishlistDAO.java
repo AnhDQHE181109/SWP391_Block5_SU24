@@ -67,5 +67,9 @@ public class WishlistDAO extends MyDAO {
     }
 }
 
+    public List<Product> searchWishlistItemsByName(int accountID, String search) {
+        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+    }
+
 
 }
