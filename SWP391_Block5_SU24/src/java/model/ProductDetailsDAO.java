@@ -579,12 +579,13 @@ public class ProductDetailsDAO extends DBConnect {
     public List<Product> getFilteredProducts(List<Integer> brandIds, List<Integer> categoryIds, List<String> colors, List<Integer> sizes, List<String> materials, String query) {
         List<Product> products = new ArrayList<>();
         StringBuilder sql = new StringBuilder("SELECT p.ProductID, p.ProductName, p.Origin, p.Material, p.Price, p.TotalQuantity, ");
-        sql.append("c.CategoryName, b.BrandName, pi.ImageURL ");
+        sql.append("c.CategoryName, b.BrandName, MIN(pi.ImageURL) AS ImageURL ");
         sql.append("FROM Products p ");
         sql.append("LEFT JOIN Categories c ON p.CategoryID = c.CategoryID ");
         sql.append("LEFT JOIN Brand b ON p.BrandID = b.BrandID ");
         sql.append("LEFT JOIN Stock s ON p.ProductID = s.ProductID ");
-        sql.append("LEFT JOIN ProductImages pi ON s.StockID = pi.StockID WHERE 1=1");
+        sql.append("LEFT JOIN ProductImages pi ON s.StockID = pi.StockID ");
+        sql.append("WHERE p.ProductStatus = 1 "); // Ensure only active products are included
 
         // Add filtering conditions based on selected filters
         if (!brandIds.isEmpty()) {
@@ -605,6 +606,9 @@ public class ProductDetailsDAO extends DBConnect {
         if (query != null && !query.isEmpty()) {
             sql.append(" AND p.ProductName LIKE ?"); // Filter by product name
         }
+
+        sql.append(" GROUP BY p.ProductID, p.ProductName, p.Origin, p.Material, p.Price, p.TotalQuantity, ");
+        sql.append("c.CategoryName, b.BrandName"); // Grouping to ensure only main product data is retrieved
 
         try {
             PreparedStatement ps = conn.prepareStatement(sql.toString());
@@ -641,28 +645,31 @@ public class ProductDetailsDAO extends DBConnect {
     public List<Product> getNewArrivals() {
         List<Product> products = new ArrayList<>();
         String sql = "SELECT p.ProductID, p.ProductName, p.Origin, p.Material, p.Price, p.TotalQuantity, "
-                + "c.CategoryName, b.BrandName, pi.ImageURL "
+                + "c.CategoryName, b.BrandName, MIN(pi.ImageURL) AS ImageURL "
                 + "FROM Products p "
+                + "JOIN Stock s ON p.ProductID = s.ProductID "
+                + "JOIN ProductStockImport psi ON s.ImportID = psi.ImportID "
                 + "LEFT JOIN Categories c ON p.CategoryID = c.CategoryID "
                 + "LEFT JOIN Brand b ON p.BrandID = b.BrandID "
-                + "LEFT JOIN Stock s ON p.ProductID = s.ProductID "
                 + "LEFT JOIN ProductImages pi ON s.StockID = pi.StockID "
-                + "INNER JOIN ProductStockImport psi ON s.ImportID = psi.ImportID "
-                + "WHERE DATEDIFF(DAY, psi.ImportDate, GETDATE()) <= 30";
+                + "WHERE p.ProductStatus = 1 " // Only include active products
+                + "AND psi.ImportDate IN (SELECT TOP (5) ImportDate FROM ProductStockImport ORDER BY ImportDate DESC) "
+                + "GROUP BY p.ProductID, p.ProductName, p.Origin, p.Material, p.Price, p.TotalQuantity, "
+                + "c.CategoryName, b.BrandName";  // Grouping to ensure only main product data is retrieved
 
         try (Statement st = conn.createStatement(); ResultSet rs = st.executeQuery(sql)) {
             while (rs.next()) {
-                Product p = new Product();
-                p.setProductId(rs.getInt("ProductID"));
-                p.setProductName(rs.getString("ProductName"));
-                p.setOrigin(rs.getString("Origin"));
-                p.setMaterial(rs.getString("Material"));
-                p.setPrice(rs.getDouble("Price"));
-                p.setTotalQuantity(rs.getInt("TotalQuantity"));
-                p.setCategoryName(rs.getString("CategoryName"));
-                p.setBrandName(rs.getString("BrandName"));
-                p.setImageURL(rs.getString("ImageURL"));
-                products.add(p);
+                Product product = new Product();
+                product.setProductId(rs.getInt("ProductID"));
+                product.setProductName(rs.getString("ProductName"));
+                product.setOrigin(rs.getString("Origin"));
+                product.setMaterial(rs.getString("Material"));
+                product.setPrice(rs.getDouble("Price"));
+                product.setTotalQuantity(rs.getInt("TotalQuantity"));
+                product.setCategoryName(rs.getString("CategoryName"));
+                product.setBrandName(rs.getString("BrandName"));
+                product.setImageURL(rs.getString("ImageURL"));
+                products.add(product);
             }
         } catch (SQLException e) {
             e.printStackTrace();
@@ -672,14 +679,14 @@ public class ProductDetailsDAO extends DBConnect {
 
     public List<Product> getBestSellers() {
         List<Product> bestSellers = new ArrayList<>();
-        String sql = "SELECT p.ProductID, p.ProductName, p.Price, pi.ImageURL, SUM(od.Quantity) AS TotalQuantity "
+        String sql = "SELECT p.ProductID, p.ProductName, p.Price, MIN(pi.ImageURL) AS ImageURL, SUM(od.Quantity) AS TotalQuantity "
                 + "FROM OrderDetails od "
                 + "JOIN Stock s ON od.StockID = s.StockID "
                 + "JOIN Products p ON s.ProductID = p.ProductID "
                 + "LEFT JOIN ProductImages pi ON s.StockID = pi.StockID "
-                + "WHERE od.OrderID IN (SELECT OrderID FROM Orders WHERE Status = 1) "
-                + // Use the correct integer value if Status is an integer
-                "GROUP BY p.ProductID, p.ProductName, p.Price, pi.ImageURL "
+                + "WHERE p.ProductStatus = 1 " // Ensure only active products are included
+                + "AND od.OrderID IN (SELECT OrderID FROM Orders WHERE Status = 1) " // Ensure only completed orders are considered
+                + "GROUP BY p.ProductID, p.ProductName, p.Price "
                 + "ORDER BY TotalQuantity DESC";
 
         try (Statement st = conn.createStatement(); ResultSet rs = st.executeQuery(sql)) {

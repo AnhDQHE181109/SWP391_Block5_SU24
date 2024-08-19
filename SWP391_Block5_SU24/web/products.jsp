@@ -99,7 +99,15 @@
 
     </head>
     <body>
-
+        <%if("true".equals(request.getParameter("auth_error"))){%>
+        <div class="alert" id="alertDiv">
+            <span class="closebtn" onclick="this.parentElement.style.display = 'none';">&times;</span>
+            You do not have permission to access this pages.
+            <div class="alert-timer">
+                <div class="alert-timer-fill" id="timerFill"></div>
+            </div>
+        </div>
+        <%}%>
         <div class="colorlib-loader"></div>
 
         <div id="page">
