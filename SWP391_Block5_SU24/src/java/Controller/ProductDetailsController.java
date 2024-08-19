@@ -91,6 +91,8 @@ public class ProductDetailsController extends HttpServlet {
 
             ProductDetails productDetails = pdDAO.getProductDetails(productID);
             List<ProductStockDetails> productColors = pdDAO.getProductColors(productID);
+            
+            int cartItemsCount = pdDAO.getCartItemsCount(accountID);
 
             //The index of the image to be displayed in the owl carousel image slider
             int displayedImage = 0;
@@ -113,6 +115,7 @@ public class ProductDetailsController extends HttpServlet {
             request.setAttribute("productDetails", productDetails);
             request.setAttribute("productColors", productColors);
             request.setAttribute("productSizes", productSizes);
+            request.setAttribute("cartItemsCount", cartItemsCount);
             request.setAttribute("selectedColor", selectedColor);
             request.setAttribute("selectedSize", selectedSize);
             request.setAttribute("selectedColorButton", selectedColor + "_" + productIDin);
@@ -170,7 +173,9 @@ public class ProductDetailsController extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        processRequest(request, response);
+        response.setContentType("text/html;charset=UTF-8");
+        PrintWriter out = response.getWriter();
+        
     }
 
     /**

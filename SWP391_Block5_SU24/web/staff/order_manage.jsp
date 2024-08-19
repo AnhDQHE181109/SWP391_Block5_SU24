@@ -120,8 +120,39 @@
                 transform: rotate(-45deg);
                 margin-top: -2px;
             }
+            .alert {
+            padding: 20px;
+            background-color: #f44336; 
+            color: white;
+            margin-bottom: 15px;
+            position: fixed;
+            
+            width:100%;
+            z-index: 9999;
+        }
+
+        .closebtn {
+            margin-left: 15px;
+            color: white;
+            font-weight: bold;
+            float: right;
+            font-size: 22px;
+            line-height: 20px;
+            cursor: pointer;
+            transition: 0.3s;
+        }
+
+        .closebtn:hover {
+            color: black;
+        }
         </style>
         <!-- Navbar-->
+        <%if("true".equals(request.getParameter("auth_error"))){%>
+        <div class="alert">
+            <span class="closebtn" onclick="this.parentElement.style.display = 'none';">&times;</span>
+            You do not have permission to access this pages.
+        </div>
+        <%}%>
 
         <div class="app-sidebar__overlay" data-toggle="sidebar"></div>
         <aside class="app-sidebar">
@@ -130,140 +161,140 @@
 
             </div>
             <hr>
-                    <ul class="app-menu">
-                        <li><a class="app-menu__item" href="dashboard"><i class='app-menu__icon bx bx-tachometer'></i><span
-                                    class="app-menu__label">Dashboard</span></a></li>
-                        <li><a class="app-menu__item" href="customer_manage"><i class='app-menu__icon bx bx-user-voice'></i><span
-                                    class="app-menu__label">Customers</span></a></li>
-                        <li><a class="app-menu__item" href="stocksManager"><i
-                                    class='app-menu__icon bx bx-purchase-tag-alt'></i><span class="app-menu__label">Products</span></a>
-                        </li>
-                        <li><a class="app-menu__item" href="Ordercontroller"><i class='app-menu__icon bx bx-task'></i><span
-                                    class="app-menu__label">Orders</span></a></li>
-                        <li><a class="app-menu__item" href="productStockImport"><i class='app-menu__icon bx bx-task'></i><span
-                                    class="app-menu__label">Reviews</span></a></li>
-                       
-                        <button class="admin_logout" onclick="showLogoutBox()">Logout</button>
-                        <div class="logout-box" id="logoutBox" style="display: none">
-                            <h2>Logout</h2>
-                            <p>Are you sure you want to logout?</p>
-                            <button onclick="logout()">Logout</button>
-                            <button onclick="cancelLogout()">Cancel</button>
-                        </div>
-                    </ul>
-        </aside>
-        
-        
-        <main class="app-content">
-    <div class="app-title">
-        <ul class="app-breadcrumb breadcrumb">
-            <li class="breadcrumb-item">All Products</li>
-            <li class="breadcrumb-item"><a href="#">Add products</a></li>
-        </ul>
-    </div>
-    <div class="row">
-        <div class="col-md-12">
+            <ul class="app-menu">
+                <li><a class="app-menu__item" href="dashboard"><i class='app-menu__icon bx bx-tachometer'></i><span
+                            class="app-menu__label">Dashboard</span></a></li>
+                <li><a class="app-menu__item" href="customer_manage"><i class='app-menu__icon bx bx-user-voice'></i><span
+                            class="app-menu__label">Customers</span></a></li>
+                <li><a class="app-menu__item" href="stocksManager"><i
+                            class='app-menu__icon bx bx-purchase-tag-alt'></i><span class="app-menu__label">Products</span></a>
+                </li>
+                <li><a class="app-menu__item" href="Ordercontroller"><i class='app-menu__icon bx bx-task'></i><span
+                            class="app-menu__label">Orders</span></a></li>
+                <li><a class="app-menu__item" href="productStockImport"><i class='app-menu__icon bx bx-task'></i><span
+                            class="app-menu__label">Reviews</span></a></li>
 
-            <!-- Search Form -->
+                <button class="admin_logout" onclick="showLogoutBox()">Logout</button>
+                <div class="logout-box" id="logoutBox" style="display: none">
+                    <h2>Logout</h2>
+                    <p>Are you sure you want to logout?</p>
+                    <button onclick="logout()">Logout</button>
+                    <button onclick="cancelLogout()">Cancel</button>
+                </div>
+            </ul>
+        </aside>
+
+
+        <main class="app-content">
+            <div class="app-title">
+                <ul class="app-breadcrumb breadcrumb">
+                    <li class="breadcrumb-item">All Products</li>
+                    <li class="breadcrumb-item"><a href="#">Add products</a></li>
+                </ul>
+            </div>
             <div class="row">
                 <div class="col-md-12">
-                    <form action="Ordercontroller" method="get">
-                        <label for="username">Username:</label>
-                        <input type="text" id="username" name="username" />
 
-                        <label for="orderDate">Order Date:</label>
-                        <input type="date" id="orderDate" name="orderDate" />
+                    <!-- Search Form -->
+                    <div class="row">
+                        <div class="col-md-12">
+                            <form action="Ordercontroller" method="get">
+                                <label for="username">Username:</label>
+                                <input type="text" id="username" name="username" />
 
-                        <label for="status">Status:</label>
-                        <select id="status" name="status">
-                            <option value="">All</option>
-                            <option value="Pending">Pending</option>
-                            <option value="Shipping">Shipping</option>
-                            <option value="Cancelled">Cancelled</option>
-                        </select>
+                                <label for="orderDate">Order Date:</label>
+                                <input type="date" id="orderDate" name="orderDate" />
 
-                        <label for="startDate">Start Date:</label>
-                        <input type="date" id="startDate" name="startDate" />
+                                <label for="status">Status:</label>
+                                <select id="status" name="status">
+                                    <option value="">All</option>
+                                    <option value="Pending">Pending</option>
+                                    <option value="Shipping">Shipping</option>
+                                    <option value="Cancelled">Cancelled</option>
+                                </select>
 
-                        <label for="endDate">End Date:</label>
-                        <input type="date" id="endDate" name="endDate" />
+                                <label for="startDate">Start Date:</label>
+                                <input type="date" id="startDate" name="startDate" />
 
-                        <button type="submit">Search</button>
-                    </form>
+                                <label for="endDate">End Date:</label>
+                                <input type="date" id="endDate" name="endDate" />
+
+                                <button type="submit">Search</button>
+                            </form>
+                        </div>
+                    </div>
+
+                    <!-- Order List Table -->
+                    <div class="tile">
+                        <h3 class="tile-title">Order List</h3>
+                        <table border="1" class="table table-striped">
+                            <thead>
+                                <tr>
+                                    <th>Order ID</th>
+                                    <th>Username</th>
+                                    <th>Order Date</th>
+                                    <th>Status</th>
+                                    <th>Action</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <c:forEach var="order" items="${orderList}">
+                                    <tr>
+                                        <td>${order.orderID}</td>
+                                        <td>${usernameMap[order.accountID]}</td> <!-- Assuming usernameMap contains usernames -->
+                                        <td hidden>${addressMap[order.accountID]}</td>
+                                        <td hidden>${phoneMap[order.accountID]}</td>
+                                        <td>${order.orderDate}</td>
+                                        <td>${order.status}</td>
+                                        <td>
+                                            <form action="Orderdetailcontroller" method="get">
+                                                <input type="hidden" name="adress" value="${addressMap[order.accountID]}" />
+                                                <input type="hidden" name="phone" value="${phoneMap[order.accountID]}" />
+                                                <input type="hidden" name="status" value="${order.status}" />
+                                                <input type="hidden" name="id" value="${order.orderID}" />
+                                                <input type="hidden" name="service" value="detailService" />
+                                                <button type="submit">Detail</button>
+                                            </form>
+                                        </td>
+                                    </tr>
+                                </c:forEach>
+                            </tbody>
+                        </table>
+
+                        <!-- Pagination Navigation -->
+                        <div class="pagination">
+                            <c:if test="${currentPage > 1}">
+                                <a href="Ordercontroller?page=${currentPage - 1}">Previous</a>
+                            </c:if>
+
+                            <c:forEach begin="1" end="${totalPages}" var="i">
+                                <a href="Ordercontroller?page=${i}">${i}</a>
+                            </c:forEach>
+
+                            <c:if test="${currentPage < totalPages}">
+                                <a href="Ordercontroller?page=${currentPage + 1}">Next</a>
+                            </c:if>
+                        </div>
+                    </div>
+
                 </div>
             </div>
+        </main>
 
-            <!-- Order List Table -->
-            <div class="tile">
-                <h3 class="tile-title">Order List</h3>
-                <table border="1" class="table table-striped">
-                    <thead>
-                        <tr>
-                            <th>Order ID</th>
-                            <th>Username</th>
-                            <th>Order Date</th>
-                            <th>Status</th>
-                            <th>Action</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <c:forEach var="order" items="${orderList}">
-                            <tr>
-                                <td>${order.orderID}</td>
-                                <td>${usernameMap[order.accountID]}</td> <!-- Assuming usernameMap contains usernames -->
-                                 <td hidden>${addressMap[order.accountID]}</td>
-                                 <td hidden>${phoneMap[order.accountID]}</td>
-                                <td>${order.orderDate}</td>
-                                <td>${order.status}</td>
-                                <td>
-                                    <form action="Orderdetailcontroller" method="get">
-                                        <input type="hidden" name="adress" value="${addressMap[order.accountID]}" />
-                                         <input type="hidden" name="phone" value="${phoneMap[order.accountID]}" />
-                                        <input type="hidden" name="status" value="${order.status}" />
-                                        <input type="hidden" name="id" value="${order.orderID}" />
-                                        <input type="hidden" name="service" value="detailService" />
-                                        <button type="submit">Detail</button>
-                                    </form>
-                                </td>
-                            </tr>
-                        </c:forEach>
-                    </tbody>
-                </table>
 
-                <!-- Pagination Navigation -->
-                <div class="pagination">
-                    <c:if test="${currentPage > 1}">
-                        <a href="Ordercontroller?page=${currentPage - 1}">Previous</a>
-                    </c:if>
 
-                    <c:forEach begin="1" end="${totalPages}" var="i">
-                        <a href="Ordercontroller?page=${i}">${i}</a>
-                    </c:forEach>
+        <script>
+            function showLogoutBox() {
+                document.getElementById('logoutBox').style.display = 'block';
+            }
+            function logout() {
+                window.location.href = 'index.html';
+            }
+            function cancelLogout() {
+                window.location.href = 'productinsert';
+            }
+        </script>
 
-                    <c:if test="${currentPage < totalPages}">
-                        <a href="Ordercontroller?page=${currentPage + 1}">Next</a>
-                    </c:if>
-                </div>
-            </div>
+    </body>
 
-        </div>
-    </div>
-</main>
-
-        
-        
-                    <script>
-                        function showLogoutBox() {
-                            document.getElementById('logoutBox').style.display = 'block';
-                        }
-                        function logout() {
-                            window.location.href = 'index.html';
-                        }
-                        function cancelLogout() {
-                            window.location.href = 'productinsert';
-                        }
-                    </script>
-
-                    </body>
-
-                    </html>
+</html>

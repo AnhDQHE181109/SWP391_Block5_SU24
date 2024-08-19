@@ -111,11 +111,16 @@ public class AdminFilterController implements Filter {
         HttpServletResponse httpResponse = (HttpServletResponse) response;
         HttpSession session = httpRequest.getSession(false);
         boolean isAdmin = false;
-        if (session.getAttribute("account") != null) {
+        if (session == null) {
+            String contextPath = httpRequest.getContextPath();
+            httpResponse.sendRedirect(contextPath + "/login.jsp?auth_error=true");
+            return;
+        }
+        if (session!=null && session.getAttribute("account") != null) {
             Account temp = (Account) session.getAttribute("account");
             isAdmin = (temp.getRole() == 4);
         }
-        boolean isLoggedIn = (session.getAttribute("account") != null && isAdmin);
+        boolean isLoggedIn = (session!= null && session.getAttribute("account") != null && isAdmin);
         if (isLoggedIn) {
             // the admin is already logged in and he's trying to login again
             // then forwards to the admin's homepage

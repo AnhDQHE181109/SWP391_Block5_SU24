@@ -495,6 +495,36 @@ public class ProductDetailsDAO extends DBConnect {
         return wishlistItemExists;
     }
 
+    public int getCartItemsCount(int accountID) {
+
+        String sql = "select count(*) as 'cartItemsCount'\n"
+                + "from Cart\n"
+                + "where AccountID = ?";
+
+        int cartItemsCount = 0;
+
+        try {
+            PreparedStatement ps = conn.prepareStatement(sql);
+            ps.setInt(1, accountID);
+
+            ResultSet rs = ps.executeQuery();
+            if (rs.next()) {
+                return rs.getInt(1);
+            }
+
+            if (rs != null) {
+                rs.close();
+            }
+            if (ps != null) {
+                ps.close();
+            }
+        } catch (SQLException e) {
+            System.out.println("getCartItemsCount(): " + e);
+        }
+
+        return cartItemsCount;
+    }
+
     public List<String> getAllColors() {
         List<String> colors = new ArrayList<>();
         String sql = "SELECT DISTINCT Color FROM Stock";
