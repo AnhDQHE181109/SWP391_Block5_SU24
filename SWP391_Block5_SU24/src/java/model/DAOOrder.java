@@ -12,6 +12,9 @@ import java.util.List;
 
 public class DAOOrder extends MyDAO {
 
+
+   
+
     // Method to add a new order
     public int addOrder(Order order) {
         int result = 0;
@@ -60,32 +63,13 @@ public class DAOOrder extends MyDAO {
         return result;
     }
 
-    // Method to delete an order by ID
-    public int deleteOrder(int orderID) {
-        int result = 0;
-        try {
-            xSql = "DELETE FROM Orders WHERE orderID = ?";
-            ps = con.prepareStatement(xSql);
-            ps.setInt(1, orderID);
-            result = ps.executeUpdate();
-        } catch (SQLException e) {
-            e.printStackTrace();
-        } finally {
-            try {
-                if (ps != null) ps.close();
-                if (con != null) con.close();
-            } catch (SQLException e) {
-                e.printStackTrace();
-            }
-        }
-        return result;
-    }
 
     // Method to retrieve an order by ID
-    public Order getOrderById(int orderID) {
+    public Order getOrderById(int orderID, String sortOrder) {
         Order order = null;
+        String orderBy = sortOrder != null && sortOrder.equalsIgnoreCase("asc") ? "ASC" : "DESC";
         try {
-            xSql = "SELECT * FROM Orders WHERE orderID = ?";
+            xSql = "SELECT * FROM Orders WHERE orderID = ? ORDER BY OrderDate " + orderBy;
             ps = con.prepareStatement(xSql);
             ps.setInt(1, orderID);
             rs = ps.executeQuery();
@@ -98,78 +82,64 @@ public class DAOOrder extends MyDAO {
         } catch (SQLException e) {
             e.printStackTrace();
         } finally {
-            try {
-                if (rs != null) rs.close();
-                if (ps != null) ps.close();
-                if (con != null) con.close();
-            } catch (SQLException e) {
-                e.printStackTrace();
-            }
+            closeResources();
         }
         return order;
     }
 
     // Method to retrieve all orders
-    public List<Order> getAllOrders() {
-        List<Order> orders = new ArrayList<>();
-        try {
-            xSql = "SELECT * FROM Orders";
-            ps = con.prepareStatement(xSql);
-            rs = ps.executeQuery();
-            while (rs.next()) {
-                int orderID = rs.getInt("orderID");
-                int accountID = rs.getInt("accountID");
-                Date orderDate = rs.getDate("orderDate");
-                String status = rs.getString("status");
-                orders.add(new Order(orderID, accountID, orderDate, status));
-            }
-        } catch (SQLException e) {
-            e.printStackTrace();
-        } finally {
+        public List<Order> getAllOrders(String sortOrder) {
+            List<Order> orders = new ArrayList<>();
+            String orderBy = sortOrder != null && sortOrder.equalsIgnoreCase("asc") ? "ASC" : "DESC";
             try {
-                if (rs != null) rs.close();
-                if (ps != null) ps.close();
-                if (con != null) con.close();
+                xSql = "SELECT * FROM Orders ORDER BY OrderDate " + orderBy;
+                ps = con.prepareStatement(xSql);
+                rs = ps.executeQuery();
+                while (rs.next()) {
+                    int orderID = rs.getInt("orderID");
+                    int accountID = rs.getInt("accountID");
+                    Date orderDate = rs.getDate("orderDate");
+                    String status = rs.getString("status");
+                    orders.add(new Order(orderID, accountID, orderDate, status));
+                }
             } catch (SQLException e) {
                 e.printStackTrace();
+            } finally {
+                closeResources();
             }
+            return orders;
         }
-        return orders;
-    }
+            public List<Order> getOrdersByUsername(String username, String sortOrder) {
+                List<Order> orders = new ArrayList<>();
+                String orderBy = sortOrder != null && sortOrder.equalsIgnoreCase("asc") ? "ASC" : "DESC";
+                xSql = "SELECT o.* FROM Orders o JOIN Accounts a ON o.AccountID = a.AccountID WHERE a.username LIKE ? ORDER BY o.OrderDate " + orderBy;
 
-    public List<Order> getOrdersByUsername(String username) {
-        List<Order> orders = new ArrayList<>();
-        // Use % for partial matching in SQL
-        xSql = "SELECT o.* FROM Orders o JOIN Accounts a ON o.AccountID = a.AccountID WHERE a.username LIKE ?";
-        
-        try {
-            ps = con.prepareStatement(xSql);
-            // Add % wildcard characters to allow partial matching
-            ps.setString(1, "%" + username + "%");
-            rs = ps.executeQuery();
+                try {
+                    ps = con.prepareStatement(xSql);
+                    ps.setString(1, "%" + username + "%");
+                    rs = ps.executeQuery();
 
-            while (rs.next()) {
-                Order order = new Order();
-                order.setOrderID(rs.getInt("OrderID"));
-                order.setAccountID(rs.getInt("AccountID"));
-                order.setOrderDate(rs.getDate("OrderDate")); // Adjust as necessary
-                order.setStatus(rs.getString("status")); // Adjust as necessary
-
-                // Set other fields...
-                orders.add(order);
+                    while (rs.next()) {
+                        Order order = new Order();
+                        order.setOrderID(rs.getInt("OrderID"));
+                        order.setAccountID(rs.getInt("AccountID"));
+                        order.setOrderDate(rs.getDate("OrderDate"));
+                        order.setStatus(rs.getString("status"));
+                        orders.add(order);
+                    }
+                } catch (SQLException e) {
+                    e.printStackTrace();
+                } finally {
+                    closeResources();
+                }
+                return orders;
             }
-        } catch (SQLException e) {
-            e.printStackTrace();
-        } finally {
-            closeResources();
-        }
-        return orders;
-    }
 
 
-    public List<Order> getOrdersByDate(String orderDate) {
+    public List<Order> getOrdersByDate(String orderDate,String sortOrder) {
         List<Order> orders = new ArrayList<>();
-        xSql = "SELECT * FROM Orders WHERE OrderDate = ?";
+            String orderBy = sortOrder != null && sortOrder.equalsIgnoreCase("asc") ? "ASC" : "DESC";
+        xSql = "SELECT * FROM Orders WHERE OrderDate = ? ORDER BY OrderDate " + orderBy;
         
         try {
             ps = con.prepareStatement(xSql);
@@ -192,9 +162,36 @@ public class DAOOrder extends MyDAO {
         return orders;
     }
     
-    public List<Order> getOrdersByStatus(String status) {
+    public List<Order> getOrdersByStatusDesc(String status) {
     List<Order> orders = new ArrayList<>();
-    xSql = "SELECT * FROM Orders WHERE status = ?";
+    xSql = "SELECT * FROM Orders WHERE status = ? order by [OrderDate] desc ";
+    
+    try {
+        ps = con.prepareStatement(xSql);
+        ps.setString(1, status);
+        rs = ps.executeQuery();
+
+        while (rs.next()) {
+            Order order = new Order();
+            order.setOrderID(rs.getInt("OrderID"));
+            order.setAccountID(rs.getInt("AccountID"));
+            order.setOrderDate(rs.getDate("OrderDate"));
+            order.setStatus(rs.getString("status"));
+            orders.add(order);
+        }
+    } catch (SQLException e) {
+        e.printStackTrace();
+    } finally {
+        closeResources();
+    }
+    return orders;
+}
+    
+    
+        public List<Order> getOrdersByStatus(String status, String sortOrder) {
+    List<Order> orders = new ArrayList<>();
+    String orderBy = sortOrder != null && sortOrder.equalsIgnoreCase("asc") ? "ASC" : "DESC";
+    xSql = "SELECT * FROM Orders WHERE status = ? ORDER BY OrderDate " + orderBy;
     
     try {
         ps = con.prepareStatement(xSql);
@@ -217,9 +214,10 @@ public class DAOOrder extends MyDAO {
     return orders;
 }
 
-public List<Order> getOrdersByDateRange(String startDate, String endDate) {
+public List<Order> getOrdersByDateRange(String startDate, String endDate, String sortOrder) {
     List<Order> orders = new ArrayList<>();
-    xSql = "SELECT * FROM Orders WHERE OrderDate BETWEEN ? AND ?";
+        String orderBy = sortOrder != null && sortOrder.equalsIgnoreCase("asc") ? "ASC" : "DESC";
+    xSql = "SELECT * FROM Orders WHERE OrderDate BETWEEN ? AND ? ORDER BY OrderDate " + orderBy ;
     
     try {
         ps = con.prepareStatement(xSql);
