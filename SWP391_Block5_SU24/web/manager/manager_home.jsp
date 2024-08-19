@@ -9,6 +9,7 @@
 <html lang="en">
 
 <head>
+    
     <meta charset="utf-8">
     <title>DASHMIN - Bootstrap Admin Template</title>
     <meta content="width=device-width, initial-scale=1.0" name="viewport">
@@ -39,6 +40,12 @@
 </head>
 
 <body>
+    <%if("true".equals(request.getParameter("auth_error"))){%>
+        <div class="alert">
+            <span class="closebtn" onclick="this.parentElement.style.display = 'none';">&times;</span>
+            You do not have permission to access this pages.
+        </div>
+        <%}%>
     <div class="${pageContext.request.contextPath}/container-fluid position-relative bg-white d-flex p-0">
         <!-- Spinner Start -->
         <div id="spinner" class="show bg-white position-fixed translate-middle w-100 vh-100 top-50 start-50 d-flex align-items-center justify-content-center">

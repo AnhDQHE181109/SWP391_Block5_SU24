@@ -15,6 +15,7 @@
 %>
 <html>
     <head>
+
         <title>Footwear - Free Bootstrap 4 Template by Colorlib</title>
         <script src="https://kit.fontawesome.com/c630e9f862.js" crossorigin="anonymous"></script>
         <meta charset="utf-8">
@@ -53,7 +54,12 @@
     </head>
 
     <body>
-
+        <%if("true".equals(request.getParameter("auth_error"))){%>
+        <div class="alert">
+            <span class="closebtn" onclick="this.parentElement.style.display = 'none';">&times;</span>
+            You do not have permission to access this pages.
+        </div>
+        <%}%>
         <div class="colorlib-loader"></div>
 
         <div id="page">
