@@ -74,12 +74,18 @@ public class RemoveFromWishlistServlet extends HttpServlet {
         int accountId = Integer.parseInt(request.getParameter("accountId"));
         int stockId = Integer.parseInt(request.getParameter("stockId"));
 
+        // Debugging logs
+        System.out.println("RemoveFromWishlistServlet: accountId = " + accountId);
+        System.out.println("RemoveFromWishlistServlet: stockId = " + stockId);
+
         WishlistDAO wishlistDAO = new WishlistDAO();
         boolean isRemoved = wishlistDAO.removeProductFromWishlist(accountId, stockId);
 
         if (isRemoved) {
+            System.out.println("Product removed successfully.");
             response.getWriter().write("success");
         } else {
+            System.out.println("Failed to remove product.");
             response.getWriter().write("failure");
         }
     }

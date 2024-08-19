@@ -13,7 +13,7 @@
     Account loggedInUser = (Account) session.getAttribute("account");
     if (loggedInUser == null) {
         out.println("No user logged in, redirecting to login page...");
-        response.sendRedirect("login.jsp");
+        response.sendRedirect("../login.jsp");
         return; // Stop further execution of JSP
     } else {
         int accountId = loggedInUser.getAccountID();
@@ -65,7 +65,7 @@
                 <div class="row">
                     <div class="col-md-12">
                         <div class="input-group mb-3">
-                            <input type="text" id="search-bar" class="form-control" placeholder="Search your wishlist..." onkeyup="searchProducts()">
+                            <input type="text" id="search-bar" class="form-control" placeholder="Search for product..." onkeyup="searchProducts()">
                             <div class="input-group-append">
                                 <span class="input-group-text"><i class="icon-search"></i></span>
                             </div>
@@ -127,7 +127,8 @@
                                 <div class="one-eight text-center">
                                     <div class="display-tc">
                                         <button class="btn btn-primary btn-add-cart">Add to Cart</button>
-                                        <button class="btn btn-danger btn-remove-wishlist" onclick="removeFromWishlist(<%= product.getProductId() %>)">Remove</button>
+                                        <button class="btn btn-danger btn-remove-wishlist" onclick="removeFromWishlist(<%= product.getStockID() %>)">Remove</button>
+
                                     </div>
                                 </div>
                             </div>
@@ -185,7 +186,7 @@
 
         $.ajax({
             type: 'POST',
-            url: '${pageContext.request.contextPath}/RemoveFromWishlistServlet',
+            url: 'RemoveFromWishlistServlet',
             data: {
                 accountId: accountId,
                 stockId: stockId
