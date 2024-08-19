@@ -4,6 +4,7 @@
  */
 package Controller;
 
+import entity.Account;
 import java.io.IOException;
 import java.io.PrintWriter;
 import jakarta.servlet.ServletException;
@@ -13,6 +14,7 @@ import jakarta.servlet.http.HttpServletResponse;
 import model.ProductDetailsDAO;
 import entity.ProductDetails;
 import entity.ProductStockDetails;
+import jakarta.servlet.http.HttpSession;
 import java.util.List;
 
 /**
@@ -62,6 +64,13 @@ public class ProductDetailsController extends HttpServlet {
         response.setContentType("text/html;charset=UTF-8");
         PrintWriter out = response.getWriter();
 
+        HttpSession session = request.getSession();
+        Account account = (Account) session.getAttribute("account");
+        int accountID = 0;
+        if (account != null) {
+            accountID = account.getAccountID();
+        }
+
         ProductDetailsDAO pdDAO = new ProductDetailsDAO();
 
         String selectedColor = request.getParameter("selectedColor");
@@ -110,6 +119,39 @@ public class ProductDetailsController extends HttpServlet {
             request.setAttribute("selectedSizeButton", "Size_" + selectedSize);
             request.setAttribute("displayedImage", displayedImage + "");
             request.getRequestDispatcher("product-detail.jsp").forward(request, response);
+        } else if (request.getParameter("addToWishlistProduct") != null) {
+            if (accountID == 0) {
+                out.println("<script type=\"text/javascript\">");
+                out.println("alert('You must be logged in to do that!')");
+                out.println("location.href=\"login.jsp\"");
+                out.println("</script>");
+                return;
+            }
+
+            String addToWishlistProductIn = request.getParameter("addToWishlistProduct");
+            String addToWishlistColor = request.getParameter("addToWishlistColor");
+            String addToWishlistSizeIn = request.getParameter("addToWishlistSize");
+
+            int addToWishlistProduct = Integer.parseInt(addToWishlistProductIn);
+            int addToWishlistSize = Integer.parseInt(addToWishlistSizeIn);
+
+            int stockID = pdDAO.getStockIDbyColorAndSizeAndProductID(addToWishlistColor, addToWishlistSize, addToWishlistProduct);
+
+            if (pdDAO.getWishlistItemExists(accountID, stockID)) {
+                out.println("<script type=\"text/javascript\">");
+                out.println("alert('You already added such product variant into your wishlist!')");
+                out.println("window.history.go(-1);");
+                out.println("</script>");
+                return;
+            }
+            
+            pdDAO.addProductToWishlist(accountID, stockID);
+            
+            out.println("<script type=\"text/javascript\">");
+            out.println("alert('You have added the selected variant to your wishlist!')");
+            out.println("window.history.go(-1);");
+            out.println("</script>");
+
         } else {
             out.println("<script type=\"text/javascript\">");
             out.println("window.history.go(-1);");
