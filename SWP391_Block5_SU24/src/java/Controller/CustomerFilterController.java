@@ -115,7 +115,7 @@ public class CustomerFilterController implements Filter {
             Account temp = (Account) session.getAttribute("account");
             isCustomer = (temp.getRole() == 1);
         }
-        boolean isLoggedIn = (session.getAttribute("account") != null && isCustomer);
+        boolean isLoggedIn = (session!= null && session.getAttribute("account") != null && isCustomer);
         if (isLoggedIn) {
             // the admin is already logged in and he's trying to login again
             // then forwards to the admin's homepage

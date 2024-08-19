@@ -115,7 +115,7 @@ public class AdminFilterController implements Filter {
             Account temp = (Account) session.getAttribute("account");
             isAdmin = (temp.getRole() == 4);
         }
-        boolean isLoggedIn = (session.getAttribute("account") != null && isAdmin);
+        boolean isLoggedIn = (session!= null && session.getAttribute("account") != null && isAdmin);
         if (isLoggedIn) {
             // the admin is already logged in and he's trying to login again
             // then forwards to the admin's homepage

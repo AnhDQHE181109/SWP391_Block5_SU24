@@ -115,7 +115,7 @@ public class StaffFilterController implements Filter {
             Account temp = (Account) session.getAttribute("account");
             isStaff = (temp.getRole() == 2);
         }
-        boolean isLoggedIn = (session.getAttribute("account") != null && isStaff);
+        boolean isLoggedIn = (session!= null && session.getAttribute("account") != null && isStaff);
         if (isLoggedIn) {
             chain.doFilter(request, response);
             return;
