@@ -7,6 +7,7 @@
 <html>
 	<head>
 	<title>Footwear - Free Bootstrap 4 Template by Colorlib</title>
+	<script src="https://kit.fontawesome.com/c630e9f862.js" crossorigin="anonymous"></script>
    <meta charset="utf-8">
    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 
@@ -83,7 +84,8 @@
 								<%
 									Integer cartItemsCount = (Integer) request.getAttribute("cartItemsCount");
 								%>
-								<li class="cart"><a href="cart.html"><i class="icon-shopping-cart"></i> Cart [<%=cartItemsCount %>]</a></li>
+								<li class="cart"><a href="shoppingCart"><i class="icon-shopping-cart"></i> Cart [<%=cartItemsCount %>]</a></li>
+								<li class="cart"><a href="customer/wishlist.jsp"><i class="fa fa-heart"></i> Wishlist</a></li>
 							</ul>
 						</div>
 					</div>
