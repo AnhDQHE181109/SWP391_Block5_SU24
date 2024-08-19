@@ -132,30 +132,58 @@
     <c:if test="${not empty error}">
         <p style="color: red;">${error}</p>
     </c:if>
-    
-    <table>
         
-<form action="CategoryController" method="get">
-    <input type="hidden" name="action" value="search">
-    <input type="text" name="searchTerm" placeholder="Search by category name">
-    <button type="submit">Search</button>
-</form>
+        
+    <table>
+    <form action="CategoryController" method="get">
+        <input type="hidden" name="action" value="search">
+        <input type="text" name="searchTerm" placeholder="Search by category name">
+        <button type="submit">Search</button>
+    </form>
+    <tr>
+        <th>ID</th>
+        <th>Name</th>
+        <th>Status</th>
+        <th>Actions</th>
+    </tr>
+    <c:forEach var="category" items="${categories}">
         <tr>
-            <th>ID</th>
-            <th>Name</th>
-            <th>Actions</th>
+            <td>${category.categoryId}</td>
+            <td>${category.categoryName}</td>
+            <td>
+                ${category.categoryStatus == 0 ? 'Active' : 'Deactive'}
+            </td>
+            <td>
+                <!-- Form to change category status -->
+                <form action="CategoryController" method="get" style="display:inline;" onsubmit="return confirmChangeStatus(${category.categoryStatus});">
+                    <input type="hidden" name="action" value="updateStatus">
+                    <input type="hidden" name="id" value="${category.categoryId}">
+                    <input type="hidden" name="categoryStatus" value="${category.categoryStatus == 0 ? 1 : 0}">
+                    <button type="submit">Change</button>
+                </form>
+
+                <!-- Form to update category -->
+                <form action="CategoryController" method="get" style="display:inline;">
+                    <input type="hidden" name="action" value="edit">
+                    <input type="hidden" name="id" value="${category.categoryId}">
+                    <button type="submit">Update</button>
+                </form>
+            </td>
         </tr>
-        <c:forEach var="category" items="${categories}">
-            <tr>
-                <td>${category.categoryId}</td>
-                <td>${category.categoryName}</td>
-                <td>
-                    <a href="CategoryController?action=edit&id=${category.categoryId}">Edit</a> |
-                    <a href="CategoryController?action=delete&id=${category.categoryId}" onclick="return confirm('Are you sure you want to delete this category?')">Delete</a>
-                </td>
-            </tr>
-        </c:forEach>
-    </table>
+    </c:forEach>
+</table>
+
+
+<script>
+    function confirmChangeStatus(currentStatus) {
+        const newStatus = currentStatus == 0 ? 'deactivate' : 'activate';
+        return confirm(`Are you sure you want to ${newStatus} this category?`);
+    }
+</script>
+
+
+
+
     
     <p><a href="CategoryController?action=showForm">Add New Category</a></p>
         </div>
