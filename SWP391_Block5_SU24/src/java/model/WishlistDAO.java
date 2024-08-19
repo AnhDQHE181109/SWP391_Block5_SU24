@@ -96,6 +96,44 @@ public class WishlistDAO extends MyDAO {
         }
     }
 }
+    
+    
+    public List<Product> getTopWishlistedProducts() {
+        List<Product> products = new ArrayList<>();
+        String sql = "SELECT TOP 5 p.ProductID, p.ProductName, pi.ImageURL, s.Color, s.Size, COUNT(DISTINCT w.StockID) AS WishlistedCount "
+                   + "FROM Wishlist w "
+                   + "JOIN Stock s ON w.StockID = s.StockID "
+                   + "JOIN Products p ON s.ProductID = p.ProductID "
+                   + "JOIN ProductImages pi ON s.StockID = pi.StockID "
+                   + "GROUP BY p.ProductID, p.ProductName, pi.ImageURL, s.Color, s.Size "
+                   + "ORDER BY WishlistedCount DESC";
+
+        try {
+            ps = con.prepareStatement(sql);
+            rs = ps.executeQuery();
+            while (rs.next()) {
+                Product product = new Product();
+                product.setProductId(rs.getInt("ProductID"));
+                product.setProductName(rs.getString("ProductName"));
+                product.setImageURL(rs.getString("ImageURL"));
+                product.setColor(rs.getString("Color"));
+                product.setSize(rs.getInt("Size"));
+                product.setWishlistedCount(rs.getInt("WishlistedCount"));
+                products.add(product);
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        } finally {
+            try {
+                if (rs != null) rs.close();
+                if (ps != null) ps.close();
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+        }
+
+        return products;
+    }
 
     public List<Product> searchWishlistItemsByName(int accountID, String search) {
         throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody

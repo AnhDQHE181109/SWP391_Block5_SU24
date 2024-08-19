@@ -32,6 +32,7 @@ public class Product {
     private int stockQuantity;
     private String imageUrl;
     private Date dateAdded;
+    private int wishlistedCount;
 
     public void setImageUrl(String imageUrl) {
         this.imageUrl = imageUrl;
@@ -244,6 +245,14 @@ public class Product {
         this.dateAdded = dateAdded;
     }
 
+     public int getWishlistedCount() {
+        return wishlistedCount;
+    }
+
+    public void setWishlistedCount(int wishlistedCount) {
+        this.wishlistedCount = wishlistedCount;
+    }
+    
     @Override
     public String toString() {
         return "Product{" + "productId=" + productId + ", productName=" + productName + ", price=" + price + ", origin=" + origin + ", material=" + material + ", totalQuantity=" + totalQuantity + ", categoryId=" + categoryId + ", brandId=" + brandId + ", importId=" + importId + ", imageId=" + imageId + ", imageURL=" + imageURL + ", size=" + size + ", color=" + color + '}';
