@@ -98,12 +98,12 @@ public class ShoppingCartController extends HttpServlet {
         String removedProduct = request.getParameter("removedProduct");
         if (removedProduct != null) {
             int removedProductStockID = Integer.parseInt(removedProduct);
-            
+
             scDAO.removeProductFromCart(accountID, removedProductStockID);
         }
 
         int cartItemsCount = pdDAO.getCartItemsCount(accountID);
-        
+
         String shippingType = request.getParameter("shippingType");
         double shippingFee = 0;
         if (shippingType != null) {
@@ -165,10 +165,18 @@ public class ShoppingCartController extends HttpServlet {
 
         int stockID = pdDAO.getStockIDbyColorAndSizeAndProductID(selectedColor, selectedSize, productID);
 
+        if (quantity > scDAO.getStockQuantityOfStockID(stockID)) {
+            out.println("<script type=\"text/javascript\">");
+            out.println("alert(\"You've achieved the maximum amount for ordering such variant, please contact us if you want to order more!\")");
+            out.println("window.history.go(-1);");
+            out.println("</script>");
+            return;
+        }
+
         int quantityInCart = scDAO.getCartQuantityOfStockID(accountID, stockID);
         //Debugging
         System.out.println("quantityInCart: " + quantityInCart);
-        
+
         if (quantityInCart < 1) {
             scDAO.addProductToCart(accountID, stockID, quantity, productID);
         } else if (quantityInCart >= 1 && quantityInCart < 10) {
