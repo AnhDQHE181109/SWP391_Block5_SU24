@@ -111,7 +111,7 @@ public class CustomerFilterController implements Filter {
         HttpServletResponse httpResponse = (HttpServletResponse) response;
         HttpSession session = httpRequest.getSession(false);
         boolean isCustomer = false;
-        if (session.getAttribute("account") != null) {
+        if (session!=null && session.getAttribute("account") != null) {
             Account temp = (Account) session.getAttribute("account");
             isCustomer = (temp.getRole() == 1);
         }
