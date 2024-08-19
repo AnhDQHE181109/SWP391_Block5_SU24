@@ -66,7 +66,7 @@
 						<div class="col-sm-12 text-left menu-1">
 							<ul>
 								<li><a href="index.jsp">Home</a></li>
-								<li class="has-dropdown active">
+								<!-- <li class="has-dropdown active">
 									<a href="men.html">Men</a>
 									<ul class="dropdown">
 										<li><a href="product-detail.html">Product Detail</a></li>
@@ -75,8 +75,9 @@
 										<li><a href="order-complete.html">Order Complete</a></li>
 										<li><a href="add-to-wishlist.html">Wishlist</a></li>
 									</ul>
-								</li>
-								<li><a href="women.html">Women</a></li>
+								</li> -->
+								<li class="active"><a href="products.jsp">Products</a></li>
+								<!-- <li><a href="women.html">Women</a></li> -->
 								<li><a href="about.html">About</a></li>
 								<li><a href="contact.html">Contact</a></li>
 								<%
