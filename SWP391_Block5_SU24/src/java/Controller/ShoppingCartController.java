@@ -4,6 +4,7 @@
  */
 package Controller;
 
+import entity.Account;
 import entity.ShoppingCartItem;
 import java.io.IOException;
 import java.io.PrintWriter;
@@ -11,7 +12,9 @@ import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import jakarta.servlet.http.HttpSession;
 import java.util.List;
+import model.ProductDetailsDAO;
 import model.ShoppingCartDAO;
 
 /**
@@ -61,10 +64,25 @@ public class ShoppingCartController extends HttpServlet {
         response.setContentType("text/html;charset=UTF-8");
         PrintWriter out = response.getWriter();
 
+        HttpSession session = request.getSession();
+        Account account = (Account) session.getAttribute("account");
+        if (account == null) {
+            out.println("<script type=\"text/javascript\">");
+            out.println("alert('You must be logged in to do that!')");
+            out.println("location.href=\"login.jsp\"");
+            out.println("</script>");
+            return;
+        }
+        int accountID = account.getAccountID();
+
         ShoppingCartDAO scDAO = new ShoppingCartDAO();
+        ProductDetailsDAO pdDAO = new ProductDetailsDAO();
 
-        List<ShoppingCartItem> cartItems = scDAO.getCartItemsByAccountID(1);
+        int cartItemsCount = pdDAO.getCartItemsCount(accountID);
 
+        List<ShoppingCartItem> cartItems = scDAO.getCartItemsByAccountID(accountID);
+
+        request.setAttribute("cartItemsCount", cartItemsCount);
         request.setAttribute("cartItems", cartItems);
         request.getRequestDispatcher("customer/cart.jsp").forward(request, response);
     }
@@ -80,7 +98,40 @@ public class ShoppingCartController extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        processRequest(request, response);
+        response.setContentType("text/html;charset=UTF-8");
+        PrintWriter out = response.getWriter();
+
+        HttpSession session = request.getSession();
+        Account account = (Account) session.getAttribute("account");
+        if (account == null) {
+            out.println("<script type=\"text/javascript\">");
+            out.println("alert('You must be logged in to do that!')");
+            out.println("location.href=\"login.jsp\"");
+            out.println("</script>");
+            return;
+        }
+        int accountID = account.getAccountID();
+
+        ShoppingCartDAO scDAO = new ShoppingCartDAO();
+        ProductDetailsDAO pdDAO = new ProductDetailsDAO();
+
+        String selectedColor = request.getParameter("selectedColor");
+        String selectedSizeIn = request.getParameter("selectedSize");
+        String quantityIn = request.getParameter("quantity");
+        String productIDin = request.getParameter("selectedProductID");
+
+        int selectedSize = Integer.parseInt(selectedSizeIn);
+        int quantity = Integer.parseInt(quantityIn);
+        int productID = Integer.parseInt(productIDin);
+
+        int stockID = pdDAO.getStockIDbyColorAndSizeAndProductID(selectedColor, selectedSize, productID);
+
+        scDAO.addProductToCart(accountID, stockID, quantity, productID);
+
+        out.println("<script type=\"text/javascript\">");
+        out.println("alert('Added to your cart!')");
+        out.println("location.href=\"shoppingCart\"");
+        out.println("</script>");
     }
 
     /**

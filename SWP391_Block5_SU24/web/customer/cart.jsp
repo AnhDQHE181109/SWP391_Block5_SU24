@@ -54,12 +54,12 @@
 							<div id="colorlib-logo"><a href="index.jsp">Footwear</a></div>
 						</div>
 						<div class="col-sm-5 col-md-3">
-			            <form action="#" class="search-wrap">
+			            <!-- <form action="#" class="search-wrap">
 			               <div class="form-group">
 			                  <input type="search" class="form-control search" placeholder="Search">
 			                  <button class="btn btn-primary submit-search text-center" type="submit"><i class="icon-search"></i></button>
 			               </div>
-			            </form>
+			            </form> -->
 			         </div>
 		         </div>
 					<div class="row">
@@ -79,7 +79,10 @@
 								<li><a href="women.html">Women</a></li>
 								<li><a href="about.html">About</a></li>
 								<li><a href="contact.html">Contact</a></li>
-								<li class="cart"><a href="cart.html"><i class="icon-shopping-cart"></i> Cart [0]</a></li>
+								<%
+									Integer cartItemsCount = (Integer) request.getAttribute("cartItemsCount");
+								%>
+								<li class="cart"><a href="cart.html"><i class="icon-shopping-cart"></i> Cart [<%=cartItemsCount %>]</a></li>
 							</ul>
 						</div>
 					</div>
@@ -170,9 +173,10 @@
 							List<ShoppingCartItem> cartItems = (List<ShoppingCartItem>) request.getAttribute("cartItems");
 							
 						%>
+						<% if (cartItems != null) { 
+							for (ShoppingCartItem cartItem : cartItems) { %>
 						<div class="product-cart d-flex">
-							<% if (cartItems != null) { 
-								for (ShoppingCartItem cartItem : cartItems) { %>
+							
 							<div class="one-forth">
 								<div class="product-img" style="background-image: url(${pageContext.request.contextPath}/<%=cartItem.getImageURL() %>);">
 								</div>
@@ -198,7 +202,7 @@
 							<div class="one-eight text-center">
 								<div class="display-tc">
 									<span>
-										<button type="button" class="items-count sub" style="cursor:pointer;" data-type="minus" data-field="">
+										<button type="button" id="decrement_<%=cartItem.getStockID() %>" class="items-count decrement_<%=cartItem.getProductName() %>" onclick="decrementQuantity('decrement_<%=cartItem.getStockID() %>', 'quantity_<%=cartItem.getStockID() %>')" style="cursor:pointer;" data-type="minus" data-field="">
 										<i class="icon-minus2"></i>
 										</button>
 									</span>
@@ -207,10 +211,10 @@
 										<input type="text" id="quantity" name="quantity" size="2" class="form-control input-number text-center" value="1" min="1" max="100">
 									</span> -->
 
-									<span><%=cartItem.getQuantity() %></span>
+									<span id="quantity_<%=cartItem.getStockID() %>"><%=cartItem.getQuantity() %></span>
 									
 									<span>
-										<button type="button" class="items-count add" style="cursor:pointer;" data-type="plus" data-field="">
+										<button type="button" id="increment_<%=cartItem.getStockID() %>" class="items-count increment_<%=cartItem.getProductName() %>" onclick="incrementQuantity('increment_<%=cartItem.getStockID() %>', 'quantity_<%=cartItem.getStockID() %>')" style="cursor:pointer;" data-type="plus" data-field="">
 										<i class="icon-plus2"></i>
 										</button>
 									</span>
@@ -230,9 +234,10 @@
 								</div>
 							</div>
 
-							<% }
-						 } %>
+							
 						</div>
+						<% }
+						 } %>
 
 						<!-- <div class="product-cart d-flex">
 							<div class="one-forth">
@@ -469,6 +474,44 @@ Copyright &copy;<script>document.write(new Date().getFullYear());</script> All r
 	<div class="gototop js-top">
 		<a href="#" class="js-gotop"><i class="ion-ios-arrow-up"></i></a>
 	</div>
+
+	<script>
+		function incrementQuantity(incrementButton, quantityBox){
+
+			var quantitiy=0;
+		
+				// Get the field name
+				var quantity = parseInt(document.getElementById(quantityBox).innerHTML);
+				
+				// If is not undefined
+					
+					if (parseInt(document.getElementById(quantityBox).innerHTML) != 10) {
+						document.getElementById(quantityBox).innerHTML = quantity + 1;
+					}
+					
+				
+					// Increment
+				
+			
+	}
+
+	function decrementQuantity(decrementButton, quantityBox){
+	
+		var quantitiy=0;
+	 
+		// Get the field name
+		var quantity = parseInt(document.getElementById(quantityBox).innerHTML);
+		
+		// If is not undefined
+	  
+			// Increment
+			if(quantity>1){
+				document.getElementById(quantityBox).innerHTML = quantity - 1;
+			}
+	
+	
+}
+	</script>
 	
 	<!-- jQuery -->
 	<script src="${pageContext.request.contextPath}/js/jquery.min.js"></script>
