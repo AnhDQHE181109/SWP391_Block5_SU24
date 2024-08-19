@@ -6,6 +6,9 @@
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <!DOCTYPE HTML>
 <%
+    // Retrieve the sorting parameter from the request
+    String sort = request.getParameter("sort");
+
     // Initialize the wishlistItems variable
     List<Product> wishlistItems = new ArrayList<>();
 
@@ -18,7 +21,7 @@
     } else {
         int accountId = loggedInUser.getAccountID();
         WishlistDAO wishlistDAO = new WishlistDAO();
-        wishlistItems = wishlistDAO.getWishlistItems(accountId); // Use the already initialized variable
+        wishlistItems = wishlistDAO.getWishlistItems(accountId, sort); // Pass the sort parameter
     }
 %>
 
@@ -70,9 +73,26 @@
                         </div>
                     </div>
                 </div>
-
+                
+                
             <div class="colorlib-product">
                 <div class="container">
+                    <div class="row">
+                        <div class="col-md-20 text-center">
+                            <form method="get" action="wishlist.jsp">
+                                <label for="sort">Sort by:</label>
+                                <select name="sort" id="sort" onchange="this.form.submit()">
+                                    <option value="name_asc" <%= request.getParameter("sort") != null && request.getParameter("sort").equals("name_asc") ? "selected" : "" %>>Name: A-Z</option>
+                                    <option value="name_desc" <%= request.getParameter("sort") != null && request.getParameter("sort").equals("name_desc") ? "selected" : "" %>>Name: Z-A</option>
+                                    <option value="price_asc" <%= request.getParameter("sort") != null && request.getParameter("sort").equals("price_asc") ? "selected" : "" %>>Price: Low to High</option>
+                                    <option value="price_desc" <%= request.getParameter("sort") != null && request.getParameter("sort").equals("price_desc") ? "selected" : "" %>>Price: High to Low</option>
+                                    <option value="date_desc" <%= request.getParameter("sort") != null && request.getParameter("sort").equals("date_desc") ? "selected" : "" %>>Date: Latest</option>
+                                    <option value="date_asc" <%= request.getParameter("sort") != null && request.getParameter("sort").equals("date_asc") ? "selected" : "" %>>Date: Earliest</option>
+                                </select>
+                            </form>
+                        </div>
+                    </div>
+                </div>
                     <div class="row row-pb-lg"></div>
                     <div class="row row-pb-lg">
                         <div class="col-md-12">
