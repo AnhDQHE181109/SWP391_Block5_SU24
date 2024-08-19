@@ -8,22 +8,41 @@ package entity;
  *
  * @author asus
  */
+import java.sql.Date;
 import java.sql.Timestamp;
 
 public class Feedback {
-    private int feedbackId;
-    private int customerId;
-    private int productId;
+    private int productID;
+    private int accountID;
+    private String username;
+    private String color;
+    private int size;
     private int rating;
     private String comment;
-    private Timestamp createdAt;
+    private java.sql.Date createdAt;
+    
+    private int feedbackId;
+    private int customerId;
+    
+//    private Timestamp createdAt;
 
     public Feedback() {}
 
-    public Feedback(int feedbackId, int customerId, int productId, int rating, String comment, Timestamp createdAt) {
-        this.feedbackId = feedbackId;
-        this.customerId = customerId;
-        this.productId = productId;
+//    public Feedback(int feedbackId, int customerId, int productId, int rating, String comment, Timestamp createdAt) {
+//        this.feedbackId = feedbackId;
+//        this.customerId = customerId;
+//        this.productId = productId;
+//        this.rating = rating;
+//        this.comment = comment;
+//        this.createdAt = createdAt;
+//    }
+
+    public Feedback(int productID, int accountID, String username, String color, int size, int rating, String comment, Date createdAt) {
+        this.productID = productID;
+        this.accountID = accountID;
+        this.username = username;
+        this.color = color;
+        this.size = size;
         this.rating = rating;
         this.comment = comment;
         this.createdAt = createdAt;
@@ -46,12 +65,12 @@ public class Feedback {
         this.customerId = customerId;
     }
 
-    public int getProductId() {
-        return productId;
+    public int getProductID() {
+        return productID;
     }
 
-    public void setProductId(int productId) {
-        this.productId = productId;
+    public void setProductID(int productID) {
+        this.productID = productID;
     }
 
     public int getRating() {
@@ -70,12 +89,54 @@ public class Feedback {
         this.comment = comment;
     }
 
-    public Timestamp getCreatedAt() {
+//    public Timestamp getCreatedAt() {
+//        return createdAt;
+//    }
+//
+//    public void setCreatedAt(Timestamp createdAt) {
+//        this.createdAt = createdAt;
+//    }
+
+    public int getAccountID() {
+        return accountID;
+    }
+
+    public void setAccountID(int accountID) {
+        this.accountID = accountID;
+    }
+
+    public String getColor() {
+        return color;
+    }
+
+    public void setColor(String color) {
+        this.color = color;
+    }
+
+    public int getSize() {
+        return size;
+    }
+
+    public void setSize(int size) {
+        this.size = size;
+    }
+
+    public Date getCreatedAt() {
         return createdAt;
     }
 
-    public void setCreatedAt(Timestamp createdAt) {
+    public void setCreatedAt(Date createdAt) {
         this.createdAt = createdAt;
     }
+
+    public String getUsername() {
+        return username;
+    }
+
+    public void setUsername(String username) {
+        this.username = username;
+    }
+    
+    
 }
 

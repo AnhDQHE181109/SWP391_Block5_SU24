@@ -218,7 +218,7 @@
 										<input type="text" id="quantity" name="quantity" size="2" class="form-control input-number text-center" value="1" min="1" max="100">
 									</span> -->
 
-									<span id="quantity_<%=cartItem.getStockID() %>"><b><%=cartItem.getQuantity() %></b></span>
+									<span id="quantity_<%=cartItem.getStockID() %>"><%=cartItem.getQuantity() %></span>
 									
 									<span>
 										<button type="button" id="increment_<%=cartItem.getStockID() %>" class="items-count increment_<%=cartItem.getProductName() %>" onclick="incrementQuantity('increment_<%=cartItem.getStockID() %>', 'quantity_<%=cartItem.getStockID() %>')" style="cursor:pointer;" data-type="plus" data-field="">

@@ -168,6 +168,7 @@ public class ShoppingCartController extends HttpServlet {
         int quantityInCart = scDAO.getCartQuantityOfStockID(accountID, stockID);
         //Debugging
         System.out.println("quantityInCart: " + quantityInCart);
+        
         if (quantityInCart < 1) {
             scDAO.addProductToCart(accountID, stockID, quantity, productID);
         } else if (quantityInCart >= 1 && quantityInCart < 10) {

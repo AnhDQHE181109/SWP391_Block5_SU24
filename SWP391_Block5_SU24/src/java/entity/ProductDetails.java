@@ -17,9 +17,10 @@ public class ProductDetails {
     private int totalQuantity;
     private String categoryName;
     private String brandName;
+    private double discountAmount;
     private int productStatus;
 
-    public ProductDetails(int productID, String productName, String origin, String material, double price, int totalQuantity, String categoryName, String brandName, int productStatus) {
+    public ProductDetails(int productID, String productName, String origin, String material, double price, int totalQuantity, String categoryName, String brandName, double discountAmount, int productStatus) {
         this.productID = productID;
         this.productName = productName;
         this.origin = origin;
@@ -28,6 +29,7 @@ public class ProductDetails {
         this.totalQuantity = totalQuantity;
         this.categoryName = categoryName;
         this.brandName = brandName;
+        this.discountAmount = discountAmount;
         this.productStatus = productStatus;
     }
 
@@ -93,6 +95,14 @@ public class ProductDetails {
 
     public void setBrandName(String brandName) {
         this.brandName = brandName;
+    }
+
+    public double getDiscountAmount() {
+        return discountAmount;
+    }
+
+    public void setDiscountAmount(double discountAmount) {
+        this.discountAmount = discountAmount;
     }
 
     public int getProductStatus() {
