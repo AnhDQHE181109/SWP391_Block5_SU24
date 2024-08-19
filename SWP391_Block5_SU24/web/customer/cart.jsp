@@ -201,7 +201,9 @@
 							</div>
 							<div class="one-eight text-center">
 								<div class="display-tc">
-									<span class="price">$<%=cartItem.getPrice() %></span>
+									<% double discountedPriced = cartItem.getPrice() - ((cartItem.getPrice() * cartItem.getDiscountAmount()) / 100); %>
+										<span class="price">$<%=discountedPriced %></span>
+									
 								</div>
 							</div>
 							<div class="one-eight text-center">
@@ -216,7 +218,7 @@
 										<input type="text" id="quantity" name="quantity" size="2" class="form-control input-number text-center" value="1" min="1" max="100">
 									</span> -->
 
-									<span id="quantity_<%=cartItem.getStockID() %>"><%=cartItem.getQuantity() %></span>
+									<span id="quantity_<%=cartItem.getStockID() %>"><b><%=cartItem.getQuantity() %></b></span>
 									
 									<span>
 										<button type="button" id="increment_<%=cartItem.getStockID() %>" class="items-count increment_<%=cartItem.getProductName() %>" onclick="incrementQuantity('increment_<%=cartItem.getStockID() %>', 'quantity_<%=cartItem.getStockID() %>')" style="cursor:pointer;" data-type="plus" data-field="">
@@ -228,7 +230,7 @@
 							</div>
 							<div class="one-eight text-center">
 								<div class="display-tc">
-									<span class="price">$120.00</span>
+									<span class="price">$<%=discountedPriced * cartItem.getQuantity() %></span>
 								</div>
 							</div>
 							<div class="one-eight text-center">
@@ -336,25 +338,47 @@
 							<div class="row">
 								<div class="col-sm-8">
 									<!-- <form action="#">
-										<div class="row form-group">
-											<div class="col-sm-9">
-												<input type="text" name="quantity" class="form-control input-number" placeholder="Your Coupon Number...">
-											</div>
-											<div class="col-sm-3">
-												<input type="submit" value="Apply Coupon" class="btn btn-primary">
-											</div>
+										<div class="row form-group" style="background-color: rgb(185, 185, 185);">
+										<div class="col-sm-9">
+											<input type="text" name="quantity" class="form-control input-number" placeholder="Your Coupon Number...">
 										</div>
+										<div class="col-sm-3">
+											<input type="submit" value="Apply Coupon" class="btn btn-primary">
+										</div>
+									</div>
 									</form> -->
+									
+									<div class="row form-group" style="background-color: rgb(220, 220, 220);">
+										<div class="col-sm-9">
+											<h5>Please select a type of shipping:</h5>
+										</div>
+										<div class="col-sm-3">
+											<% String shippingType = (String) request.getAttribute("shippingType");
+											   if (shippingType.equalsIgnoreCase("ecoRadioBox")) { %>
+												<p style="width: 1000px;" onclick="selectAndSendShippingType('ecoRadioBox')"> <input id="ecoRadioBox" type="radio" value="eco" name="shippingMethod" checked> <b>Eco</b>: Free shipping but may take longer to delivery to you (8-10 days)</p>
+												<p style="width: 1000px;" onclick="selectAndSendShippingType('fastRadioBox')"> <input id="fastRadioBox" type="radio" value="fast" name="shippingMethod"> <b>Fast shipping</b>: Express shipping, should take (1-2 days) </p>
+											<% } else { %>
+												<p style="width: 1000px;" onclick="selectAndSendShippingType('ecoRadioBox')"> <input id="ecoRadioBox" type="radio" value="eco" name="shippingMethod"> <b>Eco</b>: Free shipping but may take longer to delivery to you (8-10 days)</p>
+												<p style="width: 1000px;" onclick="selectAndSendShippingType('fastRadioBox')"> <input id="fastRadioBox" type="radio" value="fast" name="shippingMethod" checked> <b>Fast shipping</b>: Express shipping, should take (1-2 days) </p>
+											<% } %>
+											
+										</div>
+									</div>
 								</div>
 								<div class="col-sm-4 text-center">
 									<div class="total">
 										<div class="sub">
-											<p><span>Subtotal:</span> <span>$200.00</span></p>
-											<!-- <p><span>Delivery:</span> <span>$0.00</span></p> -->
-											<p><span>Discount:</span> <span>$45.00</span></p>
+											<% double subTotal = 0.0;
+											   for (ShoppingCartItem cartItem : cartItems) {
+													subTotal += (cartItem.getPrice() - ((cartItem.getPrice() * cartItem.getDiscountAmount()) / 100)) * cartItem.getQuantity();
+											   } %>
+											<p><span>Subtotal:</span> <span>$<%=subTotal %></span></p>
+											<% Double shippingFee = (Double) request.getAttribute("shippingFee"); %>
+											<p><span>Delivery:</span> <span id="">$<%=shippingFee %></span></p>
+											<!-- <p><span>Discount:</span> <span>$45.00</span></p> -->
 										</div>
 										<div class="grand-total">
-											<p><span><strong>Total:</strong></span> <span>$450.00</span></p>
+											<p><span><strong>Total:</strong></span> <span>$<%=subTotal + shippingFee %></span></p>
 										</div>
 									</div>
 									<div style="padding: 10px">
@@ -560,6 +584,11 @@ Copyright &copy;<script>document.write(new Date().getFullYear());</script> All r
 
 			function showRemovalDialog(modalID) {
 
+			}
+
+			function selectAndSendShippingType(radioBox) {
+				document.getElementById(radioBox).checked = true;
+				location.href = "shoppingCart?shippingType=" + radioBox;
 			}
 
 	</script>

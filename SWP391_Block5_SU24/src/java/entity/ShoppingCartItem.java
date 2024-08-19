@@ -16,9 +16,10 @@ public class ShoppingCartItem {
     private int size;
     private double price;
     private int quantity;
+    private double discountAmount;
     private String imageURL;
 
-    public ShoppingCartItem(int productID, int stockID, String productName, String color, int size, double price, int quantity, String imageURL) {
+    public ShoppingCartItem(int productID, int stockID, String productName, String color, int size, double price, int quantity, double discountAmount, String imageURL) {
         this.productID = productID;
         this.stockID = stockID;
         this.productName = productName;
@@ -26,6 +27,7 @@ public class ShoppingCartItem {
         this.size = size;
         this.price = price;
         this.quantity = quantity;
+        this.discountAmount = discountAmount;
         this.imageURL = imageURL;
     }
 
@@ -83,6 +85,14 @@ public class ShoppingCartItem {
 
     public void setQuantity(int quantity) {
         this.quantity = quantity;
+    }
+
+    public double getDiscountAmount() {
+        return discountAmount;
+    }
+
+    public void setDiscountAmount(double discountAmount) {
+        this.discountAmount = discountAmount;
     }
 
     public String getImageURL() {
