@@ -378,7 +378,7 @@
                                         });
 
                                         function fetchSuggestions(query) {
-                                            fetch('searchSuggestions?query=' + encodeURIComponent(query))
+                                            fetch('SearchSuggestionsServlet?query=' + encodeURIComponent(query))
                                                     .then(response => response.text())
                                                     .then(data => {
                                                         let suggestionsBox = document.getElementById('suggestions');
