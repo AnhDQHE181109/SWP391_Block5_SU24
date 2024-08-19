@@ -54,12 +54,12 @@
 							<div id="colorlib-logo"><a href="index.jsp">Footwear</a></div>
 						</div>
 						<div class="col-sm-5 col-md-3">
-			            <form action="#" class="search-wrap">
+			            <!-- <form action="#" class="search-wrap">
 			               <div class="form-group">
 			                  <input type="search" class="form-control search" placeholder="Search">
 			                  <button class="btn btn-primary submit-search text-center" type="submit"><i class="icon-search"></i></button>
 			               </div>
-			            </form>
+			            </form> -->
 			         </div>
 		         </div>
 					<div class="row">
@@ -79,7 +79,10 @@
 								<li class="active"><a href="products.jsp">Products</a></li>
 								<li><a href="about.html">About</a></li>
 								<li><a href="contact.html">Contact</a></li>
-								<li class="cart"><a href="cart.html"><i class="icon-shopping-cart"></i> Cart [0]</a></li>
+								<%
+									Integer cartItemsCount = (Integer) request.getAttribute("cartItemsCount");
+								%>
+								<li class="cart"><a href="shoppingCart"><i class="icon-shopping-cart"></i> Cart [<%=cartItemsCount %>]</a></li>
 							</ul>
 						</div>
 					</div>
@@ -197,6 +200,8 @@
 				               </ul>
 
 							   <input type="text" name="selectedSize" value="<%=selectedSize %>" hidden>
+
+							   <input type="text" name="selectedProductID" value="<%=productColors.get(0).getProductID() %>" hidden>
 
 				            	</div>
 							</div>

@@ -10,6 +10,7 @@ package entity;
  */
 public class ShoppingCartItem {
     private int productID;
+    private int stockID;
     private String productName;
     private String color;
     private int size;
@@ -17,8 +18,9 @@ public class ShoppingCartItem {
     private int quantity;
     private String imageURL;
 
-    public ShoppingCartItem(int productID, String productName, String color, int size, double price, int quantity, String imageURL) {
+    public ShoppingCartItem(int productID, int stockID, String productName, String color, int size, double price, int quantity, String imageURL) {
         this.productID = productID;
+        this.stockID = stockID;
         this.productName = productName;
         this.color = color;
         this.size = size;
@@ -33,6 +35,14 @@ public class ShoppingCartItem {
 
     public void setProductID(int productID) {
         this.productID = productID;
+    }
+
+    public int getStockID() {
+        return stockID;
+    }
+
+    public void setStockID(int stockID) {
+        this.stockID = stockID;
     }
 
     public String getProductName() {
