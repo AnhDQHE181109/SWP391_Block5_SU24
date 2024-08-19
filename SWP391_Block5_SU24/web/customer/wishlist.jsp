@@ -1,3 +1,8 @@
+<%-- 
+    Document   : index.jsp
+    Created on : Aug 11, 2024, 7:23:09 PM
+    Author     : nobbe
+--%>
 <%@ page import="java.util.List" %>
 <%@ page import="java.util.ArrayList" %>
 <%@ page import="entity.Product" %>
@@ -40,6 +45,19 @@
         <link rel="stylesheet" href="${pageContext.request.contextPath}/css/bootstrap-datepicker.css">
         <link rel="stylesheet" href="${pageContext.request.contextPath}/fonts/flaticon/font/flaticon.css">
         <link rel="stylesheet" href="${pageContext.request.contextPath}/css/style.css">
+        <style>
+            #search-bar {
+                width: 50%; /* Adjust the width to make it smaller */
+                margin-bottom: 10px; /* Add some space below the search bar */
+            }
+
+            .input-group {
+                max-width: 300px; /* Control the overall size of the search input group */
+                margin: 0 auto; /* Center the search bar horizontally */
+            }
+
+        </style>
+        
     </head>
     <body>
 
@@ -62,18 +80,14 @@
 
             <!-- Search Bar with Icon -->
             <div class="container">
-                <div class="row">
-                    <div class="col-md-12">
+                <div class="row justify-content-center">
+                    <div class="col-md-12 text-center">
                         <div class="input-group mb-3">
-                            <input type="text" id="search-bar" class="form-control" placeholder="Search your wishlist..." onkeyup="searchProducts()">
-                            <div class="input-group-append">
-                                <span class="input-group-text"><i class="icon-search"></i></span>
-                            </div>
+                            <input type="text" id="search-bar" class="form-control" placeholder="Search for more products..." onkeyup="searchProducts()">
+                            <div id="suggestions" class="list-group"></div>
                         </div>
-                        <div id="suggestions" class="list-group"></div>
                     </div>
                 </div>
-            </div>
 
             <div class="colorlib-product">
                 <div class="container">
@@ -101,7 +115,7 @@
                             <%
                                 for (Product product : wishlistItems) {
                             %>
-                            <div class="product-cart d-flex" id="product-<%= product.getProductId() %>">
+                            <div class="product-cart d-flex">
                                 <div class="one-forth">
                                     <div class="product-img" style="background-image: url(<%= product.getImageURL() %>);">
                                     </div>
@@ -126,8 +140,10 @@
                                 </div>
                                 <div class="one-eight text-center">
                                     <div class="display-tc">
-                                        <button class="btn btn-primary btn-add-cart">Add to Cart</button>
-                                        <button class="btn btn-danger btn-remove-wishlist" onclick="removeFromWishlist(<%= product.getProductId() %>)">Remove</button>
+                                        <form action="${pageContext.request.contextPath}/RemoveWishlistController" method="post">
+                                            <input type="hidden" name="stockId" value="<%= product.getStockID() %>">
+                                            <button type="submit" class="btn btn-danger btn-remove-wishlist">Remove</button>
+                                        </form>
                                     </div>
                                 </div>
                             </div>
@@ -168,7 +184,7 @@
                 if (searchTerm.length > 0) {
                     $.ajax({
                         type: 'GET',
-                        url: 'SearchSuggestionsServlet',
+                        url: '${pageContext.request.contextPath}/SearchSuggestionsServlet',
                         data: { query: searchTerm },
                         success: function(response) {
                             $('#suggestions').empty();
@@ -179,27 +195,6 @@
                     $('#suggestions').empty(); // Clear suggestions if the search bar is empty
                 }
             }
-            
-            function removeFromWishlist(stockId) {
-        const accountId = <%= loggedInUser.getAccountID() %>; // Get the account ID from the session
-
-        $.ajax({
-            type: 'POST',
-            url: '${pageContext.request.contextPath}/RemoveFromWishlistServlet',
-            data: {
-                accountId: accountId,
-                stockId: stockId
-            },
-            success: function(response) {
-                if (response.trim() === "success") {
-                    // Remove the product from the DOM
-                    $('#product-' + stockId).remove();
-                } else {
-                    alert('Failed to remove the product from your wishlist. Please try again.');
-                }
-            }
-        });
-    }
         </script>
 
     </body>

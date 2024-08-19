@@ -39,49 +39,48 @@ public class WishlistDAO extends MyDAO {
             e.printStackTrace();
         }
         return wishlistItems;
-    }
-
-    public boolean removeProductFromWishlist(int accountId, int stockId) {
-    String sql = "DELETE FROM Wishlist WHERE AccountID = ? AND StockID = ?";
-    try (PreparedStatement ps = con.prepareStatement(sql)) {
-        ps.setInt(1, accountId);
-        ps.setInt(2, stockId);
-        int rowsAffected = ps.executeUpdate();
-        return rowsAffected > 0;
-    } catch (SQLException e) {
-        e.printStackTrace();
-        return false;
-    }
-}
+   }
 
     
     public List<Product> searchWishlistItemsByName(int accountId, String search) {
-        List<Product> wishlistItems = new ArrayList<>();
-        String sql = "SELECT p.ProductID, p.ProductName, p.Price, p.ImageURL, s.Size, s.Color "
-                + "FROM Wishlist w "
-                + "JOIN Stock s ON w.StockID = s.StockID "
-                + "JOIN Products p ON s.ProductID = p.ProductID "
-                + "WHERE w.AccountID = ? AND p.ProductName LIKE ?";
+    List<Product> wishlistItems = new ArrayList<>();
+    String sql = "SELECT p.ProductName FROM Wishlist w JOIN Stock s ON w.StockID = s.StockID "
+               + "JOIN Products p ON s.ProductID = p.ProductID WHERE w.AccountID = ? AND p.ProductName LIKE ?";
 
-        try (Connection con = this.conn; PreparedStatement ps = con.prepareStatement(sql)) {
-            ps.setInt(1, accountId);
-            ps.setString(2, "%" + search + "%");
+    try (Connection con = this.con;
+         PreparedStatement ps = con.prepareStatement(sql)) {
+        
+        ps.setInt(1, accountId);
+        ps.setString(2, "%" + search + "%");
 
-            try (ResultSet rs = ps.executeQuery()) {
-                while (rs.next()) {
-                    Product product = new Product();
-                    product.setProductId(rs.getInt("ProductID"));
-                    product.setProductName(rs.getString("ProductName"));
-                    product.setPrice(rs.getDouble("Price"));
-                    product.setImageURL(rs.getString("ImageURL"));
-                    product.setSize(rs.getInt("Size"));
-                    product.setColor(rs.getString("Color"));
-                    wishlistItems.add(product);
-                }
+        try (ResultSet rs = ps.executeQuery()) {
+            while (rs.next()) {
+                Product product = new Product();
+                product.setProductName(rs.getString("ProductName"));
+                wishlistItems.add(product);
             }
+        }
+    } catch (SQLException e) {
+        e.printStackTrace();
+    }
+    return wishlistItems;
+    }
+    
+    public void removeFromWishlist(int accountId, int stockId) {
+    try {
+        xSql = "DELETE FROM Wishlist WHERE AccountID = ? AND StockID = ?"; // Use known valid IDs
+        ps = con.prepareStatement(xSql);
+        int rowsAffected = ps.executeUpdate();
+        System.out.println("Rows affected: " + rowsAffected);
+    } catch (SQLException e) {
+        e.printStackTrace();
+    } finally {
+        try {
+            if (ps != null) ps.close();
         } catch (SQLException e) {
             e.printStackTrace();
         }
-        return wishlistItems;
     }
+}
+
 }

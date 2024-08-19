@@ -4,6 +4,7 @@
  */
 package Controller;
 
+import Util.Validator;
 import java.io.IOException;
 import java.io.PrintWriter;
 import model.AccountDAO;
@@ -79,7 +80,52 @@ public class AccountManagementController extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        processRequest(request, response);
+        int accountId = Integer.parseInt(request.getParameter("id"));
+        String newEmail = request.getParameter("email");
+        String newPhoneNumber = request.getParameter("phoneNumber");
+        String newAddress = request.getParameter("address");
+
+        Validator validator = new Validator();
+        AccountDAO accountDAO = new AccountDAO();
+
+        if (!validator.isValidEmail(newEmail)) {
+            response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
+            response.getWriter().write("Invalid email format.");
+            return;
+        }
+
+        if (!validator.isEmailUnique(newEmail)) {
+            response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
+            response.getWriter().write("Email is already taken.");
+            return;
+        }
+
+        if (!validator.isValidPhoneNumber(newPhoneNumber)) {
+            response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
+            response.getWriter().write("Invalid phone number format.");
+            return;
+        }
+
+        if (!validator.isPhoneNumberUnique(newPhoneNumber)) {
+            response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
+            response.getWriter().write("Phone number is already taken.");
+            return;
+        }
+
+        try {
+            boolean updated = accountDAO.updateAccount(accountId, newEmail, newPhoneNumber, newAddress);
+            if (updated) {
+                response.setStatus(HttpServletResponse.SC_OK);
+                response.getWriter().write("Success");
+            } else {
+                response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
+                response.getWriter().write("Error updating the account.");
+            }
+        } catch (Exception e) {
+            response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
+            response.getWriter().write("Error updating the account: " + e.getMessage());
+            e.printStackTrace();
+        }
     }
 
     /**

@@ -4,6 +4,7 @@
  */
 package Controller;
 
+import entity.Account;
 import java.io.IOException;
 import java.io.PrintWriter;
 import jakarta.servlet.ServletException;
@@ -12,12 +13,11 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import model.WishlistDAO;
 
-
 /**
  *
  * @author nobbe
  */
-public class RemoveFromWishlistServlet extends HttpServlet {
+public class RemoveWishlistController extends HttpServlet {
 
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
@@ -36,10 +36,10 @@ public class RemoveFromWishlistServlet extends HttpServlet {
             out.println("<!DOCTYPE html>");
             out.println("<html>");
             out.println("<head>");
-            out.println("<title>Servlet RemoveFromWishlistServlet</title>");            
+            out.println("<title>Servlet RemoveWishlistController</title>");            
             out.println("</head>");
             out.println("<body>");
-            out.println("<h1>Servlet RemoveFromWishlistServlet at " + request.getContextPath() + "</h1>");
+            out.println("<h1>Servlet RemoveWishlistController at " + request.getContextPath() + "</h1>");
             out.println("</body>");
             out.println("</html>");
         }
@@ -71,19 +71,18 @@ public class RemoveFromWishlistServlet extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        int accountId = Integer.parseInt(request.getParameter("accountId"));
         int stockId = Integer.parseInt(request.getParameter("stockId"));
+        Account loggedInUser = (Account) request.getSession().getAttribute("account");
 
-        WishlistDAO wishlistDAO = new WishlistDAO();
-        boolean isRemoved = wishlistDAO.removeProductFromWishlist(accountId, stockId);
-
-        if (isRemoved) {
-            response.getWriter().write("success");
-        } else {
-            response.getWriter().write("failure");
+        if (loggedInUser != null) {
+            int accountId = loggedInUser.getAccountID();
+            System.out.println("Removing item with StockID: " + stockId + " for AccountID: " + accountId);
+            WishlistDAO wishlistDAO = new WishlistDAO();
+            wishlistDAO.removeFromWishlist(accountId, stockId);
         }
+
+        response.sendRedirect("customer/wishlist.jsp"); // Redirect back to the wishlist page
     }
-   
     
 
     /**

@@ -61,8 +61,8 @@
         <servlet-class>Controller.CheckoutController</servlet-class>
     </servlet>
     <servlet>
-        <servlet-name>RemoveFromWishlistServlet</servlet-name>
-        <servlet-class>Controller.RemoveFromWishlistServlet</servlet-class>
+        <servlet-name>RemoveWishlistController</servlet-name>
+        <servlet-class>Controller.RemoveWishlistController</servlet-class>
     </servlet>
     <servlet>
         <servlet-name>ConfirmOrderController</servlet-name>
@@ -116,14 +116,6 @@
         <servlet-name>DeleteAccountController</servlet-name>
         <url-pattern>/deleteAccount</url-pattern>
     </servlet-mapping>
-    <servlet>
-        <servlet-name>UpdateAccountController</servlet-name>
-        <servlet-class>Controller.UpdateAccountController</servlet-class>
-    </servlet>
-    <servlet-mapping>
-        <servlet-name>UpdateAccountController</servlet-name>
-        <url-pattern>/updateAccount</url-pattern>
-    </servlet-mapping>
     <servlet-mapping>
         <servlet-name>Ordercontroller</servlet-name>
         <url-pattern>/Ordercontroller</url-pattern>
@@ -157,8 +149,8 @@
         <url-pattern>/CheckoutController</url-pattern>
     </servlet-mapping>
     <servlet-mapping>
-        <servlet-name>RemoveFromWishlistServlet</servlet-name>
-        <url-pattern>/RemoveFromWishlistServlet</url-pattern>
+        <servlet-name>RemoveWishlistController</servlet-name>
+        <url-pattern>/RemoveWishlistController</url-pattern>
     </servlet-mapping>
     <servlet-mapping>
         <servlet-name>ConfirmOrderController</servlet-name>
