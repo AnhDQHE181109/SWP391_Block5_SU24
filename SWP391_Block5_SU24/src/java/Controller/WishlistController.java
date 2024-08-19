@@ -70,16 +70,16 @@ public class WishlistController extends HttpServlet {
         if (account != null) {
             WishlistDAO wishlistDAO = new WishlistDAO();
             String search = request.getParameter("search");
+            String sort = request.getParameter("sort"); // Get the sort parameter
             List<Product> wishlistItems;
 
             if (search != null && !search.trim().isEmpty()) {
                 wishlistItems = wishlistDAO.searchWishlistItemsByName(account.getAccountID(), search);
             } else {
-                wishlistItems = wishlistDAO.getWishlistItems(account.getAccountID());
+                wishlistItems = wishlistDAO.getWishlistItems(account.getAccountID(), sort); // Pass the sort parameter
             }
 
             request.setAttribute("wishlistItems", wishlistItems);
-            System.out.println(wishlistItems.get(0).getProductName());
             RequestDispatcher dispatcher = request.getRequestDispatcher("customer/wishlist.jsp");
             dispatcher.forward(request, response);
         } else {
