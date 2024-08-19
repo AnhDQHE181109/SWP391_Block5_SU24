@@ -64,12 +64,30 @@
         .closebtn:hover {
             color: black;
         }
+        .alert-timer {
+            height: 5px;
+            background-color: #f1f1f1;
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+        }
+
+        .alert-timer-fill {
+            height: 100%;
+            background-color: orange; /* Green */
+            width: 100%;
+            transition: width 5s linear;
+        }
     </style>
     <body>
-        <%if("true".equals(request.getParameter("auth_error"))){%>
-        <div class="alert">
+        <%if("true".equals(request.getParamter("auth_error"))){%>
+        <div class="alert" id="alertDiv">
             <span class="closebtn" onclick="this.parentElement.style.display = 'none';">&times;</span>
             You do not have permission to access this pages.
+            <div class="alert-timer">
+                <div class="alert-timer-fill" id="timerFill"></div>
+            </div>
         </div>
         <%}%>
         <div class="${pageContext.request.contextPath}/container-fluid position-relative bg-white d-flex p-0">
@@ -521,6 +539,9 @@
         <script src="${pageContext.request.contextPath}/lib/tempusdominus/js/moment-timezone.min.js"></script>
         <script src="${pageContext.request.contextPath}/lib/tempusdominus/js/tempusdominus-bootstrap-4.min.js"></script>
 
+        <!-- Template Javascript -->
+        <script src="${pageContext.request.contextPath}/js/main.js"></script>
+    </body>
         <!-- Sidebar Start -->
         <div class="sidebar pe-4 pb-3">
             <nav class="navbar bg-light navbar-light">
@@ -965,4 +986,28 @@
     <script src="${pageContext.request.contextPath}/js/main.js"></script>
 </body>
 
+<script>
+                function startAlertTimer() {
+                    const timerFill = document.getElementById('timerFill');
+                    const alertBox = document.getElementById('alertDiv');
+
+                    // Start the timer
+                    setTimeout(function () {
+                        alertBox.style.display = 'none'; // Hide the alert
+                    }, 5000);
+
+                    // Start the progress bar animation
+                    timerFill.style.width = '0%';
+                }
+                // Start the timer when the page loads
+                window.onload = startAlertTimer;
+                document.getElementById('search-bar').addEventListener('input', function () {
+                    let query = this.value;
+                    if (query.length > 0) {
+                        fetchSuggestions(query);
+                    } else {
+                        document.getElementById('alertDiv').style.display = 'none';
+                    }
+                });
+    </script>
 </html>

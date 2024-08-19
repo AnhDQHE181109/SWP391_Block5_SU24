@@ -121,32 +121,57 @@
                 margin-top: -2px;
             }
             .alert {
-            padding: 20px;
-            background-color: #f44336; 
-            color: white;
-            margin-bottom: 15px;
-            position: fixed;
-            
-            width:100%;
-            z-index: 9999;
-        }
+                padding: 20px;
+                background-color: #f44336;
+                color: white;
+                margin-bottom: 15px;
+                position: fixed;
+                width:100%;
+                z-index: 9999;
+            }
 
-        .closebtn {
-            margin-left: 15px;
-            color: white;
-            font-weight: bold;
-            float: right;
-            font-size: 22px;
-            line-height: 20px;
-            cursor: pointer;
-            transition: 0.3s;
-        }
+            .closebtn {
+                margin-left: 15px;
+                color: white;
+                font-weight: bold;
+                float: right;
+                font-size: 22px;
+                line-height: 20px;
+                cursor: pointer;
+                transition: 0.3s;
+            }
 
-        .closebtn:hover {
-            color: black;
-        }
+            .closebtn:hover {
+                color: black;
+            }
+            .alert-timer {
+                height: 5px;
+                background-color: #f1f1f1;
+                position: absolute;
+                bottom: 0;
+                left: 0;
+                width: 100%;
+            }
+
+            .alert-timer-fill {
+                height: 100%;
+                background-color: orange; /* Green */
+                width: 100%;
+                transition: width 5s linear;
+            }
         </style>
         <!-- Navbar-->
+
+        <%if("true".equals(request.getAttribute("auth_error"))){%>
+        <div class="alert" id="alertDiv">
+            <span class="closebtn" onclick="this.parentElement.style.display = 'none';">&times;</span>
+            You do not have permission to access this pages.
+            <div class="alert-timer">
+                <div class="alert-timer-fill" id="timerFill"></div>
+            </div>
+        </div>
+        <%}%>
+
 
         <div class="app-sidebar__overlay" data-toggle="sidebar"></div>
         <aside class="app-sidebar">
@@ -295,12 +320,45 @@
                     </c:if>
                 </div>
             </div>
-
         </div>
     </div>
 </main>
 
-        
+         <script>
+            function showLogoutBox() {
+                document.getElementById('logoutBox').style.display = 'block';
+            }
+            function logout() {
+                window.location.href = 'index.html';
+            }
+            function cancelLogout() {
+                window.location.href = 'productinsert';
+            }
+            function startAlertTimer() {
+                const timerFill = document.getElementById('timerFill');
+                const alertBox = document.getElementById('alertDiv');
+
+                // Start the timer
+                setTimeout(function () {
+                    alertBox.style.display = 'none'; // Hide the alert
+                }, 5000);
+
+                // Start the progress bar animation
+                timerFill.style.width = '0%';
+            }
+
+            // Start the timer when the page loads
+            window.onload = startAlertTimer;
+            document.getElementById('search-bar').addEventListener('input', function () {
+                let query = this.value;
+                if (query.length > 0) {
+                    fetchSuggestions(query);
+                } else {
+                    document.getElementById('alertDiv').style.display = 'none';
+                }
+            });
+        </script>
+
         
                     <script>
                         function showLogoutBox() {
@@ -317,3 +375,4 @@
                     </body>
 
                     </html>
+

@@ -86,10 +86,10 @@ public class ConfirmOrderController extends HttpServlet {
             stockImportDetail.setStockQuantity(quantity); // Quantity of the product in the order
 
             // Add StockImportDetail
-            boolean stockImportDetailAdded = daoStockImportDetail.create(stockImportDetail);
+            boolean stockImportDetailAdded = daoStockImportDetail.createnew(stockImportDetail);
 
             if (stockImportDetailAdded) {
-                response.sendRedirect("Ordercontroller"); // Redirect to confirmation page
+                response.sendRedirect("OrderConfirmationPage"); // Redirect to confirmation page
             } else {
                 response.getWriter().println("Error adding stock import detail.");
             }
