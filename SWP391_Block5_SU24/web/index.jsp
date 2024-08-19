@@ -282,11 +282,11 @@
                         <% for (Product product : bestSellers) { %>
                         <div class="col-lg-3 mb-4 text-center">
                             <div class="product-entry border">
-                                <a href="#" class="prod-img">
+                                <a href="ProductDetailsController?productID=<%=product.getProductId() %>" class="prod-img">
                                     <img src="<%= product.getImageURL() %>" class="img-fluid" alt="Product Image">
                                 </a>
                                 <div class="desc">
-                                    <h2><a href="#"><%= product.getProductName() %></a></h2>
+                                    <h2><a href="ProductDetailsController?productID=<%=product.getProductId() %>"><%= product.getProductName() %></a></h2>
                                     <span class="price"><%= product.getPrice() %></span>
                                 </div>
                             </div>
