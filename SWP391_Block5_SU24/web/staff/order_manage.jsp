@@ -181,10 +181,7 @@
             </div>
             <hr>
                     <ul class="app-menu">
-                        <li><a class="app-menu__item" href="dashboard"><i class='app-menu__icon bx bx-tachometer'></i><span
-                                    class="app-menu__label">Dashboard</span></a></li>
-                        <li><a class="app-menu__item" href="customer_manage"><i class='app-menu__icon bx bx-user-voice'></i><span
-                                    class="app-menu__label">Customers</span></a></li>
+
                         <li><a class="app-menu__item" href="stocksManager"><i
                                     class='app-menu__icon bx bx-purchase-tag-alt'></i><span class="app-menu__label">Products</span></a>
                         </li>
@@ -329,7 +326,7 @@
                 document.getElementById('logoutBox').style.display = 'block';
             }
             function logout() {
-                window.location.href = 'index.html';
+                window.location.href = 'LogoutController';
             }
             function cancelLogout() {
                 window.location.href = 'productinsert';
@@ -365,7 +362,7 @@
                             document.getElementById('logoutBox').style.display = 'block';
                         }
                         function logout() {
-                            window.location.href = 'index.html';
+                            window.location.href = 'LogoutController';
                         }
                         function cancelLogout() {
                             window.location.href = 'productinsert';

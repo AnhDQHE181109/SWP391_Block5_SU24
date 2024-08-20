@@ -125,10 +125,6 @@
             <div class="app-sidebar__user"><img class="app-sidebar__user-avatar" src="https://thumbs.dreamstime.com/b/admin-sign-laptop-icon-stock-vector-166205404.jpg" width="50px" alt="User Image"></div>
             <hr>
                     <ul class="app-menu">
-                        <li><a class="app-menu__item" href="dashboard"><i class='app-menu__icon bx bx-tachometer'></i><span
-                                    class="app-menu__label">Dashboard</span></a></li>
-                        <li><a class="app-menu__item" href="customer_manage"><i class='app-menu__icon bx bx-user-voice'></i><span
-                                    class="app-menu__label">Customers</span></a></li>
                         <li><a class="app-menu__item" href="stocksManager"><i
                                     class='app-menu__icon bx bx-purchase-tag-alt'></i><span class="app-menu__label">Products</span></a>
                         </li>
