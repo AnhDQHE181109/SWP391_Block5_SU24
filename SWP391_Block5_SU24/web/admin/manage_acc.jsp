@@ -111,7 +111,7 @@
                     </a>
                     <div class="d-flex align-items-center ms-4 mb-4">
                         <div class="position-relative">
-                            <img class="rounded-circle" src="images/user.jpg" alt="" style="width: 40px; height: 40px;">
+                            <img class="rounded-circle" src="${pageContext.request.contextPath}/images/user.jpg" alt="" style="width: 40px; height: 40px;">
                             <div class="bg-success rounded-circle border border-2 border-white position-absolute end-0 bottom-0 p-1"></div>
                         </div>
                         <div class="ms-3">
@@ -209,13 +209,13 @@
                         </div>
                         <div class="nav-item dropdown">
                             <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown">
-                                <img class="rounded-circle me-lg-2" src="images/user.jpg" alt="" style="width: 40px; height: 40px;">
+                                <img class="rounded-circle me-lg-2" src="${pageContext.request.contextPath}/images/user.jpg" alt="" style="width: 40px; height: 40px;">
                                 <span class="d-none d-lg-inline-flex">John Doe</span>
                             </a>
                             <div class="dropdown-menu dropdown-menu-end bg-light border-0 rounded-0 rounded-bottom m-0">
                                 <a href="#" class="dropdown-item">My Profile</a>
                                 <a href="#" class="dropdown-item">Settings</a>
-                                <a href="#" class="dropdown-item">Log Out</a>
+                                <a href="${pageContext.request.contextPath}/LogoutController" class="dropdown-item">Log Out</a>
                             </div>
                         </div>
                     </div>
@@ -414,13 +414,13 @@
         <!-- JavaScript Libraries -->
         <script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
         <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0/dist/js/bootstrap.bundle.min.js"></script>
-        <script src="lib/chart/chart.min.js"></script>
-        <script src="lib/easing/easing.min.js"></script>
-        <script src="lib/waypoints/waypoints.min.js"></script>
-        <script src="lib/owlcarousel/owl.carousel.min.js"></script>
-        <script src="lib/tempusdominus/js/moment.min.js"></script>
-        <script src="lib/tempusdominus/js/moment-timezone.min.js"></script>
-        <script src="lib/tempusdominus/js/tempusdominus-bootstrap-4.min.js"></script>
+        <script src="${pageContext.request.contextPath}/lib/chart/chart.min.js"></script>
+        <script src="${pageContext.request.contextPath}/lib/easing/easing.min.js"></script>
+        <script src="${pageContext.request.contextPath}/lib/waypoints/waypoints.min.js"></script>
+        <script src="${pageContext.request.contextPath}/lib/owlcarousel/owl.carousel.min.js"></script>
+        <script src="${pageContext.request.contextPath}/lib/tempusdominus/js/moment.min.js"></script>
+        <script src="${pageContext.request.contextPath}/lib/tempusdominus/js/moment-timezone.min.js"></script>
+        <script src="${pageContext.request.contextPath}/lib/tempusdominus/js/tempusdominus-bootstrap-4.min.js"></script>
 
         <!-- Template Javascript -->
         <script src="js/main.js"></script>
