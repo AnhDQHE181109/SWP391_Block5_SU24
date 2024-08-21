@@ -1,189 +1,136 @@
 package model;
 
-import entity.Products;
+import entity.Product;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
 public class DAOProduct extends MyDAO {
 
-    // Method to get all products
-    public List<Products> getAllProducts() {
-        List<Products> products = new ArrayList<>();
-        xSql = "SELECT * FROM Products"; // Adjust table name and columns as per your database
-
+    // Lấy tất cả các sản phẩm từ cơ sở dữ liệu
+    public List<Product> getAllProducts() {
+        List<Product> products = new ArrayList<>();
         try {
+            xSql = "SELECT [ProductID], [ProductName], [Origin], [Material], [Price], [TotalQuantity], [CategoryID], [BrandID], [ImageID] FROM [ECommerceStore].[dbo].[Products]";
             ps = con.prepareStatement(xSql);
             rs = ps.executeQuery();
             while (rs.next()) {
-                Products product = new Products(
-                    rs.getInt("productId"),
-                    rs.getString("productName"),
-                    rs.getString("Origin"),
-                    rs.getString("Material"),
-                    rs.getDouble("Price"),
-                    rs.getInt("TotalQuantity"),
-                    rs.getInt("CategoryID"),
-                    rs.getInt("BrandID"),
-                    rs.getInt("ImageID"),
-                    rs.getInt("ProductStatus")
-                );
+                Product product = new Product();
+                product.setProductId(rs.getInt("ProductID"));
+                product.setProductName(rs.getString("ProductName"));
+                product.setOrigin(rs.getString("Origin"));
+                product.setMaterial(rs.getString("Material"));
+                product.setPrice(rs.getDouble("Price"));
+                product.setTotalQuantity(rs.getInt("TotalQuantity"));
+                product.setCategoryId(rs.getInt("CategoryID"));
+                product.setBrandId(rs.getInt("BrandID"));
+                product.setImageId(rs.getInt("ImageID"));
+                
                 products.add(product);
             }
         } catch (SQLException e) {
             e.printStackTrace();
         } finally {
-            try {
-                if (rs != null) rs.close();
-                if (ps != null) ps.close();
-            } catch (SQLException e) {
-                e.printStackTrace();
-            }
+            closeResources();
         }
-
         return products;
     }
 
-    // Method to get a product by ID
-    public Products getProductById(int productId) {
-        Products product = null;
-        xSql = "SELECT * FROM Products WHERE productId = ?";
-
+    // Thêm sản phẩm mới vào cơ sở dữ liệu
+    public void addProduct(Product product) {
         try {
+            xSql = "INSERT INTO [ECommerceStore].[dbo].[Products] ([ProductName], [Origin], [Material], [Price], [TotalQuantity], [CategoryID], [BrandID], [ImageID]) VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
+            ps = con.prepareStatement(xSql);
+            ps.setString(1, product.getProductName());
+            ps.setString(2, product.getOrigin());
+            ps.setString(3, product.getMaterial());
+            ps.setDouble(4, product.getPrice());
+            ps.setInt(5, product.getTotalQuantity());
+            ps.setInt(6, product.getCategoryId());
+            ps.setInt(7, product.getBrandId());
+            ps.setInt(8, product.getImageId());
+            
+            ps.executeUpdate();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        } finally {
+            closeResources();
+        }
+    }
+
+    // Cập nhật thông tin sản phẩm
+    public void updateProduct(Product product) {
+        try {
+            xSql = "UPDATE [ECommerceStore].[dbo].[Products] SET [ProductName] = ?, [Origin] = ?, [Material] = ?, [Price] = ?, [TotalQuantity] = ?, [CategoryID] = ?, [BrandID] = ?, [ImageID] = ? WHERE [ProductID] = ?";
+            ps = con.prepareStatement(xSql);
+            ps.setString(1, product.getProductName());
+            ps.setString(2, product.getOrigin());
+            ps.setString(3, product.getMaterial());
+            ps.setDouble(4, product.getPrice());
+            ps.setInt(5, product.getTotalQuantity());
+            ps.setInt(6, product.getCategoryId());
+            ps.setInt(7, product.getBrandId());
+            ps.setInt(8, product.getImageId());
+            ps.setInt(9, product.getProductId());
+            
+            ps.executeUpdate();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        } finally {
+            closeResources();
+        }
+    }
+
+    // Xóa sản phẩm theo ProductID
+    public void deleteProduct(int productId) {
+        try {
+            xSql = "DELETE FROM [ECommerceStore].[dbo].[Products] WHERE [ProductID] = ?";
+            ps = con.prepareStatement(xSql);
+            ps.setInt(1, productId);
+            ps.executeUpdate();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        } finally {
+            closeResources();
+        }
+    }
+
+        // Lấy thông tin sản phẩm dựa trên ProductID
+    public Product getProductById(int productId) {
+        Product product = null;
+        try {
+            xSql = "SELECT * FROM [ECommerceStore].[dbo].[Products] WHERE [ProductID] = ?";
             ps = con.prepareStatement(xSql);
             ps.setInt(1, productId);
             rs = ps.executeQuery();
             if (rs.next()) {
-                product = new Products(
-                    rs.getInt("productID"),
-                    rs.getString("productName"),
-                    rs.getString("Origin"),
-                    rs.getString("Material"),
-                    rs.getDouble("Price"),
-                    rs.getInt("TotalQuantity"),
-                    rs.getInt("CategoryID"),
-                    rs.getInt("BrandID"),
-                    rs.getInt("ImageID"),
-                    rs.getInt("ProductStatus")
-                );
+                product = new Product();
+                product.setProductId(rs.getInt("ProductID"));
+                product.setProductName(rs.getString("ProductName"));
+                product.setOrigin(rs.getString("Origin"));
+                product.setMaterial(rs.getString("Material"));
+                product.setPrice(rs.getDouble("Price"));
+                product.setTotalQuantity(rs.getInt("TotalQuantity"));
+                product.setCategoryId(rs.getInt("CategoryID"));
+                product.setBrandId(rs.getInt("BrandID"));
+                product.setImageId(rs.getInt("ImageID"));
             }
         } catch (SQLException e) {
             e.printStackTrace();
         } finally {
-            try {
-                if (rs != null) rs.close();
-                if (ps != null) ps.close();
-            } catch (SQLException e) {
-                e.printStackTrace();
-            }
+            closeResources();
         }
-
         return product;
     }
-
-    // Method to add a new product
-    public boolean addProduct(Products product) {
-        xSql = "INSERT INTO Products (productName, Origin, Material, Price, TotalQuantity, CategoryID, BrandID, ImageID, ProductStatus, Gender) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
-
-        try {
-            ps = con.prepareStatement(xSql);
-            ps.setString(1, product.getProductName());
-            ps.setString(2, product.getOrigin());
-            ps.setString(3, product.getMaterial());
-            ps.setDouble(4, product.getPrice());
-            ps.setInt(5, product.getTotalQuantity());
-            ps.setInt(6, product.getCategoryID());
-            ps.setInt(7, product.getBrandID());
-            ps.setInt(8, product.getImageID());
-            ps.setInt(9, product.getProductStatus());
-
-            return ps.executeUpdate() > 0;
-        } catch (SQLException e) {
-            e.printStackTrace();
-            return false;
-        } finally {
-            try {
-                if (ps != null) ps.close();
-            } catch (SQLException e) {
-                e.printStackTrace();
-            }
-        }
-    }
-
-    // Method to update an existing product
-    public boolean updateProduct(Products product) {
-        xSql = "UPDATE Products SET productName = ?, Origin = ?, Material = ?, Price = ?, TotalQuantity = ?, CategoryID = ?, BrandID = ?, ImageID = ?, ProductStatus = ?, Gender = ? WHERE productId = ?";
-
-        try {
-            ps = con.prepareStatement(xSql);
-            ps.setString(1, product.getProductName());
-            ps.setString(2, product.getOrigin());
-            ps.setString(3, product.getMaterial());
-            ps.setDouble(4, product.getPrice());
-            ps.setInt(5, product.getTotalQuantity());
-            ps.setInt(6, product.getCategoryID());
-            ps.setInt(7, product.getBrandID());
-            ps.setInt(8, product.getImageID());
-            ps.setInt(9, product.getProductStatus());
-            ps.setInt(11, product.getProductId());
-
-            return ps.executeUpdate() > 0;
-        } catch (SQLException e) {
-            e.printStackTrace();
-            return false;
-        } finally {
-            try {
-                if (ps != null) ps.close();
-            } catch (SQLException e) {
-                e.printStackTrace();
-            }
-        }
-    }
-
-    // Method to delete a product by ID
-    public boolean deleteProduct(int productId) {
-        xSql = "DELETE FROM Products WHERE productId = ?";
-
-        try {
-            ps = con.prepareStatement(xSql);
-            ps.setInt(1, productId);
-
-            return ps.executeUpdate() > 0;
-        } catch (SQLException e) {
-            e.printStackTrace();
-            return false;
-        } finally {
-            try {
-                if (ps != null) ps.close();
-            } catch (SQLException e) {
-                e.printStackTrace();
-            }
-        }
-    }
     
-        // New method to get product name by ID
-    public String getProductNameById(int productId) {
-        String productName = null;
-        xSql = "SELECT productName  FROM Products WHERE productId = ?";
-
+    
+    // Đóng các tài nguyên sau khi sử dụng
+    private void closeResources() {
         try {
-            ps = con.prepareStatement(xSql);
-            ps.setInt(1, productId);
-            rs = ps.executeQuery();
-            if (rs.next()) {
-                productName = rs.getString("productName");
-            }
+            if (rs != null) rs.close();
+            if (ps != null) ps.close();
         } catch (SQLException e) {
             e.printStackTrace();
-        } finally {
-            try {
-                if (rs != null) rs.close();
-                if (ps != null) ps.close();
-            } catch (SQLException e) {
-                e.printStackTrace();
-            }
         }
-
-        return productName;
     }
 }

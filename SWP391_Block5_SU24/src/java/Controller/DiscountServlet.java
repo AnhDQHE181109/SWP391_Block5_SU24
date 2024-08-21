@@ -1,7 +1,7 @@
 package Controller;
 
 import entity.Discount;
-import entity.Products;
+import entity.Product;
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -139,14 +139,14 @@ public class DiscountServlet extends HttpServlet {
         int totalDiscounts = daoDiscount.getTotalDiscountCount();
         int totalPages = (int) Math.ceil((double) totalDiscounts / pageSize);
 
-        Map<Integer, Products> productMap = new HashMap<>();
+        Map<Integer, Product> productMap = new HashMap<>();
         Set<Integer> productIds = new HashSet<>();
         for (Discount discount : discountList) {
             productIds.add(discount.getProductID());
         }
 
         for (Integer productId : productIds) {
-            Products product = daoProducts.getProductById(productId);
+            Product product = daoProducts.getProductById(productId);
             if (product != null) {
                 productMap.put(productId, product);
             }
@@ -185,7 +185,7 @@ public class DiscountServlet extends HttpServlet {
 
     private void showAddForm(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         try {
-            List<Products> productList = daoProducts.getAllProducts(); // Assuming this method exists
+            List<Product> productList = daoProducts.getAllProducts(); // Assuming this method exists
             request.setAttribute("productList", productList);
             request.getRequestDispatcher("manager/discounteditform.jsp").forward(request, response);
         } catch (Exception e) {
@@ -213,14 +213,14 @@ public class DiscountServlet extends HttpServlet {
 
             List<Discount> paginatedDiscounts = discountList.subList(startIndex, endIndex);
 
-            Map<Integer, Products> productMap = new HashMap<>();
+            Map<Integer, Product> productMap = new HashMap<>();
             Set<Integer> productIds = new HashSet<>();
             for (Discount discount : paginatedDiscounts) {
                 productIds.add(discount.getProductID());
             }
 
             for (Integer productId : productIds) {
-                Products product = daoProducts.getProductById(productId);
+                Product product = daoProducts.getProductById(productId);
                 if (product != null) {
                     productMap.put(productId, product);
                 }
