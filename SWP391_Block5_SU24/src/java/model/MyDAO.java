@@ -23,6 +23,32 @@ public class MyDAO extends DBConnect {
      con = conn;
   }
   
+   // Phương thức lấy tên sản phẩm theo ID sản phẩm
+    public String getProductNameById(int productId) {
+        String productName = null;
+        xSql = "SELECT product_name FROM Products WHERE product_id = ?";
+
+        try {
+            ps = con.prepareStatement(xSql);
+            ps.setInt(1, productId);
+            rs = ps.executeQuery();
+
+            if (rs.next()) {
+                productName = rs.getString("product_name");
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            try {
+                if (rs != null) rs.close();
+                if (ps != null) ps.close();
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+
+        return productName;
+    }
   
   public void finalize() {
      try {
