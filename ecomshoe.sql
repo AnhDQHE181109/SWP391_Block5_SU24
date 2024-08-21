@@ -43,6 +43,7 @@ GO
 CREATE TABLE Accounts(
     AccountID INT IDENTITY(1,1) PRIMARY KEY,
     Username NVARCHAR(100) NOT NULL, 
+	Fullname NVARCHAR(800) NOT NULL, 
     Hash TEXT NOT NULL,
     PhoneNumber NVARCHAR(20) NULL,
     Email NVARCHAR(100) UNIQUE NULL,
@@ -92,7 +93,7 @@ CREATE TABLE ProductStockImport (
     AccountID INT NOT NULL,
     ImportDate DATETIME DEFAULT GETDATE() NOT NULL,
 	ImportAction  int  NOT NULL,
-	Actorname  NVARCHAR(50) NOT NULL
+	SupplierName  NVARCHAR(50) NOT NULL
 );
 GO
 
@@ -208,12 +209,12 @@ USE ECommerceStore;
 GO
 
 -- Insert data into Accounts
-INSERT INTO Accounts (Username, Hash, PhoneNumber, Email, Address, Role, Salt, Status)
+INSERT INTO Accounts (Username, Fullname, Hash, PhoneNumber, Email, Address, Role, Salt, Status)
 VALUES 
-('johndoe', 'NqmCu0KLyfdegTojOpWmaAC8gODT1EfFxKtyJ9tfwUDneUmaWlo7TiaWJYzGnaWaYcWsUtytBL/iqltP+MLvVA==', '123-456-7890', 'johndoe@example.com', '123 Main St, Anytown, USA', 1, 'jMxFrhzK+pkZRnCz7jEkew==',1),
-('janedoe', 'NqmCu0KLyfdegTojOpWmaAC8gODT1EfFxKtyJ9tfwUDneUmaWlo7TiaWJYzGnaWaYcWsUtytBL/iqltP+MLvVA==', '987-654-3210', 'janedoe@example.com', '456 Elm St, Othertown, USA', 2, 'jMxFrhzK+pkZRnCz7jEkew==',0),
-('alice', 'NqmCu0KLyfdegTojOpWmaAC8gODT1EfFxKtyJ9tfwUDneUmaWlo7TiaWJYzGnaWaYcWsUtytBL/iqltP+MLvVA==', '555-123-4567', 'alice@example.com', '789 Maple St, Sometown, USA', 3, 'jMxFrhzK+pkZRnCz7jEkew==',0),
-('long', 'NqmCu0KLyfdegTojOpWmaAC8gODT1EfFxKtyJ9tfwUDneUmaWlo7TiaWJYzGnaWaYcWsUtytBL/iqltP+MLvVA==', '555-123-4567', 'long@example.com', '789 Maple St, Sometown, USA', 2, 'jMxFrhzK+pkZRnCz7jEkew==',0);
+('johndoe', 'John Doe', 'NqmCu0KLyfdegTojOpWmaAC8gODT1EfFxKtyJ9tfwUDneUmaWlo7TiaWJYzGnaWaYcWsUtytBL/iqltP+MLvVA==', '123-456-7890', 'johndoe@example.com', '123 Main St, Anytown, USA', 1, 'jMxFrhzK+pkZRnCz7jEkew==',1),
+('janedoe', 'Jane Doe', 'NqmCu0KLyfdegTojOpWmaAC8gODT1EfFxKtyJ9tfwUDneUmaWlo7TiaWJYzGnaWaYcWsUtytBL/iqltP+MLvVA==', '987-654-3210', 'janedoe@example.com', '456 Elm St, Othertown, USA', 2, 'jMxFrhzK+pkZRnCz7jEkew==',0),
+('alice', 'Alice Doe', 'NqmCu0KLyfdegTojOpWmaAC8gODT1EfFxKtyJ9tfwUDneUmaWlo7TiaWJYzGnaWaYcWsUtytBL/iqltP+MLvVA==', '555-123-4567', 'alice@example.com', '789 Maple St, Sometown, USA', 3, 'jMxFrhzK+pkZRnCz7jEkew==',0),
+('long', 'Long Vu', 'NqmCu0KLyfdegTojOpWmaAC8gODT1EfFxKtyJ9tfwUDneUmaWlo7TiaWJYzGnaWaYcWsUtytBL/iqltP+MLvVA==', '555-123-4567', 'long@example.com', '789 Maple St, Sometown, USA', 2, 'jMxFrhzK+pkZRnCz7jEkew==',0);
 
 
 
@@ -239,7 +240,7 @@ VALUES
 ('Suede Classic', 'Vietnam', 'Suede', 120.00, 150, 1, 3, 4, 0);
 
 -- Insert data into ProductStockImport
-INSERT INTO ProductStockImport (AccountID, ImportDate,ImportAction,Actorname)
+INSERT INTO ProductStockImport (AccountID, ImportDate,ImportAction,SupplierName)
 VALUES 
 (1, '12/3/2024',1,'johndoe' ),
 (2, '12/12/2024',0,'janedoe'),
