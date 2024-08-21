@@ -122,49 +122,31 @@
         </div>
         <!-- Sidebar End -->
 
-        <!-- Content Start -->
-        <div class="content p-4">
-            
-    <h1>${brand != null ? "Edit Brand" : "Add New Brand"}</h1>
-    <c:if test="${not empty errorMessage}">
-        <p style="color: red;">${errorMessage}</p>
-    </c:if>
-    <form action="BrandController" method="post" onsubmit="return validateForm()">
-        <input type="hidden" name="brandId" value="${brand != null ? brand.brandId : ''}"/>
-        <label for="brandName">Brand Name:</label>
-        <input type="text" id="brandName" name="brandName" value="${brand != null ? brand.brandName : ''}" required/>
-        <input type="hidden" name="action" value="${brand != null ? 'update' : 'insert'}"/>
-        <button type="submit">${brand != null ? "Update Brand" : "Add Brand"}</button>
-    </form>
-    <a href="BrandController?action=list">Back to Brand List</a>
-    
-        </div>
-        <!-- Content End -->
+  <h2>Update Discount</h2>
+    <form action="DiscountServlet" method="get">
+        <input type="hidden" name="action" value="updateby">
+        
+        <label for="discount_amount">New Discount Amount:</label>
+        <input type="number" name="discount_amount" id="discount_amount" step="0.01" required><br>
 
-        <!-- Modal for Editing Brand -->
-        <div class="modal fade" id="editModal" tabindex="-1" aria-labelledby="editModalLabel" aria-hidden="true">
-            <div class="modal-dialog">
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <h5 class="modal-title" id="editModalLabel">Edit Brand</h5>
-                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                    </div>
-                    <form id="editForm" onsubmit="updateBrand(event)">
-                        <div class="modal-body">
-                            <input type="hidden" name="brandId"/>
-                            <div class="mb-3">
-                                <label for="brandName" class="form-label">Brand Name</label>
-                                <input type="text" class="form-control" id="brandName" name="brandName" required/>
-                            </div>
-                        </div>
-                        <div class="modal-footer">
-                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                            <button type="submit" class="btn btn-primary">Save changes</button>
-                        </div>
-                    </form>
-                </div>
-            </div>
-        </div>
+        <label for="brand">Brand:</label>
+        <select name="brand_id" id="brand">
+            <option value="">None</option>
+            <% for (Brand brand : (List<Brand>) request.getAttribute("brands")) { %>
+                <option value="<%= brand.getBrandId() %>"><%= brand.getBrandName() %></option>
+            <% } %>
+        </select><br>
+
+        <label for="category">Category:</label>
+        <select name="category_id" id="category">
+            <option value="">None</option>
+            <% for (Category category : (List<Category>) request.getAttribute("categories")) { %>
+                <option value="<%= category.getCategoryId() %>"><%= category.getCategoryName() %></option>
+            <% } %>
+        </select><br>
+
+        <input type="submit" value="Update Discount">
+    </form>
     </div>
 </body>
 
