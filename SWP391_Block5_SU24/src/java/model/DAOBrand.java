@@ -29,6 +29,30 @@ public class DAOBrand extends MyDAO {
         return brands;
     }
 
+        public List<Brand> getAllBrandbystatus(int brandStatus) {
+        List<Brand> brands = new ArrayList<>();
+        xSql = "SELECT * FROM Brand where BrandStatus = ? ";
+        try {
+            ps = con.prepareStatement(xSql);
+            ps.setInt(1, brandStatus);
+            rs = ps.executeQuery();
+            while (rs.next()) {
+                Brand brand = new Brand();
+                brand.setBrandId(rs.getInt("brandId"));
+                brand.setBrandName(rs.getString("brandName"));
+                brand.setBrandstatus(rs.getInt("brandstatus"));
+
+                brands.add(brand);
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        } finally {
+            closeResources();
+        }
+        return brands;
+    }
+    
+    
     public Brand getBrandById(int brandId) {
         Brand brand = null;
         xSql = "SELECT * FROM Brand WHERE brandId = ?";
@@ -164,6 +188,8 @@ public class DAOBrand extends MyDAO {
         closeResources();
     }
 }
+    
+    
 
 
     private void closeResources() {

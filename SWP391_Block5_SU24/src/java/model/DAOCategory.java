@@ -82,6 +82,23 @@ public class DAOCategory extends MyDAO {
         }
         return categories;
     }
+    
+        // Get all categories
+    public List<Category> getAllbystatus(int CategoryStatus) {
+        List<Category> categories = new ArrayList<>();
+        xSql = "SELECT * FROM Categories where [CategoryStatus] =  ?  ";
+        try {
+            ps = con.prepareStatement(xSql);
+            ps.setInt(1, CategoryStatus);
+            rs = ps.executeQuery();
+            while (rs.next()) {
+                categories.add(new Category(rs.getInt("CategoryID"), rs.getString("CategoryName"), rs.getInt("CategoryStatus")));
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return categories;
+    }
 
     public boolean isCategoryNameExists(String categoryName, Integer excludeId) {
         xSql = "SELECT COUNT(*) FROM Categories WHERE CategoryName = ? AND CategoryID != COALESCE(?, -1)";

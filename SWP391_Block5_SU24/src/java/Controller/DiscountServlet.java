@@ -1,5 +1,7 @@
 package Controller;
 
+import entity.Brand;
+import entity.Category;
 import entity.Discount;
 import entity.Product;
 import java.io.IOException;
@@ -12,6 +14,8 @@ import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import model.DAOBrand;
+import model.DAOCategory;
 import model.DAODiscount;
 import model.DAOProduct;
 
@@ -21,12 +25,16 @@ public class DiscountServlet extends HttpServlet {
 
     private DAODiscount daoDiscount;
     private DAOProduct daoProducts;
+    private DAOCategory DAOCategory;
+    private DAOBrand DAOBrand ; 
 
     @Override
     public void init() throws ServletException {
         // Initialize DAODiscount and DAOProducts
         daoDiscount = new DAODiscount();
         daoProducts = new DAOProduct();
+        DAOCategory= new DAOCategory() ; 
+        DAOBrand = new DAOBrand() ; 
     }
 
     @Override
@@ -79,6 +87,8 @@ public class DiscountServlet extends HttpServlet {
             } else {
                 response.sendRedirect("error.jsp");
             }
+            
+            
         } catch (NumberFormatException e) {
             e.printStackTrace();
             response.sendRedirect("error.jsp");
@@ -151,16 +161,26 @@ public class DiscountServlet extends HttpServlet {
                 productMap.put(productId, product);
             }
         }
+        
+          List<Brand> brands = DAOBrand.getAllBrandbystatus(1); // Lấy danh sách các Brand có trạng thái = 1
+          List<Category> categories = DAOCategory.getAllbystatus(1); // Lấy danh sách các Category có trạng thái = 1
 
-        request.setAttribute("discountList", discountList);
-        request.setAttribute("productMap", productMap);
-        request.setAttribute("currentPage", page);
-        request.setAttribute("totalPages", totalPages);
-        request.getRequestDispatcher("manager/Discount.jsp").forward(request, response);
+
+            request.setAttribute("discountList", discountList);
+            request.setAttribute("productMap", productMap);
+            request.setAttribute("currentPage", page);
+            request.setAttribute("totalPages", totalPages);
+            request.setAttribute("brands", brands); // Thêm danh sách Brand vào request
+            request.setAttribute("categories", categories); // Thêm danh sách Category vào request
+            request.getRequestDispatcher("manager/Discount.jsp").forward(request, response);
+            
+            System.out.println("brands :" + brands);
+            System.out.println("categories : " + categories);
+
 
     } catch (Exception e) {
         e.printStackTrace();
-        response.sendRedirect("error.jsp");
+        response.sendRedirect("errorhandleListDiscounts.jsp");
     }
 }
 
