@@ -66,7 +66,7 @@
 						<div class="col-sm-12 text-left menu-1">
 							<ul>
 								<li><a href="index.jsp">Home</a></li>
-								<li class="has-dropdown">
+								<!-- <li class="has-dropdown">
 									<a href="men.html">Men</a>
 									<ul class="dropdown">
 										<li><a href="product-detail.html">Product Detail</a></li>
@@ -75,11 +75,14 @@
 										<li><a href="order-complete.html">Order Complete</a></li>
 										<li><a href="add-to-wishlist.html">Wishlist</a></li>
 									</ul>
-								</li>
+								</li> -->
 								<li class="active"><a href="products.jsp">Products</a></li>
 								<li><a href="about.html">About</a></li>
 								<li><a href="contact.html">Contact</a></li>
-								<li class="cart"><a href="cart.html"><i class="icon-shopping-cart"></i> Cart [0]</a></li>
+								<%
+									Integer cartItemsCount = (Integer) request.getAttribute("cartItemsCount");
+								%>
+								<li class="cart"><a href="shoppingCart"><i class="icon-shopping-cart"></i> Cart [<%=cartItemsCount %>]</a></li>
 							</ul>
 						</div>
 					</div>
@@ -142,8 +145,11 @@
 				</div>
 				<div class="row">
 					<div class="col-lg-7">
-						<form method="post" class="colorlib-form">
+						<form id="billingDetailsForm" method="post" class="colorlib-form">
 							<h2>Billing Details</h2>
+
+						<% CheckoutItem billingDetails = (CheckoutItem) request.getAttribute("billingDetails");
+						   Double shippingFee = (Double) request.getAttribute("shippingFee"); %>
 		              	<div class="row">
 			               <!-- <div class="col-md-12">
 			                  <div class="form-group">
@@ -178,14 +184,16 @@
 								<div class="col-md-12">
 									<div class="form-group">
 										<label for="fullname">Full Name</label>
-			                    	<input type="text" name="fullname" id="fullname" class="form-control" placeholder="Fullname">
+			                    	<input type="text" name="fullname" id="fullname" class="form-control" placeholder="Fullname"
+										   value="<%=billingDetails.getFullName() %>" style="color:black; font-weight: bold;" required>
 			                  </div>
 			               </div>
 
 			               <div class="col-md-12">
 									<div class="form-group">
 										<label for="fname">Address</label>
-			                    	<input type="text" id="address" class="form-control" placeholder="Enter Your Address">
+			                    	<input type="text" id="address" class="form-control" placeholder="Enter Your Address"
+										   value="<%=billingDetails.getAddress() %>" style="color:black; font-weight: bold;" required>
 			                  </div>
 			                  <!-- <div class="form-group">
 			                    	<input type="text" id="address2" class="form-control" placeholder="Second Address">
@@ -215,13 +223,15 @@
 								<div class="col-md-6">
 									<div class="form-group">
 										<label for="email">E-mail Address</label>
-										<input type="text" name="email" id="email" class="form-control" placeholder="E-mail address">
+										<input type="text" name="email" id="email" class="form-control" placeholder="E-mail address"
+											   value="<%=billingDetails.getEmail() %>" style="color:black; font-weight: bold;">
 									</div>
 								</div>
 								<div class="col-md-6">
 									<div class="form-group">
 										<label for="Phone">Phone Number</label>
-										<input type="number" name="phoneNumber" id="phoneNumber" class="form-control" placeholder="Phone number">
+										<input type="number" name="phoneNumber" id="phoneNumber" class="form-control" placeholder="Phone number"
+											   value="<%=billingDetails.getPhoneNumber() %>" style="color:black; font-weight: bold;" required>
 									</div>
 								</div>
 
@@ -240,7 +250,12 @@
 
 					<div class="row">
 						<div class="col-md-4">
-							<p class="text-end"><a href="#" class="btn btn-primary">Return to cart</a></p>
+							<% if (shippingFee == 15.0) { %>
+								<p class="text-end"><a href="shoppingCart?shippingType=fastRadioBox" class="btn btn-primary">Return to cart</a></p>
+							<% } else if (shippingFee == 0.0) { %>
+								<p class="text-end"><a href="shoppingCart?shippingType=ecoRadioBox" class="btn btn-primary">Return to cart</a></p>
+							<% } %>
+							
 						</div>
 
 						<div class="col-md-4">
@@ -248,7 +263,8 @@
 						</div>
 
 						<div class="col-md-4">
-							<p class="text-end"><a href="#" class="btn btn-primary">Place an order</a></p>
+							<!-- <p class="text-end"><a href="#" class="btn btn-primary">Place an order</a></p> -->
+							<p class="text-end"><button onclick="document.getElementById('billingDetailsForm').submit()" class="btn btn-primary">Place an order</button></p>
 						</div>
 					</div>
 
@@ -263,7 +279,7 @@
 										<li>
 											<% 
 												List<ShoppingCartItem> cartItems = (List<ShoppingCartItem>) request.getAttribute("cartItems");
-							
+												
 											%>
 											
 											<ul>
@@ -281,8 +297,10 @@
 													subTotal += (cartItem.getPrice() - ((cartItem.getPrice() * cartItem.getDiscountAmount()) / 100)) * cartItem.getQuantity();
 											   } %>
 										<li><span>Subtotal</span> <span>$<%=subTotal %></span></li>
-										<li><span>Shipping</span> <span>$0.00</span></li>
-										<li><span>Order Total</span> <span>$180.00</span></li>
+
+
+										<li><span>Shipping</span> <span>$<%=shippingFee %></span></li>
+										<li><span>Order Total</span> <span>$<%=subTotal + shippingFee %></span></li>
 									</ul>
 								</div>
 						   </div>
