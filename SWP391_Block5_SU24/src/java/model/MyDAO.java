@@ -8,6 +8,8 @@ import model.DBConnect;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  *
@@ -59,6 +61,53 @@ public class MyDAO extends DBConnect {
      }
   }
   
-  
+  // Method to update discount amounts by both CategoryID and BrandID
+    public boolean updateDiscountByBoth(int categoryID, int brandID, double newDiscountAmount) {
+        boolean isSuccess = false;
+        
+        try {
+            // First, find all products with the given CategoryID and BrandID
+            String sqlFindProducts = "SELECT ProductID FROM Products WHERE CategoryID = ? AND BrandID = ?";
+            ps = con.prepareStatement(sqlFindProducts);
+            ps.setInt(1, categoryID);
+            ps.setInt(2, brandID);
+            rs = ps.executeQuery();
+
+            List<Integer> productIDs = new ArrayList<>();
+            while (rs.next()) {
+                productIDs.add(rs.getInt("ProductID"));
+            }
+
+            // If no products found for this CategoryID and BrandID, exit
+            if (productIDs.isEmpty()) {
+                return false;
+            }
+
+            // Now, update discount amounts for these products
+            String sqlUpdateDiscounts = "UPDATE Discounts SET discount_amount = ? WHERE product_id = ?";
+            ps = con.prepareStatement(sqlUpdateDiscounts);
+
+            for (int productID : productIDs) {
+                ps.setDouble(1, newDiscountAmount);
+                ps.setInt(2, productID);
+                ps.addBatch();
+            }
+
+            int[] rowsAffected = ps.executeBatch();
+            isSuccess = (rowsAffected.length > 0);
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            // Close resources
+            try {
+                if (rs != null) rs.close();
+                if (ps != null) ps.close();
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+        return isSuccess;
+    }
 
 }

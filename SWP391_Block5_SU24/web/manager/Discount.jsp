@@ -157,6 +157,9 @@
                         <button type="submit" class="btn btn-primary">Apply Brand Filter</button>
                     </form>
                 </div>
+                
+                  <!-- Add New Discount Button -->
+    <a href="DiscountServlet?action=showaddform" class="btn btn-success">Add New Discount</a>
 
         
         <div class="container mt-4">
