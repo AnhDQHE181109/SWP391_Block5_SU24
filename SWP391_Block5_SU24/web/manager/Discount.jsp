@@ -123,6 +123,41 @@
             </nav>
         </div>
         <!-- Sidebar End -->
+           <div class="container mt-4">
+            <div class="row">
+                <!-- Left Column for Filters -->
+                <div class="col-md-3">
+                    <!-- Category Filter -->
+                    <form action="DiscountServlet" method="get" class="mb-4">
+                        <input type="hidden" name="action" value="filterByCategory">
+                        <h4>Filter by Category</h4>
+                        <div class="mb-3">
+                            <select name="categoryId" class="form-select">
+                                <option value="">All Categories</option>
+                                <c:forEach var="category" items="${categories}">
+                                    <option value="${category.categoryId}">${category.categoryName}</option>
+                                </c:forEach>
+                            </select>
+                        </div>
+                        <button type="submit" class="btn btn-primary">Apply Category Filter</button>
+                    </form>
+
+                    <!-- Brand Filter -->
+                    <form action="DiscountServlet" method="get" class="mb-4">
+                        <input type="hidden" name="action" value="filterByBrand">
+                        <h4>Filter by Brand</h4>
+                        <div class="mb-3">
+                            <select name="brandId" class="form-select">
+                                <option value="">All Brands</option>
+                                <c:forEach var="brand" items="${brands}">
+                                    <option value="${brand.brandId}">${brand.brandName}</option>
+                                </c:forEach>
+                            </select>
+                        </div>
+                        <button type="submit" class="btn btn-primary">Apply Brand Filter</button>
+                    </form>
+                </div>
+
         
         <div class="container mt-4">
             <!-- Header for Discount Management -->

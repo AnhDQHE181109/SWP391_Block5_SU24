@@ -124,6 +124,7 @@ public class DAOProduct extends MyDAO {
     }
     
     
+    
     // Đóng các tài nguyên sau khi sử dụng
     private void closeResources() {
         try {
