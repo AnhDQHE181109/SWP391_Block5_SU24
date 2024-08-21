@@ -1,3 +1,8 @@
+<%@page contentType="text/html" pageEncoding="UTF-8"%>
+<%@taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
+<%@page import = "entity.*" %>
+<%@page import = "java.util.*" %>
+
 <!DOCTYPE HTML>
 <html>
 	<head>
@@ -136,7 +141,7 @@
 					</div>
 				</div>
 				<div class="row">
-					<div class="col-lg-8">
+					<div class="col-lg-7">
 						<form method="post" class="colorlib-form">
 							<h2>Billing Details</h2>
 		              	<div class="row">
@@ -172,8 +177,8 @@
 
 								<div class="col-md-12">
 									<div class="form-group">
-										<label for="companyname">Company Name</label>
-			                    	<input type="text" id="companyname" class="form-control" placeholder="Company Name">
+										<label for="fullname">Full Name</label>
+			                    	<input type="text" name="fullname" id="fullname" class="form-control" placeholder="Fullname">
 			                  </div>
 			               </div>
 
@@ -182,12 +187,12 @@
 										<label for="fname">Address</label>
 			                    	<input type="text" id="address" class="form-control" placeholder="Enter Your Address">
 			                  </div>
-			                  <div class="form-group">
+			                  <!-- <div class="form-group">
 			                    	<input type="text" id="address2" class="form-control" placeholder="Second Address">
-			                  </div>
+			                  </div> -->
 			               </div>
 			            
-			               <div class="col-md-12">
+			               <!-- <div class="col-md-12">
 									<div class="form-group">
 										<label for="companyname">Town/City</label>
 			                    	<input type="text" id="towncity" class="form-control" placeholder="Town or City">
@@ -205,53 +210,77 @@
 										<label for="lname">Zip/Postal Code</label>
 										<input type="text" id="zippostalcode" class="form-control" placeholder="Zip / Postal">
 									</div>
-								</div>
+								</div> -->
 							
 								<div class="col-md-6">
 									<div class="form-group">
 										<label for="email">E-mail Address</label>
-										<input type="text" id="email" class="form-control" placeholder="State Province">
+										<input type="text" name="email" id="email" class="form-control" placeholder="E-mail address">
 									</div>
 								</div>
 								<div class="col-md-6">
 									<div class="form-group">
 										<label for="Phone">Phone Number</label>
-										<input type="text" id="zippostalcode" class="form-control" placeholder="">
+										<input type="number" name="phoneNumber" id="phoneNumber" class="form-control" placeholder="Phone number">
 									</div>
 								</div>
 
-								<div class="col-md-12">
+								<!-- <div class="col-md-12">
 									<div class="form-group">
 										<div class="radio">
 										  <label><input type="radio" name="optradio"> Create an Account? </label>
 										  <label><input type="radio" name="optradio"> Ship to different address</label>
 										</div>
 									</div>
-								</div>
+								</div> -->
+
 		               </div>
+
 		            </form>
+
+					<div class="row">
+						<div class="col-md-4">
+							<p class="text-end"><a href="#" class="btn btn-primary">Return to cart</a></p>
+						</div>
+
+						<div class="col-md-4">
+							
+						</div>
+
+						<div class="col-md-4">
+							<p class="text-end"><a href="#" class="btn btn-primary">Place an order</a></p>
+						</div>
 					</div>
 
-					<div class="col-lg-4">
+					</div>
+
+					<div class="col-lg-5">
 						<div class="row">
 							<div class="col-md-12">
 								<div class="cart-detail">
 									<h2>Cart Total</h2>
 									<ul>
 										<li>
-											<span>Subtotal</span> <span>$100.00</span>
 											<% 
 												List<ShoppingCartItem> cartItems = (List<ShoppingCartItem>) request.getAttribute("cartItems");
 							
 											%>
+											
 											<ul>
 												<% if (cartItems != null) { 
-													for (ShoppingCartItem cartItem : cartItems) { %>
-												<li><span>1 x Product Name</span> <span>$99.00</span></li>
-												<% } %>
+													for (ShoppingCartItem cartItem : cartItems) {
+														double finalPrice = cartItem.getPrice() - ((cartItem.getPrice() * cartItem.getDiscountAmount()) / 100); %>
+												<li><span style="width: 50px"><img width="50px" height="50px" class="product-img" src="${pageContext.request.contextPath}/<%=cartItem.getImageURL() %>"></span> <span style="width: calc(100% - 150px); padding-bottom: 14px; padding-top: 10px;"><%=cartItem.getQuantity() %> x <%=cartItem.getProductName() %> - <%=cartItem.getColor() %> - <%=cartItem.getSize() %></span> <span style="padding-bottom: 14px; padding-top: 10px;">$<%=finalPrice * cartItem.getQuantity() %></span></li>
+												<%  } 
+												   } %>
 												<!-- <li><span>1 x Product Name</span> <span>$78.00</span></li> -->
 											</ul>
 										</li>
+										<% double subTotal = 0.0;
+											   for (ShoppingCartItem cartItem : cartItems) {
+													subTotal += (cartItem.getPrice() - ((cartItem.getPrice() * cartItem.getDiscountAmount()) / 100)) * cartItem.getQuantity();
+											   } %>
+										<li><span>Subtotal</span> <span>$<%=subTotal %></span></li>
 										<li><span>Shipping</span> <span>$0.00</span></li>
 										<li><span>Order Total</span> <span>$180.00</span></li>
 									</ul>
@@ -260,7 +289,7 @@
 
 						   <div class="w-100"></div>
 
-						   <div class="col-md-12">
+						   <!-- <div class="col-md-12">
 								<div class="cart-detail">
 									<h2>Payment Method</h2>
 									<div class="form-group">
@@ -292,13 +321,9 @@
 										</div>
 									</div>
 								</div>
-							</div>
+							</div> -->
 						</div>
-						<div class="row">
-							<div class="col-md-12 text-center">
-								<p><a href="#" class="btn btn-primary">Place an order</a></p>
-							</div>
-						</div>
+						
 					</div>
 				</div>
 			</div>

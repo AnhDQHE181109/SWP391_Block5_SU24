@@ -102,6 +102,18 @@ public class CheckoutController extends HttpServlet {
         response.setContentType("text/html;charset=UTF-8");
         PrintWriter out = response.getWriter();
 
+        HttpSession session = request.getSession();
+        Account account = (Account) session.getAttribute("account");
+        if (account == null) {
+            out.println("<script type=\"text/javascript\">");
+            out.println("alert('You must be logged in to do that!')");
+            out.println("location.href=\"login.jsp\"");
+            out.println("</script>");
+            return;
+        }
+        int accountID = account.getAccountID();
+        
+            
     }
 
     /**
