@@ -133,7 +133,7 @@
                         </div>
                     </div>
                 </div>
-                <div class="row row-pb-lg wishlist-table"></div>
+                                
                 <div class="row row-pb-lg wishlist-table">
                     <div class="col-md-12">
                         <div class="product-name d-flex wishlist-table">
@@ -162,7 +162,7 @@
                                 <div class="product-img" style="background-image: url(${pageContext.request.contextPath}/<%= product.getImageURL() %>);">
                                 </div>
                                 <div class="display-tc">
-                                    <a href="${pageContext.request.contextPath}/ProductDetailsController?productID=<%=product.getProductId() %>"><h3><%= product.getProductName() %></h3></a>
+                                    <h3><%= product.getProductName() %></h3></a>
                                 </div>
                             </div>
 
