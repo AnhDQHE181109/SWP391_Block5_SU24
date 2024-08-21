@@ -212,8 +212,8 @@ GO
 INSERT INTO Accounts (Username, Fullname, Hash, PhoneNumber, Email, Address, Role, Salt, Status)
 VALUES 
 ('johndoe', 'John Doe', 'NqmCu0KLyfdegTojOpWmaAC8gODT1EfFxKtyJ9tfwUDneUmaWlo7TiaWJYzGnaWaYcWsUtytBL/iqltP+MLvVA==', '0984567890', 'johndoe@example.com', '123 Main St, Anytown, USA', 1, 'jMxFrhzK+pkZRnCz7jEkew==',1),
-('janedoe', 'Jane Doe', 'NqmCu0KLyfdegTojOpWmaAC8gODT1EfFxKtyJ9tfwUDneUmaWlo7TiaWJYzGnaWaYcWsUtytBL/iqltP+MLvVA==', '0936543210', 'janedoe@example.com', '456 Elm St, Othertown, USA', 2, 'jMxFrhzK+pkZRnCz7jEkew==',0),
-('alice', 'Alice Doe', 'NqmCu0KLyfdegTojOpWmaAC8gODT1EfFxKtyJ9tfwUDneUmaWlo7TiaWJYzGnaWaYcWsUtytBL/iqltP+MLvVA==', '0971234567', 'alice@example.com', '789 Maple St, Sometown, USA', 3, 'jMxFrhzK+pkZRnCz7jEkew==',0),
+('janedoe', 'Jane Doe', 'NqmCu0KLyfdegTojOpWmaAC8gODT1EfFxKtyJ9tfwUDneUmaWlo7TiaWJYzGnaWaYcWsUtytBL/iqltP+MLvVA==', '0936543210', 'janedoe@example.com', '456 Elm St, Othertown, USA', 2, 'jMxFrhzK+pkZRnCz7jEkew==',1),
+('alice', 'Alice Doe', 'NqmCu0KLyfdegTojOpWmaAC8gODT1EfFxKtyJ9tfwUDneUmaWlo7TiaWJYzGnaWaYcWsUtytBL/iqltP+MLvVA==', '0971234567', 'alice@example.com', '789 Maple St, Sometown, USA', 3, 'jMxFrhzK+pkZRnCz7jEkew==',1),
 ('long', 'Long Vu', 'NqmCu0KLyfdegTojOpWmaAC8gODT1EfFxKtyJ9tfwUDneUmaWlo7TiaWJYzGnaWaYcWsUtytBL/iqltP+MLvVA==', '0961234567', 'long@example.com', '789 Maple St, Sometown, USA', 2, 'jMxFrhzK+pkZRnCz7jEkew==',0);
 
 
@@ -235,9 +235,9 @@ VALUES
 -- Insert data into Products
 INSERT INTO Products (ProductName, Origin, Material, Price, TotalQuantity, CategoryID, BrandID, ImageID, ProductStatus)
 VALUES 
-('Air Max 2021', 'Vietnam', 'Leather', 150.00, 100, 1, 1, 2, 0),
-('Ultraboost 21', 'Germany', 'Synthetic', 180.00, 200, 1, 2, 3, 0),
-('Suede Classic', 'Vietnam', 'Suede', 120.00, 150, 1, 3, 4, 0);
+('Air Max 2021', 'Vietnam', 'Leather', 150.00, 100, 1, 1, 2, 1),
+('Ultraboost 21', 'Germany', 'Synthetic', 180.00, 200, 1, 2, 3, 1),
+('Suede Classic', 'Vietnam', 'Suede', 120.00, 150, 1, 3, 4, 1);
 
 -- Insert data into ProductStockImport
 INSERT INTO ProductStockImport (AccountID, ImportDate,ImportAction,SupplierName)
