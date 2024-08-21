@@ -69,7 +69,15 @@ public class DiscountServlet extends HttpServlet {
             showAddForm(request, response);
         } else if ("search".equals(action)) {
             handleSearchDiscounts(request, response);
-        } else {
+        } else if ("filterByCategory".equals(action)) {
+            filterByCategory(request, response);
+        }else if ("filterByBrand".equals(action)) {
+            filterByBrandID(request, response);
+         }else if ("showaddform".equals(action)) {
+            showaddform(request, response);
+         }else if ("updateby".equals(action)) {
+            updateby(request, response);
+         }else {
             response.sendRedirect("errorllisy.jsp");
         }
     }
@@ -250,6 +258,13 @@ public class DiscountServlet extends HttpServlet {
             request.setAttribute("productMap", productMap);
             request.setAttribute("currentPage", page);
             request.setAttribute("totalPages", totalPages);
+            
+                        List<Brand> brands = DAOBrand.getAllBrandbystatus(1);
+            List<Category> categories = DAOCategory.getAllbystatus(1);
+
+            request.setAttribute("brands", brands);
+            request.setAttribute("categories", categories);
+            
             request.getRequestDispatcher("manager/Discount.jsp").forward(request, response);
 
         } catch (Exception e) {
@@ -257,4 +272,173 @@ public class DiscountServlet extends HttpServlet {
             response.sendRedirect("error.jsp");
         }
     }
+
+private void filterByCategory(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+    try {
+        int categoryId = Integer.parseInt(request.getParameter("categoryId"));
+
+        // Lấy toàn bộ danh sách giảm giá cho categoryId
+        List<Discount> allDiscounts = daoDiscount.getDiscountsByCategoryID(categoryId);
+
+        int page = 1;
+        String pageStr = request.getParameter("page");
+        if (pageStr != null && !pageStr.isEmpty()) {
+            page = Integer.parseInt(pageStr);
+        }
+
+        int pageSize = 10; // Số lượng mục trên mỗi trang
+        int totalItems = allDiscounts.size(); // Tổng số mục
+        int totalPages = (int) Math.ceil((double) totalItems / pageSize);
+
+        // Tính toán vị trí bắt đầu và kết thúc của trang hiện tại
+        int startIndex = (page - 1) * pageSize;
+        int endIndex = Math.min(startIndex + pageSize, totalItems);
+
+        // Lấy danh sách giảm giá cho trang hiện tại
+        List<Discount> paginatedDiscounts = allDiscounts.subList(startIndex, endIndex);
+
+        Map<Integer, Product> productMap = new HashMap<>();
+        Set<Integer> productIds = new HashSet<>();
+        for (Discount discount : paginatedDiscounts) {
+            productIds.add(discount.getProductID());
+        }
+
+        for (Integer productId : productIds) {
+            Product product = daoProducts.getProductById(productId);
+            if (product != null) {
+                productMap.put(productId, product);
+            }
+        }
+
+        request.setAttribute("discountList", paginatedDiscounts);
+        request.setAttribute("productMap", productMap);
+        request.setAttribute("currentPage", page);
+        request.setAttribute("totalPages", totalPages);
+
+        List<Brand> brands = DAOBrand.getAllBrandbystatus(1);
+        List<Category> categories = DAOCategory.getAllbystatus(1);
+
+        request.setAttribute("brands", brands);
+        request.setAttribute("categories", categories);
+        request.getRequestDispatcher("manager/Discount.jsp").forward(request, response);
+    } catch (Exception e) {
+        e.printStackTrace();
+        response.sendRedirect("errorfilterByCategory.jsp");
+    }
+}
+
+    private void filterByBrandID(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        try {
+            int brandId = Integer.parseInt(request.getParameter("brandId"));
+
+            // Get the list of discounts for the selected brand
+            List<Discount> allDiscounts = daoDiscount.filterByBrandID(brandId);
+
+            int page = 1;
+            String pageStr = request.getParameter("page");
+            if (pageStr != null && !pageStr.isEmpty()) {
+                page = Integer.parseInt(pageStr);
+            }
+
+            int pageSize = 10; // Number of items per page
+            int totalItems = allDiscounts.size(); // Total number of items
+            int totalPages = (int) Math.ceil((double) totalItems / pageSize);
+
+            // Calculate start and end index for current page
+            int startIndex = (page - 1) * pageSize;
+            int endIndex = Math.min(startIndex + pageSize, totalItems);
+
+            // Get the sublist for the current page
+            List<Discount> paginatedDiscounts = allDiscounts.subList(startIndex, endIndex);
+
+            Map<Integer, Product> productMap = new HashMap<>();
+            Set<Integer> productIds = new HashSet<>();
+            for (Discount discount : paginatedDiscounts) {
+                productIds.add(discount.getProductID());
+            }
+
+            for (Integer productId : productIds) {
+                Product product = daoProducts.getProductById(productId);
+                if (product != null) {
+                    productMap.put(productId, product);
+                }
+            }
+
+            request.setAttribute("discountList", paginatedDiscounts);
+            request.setAttribute("productMap", productMap);
+            request.setAttribute("currentPage", page);
+            request.setAttribute("totalPages", totalPages);
+
+            List<Brand> brands = DAOBrand.getAllBrandbystatus(1);
+            List<Category> categories = DAOCategory.getAllbystatus(1);
+
+            request.setAttribute("brands", brands);
+            request.setAttribute("categories", categories);
+            request.getRequestDispatcher("manager/Discount.jsp").forward(request, response);
+        } catch (Exception e) {
+            e.printStackTrace();
+            response.sendRedirect("errorfilterByBrandID.jsp");
+        }
+    }
+
+ private void showaddform(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+            try {
+                    List<Product> productList = daoProducts.getAllProducts();
+                List<Brand> brands = DAOBrand.getAllBrandbystatus(1); // Lấy danh sách các Brand có trạng thái = 1
+                List<Category> categories = DAOCategory.getAllbystatus(1); // Lấy danh sách các Category có trạng thái = 1
+
+                    request.setAttribute("productList", productList);
+                    request.setAttribute("brands", brands);
+                    request.setAttribute("categories", categories);
+                    request.getRequestDispatcher("manager/addform.jsp").forward(request, response);
+                } catch (Exception e) {
+                    e.printStackTrace();
+                    response.sendRedirect("errorhandleListDiscounts.jsp");
+                }
+            }
+
+
+ private void updateby(HttpServletRequest request, HttpServletResponse response) throws IOException {
+     try {
+        String brandID = request.getParameter("brand_id");
+        String categoryID = request.getParameter("category_id");
+        double newDiscountAmount = Double.parseDouble(request.getParameter("discount_amount"));
+
+        boolean isSuccess = false;
+
+        if (!brandID.isEmpty() && !categoryID.isEmpty()) {
+            // Both brand and category selected
+            int brandId = Integer.parseInt(brandID);
+            int categoryId = Integer.parseInt(categoryID);
+            isSuccess = daoDiscount.updateDiscountByBoth(categoryId, brandId, newDiscountAmount);
+        } else if (!brandID.isEmpty()) {
+            // Only brand selected
+            int brandId = Integer.parseInt(brandID);
+            isSuccess = daoDiscount.updateDiscountByBrand(brandId, newDiscountAmount);
+        } else if (!categoryID.isEmpty()) {
+            // Only category selected
+            int categoryId = Integer.parseInt(categoryID);
+            isSuccess = daoDiscount.updateDiscountByCategory(categoryId, newDiscountAmount);
+        } else {
+            // No brand or category selected
+            response.sendRedirect("errorupdateby.jsp");
+            return;
+        }
+
+        if (isSuccess) {
+            response.sendRedirect("DiscountServlet?action=list");
+        } else {
+            response.sendRedirect("errorupdateby.jsp");
+        }
+    } catch (NumberFormatException e) {
+        e.printStackTrace();
+        response.sendRedirect("errornumber.jsp");
+    } catch (Exception e) {
+        e.printStackTrace();
+        response.sendRedirect("errorupdateby.jsp");
+    }
+}
+
+
+
 }
