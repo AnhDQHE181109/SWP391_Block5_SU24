@@ -76,6 +76,10 @@
         <servlet-name>SearchingController</servlet-name>
         <servlet-class>Controller.SearchingController</servlet-class>
     </servlet>
+    <servlet>
+        <servlet-name>FeedbackController</servlet-name>
+        <servlet-class>Controller.FeedbackController</servlet-class>
+    </servlet>
     <servlet-mapping>
         <servlet-name>LoginController</servlet-name>
         <url-pattern>/LoginController</url-pattern>
@@ -171,5 +175,9 @@
     <servlet-mapping>
         <servlet-name>SearchingController</servlet-name>
         <url-pattern>/SearchingController</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>FeedbackController</servlet-name>
+        <url-pattern>/FeedbackController</url-pattern>
     </servlet-mapping>
 </web-app>
