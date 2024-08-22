@@ -161,8 +161,8 @@ public class CheckoutDAO extends DBConnect {
         ShoppingCartDAO scDAO = new ShoppingCartDAO();
 
         List<ShoppingCartItem> cartItems = scDAO.getCartItemsByAccountID(accountID);
-
-        addCartToOrder(accountID);
+        
+        addToOrders(accountID);
         int orderID = getLatestOrderIDbyAccountID(accountID);
 
         for (ShoppingCartItem cartItem : cartItems) {
@@ -170,11 +170,41 @@ public class CheckoutDAO extends DBConnect {
             int quantity = cartItem.getQuantity();
             double discountedPrice = cartItem.getPrice() - ((cartItem.getPrice() * cartItem.getDiscountAmount()) / 100);
             double salePrice = discountedPrice * quantity;
-            
+
             addToOrderDetails(orderID, stockID, quantity, salePrice);
         }
-        
+
         clearShoppingCart(accountID);
+    }
+
+    public String getFullnameByAccountID(int accountID) {
+
+        String sql = "select AccountID, Fullname\n"
+                + "from Accounts\n"
+                + "where AccountID = ?";
+
+        String fullname = null;
+
+        try {
+            PreparedStatement ps = conn.prepareStatement(sql);
+            ps.setInt(1, accountID);
+
+            ResultSet rs = ps.executeQuery();
+            if (rs.next()) {
+                return rs.getString("Fullname");
+            }
+
+            if (rs != null) {
+                rs.close();
+            }
+            if (ps != null) {
+                ps.close();
+            }
+        } catch (SQLException e) {
+            System.out.println("getFullnameByAccountID(): " + e);
+        }
+
+        return fullname;
     }
 
 }

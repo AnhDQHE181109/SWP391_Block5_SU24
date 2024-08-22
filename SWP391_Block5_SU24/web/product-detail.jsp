@@ -6,7 +6,8 @@
 <!DOCTYPE HTML>
 <html>
 	<head>
-	<title>Footwear - Free Bootstrap 4 Template by Colorlib</title>
+	<% ProductDetails productDetails = (ProductDetails) request.getAttribute("productDetails"); %>
+	<title><%=productDetails.getProductName() %></title>
 	<script src="https://kit.fontawesome.com/c630e9f862.js" crossorigin="anonymous"></script>
    <meta charset="utf-8">
    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
@@ -125,7 +126,6 @@
 		</div>
 
 		<%
-			ProductDetails productDetails = (ProductDetails) request.getAttribute("productDetails");
 			List<ProductStockDetails> productColors = (List<ProductStockDetails>) request.getAttribute("productColors");
 			List<ProductStockDetails> productSizes = (List<ProductStockDetails>) request.getAttribute("productSizes");
 			String selectedColor = (String) request.getAttribute("selectedColor");

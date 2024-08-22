@@ -77,23 +77,32 @@ public class CheckoutController extends HttpServlet {
         }
         int accountID = account.getAccountID();
         
-        String shippingFeeIn = request.getParameter("shippingFee");
-        if (shippingFeeIn == null) {
-            out.println("<script type=\"text/javascript\">");
-            out.println("window.history.go(-1);");
-            out.println("</script>");
-            return;
-        } else {
-            double shippingFee = Double.parseDouble(shippingFeeIn);
-            
-            request.setAttribute("shippingFee", shippingFee);
-        }
+//        String shippingFeeIn = request.getParameter("shippingFee");
+//        if (shippingFeeIn == null) {
+//            out.println("<script type=\"text/javascript\">");
+//            out.println("window.history.go(-1);");
+//            out.println("</script>");
+//            return;
+//        } else {
+//            double shippingFee = Double.parseDouble(shippingFeeIn);
+//            
+//            request.setAttribute("shippingFee", shippingFee);
+//        }
         
         ShoppingCartDAO scDAO = new ShoppingCartDAO();
         ProductDetailsDAO pdDAO = new ProductDetailsDAO();
         CheckoutDAO coDAO = new CheckoutDAO();
         
         int cartItemsCount = pdDAO.getCartItemsCount(accountID);
+        if (cartItemsCount == 0 || !request.getHeader("referer").contains("shoppingCart")) {
+            //Debugging
+            System.out.println("Checkout GET referer: " + request.getHeader("referer"));
+            
+            out.println("<script type=\"text/javascript\">");
+            out.println("window.history.go(-1);");
+            out.println("</script>");
+            return;
+        }
         CheckoutItem billingDetails = coDAO.getBillingDetails(accountID);
         
         List<ShoppingCartItem> cartItems = scDAO.getCartItemsByAccountID(accountID);
@@ -144,11 +153,23 @@ public class CheckoutController extends HttpServlet {
 //            out.println("</script>");
 //            return;
 //        }
+
+        ProductDetailsDAO pdDAO = new ProductDetailsDAO();
+        int cartItemsCount = pdDAO.getCartItemsCount(accountID);
+
+        if (!request.getHeader("referer").contains("CheckoutController") || cartItemsCount == 0) {
+            out.println("<script type=\"text/javascript\">");
+            out.println("location.href=\"home.jsp\"");
+            out.println("</script>");
+            return;
+        }
         
         CheckoutDAO coDAO = new CheckoutDAO();
         
-//        coDAO.addCartToOrder(accountID);
+        String userFullname = coDAO.getFullnameByAccountID(accountID);
+        coDAO.addCartToOrder(accountID);
         
+        request.setAttribute("userFullname", userFullname);
         request.getRequestDispatcher("customer/order-complete.jsp").forward(request, response);
     }
 
