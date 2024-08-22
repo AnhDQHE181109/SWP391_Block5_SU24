@@ -6,7 +6,7 @@
 <!DOCTYPE HTML>
 <html>
 	<head>
-	<title>Footwear - Free Bootstrap 4 Template by Colorlib</title>
+	<title>Cart checkout</title>
    <meta charset="utf-8">
    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 
@@ -42,6 +42,13 @@
 
 	</head>
 	<body>
+
+		<% if (request.getHeader("referer") == null) { %>
+            <script type="text/javascript">
+            window.history.go(-1);
+            </script>
+        <%    return;
+        } %>
 		
 	<div class="colorlib-loader"></div>
 
@@ -185,7 +192,7 @@
 									<div class="form-group">
 										<label for="fullname">Full Name</label>
 			                    	<input type="text" name="fullname" id="fullname" class="form-control" placeholder="Fullname"
-										   value="<%=billingDetails.getFullName() %>" style="color:black; font-weight: bold;" required>
+										   value="<%=billingDetails.getFullName() %>" style="color:black; font-weight: bold;" readonly>
 			                  </div>
 			               </div>
 
@@ -193,7 +200,7 @@
 									<div class="form-group">
 										<label for="fname">Address</label>
 			                    	<input type="text" id="address" class="form-control" placeholder="Enter Your Address"
-										   value="<%=billingDetails.getAddress() %>" style="color:black; font-weight: bold;" required>
+										   value="<%=billingDetails.getAddress() %>" style="color:black; font-weight: bold;" readonly>
 			                  </div>
 			                  <!-- <div class="form-group">
 			                    	<input type="text" id="address2" class="form-control" placeholder="Second Address">
@@ -224,14 +231,14 @@
 									<div class="form-group">
 										<label for="email">E-mail Address</label>
 										<input type="text" name="email" id="email" class="form-control" placeholder="E-mail address"
-											   value="<%=billingDetails.getEmail() %>" style="color:black; font-weight: bold;">
+											   value="<%=billingDetails.getEmail() %>" style="color:black; font-weight: bold;" readonly>
 									</div>
 								</div>
 								<div class="col-md-6">
 									<div class="form-group">
 										<label for="Phone">Phone Number</label>
 										<input type="number" name="phoneNumber" id="phoneNumber" class="form-control" placeholder="Phone number"
-											   value="<%=billingDetails.getPhoneNumber() %>" style="color:black; font-weight: bold;" required>
+											   value="<%=billingDetails.getPhoneNumber() %>" style="color:black; font-weight: bold;" readonly>
 									</div>
 								</div>
 
@@ -250,11 +257,13 @@
 
 					<div class="row">
 						<div class="col-md-4">
-							<% if (shippingFee == 15.0) { %>
+							<!-- <% //if (shippingFee == 15.0) { %>
 								<p class="text-end"><a href="shoppingCart?shippingType=fastRadioBox" class="btn btn-primary">Return to cart</a></p>
-							<% } else if (shippingFee == 0.0) { %>
+							<% //} else if (shippingFee == 0.0) { %>
 								<p class="text-end"><a href="shoppingCart?shippingType=ecoRadioBox" class="btn btn-primary">Return to cart</a></p>
-							<% } %>
+							<% //} %> -->
+
+							<p class="text-end"><a href="shoppingCart" class="btn btn-primary">Return to cart</a></p>
 							
 						</div>
 
@@ -296,11 +305,11 @@
 											   for (ShoppingCartItem cartItem : cartItems) {
 													subTotal += (cartItem.getPrice() - ((cartItem.getPrice() * cartItem.getDiscountAmount()) / 100)) * cartItem.getQuantity();
 											   } %>
-										<li><span>Subtotal</span> <span>$<%=subTotal %></span></li>
+										<!-- <li><span>Subtotal</span> <span>$<%=subTotal %></span></li> -->
 
 
-										<li><span>Shipping</span> <span>$<%=shippingFee %></span></li>
-										<li><span>Order Total</span> <span>$<%=subTotal + shippingFee %></span></li>
+										<!-- <li><span>Shipping</span> <span>$<%=shippingFee %></span></li> -->
+										<li><span>Order Total</span> <span>$<%=subTotal %></span></li>
 									</ul>
 								</div>
 						   </div>
