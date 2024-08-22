@@ -138,16 +138,16 @@ public class CheckoutController extends HttpServlet {
         String email = request.getParameter("email");
         String phoneNumber = request.getParameter("phoneNumber");
         
-        if (fullname == null || address == null || email == null || phoneNumber == null) {
-            out.println("<script type=\"text/javascript\">");
-            out.println("window.history.go(-1);");
-            out.println("</script>");
-            return;
-        }
+//        if (fullname == null || address == null || email == null || phoneNumber == null) {
+//            out.println("<script type=\"text/javascript\">");
+//            out.println("window.history.go(-1);");
+//            out.println("</script>");
+//            return;
+//        }
         
         CheckoutDAO coDAO = new CheckoutDAO();
         
-        coDAO.addCartToOrder(accountID);
+//        coDAO.addCartToOrder(accountID);
         
         request.getRequestDispatcher("customer/order-complete.jsp").forward(request, response);
     }

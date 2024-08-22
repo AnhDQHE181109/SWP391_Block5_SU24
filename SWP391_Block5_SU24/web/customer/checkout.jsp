@@ -145,7 +145,7 @@
 				</div>
 				<div class="row">
 					<div class="col-lg-7">
-						<form id="billingDetailsForm" method="post" class="colorlib-form">
+						<form action="CheckoutController" id="billingDetailsForm" method="post" class="colorlib-form">
 							<h2>Billing Details</h2>
 
 						<% CheckoutItem billingDetails = (CheckoutItem) request.getAttribute("billingDetails");
