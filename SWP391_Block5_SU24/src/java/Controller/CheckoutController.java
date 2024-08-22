@@ -5,6 +5,7 @@
 package Controller;
 
 import entity.Account;
+import entity.CheckoutItem;
 import entity.ShoppingCartItem;
 import java.io.IOException;
 import java.io.PrintWriter;
@@ -14,6 +15,7 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
 import java.util.List;
+import model.CheckoutDAO;
 import model.ProductDetailsDAO;
 import model.ShoppingCartDAO;
 
@@ -75,15 +77,33 @@ public class CheckoutController extends HttpServlet {
         }
         int accountID = account.getAccountID();
         
+        String shippingFeeIn = request.getParameter("shippingFee");
+        if (shippingFeeIn == null) {
+            out.println("<script type=\"text/javascript\">");
+            out.println("window.history.go(-1);");
+            out.println("</script>");
+            return;
+        } else {
+            double shippingFee = Double.parseDouble(shippingFeeIn);
+            
+            request.setAttribute("shippingFee", shippingFee);
+        }
+        
         ShoppingCartDAO scDAO = new ShoppingCartDAO();
         ProductDetailsDAO pdDAO = new ProductDetailsDAO();
+        CheckoutDAO coDAO = new CheckoutDAO();
         
         int cartItemsCount = pdDAO.getCartItemsCount(accountID);
+        CheckoutItem billingDetails = coDAO.getBillingDetails(accountID);
         
         List<ShoppingCartItem> cartItems = scDAO.getCartItemsByAccountID(accountID);
+        
+        //Debugging
+//        System.out.println("Referer: " + request.getHeader("referer"));
 
         request.setAttribute("cartItemsCount", cartItemsCount);
         request.setAttribute("cartItems", cartItems);
+        request.setAttribute("billingDetails", billingDetails);
         
         request.getRequestDispatcher("customer/checkout.jsp").forward(request, response);
     }
@@ -113,7 +133,23 @@ public class CheckoutController extends HttpServlet {
         }
         int accountID = account.getAccountID();
         
-            
+        String fullname = request.getParameter("fullname");
+        String address = request.getParameter("address");
+        String email = request.getParameter("email");
+        String phoneNumber = request.getParameter("phoneNumber");
+        
+        if (fullname == null || address == null || email == null || phoneNumber == null) {
+            out.println("<script type=\"text/javascript\">");
+            out.println("window.history.go(-1);");
+            out.println("</script>");
+            return;
+        }
+        
+        CheckoutDAO coDAO = new CheckoutDAO();
+        
+        coDAO.addCartToOrder(accountID);
+        
+        request.getRequestDispatcher("customer/order-complete.jsp").forward(request, response);
     }
 
     /**

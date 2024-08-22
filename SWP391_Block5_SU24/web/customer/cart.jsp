@@ -384,7 +384,7 @@
                                             </div>
                                         </div>
                                         <div style="padding: 10px">
-                                            <button class="btn btn-success">Continue</button>
+                                            <button onclick="location.href='CheckoutController?shippingFee=<%=shippingFee %>'" class="btn btn-success">Continue</button>
                                         </div>
                                     </div>
                                 </div>

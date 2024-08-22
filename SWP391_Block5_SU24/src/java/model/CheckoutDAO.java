@@ -18,34 +18,26 @@ import java.util.List;
  */
 public class CheckoutDAO extends DBConnect {
 
-    public List<CheckoutItem> getCartItems(int accountID) {
+    public CheckoutItem getBillingDetails(int accountID) {
 
-        String sql = "select p.ProductID, s.StockID, p.ProductName, Color, Size, Price, quantity, discount_amount, ImageURL\n"
-                + "from Stock s, Products p, Cart cart, ProductImages pi, Discounts dis\n"
-                + "where s.ProductID = p.ProductID and s.StockID = cart.StockID and\n"
-                + "pi.StockID = s.StockID and p.ProductID = dis.product_id and cart.AccountID = ?";
+        String sql = "select Fullname, Address, Email, PhoneNumber\n"
+                + "from Accounts\n"
+                + "where AccountID = ?";
 
-        ShoppingCartItem cartItem = null;
-        List<CheckoutItem> cartItems = new ArrayList<>();
+        CheckoutItem checkoutItem = null;
 
         try {
             PreparedStatement ps = conn.prepareStatement(sql);
             ps.setInt(1, accountID);
 
             ResultSet rs = ps.executeQuery();
-            while (rs.next()) {
-                int productID = rs.getInt("ProductID");
-                int stockID = rs.getInt("StockID");
-                String productName = rs.getString("ProductName");
-                String color = rs.getString("Color");
-                int size = rs.getInt("Size");
-                double price = rs.getDouble("Price");
-                int quantity = rs.getInt("quantity");
-                double discountAmount = rs.getDouble("discount_amount");
-                String imageURL = rs.getString("ImageURL");
+            if (rs.next()) {
+                String fullname = rs.getString("Fullname");
+                String address = rs.getString("Address");
+                String email = rs.getString("Email");
+                String phoneNumber = rs.getString("PhoneNumber");
 
-                cartItem = new ShoppingCartItem(productID, stockID, productName, color, size, price, quantity, discountAmount, imageURL);
-                cartItems.add(cartItem);
+                checkoutItem = new CheckoutItem(fullname, address, email, phoneNumber);
             }
 
             if (rs != null) {
@@ -55,10 +47,134 @@ public class CheckoutDAO extends DBConnect {
                 ps.close();
             }
         } catch (SQLException e) {
-            System.out.println("getCartItemsByAccountID(): " + e);
+            System.out.println("getBillingDetails(): " + e);
         }
 
-        return cartItems;
+        return checkoutItem;
+    }
+
+    public void addToOrders(int accountID) {
+
+        String sql = "insert into Orders(AccountID, OrderDate, Status)\n"
+                + "values (?, getdate(), 0)";
+
+        try {
+            PreparedStatement ps = conn.prepareStatement(sql);
+            ps.setInt(1, accountID);
+
+            ResultSet rs = ps.executeQuery();
+
+            if (rs != null) {
+                rs.close();
+            }
+            if (ps != null) {
+                ps.close();
+            }
+        } catch (SQLException e) {
+            System.out.println("addToOrders(): " + e);
+        }
+
+    }
+
+    public int getLatestOrderIDbyAccountID(int accountID) {
+
+        String sql = "select top 1 OrderID, AccountID\n"
+                + "from Orders\n"
+                + "where AccountID = ?\n"
+                + "order by OrderID desc";
+
+        int orderID = -1;
+
+        try {
+            PreparedStatement ps = conn.prepareStatement(sql);
+            ps.setInt(1, accountID);
+
+            ResultSet rs = ps.executeQuery();
+            if (rs.next()) {
+                return rs.getInt("OrderID");
+            }
+
+            if (rs != null) {
+                rs.close();
+            }
+            if (ps != null) {
+                ps.close();
+            }
+        } catch (SQLException e) {
+            System.out.println("getLatestOrderIDbyAccountID(): " + e);
+        }
+
+        return orderID;
+    }
+
+    public void addToOrderDetails(int orderID, int stockID, int quantity, double salePrice) {
+
+        String sql = "insert into OrderDetails(OrderID, StockID, Quantity, SalePrice)\n"
+                + "values (?, ?, ?, ?)";
+
+        try {
+            PreparedStatement ps = conn.prepareStatement(sql);
+            ps.setInt(1, orderID);
+            ps.setInt(2, stockID);
+            ps.setInt(3, quantity);
+            ps.setDouble(4, salePrice);
+
+            ResultSet rs = ps.executeQuery();
+
+            if (rs != null) {
+                rs.close();
+            }
+            if (ps != null) {
+                ps.close();
+            }
+        } catch (SQLException e) {
+            System.out.println("addToOrderDetails(): " + e);
+        }
+
+    }
+
+    public void clearShoppingCart(int accountID) {
+
+        String sql = "delete\n"
+                + "from Cart\n"
+                + "where AccountID = ?";
+
+        try {
+            PreparedStatement ps = conn.prepareStatement(sql);
+            ps.setInt(1, accountID);
+
+            ResultSet rs = ps.executeQuery();
+
+            if (rs != null) {
+                rs.close();
+            }
+            if (ps != null) {
+                ps.close();
+            }
+        } catch (SQLException e) {
+            System.out.println("clearShoppingCart(): " + e);
+        }
+
+    }
+
+    public void addCartToOrder(int accountID) {
+        ShoppingCartDAO scDAO = new ShoppingCartDAO();
+
+        List<ShoppingCartItem> cartItems = scDAO.getCartItemsByAccountID(accountID);
+
+        addCartToOrder(accountID);
+        int orderID = getLatestOrderIDbyAccountID(accountID);
+
+        for (ShoppingCartItem cartItem : cartItems) {
+            int stockID = cartItem.getStockID();
+            int quantity = cartItem.getQuantity();
+            double discountedPrice = cartItem.getPrice() - ((cartItem.getPrice() * cartItem.getDiscountAmount()) / 100);
+            double salePrice = discountedPrice * quantity;
+            
+            addToOrderDetails(orderID, stockID, quantity, salePrice);
+        }
+        
+        clearShoppingCart(accountID);
     }
 
 }
