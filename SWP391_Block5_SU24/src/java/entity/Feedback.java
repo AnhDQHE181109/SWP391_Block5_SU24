@@ -16,6 +16,7 @@ public class Feedback {
     private int accountID;
     private String username;
     private String color;
+    private int StockID ; 
     private int size;
     private int rating;
     private String comment;
@@ -35,7 +36,25 @@ public class Feedback {
 //        this.rating = rating;
 //        this.comment = comment;
 //        this.createdAt = createdAt;
-//    }
+//    } 
+
+    public Feedback(int productID, int accountID, String username, String color, int StockID, int size, int rating, String comment, Date createdAt, int feedbackId, int customerId) {
+        this.productID = productID;
+        this.accountID = accountID;
+        this.username = username;
+        this.color = color;
+        this.StockID = StockID;
+        this.size = size;
+        this.rating = rating;
+        this.comment = comment;
+        this.createdAt = createdAt;
+        this.feedbackId = feedbackId;
+        this.customerId = customerId;
+    }
+
+
+    
+    
 
     public Feedback(int productID, int accountID, String username, String color, int size, int rating, String comment, Date createdAt) {
         this.productID = productID;
@@ -136,6 +155,21 @@ public class Feedback {
     public void setUsername(String username) {
         this.username = username;
     }
+
+    public int getStockID() {
+        return StockID;
+    }
+
+    public void setStockID(int StockID) {
+        this.StockID = StockID;
+    }
+
+    @Override
+    public String toString() {
+        return "Feedback{" + "productID=" + productID + ", accountID=" + accountID + ", username=" + username + ", color=" + color + ", StockID=" + StockID + ", size=" + size + ", rating=" + rating + ", comment=" + comment + ", createdAt=" + createdAt + ", feedbackId=" + feedbackId + ", customerId=" + customerId + '}';
+    }
+
+
     
     
 }
