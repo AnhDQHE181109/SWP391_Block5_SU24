@@ -1,5 +1,6 @@
 package Controller;
 
+import entity.Account;
 import entity.Brand;
 import entity.Category;
 import entity.Discount;
@@ -14,6 +15,7 @@ import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import jakarta.servlet.http.HttpSession;
 import model.DAOBrand;
 import model.DAOCategory;
 import model.DAODiscount;
@@ -39,6 +41,10 @@ public class DiscountServlet extends HttpServlet {
 
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        
+        
+        
+        
         String action = request.getParameter("action");
 
         switch (action) {
@@ -59,6 +65,19 @@ public class DiscountServlet extends HttpServlet {
 
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        
+        
+            HttpSession session = request.getSession();
+    Account account = (Account) session.getAttribute("account");
+    if (account == null) {
+        response.sendError(HttpServletResponse.SC_FORBIDDEN, "You do not have permission to access this page.");
+        return;
+    }
+    if (account.getRole() == 1) {
+        response.sendError(HttpServletResponse.SC_FORBIDDEN, "You do not have permission to access this page.");
+        return;
+    }
+        
         String action = request.getParameter("action");
 
         if ("list".equals(action)) {
@@ -170,8 +189,8 @@ public class DiscountServlet extends HttpServlet {
             }
         }
         
-          List<Brand> brands = DAOBrand.getAllBrandbystatus(1); // Lấy danh sách các Brand có trạng thái = 1
-          List<Category> categories = DAOCategory.getAllbystatus(1); // Lấy danh sách các Category có trạng thái = 1
+          List<Brand> brands = DAOBrand.getAllBrandbystatus(0); // Lấy danh sách các Brand có trạng thái = 1
+          List<Category> categories = DAOCategory.getAllbystatus(0); // Lấy danh sách các Category có trạng thái = 1
 
 
             request.setAttribute("discountList", discountList);
@@ -259,8 +278,8 @@ public class DiscountServlet extends HttpServlet {
             request.setAttribute("currentPage", page);
             request.setAttribute("totalPages", totalPages);
             
-                        List<Brand> brands = DAOBrand.getAllBrandbystatus(1);
-            List<Category> categories = DAOCategory.getAllbystatus(1);
+                        List<Brand> brands = DAOBrand.getAllBrandbystatus(0);
+            List<Category> categories = DAOCategory.getAllbystatus(0);
 
             request.setAttribute("brands", brands);
             request.setAttribute("categories", categories);
@@ -315,8 +334,8 @@ private void filterByCategory(HttpServletRequest request, HttpServletResponse re
         request.setAttribute("currentPage", page);
         request.setAttribute("totalPages", totalPages);
 
-        List<Brand> brands = DAOBrand.getAllBrandbystatus(1);
-        List<Category> categories = DAOCategory.getAllbystatus(1);
+        List<Brand> brands = DAOBrand.getAllBrandbystatus(0);
+        List<Category> categories = DAOCategory.getAllbystatus(0);
 
         request.setAttribute("brands", brands);
         request.setAttribute("categories", categories);
@@ -369,8 +388,8 @@ private void filterByCategory(HttpServletRequest request, HttpServletResponse re
             request.setAttribute("currentPage", page);
             request.setAttribute("totalPages", totalPages);
 
-            List<Brand> brands = DAOBrand.getAllBrandbystatus(1);
-            List<Category> categories = DAOCategory.getAllbystatus(1);
+            List<Brand> brands = DAOBrand.getAllBrandbystatus(0);
+            List<Category> categories = DAOCategory.getAllbystatus(0);
 
             request.setAttribute("brands", brands);
             request.setAttribute("categories", categories);
@@ -384,8 +403,8 @@ private void filterByCategory(HttpServletRequest request, HttpServletResponse re
  private void showaddform(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
             try {
                     List<Product> productList = daoProducts.getAllProducts();
-                List<Brand> brands = DAOBrand.getAllBrandbystatus(1); // Lấy danh sách các Brand có trạng thái = 1
-                List<Category> categories = DAOCategory.getAllbystatus(1); // Lấy danh sách các Category có trạng thái = 1
+                List<Brand> brands = DAOBrand.getAllBrandbystatus(0); // Lấy danh sách các Brand có trạng thái = 1
+                List<Category> categories = DAOCategory.getAllbystatus(0); // Lấy danh sách các Category có trạng thái = 1
 
                     request.setAttribute("productList", productList);
                     request.setAttribute("brands", brands);

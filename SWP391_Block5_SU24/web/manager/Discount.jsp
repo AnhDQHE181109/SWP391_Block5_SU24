@@ -77,7 +77,6 @@
 </head>
 
 <body>
-    
     <div class="container-fluid position-relative bg-light" style="padding-left: 250px;">
         <!-- Sidebar Start -->
         <div class="sidebar pe-4 pb-3">
@@ -98,20 +97,24 @@
                 <div class="navbar-nav w-100">
                     <a href="manager_home.jsp" class="nav-item nav-link"><i class="fa fa-tachometer-alt me-2"></i>Dashboard</a>
                     <div class="nav-item dropdown">
-                        <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown"><i class="fa fa-laptop me-2"></i>Elements</a>
+                        <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown">
+                            <i class="fa fa-laptop me-2"></i>Elements
+                        </a>
                         <div class="dropdown-menu bg-transparent border-0">
                             <a href="button.html" class="dropdown-item">Buttons</a>
                             <a href="typography.html" class="dropdown-item">Typography</a>
                             <a href="element.html" class="dropdown-item">Other Elements</a>
                         </div>
                     </div>
-                    <a href="BrandController?action=list" class="nav-item nav-link"><i class="fa fa-th me-2"></i>Brand </a>
+                    <a href="BrandController?action=list" class="nav-item nav-link"><i class="fa fa-th me-2"></i>Brand</a>
                     <a href="CategoryController" class="nav-item nav-link"><i class="fa fa-th me-2"></i>Category</a>
                     <a href="addStaffAccount.jsp" class="nav-item nav-link"><i class="fa fa-keyboard me-2"></i>Forms</a>
                     <a href="manager_table.jsp" class="nav-item nav-link"><i class="fa fa-table me-2"></i>Tables</a>
                     <a href="chart.html" class="nav-item nav-link"><i class="fa fa-chart-bar me-2"></i>Charts</a>
                     <div class="nav-item dropdown">
-                        <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown"><i class="far fa-file-alt me-2"></i>Pages</a>
+                        <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown">
+                            <i class="far fa-file-alt me-2"></i>Pages
+                        </a>
                         <div class="dropdown-menu bg-transparent border-0">
                             <a href="signin.html" class="dropdown-item">Sign In</a>
                             <a href="signup.html" class="dropdown-item">Sign Up</a>
@@ -123,7 +126,8 @@
             </nav>
         </div>
         <!-- Sidebar End -->
-           <div class="container mt-4">
+
+        <div class="container mt-4">
             <div class="row">
                 <!-- Left Column for Filters -->
                 <div class="col-md-3">
@@ -139,7 +143,7 @@
                                 </c:forEach>
                             </select>
                         </div>
-                        <button type="submit" class="btn btn-primary">Apply Category Filter</button>
+                        <button type="submit" class="btn btn-primary w-100">Apply Category Filter</button>
                     </form>
 
                     <!-- Brand Filter -->
@@ -154,110 +158,114 @@
                                 </c:forEach>
                             </select>
                         </div>
-                        <button type="submit" class="btn btn-primary">Apply Brand Filter</button>
+                        <button type="submit" class="btn btn-primary w-100">Apply Brand Filter</button>
                     </form>
                 </div>
-                
-                  <!-- Add New Discount Button -->
-    <a href="DiscountServlet?action=showaddform" class="btn btn-success">Add New Discount</a>
 
-        
-        <div class="container mt-4">
-            <!-- Header for Discount Management -->
-            <header class="mb-4">
-                <h1>Discount Management</h1>
-                <form action="DiscountServlet" method="get" class="mb-4">
-                    <input type="hidden" name="action" value="search">
-                    <div class="mb-3">
-                        <label for="product_name" class="form-label">Search by Product Name:</label>
-                        <input type="text" id="product_name" name="product_name" class="form-control" placeholder="Enter product name" />
+                <!-- Right Column for Discount Management -->
+                <div class="col-md-9">
+                    <!-- Add New Discount Button -->
+                    <div class="d-flex justify-content-end mb-3">
+                        <a href="DiscountServlet?action=showaddform" class="btn btn-success">Add New Discount</a>
                     </div>
-                    <button type="submit" class="btn btn-primary">Search</button>
-                </form>
-<!--                <a href="DiscountServlet?action=showadform" class="btn btn-primary">Add New Discount</a>-->
-            </header>
 
-            <!-- Discount List Table -->
-            <section>
-                <c:if test="${not empty discountList}">
-                    <table class="table table-striped table-bordered">
-                        <thead>
-                            <tr>
-                                <th>Discount ID</th>
-                                <th>Product ID</th>
-                                <th>Discount Amount</th>
-                                <th>Product Name</th>
-                                <th>Actions</th> <!-- Column for Edit Button -->
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <c:forEach var="discount" items="${discountList}">
-                                <c:set var="product" value="${productMap[discount.productID]}" />
-                                <tr>
-                                    <td>${discount.discountID}</td>
-                                    <td>${discount.productID}</td>
-                                    <td>${discount.discountAmount}</td>
-                                    <td>${product.productName}</td>
-                                    <td>
-                                        <!-- Edit Button -->
-                                        <a href="DiscountServlet?action=showeditform&discountID=${discount.discountID}&productname=${product.productName}" class="btn btn-warning">Edit</a>
-                                    </td>
-                                </tr>
-                            </c:forEach>
-                        </tbody>
-                    </table>
-
-                    <!-- Pagination Controls -->
-                    <nav aria-label="Page navigation">
-                        <ul class="pagination">
-                            <c:if test="${currentPage > 1}">
-                                <li class="page-item">
-                                    <a class="page-link" href="DiscountServlet?action=list&page=${currentPage - 1}">&laquo; Previous</a>
-                                </li>
-                            </c:if>
-
-                            <c:forEach var="pageNum" begin="1" end="${totalPages}">
-                                <li class="page-item <c:if test="${pageNum == currentPage}">active</c:if>">
-                                    <a class="page-link" href="DiscountServlet?action=list&page=${pageNum}">${pageNum}</a>
-                                </li>
-                            </c:forEach>
-
-                            <c:if test="${currentPage < totalPages}">
-                                <li class="page-item">
-                                    <a class="page-link" href="DiscountServlet?action=list&page=${currentPage + 1}">Next &raquo;</a>
-                                </li>
-                            </c:if>
-                        </ul>
-                    </nav>
-                </c:if>
-            </section>
-
-            <!-- Edit Modal -->
-            <div class="modal fade" id="editModal" tabindex="-1" aria-labelledby="editModalLabel" aria-hidden="true">
-                <div class="modal-dialog">
-                    <div class="modal-content">
-                        <div class="modal-header">
-                            <h5 class="modal-title" id="editModalLabel">Edit Brand</h5>
-                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                        </div>
-                        <form id="editForm" onsubmit="updateBrand(event)">
-                            <div class="modal-body">
-                                <input type="hidden" name="brandId">
-                                <div class="mb-3">
-                                    <label for="brandName" class="form-label">Brand Name</label>
-                                    <input type="text" class="form-control" id="brandName" name="brandName" required>
-                                </div>
+                    <!-- Discount Management Header -->
+                    <header class="mb-4">
+                        <h1>Discount Management</h1>
+                        <form action="DiscountServlet" method="get" class="mb-4">
+                            <input type="hidden" name="action" value="search">
+                            <div class="mb-3">
+                                <label for="product_name" class="form-label">Search by Product Name:</label>
+                                <input type="text" id="product_name" name="product_name" class="form-control" placeholder="Enter product name" />
                             </div>
-                            <div class="modal-footer">
-                                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                                <button type="submit" class="btn btn-primary">Save changes</button>
-                            </div>
+                            <button type="submit" class="btn btn-primary">Search</button>
                         </form>
-                    </div>
+                    </header>
+
+                    <!-- Discount List Table -->
+                    <section>
+                        <c:if test="${not empty discountList}">
+                            <table class="table table-striped table-bordered">
+                                <thead>
+                                    <tr>
+                                        <th>Discount ID</th>
+                                        <th>Product ID</th>
+                                        <th>Discount Amount</th>
+                                        <th>Product Name</th>
+                                        <th>Actions</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <c:forEach var="discount" items="${discountList}">
+                                        <c:set var="product" value="${productMap[discount.productID]}" />
+                                        <tr>
+                                            <td>${discount.discountID}</td>
+                                            <td>${discount.productID}</td>
+                                            <td>${discount.discountAmount}</td>
+                                            <td>${product.productName}</td>
+                                            <td>
+                                                <a href="DiscountServlet?action=showeditform&discountID=${discount.discountID}&productname=${product.productName}" class="btn btn-warning">Edit</a>
+                                            </td>
+                                        </tr>
+                                    </c:forEach>
+                                </tbody>
+                            </table>
+
+                            <!-- Pagination Controls -->
+                            <nav aria-label="Page navigation">
+                                <ul class="pagination justify-content-center">
+                                    <c:if test="${currentPage > 1}">
+                                        <li class="page-item">
+                                            <a class="page-link" href="DiscountServlet?action=list&page=${currentPage - 1}">&laquo; Previous</a>
+                                        </li>
+                                    </c:if>
+
+                                    <c:forEach var="pageNum" begin="1" end="${totalPages}">
+                                        <li class="page-item <c:if test="${pageNum == currentPage}">active</c:if>">
+                                            <a class="page-link" href="DiscountServlet?action=list&page=${pageNum}">${pageNum}</a>
+                                        </li>
+                                    </c:forEach>
+
+                                    <c:if test="${currentPage < totalPages}">
+                                        <li class="page-item">
+                                            <a class="page-link" href="DiscountServlet?action=list&page=${currentPage + 1}">Next &raquo;</a>
+                                        </li>
+                                    </c:if>
+                                </ul>
+                            </nav>
+                        </c:if>
+                    </section>
                 </div>
             </div>
         </div>
+
+        <!-- Edit Modal -->
+        <div class="modal fade" id="editModal" tabindex="-1" aria-labelledby="editModalLabel" aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="editModalLabel">Edit Brand</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <form id="editForm" onsubmit="updateBrand(event)">
+                        <div class="modal-body">
+                            <input type="hidden" name="brandId">
+                            <div class="mb-3">
+                                <label for="brandName" class="form-label">Brand Name</label>
+                                <input type="text" class="form-control" id="brandName" name="brandName" required>
+                            </div>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                            <button type="submit" class="btn btn-primary">Save changes</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+        <!-- Edit Modal End -->
     </div>
 </body>
+
 
 </html>

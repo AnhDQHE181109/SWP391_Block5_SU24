@@ -4,6 +4,7 @@
  */
 package Controller;
 
+import entity.Account;
 import entity.OrderDetail;
 import entity.Stock;
 import java.io.IOException;
@@ -14,6 +15,7 @@ import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import jakarta.servlet.http.HttpSession;
 import model.DAOOrder;
 import model.DAOOrderDetail;
 import model.DAOStock;
@@ -24,6 +26,19 @@ public class Orderdetailcontroller extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
+        
+            HttpSession session = request.getSession();
+    Account account = (Account) session.getAttribute("account");
+    if (account == null) {
+        response.sendError(HttpServletResponse.SC_FORBIDDEN, "You do not have permission to access this page.");
+        return;
+    }
+    if (account.getRole() == 1) {
+        response.sendError(HttpServletResponse.SC_FORBIDDEN, "You do not have permission to access this page.");
+        return;
+    }
+        
+        
         String orderIdParam = request.getParameter("id");
         String status  = request.getParameter("status");
         String adress  = request.getParameter("adress");

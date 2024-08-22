@@ -183,7 +183,7 @@
             </c:otherwise>
         </c:choose>
     </p>
-                <p><strong>Actor Name:</strong> <c:out value="${productStockImport.actorname}" /></p>
+                <p><strong>Actor Name:</strong> <c:out value="${productStockImport.supplierName}" /></p>
             </div>
 
             <table class="table table-bordered">
