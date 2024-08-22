@@ -6,7 +6,7 @@
 <!DOCTYPE HTML>
 <html>
     <head>
-        <title>Footwear - Free Bootstrap 4 Template by Colorlib</title>
+        <title>Shopping cart</title>
         <script src="https://kit.fontawesome.com/c630e9f862.js" crossorigin="anonymous"></script>
         <meta charset="utf-8">
         <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
@@ -43,6 +43,13 @@
 
     </head>
     <body>
+
+        <% if (request.getHeader("referer") == null) { %>
+            <script type="text/javascript">
+            window.history.go(-1);
+            </script>
+        <%    return;
+        } %>
 
         <div class="colorlib-loader"></div>
 
@@ -148,6 +155,13 @@
                     </div>
                     <div class="row row-pb-lg">
                         <div class="col-md-12">
+                            <% 
+                                    List<ShoppingCartItem> cartItems = (List<ShoppingCartItem>) request.getAttribute("cartItems");
+							
+                            %>
+                            <% if (cartItems != null) { 
+                                if (!cartItems.isEmpty()) { %>
+
                             <div class="product-name d-flex">
                                 <div class="one-forth text-left px-4">
                                     <span>Product Details</span>
@@ -172,12 +186,8 @@
                                 </div>
                             </div>
 
-                            <% 
-                                    List<ShoppingCartItem> cartItems = (List<ShoppingCartItem>) request.getAttribute("cartItems");
-							
-                            %>
-                            <% if (cartItems != null) { 
-							for (ShoppingCartItem cartItem : cartItems) { %>
+                            
+							<% for (ShoppingCartItem cartItem : cartItems) { %>
                             <div class="product-cart d-flex">
 
                                 <div class="one-forth">
@@ -266,8 +276,7 @@
 
 
                             </div>
-                            <% }
-						 } %>
+                            <% } %>
 
                             <!-- <div class="product-cart d-flex">
                                     <div class="one-forth">
@@ -330,7 +339,7 @@
                                             </div>
                                     </div>
                             </div> -->
-
+                            
                         </div>
                     </div>
 
@@ -350,22 +359,22 @@
                                         </div>
                                         </form> -->
 
-                                        <div class="row form-group" style="background-color: rgb(220, 220, 220);">
+                                        <!-- <div class="row form-group" style="background-color: rgb(220, 220, 220);">
                                             <div class="col-sm-9">
                                                 <h5>Please select a type of shipping:</h5>
                                             </div>
                                             <div class="col-sm-3">
                                                 <% String shippingType = (String) request.getAttribute("shippingType");
-											   if (shippingType.equalsIgnoreCase("ecoRadioBox")) { %>
+											   //if (shippingType.equalsIgnoreCase("ecoRadioBox")) { %>
                                                 <p style="width: 1000px;" onclick="selectAndSendShippingType('ecoRadioBox')"> <input id="ecoRadioBox" type="radio" value="eco" name="shippingMethod" checked> <b>Eco</b>: Free shipping but may take longer to delivery to you (8-10 days)</p>
                                                 <p style="width: 1000px;" onclick="selectAndSendShippingType('fastRadioBox')"> <input id="fastRadioBox" type="radio" value="fast" name="shippingMethod"> <b>Fast shipping</b>: Express shipping, should take (1-2 days) </p>
-                                                    <% } else { %>
+                                                    <% //} else { %>
                                                 <p style="width: 1000px;" onclick="selectAndSendShippingType('ecoRadioBox')"> <input id="ecoRadioBox" type="radio" value="eco" name="shippingMethod"> <b>Eco</b>: Free shipping but may take longer to delivery to you (8-10 days)</p>
                                                 <p style="width: 1000px;" onclick="selectAndSendShippingType('fastRadioBox')"> <input id="fastRadioBox" type="radio" value="fast" name="shippingMethod" checked> <b>Fast shipping</b>: Express shipping, should take (1-2 days) </p>
-                                                    <% } %>
+                                                    <% //} %>
 
                                             </div>
-                                        </div>
+                                        </div> -->
                                     </div>
                                     <div class="col-sm-4 text-center">
                                         <div class="total">
@@ -375,22 +384,30 @@
                                                                 subTotal += (cartItem.getPrice() - ((cartItem.getPrice() * cartItem.getDiscountAmount()) / 100)) * cartItem.getQuantity();
                                                    } %>
                                                 <p><span>Subtotal:</span> <span>$<%=subTotal %></span></p>
-                                                <% Double shippingFee = (Double) request.getAttribute("shippingFee"); %>
-                                                <p><span>Delivery:</span> <span id="">$<%=shippingFee %></span></p>
+                                                <!-- <% Double shippingFee = (Double) request.getAttribute("shippingFee"); %>
+                                                <p><span>Delivery:</span> <span id="">$<%=shippingFee %></span></p> -->
                                                 <!-- <p><span>Discount:</span> <span>$45.00</span></p> -->
                                             </div>
                                             <div class="grand-total">
-                                                <p><span><strong>Total:</strong></span> <span>$<%=subTotal + shippingFee %></span></p>
+                                                <p><span><strong>Total:</strong></span> <span>$<%=subTotal %></span></p>
                                             </div>
                                         </div>
                                         <div style="padding: 10px">
-                                            <button onclick="location.href='CheckoutController?shippingFee=<%=shippingFee %>'" class="btn btn-success">Continue</button>
+                                            <!-- <button onclick="location.href='CheckoutController?shippingFee=<%=shippingFee %>'" class="btn btn-success">Continue</button> -->
+                                            <button onclick="location.href='CheckoutController'" class="btn btn-success">Continue</button>
                                         </div>
                                     </div>
                                 </div>
                             </div>
                         </div>
                     </div>
+
+                    <% } else { %>
+                        <div class="d-flex">
+                            <h1>There are no products in your shopping cart yet, come back later when you add one into it!</h1>
+                        </div>
+                    <% }
+                    } %>
 
                     <div class="row">
                         <div class="col-sm-8 offset-sm-2 text-center colorlib-heading colorlib-heading-sm">

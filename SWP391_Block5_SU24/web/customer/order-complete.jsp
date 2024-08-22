@@ -38,10 +38,17 @@
         <link rel="stylesheet" href="${pageContext.request.contextPath}/fonts/flaticon/font/flaticon.css">
 
         <!-- Theme style  -->
-        <link rel="stylesheet" href=${pageContext.request.contextPath}/css/style.css">
+        <link rel="stylesheet" href="${pageContext.request.contextPath}/css/style.css">
 
     </head>
     <body>
+
+        <% if (request.getHeader("referer") == null) { %>
+            <script type="text/javascript">
+            window.history.go(-1);
+            </script>
+        <%    return;
+        } %>
 
         <div class="colorlib-loader"></div>
 
@@ -143,7 +150,12 @@
                     <div class="row">
                         <div class="col-sm-10 offset-sm-1 text-center">
                             <p class="icon-addcart"><span><i class="icon-check"></i></span></p>
-                            <h2 class="mb-4">Thank you for purchasing, Your order is complete</h2>
+                            <% String userFullname = (String) request.getAttribute("userFullname");
+                               if (userFullname != null) { %>
+                                <h2 class="mb-4">Thank you, <%=userFullname %>, for purchasing, your order is complete!</h2>
+                                <h2 class="mb-4">A shop staff will contact you back soon!</h2>
+                            <% } %>
+                            
                             <p>
                                 <a href="index.jsp"class="btn btn-primary btn-outline-primary">Home</a>
                                 <a href="products.jsp"class="btn btn-primary btn-outline-primary"><i class="icon-shopping-cart"></i> Continue Shopping</a>
