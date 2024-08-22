@@ -15,13 +15,13 @@ public class DAOProductStockImport extends MyDAO {
 
  // Method to add a ProductStockImport to the database
     public boolean addProductStockImport(ProductStockImport stockImport) {
-        xSql = "INSERT INTO ProductStockImport (AccountID,ImportDate, ImportAction, Actorname) VALUES (?, GETDATE(), ?, ?)";
+        xSql = "INSERT INTO ProductStockImport (AccountID,ImportDate, ImportAction, [SupplierName]) VALUES (?, GETDATE(), ?, ?)";
         
         try {
             ps = con.prepareStatement(xSql);
             ps.setInt(1, stockImport.getAccountID());
             ps.setInt(2, stockImport.getImportAction());
-            ps.setString(3, stockImport.getActorname());
+            ps.setString(3, stockImport.getSupplierName());
 
             int rowsAffected = ps.executeUpdate();
             return rowsAffected > 0;
@@ -52,7 +52,7 @@ public class DAOProductStockImport extends MyDAO {
                 stockImport.setAccountID(rs.getInt("AccountID"));
                 stockImport.setImportDate(rs.getDate("ImportDate"));
                 stockImport.setImportAction(rs.getInt("ImportAction"));
-                stockImport.setActorname(rs.getString("Actorname"));
+                stockImport.setSupplierName(rs.getString("SupplierName"));
 
 
                 stockImports.add(stockImport);
@@ -81,7 +81,7 @@ public class DAOProductStockImport extends MyDAO {
                 stockImport.setAccountID(rs.getInt("AccountID"));
                 stockImport.setImportDate(rs.getDate("ImportDate"));
                 stockImport.setImportAction(rs.getInt("ImportAction"));
-                stockImport.setActorname(rs.getString("Actorname"));
+                stockImport.setSupplierName(rs.getString("SupplierName"));
 
 
                 stockImports.add(stockImport);
@@ -150,7 +150,7 @@ public class DAOProductStockImport extends MyDAO {
                 stockImport.setAccountID(rs.getInt("AccountID"));
                 stockImport.setImportDate(rs.getDate("ImportDate"));
                 stockImport.setImportAction(rs.getInt("ImportAction"));
-                stockImport.setActorname(rs.getString("Actorname"));
+                stockImport.setSupplierName(rs.getString("SupplierName"));
             }
 
         } catch (SQLException e) {

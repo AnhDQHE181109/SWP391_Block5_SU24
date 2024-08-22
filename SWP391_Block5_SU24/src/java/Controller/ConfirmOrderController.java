@@ -64,7 +64,7 @@ public class ConfirmOrderController extends HttpServlet {
         ProductStockImport stockImport = new ProductStockImport();
         stockImport.setAccountID(accountID);
         stockImport.setImportAction(1); // Assuming 1 means successful import
-        stockImport.setActorname(actorName);
+        stockImport.setSupplierName(actorName);
 
         // Add ProductStockImport
         boolean stockImportAdded = daoProductStockImport.addProductStockImport(stockImport);
