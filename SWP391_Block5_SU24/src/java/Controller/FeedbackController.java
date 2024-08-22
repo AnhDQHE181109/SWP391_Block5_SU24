@@ -2,7 +2,7 @@ package Controller;
 
 import entity.Feedback;
 import entity.Stock;
-import entity.Product; // Giả sử bạn có lớp Product tương ứng
+import entity.Product;
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.List;
@@ -18,17 +18,46 @@ import model.DAOProduct;
 
 public class FeedbackController extends HttpServlet {
 
+    private static final int RECORDS_PER_PAGE = 10;
+
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         DAOFeedback daoFeedback = new DAOFeedback();
-        AccountDAO accountDAO = new AccountDAO();
-        DAOStock daoStock = new DAOStock(); // Khởi tạo DAOStock
-        DAOProduct daoProduct = new DAOProduct(); // Khởi tạo DAOProduct
+        DAOStock daoStock = new DAOStock(); 
+        DAOProduct daoProduct = new DAOProduct(); 
+         AccountDAO accountDAO = new AccountDAO();
 
         try {
-            // Lấy danh sách feedbacks
-            List<Feedback> feedbackList = daoFeedback.getAllFeedbacks();
+            // Lấy tham số tìm kiếm và sắp xếp từ request
+            String username = request.getParameter("username");
+            String productName = request.getParameter("productName");
+            String sortBy = request.getParameter("sortBy");
+            String pageStr = request.getParameter("page");
+
+            // Xử lý phân trang
+            int currentPage = (pageStr == null || pageStr.isEmpty()) ? 1 : Integer.parseInt(pageStr);
+            int start = (currentPage - 1) * RECORDS_PER_PAGE;
+            int end = start + RECORDS_PER_PAGE;
+
+            List<Feedback> feedbackList;
+
+            // Xử lý tìm kiếm và sắp xếp
+            if (username != null && !username.trim().isEmpty()) {
+                feedbackList = daoFeedback.getFeedbackByUsername(username);
+            } else if (productName != null && !productName.trim().isEmpty()) {
+                feedbackList = daoFeedback.getFeedbackByProductName(productName);
+            } else {
+                feedbackList = daoFeedback.getFeedbacksSorted(sortBy); // Phương thức này sắp xếp theo Rating hoặc Created At
+            }
+
+            // Xử lý phân trang trong mã
+            int totalRecords = feedbackList.size();
+            int totalPages = (int) Math.ceil((double) totalRecords / RECORDS_PER_PAGE);
+            List<Feedback> paginatedFeedbackList = feedbackList.subList(
+                    Math.min(start, totalRecords), 
+                    Math.min(end, totalRecords)
+            );
 
             // Tạo Map để lưu trữ accountID và username
             Map<Integer, String> accountUsernameMap = new HashMap<>();
@@ -38,10 +67,10 @@ public class FeedbackController extends HttpServlet {
             Map<Integer, Product> productMap = new HashMap<>();
 
             // Duyệt qua từng feedback và lấy username, Stock và Product tương ứng
-            for (Feedback feedback : feedbackList) {
+            for (Feedback feedback : paginatedFeedbackList) {
                 int accountID = feedback.getAccountID();
-                String username = accountDAO.getUsernameByAccountID(accountID);
-                accountUsernameMap.put(accountID, username);
+                String user = accountDAO.getUsernameByAccountID(accountID);
+                accountUsernameMap.put(accountID, user);
 
                 // Lấy Stock thông tin
                 int stockID = feedback.getStockID();
@@ -56,17 +85,14 @@ public class FeedbackController extends HttpServlet {
                 }
             }
 
-            // Truyền feedbackList, accountUsernameMap, stockMap, và productMap đến JSP
-            request.setAttribute("feedbackList", feedbackList);
+            // Truyền dữ liệu đến JSP
+            request.setAttribute("paginatedFeedbackList", paginatedFeedbackList);
             request.setAttribute("accountUsernameMap", accountUsernameMap);
             request.setAttribute("stockMap", stockMap);
             request.setAttribute("productMap", productMap);
+            request.setAttribute("totalPages", totalPages);
+            request.setAttribute("currentPage", currentPage);
             request.getRequestDispatcher("manager/feedback.jsp").forward(request, response);
-            
-            System.out.println("feedbackList: " + feedbackList);
-            System.out.println("accountUsernameMap: " + accountUsernameMap);
-            System.out.println("stockMap: " + stockMap);
-            System.out.println("productMap: " + productMap);
 
         } catch (Exception e) {
             e.printStackTrace();
@@ -74,16 +100,5 @@ public class FeedbackController extends HttpServlet {
         } finally {
             daoFeedback.finalize(); // Đảm bảo DAO được đóng đúng cách
         }
-    }
-
-    @Override
-    protected void doPost(HttpServletRequest request, HttpServletResponse response)
-            throws ServletException, IOException {
-        doGet(request, response); // Xử lý POST giống như GET
-    }
-
-    @Override
-    public String getServletInfo() {
-        return "Short description";
     }
 }
