@@ -140,4 +140,11 @@ public class Account {
     public void setRole(int role) {
         this.role = role;
     }
+
+    @Override
+    public String toString() {
+        return "Account{" + "accountID=" + accountID + ", username=" + username + ", hash=" + hash + ", phoneNumber=" + phoneNumber + ", email=" + email + ", address=" + address + ", salt=" + salt + ", role=" + role + ", status=" + status + ", fullname=" + fullname + '}';
+    }
+    
+    
 }

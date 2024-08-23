@@ -337,5 +337,39 @@ public class AccountDAO extends MyDAO {
         }
         return username;
     }
+    
+    public List<Account> getAccountsByAccountID(int accountID) {
+    String sql = "SELECT * FROM Accounts WHERE AccountID = ?";
+    List<Account> accountList = new ArrayList<>();
+    try {
+        ps = con.prepareStatement(sql);
+        ps.setInt(1, accountID);
+        rs = ps.executeQuery();
+        while (rs.next()) {
+            int id = rs.getInt("AccountID");
+            String username = rs.getString("Username");
+            String hash = rs.getString("Hash");
+            String phoneNumber = rs.getString("PhoneNumber");
+            String email = rs.getString("Email");
+            String address = rs.getString("Address");
+            int role = rs.getInt("Role");
+            String salt = rs.getString("Salt");
+            boolean status = rs.getBoolean("Status");
+            String fullname = rs.getString("Fullname");
+            Account account = new Account(id, username, hash, phoneNumber, email, address, salt, role, status, fullname);
+            accountList.add(account);
+        }
+    } catch (Exception e) {
+        e.printStackTrace();
+    } finally {
+        try {
+            if (rs != null) rs.close();
+            if (ps != null) ps.close();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+    return accountList;
+}
 
 }

@@ -65,7 +65,7 @@
                             </c:choose>
                         </td>
                         <td>
-                            <a href="FeedbackDetailController?feedbackID=${feedback.feedbackId}" class="btn btn-info btn-sm">Detail</a>
+                            <a href="FeedbackDetailController?feedbackId=${feedback.feedbackId}" class="btn btn-info btn-sm">Detail</a>
                         </td>
                     </tr>
                 </c:forEach>
