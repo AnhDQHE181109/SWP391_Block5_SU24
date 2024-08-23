@@ -100,6 +100,14 @@
         <servlet-name>FeedbackDetailController</servlet-name>
         <servlet-class>Controller.FeedbackDetailController</servlet-class>
     </servlet>
+    <servlet>
+        <servlet-name>CancelOrderController</servlet-name>
+        <servlet-class>Controller.CancelOrderController</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>BuyAgainController</servlet-name>
+        <servlet-class>Controller.BuyAgainController</servlet-class>
+    </servlet>
     <servlet-mapping>
         <servlet-name>LoginController</servlet-name>
         <url-pattern>/LoginController</url-pattern>
@@ -223,5 +231,13 @@
     <servlet-mapping>
         <servlet-name>FeedbackDetailController</servlet-name>
         <url-pattern>/FeedbackDetailController</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>CancelOrderController</servlet-name>
+        <url-pattern>/CancelOrderController</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>BuyAgainController</servlet-name>
+        <url-pattern>/BuyAgainController</url-pattern>
     </servlet-mapping>
 </web-app>

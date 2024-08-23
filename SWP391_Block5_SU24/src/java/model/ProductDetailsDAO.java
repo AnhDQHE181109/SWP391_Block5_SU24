@@ -817,4 +817,15 @@ public class ProductDetailsDAO extends DBConnect {
         return orders;
     }
 
+    public void updateOrderStatus(int orderId, int status) {
+        String query = "UPDATE Orders SET Status = ? WHERE OrderID = ?";
+
+        try (PreparedStatement ps = conn.prepareStatement(query)) {
+            ps.setInt(1, status);
+            ps.setInt(2, orderId);
+            ps.executeUpdate();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
 }

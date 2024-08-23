@@ -5,24 +5,19 @@
 
 package Controller;
 
-import entity.Account;
 import java.io.IOException;
 import java.io.PrintWriter;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
-import jakarta.servlet.http.HttpSession;
-import java.util.List;
 import model.ProductDetailsDAO;
-import entity.Order;
-import jakarta.servlet.RequestDispatcher;
 
 /**
  *
  * @author Admin
  */
-public class OrderListController extends HttpServlet {
+public class CancelOrderController extends HttpServlet {
    
     /** 
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code> methods.
@@ -39,10 +34,10 @@ public class OrderListController extends HttpServlet {
             out.println("<!DOCTYPE html>");
             out.println("<html>");
             out.println("<head>");
-            out.println("<title>Servlet OrderListController</title>");  
+            out.println("<title>Servlet CancelOrderController</title>");  
             out.println("</head>");
             out.println("<body>");
-            out.println("<h1>Servlet OrderListController at " + request.getContextPath () + "</h1>");
+            out.println("<h1>Servlet CancelOrderController at " + request.getContextPath () + "</h1>");
             out.println("</body>");
             out.println("</html>");
         }
@@ -59,26 +54,7 @@ public class OrderListController extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
     throws ServletException, IOException {
-        HttpSession session = request.getSession();
-        Account account = (Account) session.getAttribute("account");
-
-        if (account != null) {
-            ProductDetailsDAO orderDAO = new ProductDetailsDAO();
-            int accountId = account.getAccountID();
-
-            // Retrieve the orders for the logged-in customer
-            List<Order> orderList = orderDAO.getAllOrdersByCustomerId(accountId);
-
-            // Set orders as a request attribute
-            request.setAttribute("orderList", orderList);
-
-            // Forward the request to the JSP page for display
-            RequestDispatcher dispatcher = request.getRequestDispatcher("customer/order_list.jsp");
-            dispatcher.forward(request, response);
-        } else {
-            // If no customer is logged in, redirect to the login page
-            response.sendRedirect("login.jsp");
-        }
+        processRequest(request, response);
     } 
 
     /** 
@@ -91,7 +67,12 @@ public class OrderListController extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
     throws ServletException, IOException {
-        processRequest(request, response);
+        int orderId = Integer.parseInt(request.getParameter("orderId"));
+        
+        ProductDetailsDAO orderDAO = new ProductDetailsDAO();
+        orderDAO.updateOrderStatus(orderId, 4); // 4 = canceled
+        
+        response.sendRedirect("customer/customer_profile.jsp?status=0");
     }
 
     /** 

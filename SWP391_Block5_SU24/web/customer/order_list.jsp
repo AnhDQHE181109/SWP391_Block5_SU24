@@ -336,60 +336,104 @@
                             </ul>
                         </div>
 
-                        <div class="body-main-bar">
-                            <% if (orderItems != null && !orderItems.isEmpty()) { %>
-                            <div class="order-list">
-                                <%
-                                    int currentOrderId = -1;
-                                    double totalOrderAmount = 0;
-                                    for (Order order : orderItems) {
-                                        if (order.getOrderID() != currentOrderId) {
-                                            if (currentOrderId != -1) {
-                                                out.println("<div><strong>Total Order Amount: $" + totalOrderAmount + "</strong></div>");
-                                                out.println("</div>");
-                                            }
-                                            currentOrderId = order.getOrderID();
-                                            totalOrderAmount = 0;
-                                            out.println("<div class='order'>");
-                                            out.println("<div class='order-products'>");
+                        <div class="order-list">
+                            <% if (orderItems != null && !orderItems.isEmpty()) { 
+                                int currentOrderId = -1;
+                                double totalOrderAmount = 0;
+        
+                                for (Order order : orderItems) {
+                                    if (order.getOrderID() != currentOrderId) {
+                                        if (currentOrderId != -1) {
+                                            out.println("<div><strong>Total Order Amount: $" + totalOrderAmount + "</strong></div>");
+                                            out.println("</div>");
                                         }
-                                        totalOrderAmount += order.getProducttotal();
-                                %>
-                                <div class="product-cart d-flex">
-                                    <div class="one-forth">
-                                        <div class="product-img" style="background-image: url(${pageContext.request.contextPath}/<%= order.getImageUrl() %>);"></div>
-                                        <div class="display-tc">
-                                            <h3><%= order.getProductName() %></h3>
-                                        </div>
-                                    </div>
-                                    <div class="one-eight text-center">
-                                        <div class="display-tc">
-                                            <span class="price">x<%= order.getQuantity() %></span>
-                                        </div>
-                                    </div>
-                                    <div class="one-eight text-center">
-                                        <div class="display-tc">
-                                            <span class="price">$<%= order.getSalePrice() %></span>
-                                        </div>
-                                    </div>
-
-                                    <div class="one-eight text-center">
-                                        <div class="display-tc">
-                                            <span class="total">$<%= order.getProducttotal() %></span>
-                                        </div>
+                                        currentOrderId = order.getOrderID();
+                                        totalOrderAmount = 0;
+                                        out.println("<div class='order'>");
+                                        out.println("<div class='order-products'>");
+                                    }
+                                    totalOrderAmount += order.getProducttotal();
+                            %>
+                            <div class="product-cart d-flex">
+                                <div class="one-eight text-center">
+                                    <div class="product-img" style="background-image: url(${pageContext.request.contextPath}/<%= order.getImageUrl() %>);"></div>
+                                    <div class="display-tc">
+                                        <h3><%= order.getProductName() %></h3>
                                     </div>
                                 </div>
-                                <% } 
-                                    if (currentOrderId != -1) {
-                                        out.println("<div><strong>Total Order Amount: $" + totalOrderAmount + "</strong></div>");
-                                        out.println("</div>");
-                                    }
-                                %>
+                                <div class="one-eight text-center">
+                                    <div class="display-tc">
+                                        <span class="price">x<%= order.getQuantity() %></span>
+                                    </div>
+                                </div>
+                                <div class="one-eight text-center">
+                                    <div class="display-tc">
+                                        <span class="price">Price: $<%= order.getSalePrice() %></span>
+                                    </div>
+                                </div>
+                                <div class="one-eight text-center">
+                                    <div class="display-tc">
+                                        <span class="total">Total: $<%= order.getProducttotal() %></span>
+                                    </div>
+                                </div>
+
+                                <!-- Show order status when "All" is selected -->
+                                <div class="one-eight text-center">
+                                    <div class="display-tc">
+                                        <span>Status: 
+                                            <%
+                                                String statusLabel = "";
+                                                switch (order.getStatus()) {
+                                                    case "0": statusLabel = "Pending"; break;
+                                                    case "1": statusLabel = "Process"; break;
+                                                    case "2": statusLabel = "Delivering"; break;
+                                                    case "3": statusLabel = "Done"; break;
+                                                    case "4": statusLabel = "Canceled"; break;
+                                                    case "5": statusLabel = "Returned"; break;
+                                                    default: statusLabel = "Unknown"; break;
+                                                }
+                                                out.print(statusLabel);
+                                            %>
+                                        </span>
+                                    </div>
+                                </div>
+
+                                <% if (order.getStatus().equals("0")) { %>
+                                <!-- Cancel Order Button for Pending Orders -->
+                                <div class="one-eight text-center">
+                                    <div class="display-tc">
+                                        <form action="CancelOrderController" method="post">
+                                            <input type="hidden" name="orderId" value="<%= order.getOrderID() %>" />
+                                            <button type="submit" class="btn btn-danger">Cancel Order</button>
+                                        </form>
+                                    </div>
+                                </div>
+                                <% } else if (order.getStatus().equals("4")) { %>
+                                <!-- Buy Again Button for Canceled Orders -->
+                                <div class="one-eight text-center">
+                                    <div class="display-tc">
+                                        <form action="BuyAgainController" method="post">
+                                            <input type="hidden" name="orderId" value="<%= order.getOrderID() %>" />
+                                            <button type="submit" class="btn btn-success">Buy Again</button>
+                                        </form>
+                                    </div>
+                                </div>
+                                <% } %>
                             </div>
+                            <% 
+                                } // End of the orderItems loop
+
+                                // After the loop ends, output the total for the last order
+                                if (currentOrderId != -1) {
+                                    out.println("<div><strong>Total Order Amount: $" + totalOrderAmount + "</strong></div>");
+                                    out.println("</div>");
+                                }
+                            %>
                             <% } else { %>
                             <div>No orders found.</div>
                             <% } %>
                         </div>
+
                     </div>
                 </div>
             </div>
