@@ -14,7 +14,7 @@
         <meta name="viewport" content="width=device-width, initial-scale=1">
         <!-- Main CSS-->
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-        <link rel="stylesheet" href="staff/css/customer_m.css">
+        <link rel="stylesheet" href="staff/css/customer_m.css"> 
         <link rel="stylesheet" type="text/css" href="staff/css/main.css">
         <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/boxicons@latest/css/boxicons.min.css">
         <link rel="stylesheet" href="staff/font/themify-icons/themify-icons.css">
@@ -68,7 +68,7 @@
                         <li><a class="app-menu__item" href="stocksManager"><i
                                     class='app-menu__icon bx bx-purchase-tag-alt'></i><span class="app-menu__label">Products</span></a>
                         </li>
-                        <li><a class="app-menu__item" href="importProductVariants"><i
+                        <li><a class="app-menu__item" href="importProductStocks"><i
                             class='app-menu__icon bx bx-purchase-tag-alt'></i><span class="app-menu__label">Import product variants</span></a>
                         </li>
                         <li><a class="app-menu__item" href="Ordercontroller"><i class='app-menu__icon bx bx-task'></i><span

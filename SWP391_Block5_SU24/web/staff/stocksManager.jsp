@@ -68,7 +68,7 @@
                         <li><a class="app-menu__item" href="stocksManager"><i
                                     class='app-menu__icon bx bx-purchase-tag-alt'></i><span class="app-menu__label">Products</span></a>
                         </li>
-                        <li><a class="app-menu__item" href="importProductVariants"><i
+                        <li><a class="app-menu__item" href="importProductStocks"><i
                             class='app-menu__icon bx bx-purchase-tag-alt'></i><span class="app-menu__label">Import product variants</span></a>
                         </li>
                         <li><a class="app-menu__item" href="Ordercontroller"><i class='app-menu__icon bx bx-task'></i><span
