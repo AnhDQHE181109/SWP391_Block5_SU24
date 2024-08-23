@@ -1,4 +1,5 @@
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <%@page import="model.DAOBrand" %>
 <%@page import="entity.Brand" %>
 <%@page import="java.util.List" %>
@@ -7,7 +8,7 @@
 
 <head>
     <meta charset="utf-8">
-    <title>Brand Management - Bootstrap Admin Template</title>
+    <title>Discount Management - Bootstrap Admin Template</title>
     <meta content="width=device-width, initial-scale=1.0" name="viewport">
     
     <!-- Favicon -->
@@ -24,7 +25,7 @@
     
     <!-- Libraries Stylesheet -->
     <link href="lib/owlcarousel/assets/owl.carousel.min.css" rel="stylesheet">
-    <link href="lib/tempusdominus/css/tempusdominus-bootstrap-4.min.css" rel="stylesheet" />
+    <link href="lib/tempusdominus/css/tempusdominus-bootstrap-4.min.css" rel="stylesheet">
     
     <!-- Customized Bootstrap Stylesheet -->
     <link href="css/bootstrap.min.css" rel="stylesheet">
@@ -50,7 +51,7 @@
             const brandId = formData.get('brandId');
             const brandName = formData.get('brandName');
             
-            fetch('BrandController?action=update', {
+            fetch('BrandController', {
                 method: 'POST',
                 body: new URLSearchParams({
                     id: brandId,
@@ -76,78 +77,103 @@
 </head>
 
 <body>
-    <div class="container-fluid position-relative bg-light">
+    <div class="container-fluid position-relative bg-light" style="padding-left: 250px;">
         <!-- Sidebar Start -->
-        <div class="sidebar pe-4 pb-3">
-            <nav class="navbar bg-light navbar-light">
-                <a href="manager_home.jsp" class="navbar-brand mx-4 mb-3">
-                    <h3 class="text-primary"><i class="fa fa-hashtag me-2"></i>DASHMIN</h3>
-                </a>
-                <div class="d-flex align-items-center ms-4 mb-4">
-                    <div class="position-relative">
-                        <img class="rounded-circle" src="images/user.jpg" alt="" style="width: 40px; height: 40px;">
-                        <div class="bg-success rounded-circle border border-2 border-white position-absolute end-0 bottom-0 p-1"></div>
-                    </div>
-                    <div class="ms-3">
-                        <h6 class="mb-0">Jhon Doe</h6>
-                        <span>Admin</span>
-                    </div>
-                </div>
-                <div class="navbar-nav w-100">
-                    <a href="manager_home.jsp" class="nav-item nav-link"><i class="fa fa-tachometer-alt me-2"></i>Dashboard</a>
-                    <div class="nav-item dropdown">
-                        <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown"><i class="fa fa-laptop me-2"></i>Elements</a>
-                        <div class="dropdown-menu bg-transparent border-0">
-                            <a href="button.html" class="dropdown-item">Buttons</a>
-                            <a href="typography.html" class="dropdown-item">Typography</a>
-                            <a href="element.html" class="dropdown-item">Other Elements</a>
+            <div class="sidebar pe-4 pb-3">
+                <nav class="navbar bg-light navbar-light">
+                    <a href="manager_home.jsp" class="navbar-brand mx-4 mb-3">
+                        <h3 class="text-primary"></i>Manager Site</h3>
+                    </a>
+                    <div class="d-flex align-items-center ms-4 mb-4">
+                        <div class="position-relative">
+                            <img class="rounded-circle" src="${pageContext.request.contextPath}/images/user.jpg" alt="" style="width: 40px; height: 40px;">
+                            <div class="bg-success rounded-circle border border-2 border-white position-absolute end-0 bottom-0 p-1"></div>
+                        </div>
+                        <div class="ms-3">
+                            <h6 class="mb-0">Jhon Doe</h6>
+                            <span>Admin</span>
                         </div>
                     </div>
-                    <a href="BrandController?action=list" class="nav-item nav-link"><i class="fa fa-th me-2"></i>Brand </a>
-                    <a href="CategoryController" class="nav-item nav-link"><i class="fa fa-th me-2"></i>Category</a>
-                    <a href="addStaffAccount.jsp" class="nav-item nav-link"><i class="fa fa-keyboard me-2"></i>Forms</a>
-                    <a href="manager_table.jsp" class="nav-item nav-link"><i class="fa fa-table me-2"></i>Tables</a>
-                    <a href="chart.html" class="nav-item nav-link"><i class="fa fa-chart-bar me-2"></i>Charts</a>
-                    <div class="nav-item dropdown">
-                        <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown"><i class="far fa-file-alt me-2"></i>Pages</a>
-                        <div class="dropdown-menu bg-transparent border-0">
-                            <a href="signin.html" class="dropdown-item">Sign In</a>
-                            <a href="signup.html" class="dropdown-item">Sign Up</a>
-                            <a href="404.html" class="dropdown-item">404 Error</a>
-                            <a href="blank.html" class="dropdown-item">Blank Page</a>
+                    <div class="navbar-nav w-100">
+                        <a href="manager/manager_home.jsp" class="nav-item nav-link active"><i class="fa fa-tachometer-alt me-2"></i>Dashboard</a>
+
+                        <a href="${pageContext.request.contextPath}/BrandController?action=list" class="nav-item nav-link"><i class="fa fa-th me-2"></i>Brand </a>
+                        <a href="${pageContext.request.contextPath}/CategoryController" class="nav-item nav-link"><i class="fa fa-th me-2"></i>Category</a>
+                        <a href="${pageContext.request.contextPath}/DiscountServlet?action=list" class="nav-item nav-link"><i class="fa fa-th me-2"></i>Discount</a>
+
+                        
+                        <div class="nav-item dropdown">
+                            <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown"><i class="far fa-file-alt me-2"></i>Manage Requests</a>
+                            <div class="dropdown-menu bg-transparent border-0">
+                                <a href="manage_request.jsp" class="nav-item nav-link"><i class="fa fa-chart-bar me-2"></i>View Requests</a>
+                                <a href="history_requests.jsp" class="nav-item nav-link"><i class="fa fa-chart-bar me-2"></i>Request History</a>
+                            </div>
                         </div>
                     </div>
-                </div>
-            </nav>
-        </div>
-        <!-- Sidebar End -->
+                </nav>
+            </div>
+            <!-- Sidebar End -->
 
-  <h2>Update Discount</h2>
-    <form action="DiscountServlet" method="get">
-        <input type="hidden" name="action" value="updateby">
-        
-        <label for="discount_amount">New Discount Amount:</label>
-        <input type="number" name="discount_amount" id="discount_amount" step="0.01" required><br>
+        <div class="container">
+    <h1>Feedback Details</h1>
 
-        <label for="brand">Brand:</label>
-        <select name="brand_id" id="brand">
-            <option value="">None</option>
-            <% for (Brand brand : (List<Brand>) request.getAttribute("brands")) { %>
-                <option value="<%= brand.getBrandId() %>"><%= brand.getBrandName() %></option>
-            <% } %>
-        </select><br>
+    <c:if test="${not empty feedbackList}">
+        <table>
+            <thead>
+                <tr>
+<!--                     Hidden Columns 
+                    <th>Feedback ID</th>
+                    <th>Account ID</th>
+                    <th>Product ID</th>
+                    <th>Stock ID</th>-->
+                    
+                    <!-- Display Columns -->
+                    <th>Username</th>
+                    <th>Full Name</th>
+                    <th>Phone Number</th>
+                    <th>Email</th>
+                    <th>Address</th>
+                    <th>Size</th>
+                    <th>Color</th>
+                    <th>Rating</th>
+                    <th>Comment</th>
+                    <th>Created At</th>
+                </tr>
+            </thead>
+            <tbody>
+                <c:forEach var="feedback" items="${feedbackList}">
+                    <tr>
+                        <!-- Hidden Columns -->
+                        <td hidden >${feedback.feedbackId}</td>
+                        <td  hidden >${feedback.accountID}</td>
+                        <td  hidden >${feedback.productID}</td>
+                        <td  hidden  >${feedback.stockID}</td>
+                        
+                        <!-- Display Columns -->
+                        <td>${accountMap[feedback.accountID].username}</td>
+                        <td>${accountMap[feedback.accountID].fullname}</td>
+                        <td>${accountMap[feedback.accountID].phoneNumber}</td>
+                        <td>${accountMap[feedback.accountID].email}</td>
+                        <td>${accountMap[feedback.accountID].address}</td>
+                        <td>${stockMap[feedback.stockID].size}</td>
+                        <td>${stockMap[feedback.stockID].color}</td>
+                        <td>${feedback.rating}</td>
+                        <td>${feedback.comment}</td>
+                        <td>${feedback.createdAt}</td>
+                    </tr>
+                </c:forEach>
+            </tbody>
+        </table>
+    </c:if>
 
-        <label for="category">Category:</label>
-        <select name="category_id" id="category">
-            <option value="">None</option>
-            <% for (Category category : (List<Category>) request.getAttribute("categories")) { %>
-                <option value="<%= category.getCategoryId() %>"><%= category.getCategoryName() %></option>
-            <% } %>
-        </select><br>
+    <c:if test="${empty feedbackList}">
+        <p class="message">No feedback found for the provided ID.</p>
+    </c:if>
+</div>
 
-        <input type="submit" value="Update Discount">
-    </form>
+ 
     </div>
 </body>
+
 
 </html>

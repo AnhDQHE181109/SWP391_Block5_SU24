@@ -286,7 +286,7 @@ public class DAOFeedback extends MyDAO {
 public List<Feedback> getallfbyFeedbackID(int feedbackId) {
     List<Feedback> feedbackList = new ArrayList<>();
     String sql = "SELECT f.feedback_id, f.rating, f.comment, f.created_at, " +
-                 "a.AccountID, a.Username, a.Fullname, a.Email, a.PhoneNumber, " +
+                 "a.AccountID, a.Username, a.[Name], a.Email, a.PhoneNumber, " +
                  "p.ProductID, p.ProductName, p.Origin, p.Material, p.Price, " +
                  "s.StockID, s.Size, s.Color, s.StockQuantity " +
                  "FROM [ECommerceStore].[dbo].[Feedback] f " +
