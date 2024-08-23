@@ -101,7 +101,7 @@ public class ProductDetailsDAO extends DBConnect {
     public boolean addProduct(Product product) {
         boolean isSuccess = false;
         try {
-            String sql = "INSERT INTO Products (ProductName, Origin, Material, Price, CategoryID, BrandID) VALUES (?, ?, ?, ?, ?, ?)";
+            String sql = "INSERT INTO Products (ProductName, Origin, Material, Price, CategoryID, BrandID, ProductStatus) VALUES (?, ?, ?, ?, ?, ?, ?)";
             PreparedStatement ps = conn.prepareStatement(sql);
             ps.setString(1, product.getProductName());
             ps.setString(2, product.getOrigin());
@@ -109,6 +109,7 @@ public class ProductDetailsDAO extends DBConnect {
             ps.setDouble(4, product.getPrice());
             ps.setInt(5, product.getCategoryId());
             ps.setInt(6, product.getBrandId());
+            ps.setInt(7, product.getProductStatus()); // Set the ProductStatus value
 
             int rowsAffected = ps.executeUpdate(); // Execute the update and get the number of affected rows
             if (rowsAffected > 0) {
