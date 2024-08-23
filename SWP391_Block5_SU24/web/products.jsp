@@ -319,7 +319,7 @@
                                     </a>
                                     <div class="desc">
                                         <h2><a href="ProductDetailsController?productID=<%=product.getProductId() %>"><%= product.getProductName() %></a></h2>
-                                        <span class="price"><%= product.getPrice() %></span>
+                                        <span class="price">$<%= product.getPrice() %></span>
                                     </div>
                                 </div>
                             </div>

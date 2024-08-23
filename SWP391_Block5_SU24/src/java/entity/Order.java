@@ -12,11 +12,59 @@ public class Order {
     private Date orderDate;
     private String status;
     private String productname;
-    private double price;
-    private double discount_amount;
+    private double saleprice;
     private String imageURL;
-    private int quanity;
-    
+    private int quantity;
+    private double producttotal;
+    private double ordertotal;
+
+    public String getProductName() {
+        return productname;
+    }
+
+    public double getSalePrice() {
+        return saleprice;
+    }
+
+    public String getImageUrl() {
+        return imageURL;
+    }
+
+    public int getQuantity() {
+        return quantity;
+    }
+
+    public double getProducttotal() {
+        return producttotal;
+    }
+
+    public double getOrdertotal() {
+        return ordertotal;
+    }
+
+    public void setProductName(String productname) {
+        this.productname = productname;
+    }
+
+    public void setSalePrice(double saleprice) {
+        this.saleprice = saleprice;
+    }
+
+    public void setImageUrl(String imageURL) {
+        this.imageURL = imageURL;
+    }
+
+    public void setQuantity(int quantity) {
+        this.quantity = quantity;
+    }
+
+    public void setProducttotal(double producttotal) {
+        this.producttotal = producttotal;
+    }
+
+    public void setOrdertotal(double ordertotal) {
+        this.ordertotal = ordertotal;
+    }
     
     public Order() {
     }

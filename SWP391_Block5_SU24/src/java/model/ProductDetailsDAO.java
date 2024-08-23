@@ -749,16 +749,35 @@ public class ProductDetailsDAO extends DBConnect {
         return bestSellers;
     }
 
+    public int addProductImage(String imageUrl) {
+        int imageId = -1;
+        try {
+            String sql = "INSERT INTO ProductImages (ImageURL) VALUES (?)";
+            PreparedStatement ps = conn.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
+            ps.setString(1, imageUrl);
+            ps.executeUpdate();
+            ResultSet rs = ps.getGeneratedKeys();
+            if (rs.next()) {
+                imageId = rs.getInt(1); // Get the generated ImageID
+            }
+
+            rs.close();
+            ps.close();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return imageId;
+    }
+
     public List<Order> getAllOrdersByCustomerId(int accountId) {
         List<Order> orders = new ArrayList<>();
-        String sql = "SELECT o.OrderID, p.ProductName, p.Price, d.discount_amount, i.ImageURL, od.Quantity, "
-                + "(p.Price - ISNULL(d.discount_amount, 0)) * od.Quantity AS ProductTotal, "
-                + "SUM((p.Price - ISNULL(d.discount_amount, 0)) * od.Quantity) OVER (PARTITION BY o.OrderID) AS OrderTotal "
+        String sql = "SELECT o.OrderID, p.ProductName, od.SalePrice, i.ImageURL, od.Quantity, "
+                + "(od.SalePrice * od.Quantity) AS ProductTotal, "
+                + "SUM(od.SalePrice * od.Quantity) OVER (PARTITION BY o.OrderID) AS OrderTotal "
                 + "FROM Orders o "
                 + "JOIN OrderDetails od ON o.OrderID = od.OrderID "
                 + "JOIN Stock s ON od.StockID = s.StockID "
                 + "JOIN Products p ON s.ProductID = p.ProductID "
-                + "LEFT JOIN Discounts d ON p.ProductID = d.product_id "
                 + "LEFT JOIN ProductImages i ON s.StockID = i.StockID "
                 + "WHERE o.AccountID = ? "
                 + "ORDER BY o.OrderID";
@@ -769,12 +788,11 @@ public class ProductDetailsDAO extends DBConnect {
                 Order order = new Order();
                 order.setOrderID(rs.getInt("OrderID"));
                 order.setProductName(rs.getString("ProductName"));
-                order.setPrice(rs.getDouble("Price"));
-                order.setDiscountAmount(rs.getDouble("discount_amount"));
+                order.setSalePrice(rs.getDouble("SalePrice"));
                 order.setImageUrl(rs.getString("ImageURL"));
                 order.setQuantity(rs.getInt("Quantity"));
-                order.setProductTotal(rs.getDouble("ProductTotal"));
-                order.setOrderTotal(rs.getDouble("OrderTotal"));
+                order.setProducttotal(rs.getDouble("ProductTotal"));
+                order.setOrdertotal(rs.getDouble("OrderTotal"));
                 orders.add(order);
             }
         } catch (SQLException e) {
@@ -783,4 +801,4 @@ public class ProductDetailsDAO extends DBConnect {
         return orders;
     }
 
-}`
+}
