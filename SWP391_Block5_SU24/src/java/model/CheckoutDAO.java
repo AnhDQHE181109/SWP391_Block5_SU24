@@ -20,7 +20,7 @@ public class CheckoutDAO extends DBConnect {
 
     public CheckoutItem getBillingDetails(int accountID) {
 
-        String sql = "select Fullname, Address, Email, PhoneNumber\n"
+        String sql = "select Name, Address, Email, PhoneNumber\n"
                 + "from Accounts\n"
                 + "where AccountID = ?";
 
@@ -32,12 +32,12 @@ public class CheckoutDAO extends DBConnect {
 
             ResultSet rs = ps.executeQuery();
             if (rs.next()) {
-                String fullname = rs.getString("Fullname");
+                String name = rs.getString("Name");
                 String address = rs.getString("Address");
                 String email = rs.getString("Email");
                 String phoneNumber = rs.getString("PhoneNumber");
 
-                checkoutItem = new CheckoutItem(fullname, address, email, phoneNumber);
+                checkoutItem = new CheckoutItem(name, address, email, phoneNumber);
             }
 
             if (rs != null) {
@@ -177,13 +177,13 @@ public class CheckoutDAO extends DBConnect {
         clearShoppingCart(accountID);
     }
 
-    public String getFullnameByAccountID(int accountID) {
+    public String getNameByAccountID(int accountID) {
 
-        String sql = "select AccountID, Fullname\n"
+        String sql = "select AccountID, Name\n"
                 + "from Accounts\n"
                 + "where AccountID = ?";
 
-        String fullname = null;
+        String name = null;
 
         try {
             PreparedStatement ps = conn.prepareStatement(sql);
@@ -191,7 +191,7 @@ public class CheckoutDAO extends DBConnect {
 
             ResultSet rs = ps.executeQuery();
             if (rs.next()) {
-                return rs.getString("Fullname");
+                return rs.getString("Name");
             }
 
             if (rs != null) {
@@ -201,10 +201,10 @@ public class CheckoutDAO extends DBConnect {
                 ps.close();
             }
         } catch (SQLException e) {
-            System.out.println("getFullnameByAccountID(): " + e);
+            System.out.println("getNameByAccountID(): " + e);
         }
 
-        return fullname;
+        return name;
     }
 
 }

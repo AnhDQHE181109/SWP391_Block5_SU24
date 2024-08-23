@@ -17,7 +17,7 @@ public class CheckoutItem {
     private double price;
     private int quantity;
     private double discount_amount;
-    private String fullName;
+    private String name;
     private String address;
     private String email;
     private String phoneNumber;
@@ -33,8 +33,8 @@ public class CheckoutItem {
         this.discount_amount = discount_amount;
     }
 
-    public CheckoutItem(String fullName, String address, String email, String phoneNumber) {
-        this.fullName = fullName;
+    public CheckoutItem(String name, String address, String email, String phoneNumber) {
+        this.name = name;
         this.address = address;
         this.email = email;
         this.phoneNumber = phoneNumber;
@@ -104,12 +104,12 @@ public class CheckoutItem {
         this.discount_amount = discount_amount;
     }
 
-    public String getFullName() {
-        return fullName;
+    public String getName() {
+        return name;
     }
 
-    public void setFullName(String fullName) {
-        this.fullName = fullName;
+    public void setName(String name) {
+        this.name = name;
     }
 
     public String getAddress() {
