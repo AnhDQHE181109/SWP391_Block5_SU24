@@ -1,6 +1,7 @@
 package model;
 
 import entity.StockImportDetail;
+import entity.StockImportSummary;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -116,4 +117,77 @@ public class DAOStockImportDetail extends MyDAO {
         stockImportDetail.setStockQuantity(rs.getInt("stockQuantity"));
         return stockImportDetail;
     }
+    
+      public List<StockImportSummary> getStockImportSummary(int importID) throws SQLException {
+        List<StockImportSummary> summaries = new ArrayList<>();
+        String sql = """
+            WITH StockBefore AS (
+                SELECT 
+                    s.ProductID,
+                    s.StockQuantity AS StockBeforeImport
+                FROM 
+                    Stock s
+                WHERE 
+                    s.ProductID IN (
+                        SELECT 
+                            d.StockID 
+                        FROM 
+                            StockImportDetail d 
+                        WHERE 
+                            d.ImportID = ?
+                    )
+            ),
+            StockAfter AS (
+                SELECT 
+                    s.ProductID,
+                    CASE 
+                        WHEN p.ImportAction = 0 THEN s.StockQuantity - COALESCE(d.StockQuantity, 0)
+                        WHEN p.ImportAction = 1 THEN s.StockQuantity + COALESCE(d.StockQuantity, 0)
+                    END AS StockAfterImport
+                FROM 
+                    Stock s
+                LEFT JOIN 
+                    StockImportDetail d ON s.ProductID = d.StockID AND d.ImportID = ?
+                JOIN 
+                    ProductStockImport p ON p.ImportID = ?
+                WHERE 
+                    s.ProductID IN (
+                        SELECT 
+                            d.StockID 
+                        FROM 
+                            StockImportDetail d 
+                        WHERE 
+                            d.ImportID = ?
+                    )
+            )
+            SELECT 
+                b.ProductID,
+                b.StockBeforeImport,
+                a.StockAfterImport
+            FROM 
+                StockBefore b
+            JOIN 
+                StockAfter a ON b.ProductID = a.ProductID
+        """;
+
+        try (PreparedStatement ps = con.prepareStatement(sql)) {
+            ps.setInt(1, importID);
+            ps.setInt(2, importID);
+            ps.setInt(3, importID);
+            ps.setInt(4, importID);
+
+            try (ResultSet rs = ps.executeQuery()) {
+                while (rs.next()) {
+                    int productID = rs.getInt("ProductID");
+                    int stockBeforeImport = rs.getInt("StockBeforeImport");
+                    int stockAfterImport = rs.getInt("StockAfterImport");
+
+                    summaries.add(new StockImportSummary(productID, stockBeforeImport, stockAfterImport));
+                }
+            }
+        }
+        return summaries;
+    }
+    
+    
 }
