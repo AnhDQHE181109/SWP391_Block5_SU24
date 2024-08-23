@@ -67,7 +67,7 @@ public class OrderListController extends HttpServlet {
             int accountId = account.getAccountID();
 
             // Retrieve the orders for the logged-in customer
-            List<Order> orderList = orderDAO.getAllOrdersByCustomerId(accountId);
+            List<Order> orderList = orderDAO.getAllOrdersByCustomerId(accountId, status);
 
             // Set orders as a request attribute
             request.setAttribute("orderList", orderList);

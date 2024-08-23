@@ -11,6 +11,7 @@
 <%
     ProductDetailsDAO pDAO = new ProductDetailsDAO();
     List<Product> bestSellers = pDAO.getBestSellers();
+    
 %>
 <html>
     <head>
