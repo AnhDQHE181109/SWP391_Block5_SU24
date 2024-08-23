@@ -278,7 +278,7 @@
                                 <% if ("true".equals(request.getAttribute("error_name_invalid"))) { %>
                                 <p style="color:red" class="error">Invalid Name!</p>
                                 <% } %>
-                                <input style='margin:0px 12px 0px 12px; height: 40px; width:85%;' type="text" id="name" name="name" placeholder='Name' required value="${name != null ? name : ''}"><br>    
+                                <input style='margin:0px 12px 0px 12px; height: 40px; width:85%;' type="text" id="Nname" name="name" placeholder='Name' required value="${name != null ? name : ''}"><br>    
                                 <div id="Nmessage">          
                                     <b>Name must not: </b>
                                     <p id="Nletter" class="Ninvalid">Not contain any <b>special characters</b></p> 
@@ -296,7 +296,7 @@
                                 <p style="color:red" class="error">Username must contain a maximum of 20 characters!</p>
                                 <% } %>
                                 <input style='margin:0px 12px 0px 12px; height: 40px; width:85%;' type="text" id="usname" name="username" placeholder='Username' required value="${username != null ? username : ''}"><br>
-                                <div id="Nmessage">          
+                                <div id="umessage">          
                                     <b>Username must not: </b>
                                     <p id="uletter" class="uinvalid">Not contain any of the following special characters: <br><b>/, \, <, >, &, $, #, %, ", (, ), !, ?, '</b>as well as <b></b> whitespace <br> characters</p> 
                                     <p id="ulength" class="uinvalid">Contain <b>maximum 20 characters</b></p>
@@ -414,10 +414,10 @@
         var pnumber = document.getElementById("pnumber");
         pInput.onfocus = function () {
             document.getElementById("pmessage").style.display = "block";
-        }
+        };
         pInput.onblur = function () {
             document.getElementById("pmessage").style.display = "none";
-        }
+        };
         const Validpnum = /[^0-9]/;
         pInput.onkeyup = function () {
             if (!Validpnum.test(pInput.value)) {
@@ -451,17 +451,17 @@
                 pnumber.classList.remove("pvalid");
                 pnumber.classList.add("pinvalid");
             }
-        }
+        };
 
         var unameInput = document.getElementById("usname");
         var uletter = document.getElementById("uletter");
         var ulength = document.getElementById("ulength");
         unameInput.onfocus = function () {
             document.getElementById("umessage").style.display = "block";
-        }
+        };
         unameInput.onblur = function () {
             document.getElementById("umessage").style.display = "none";
-        }
+        };
         const invalidChars = /[\/\\<>&$#%"()!?' \t\n\r]/;
         unameInput.onkeyup = function () {
             if (!invalidChars.test(unameInput.value)) {
@@ -485,7 +485,7 @@
                 ulength.classList.remove("uvalid");
                 ulength.classList.add("uinvalid");
             }
-        }
+        };
 
         var myInput = document.getElementById("psw");
         var letter = document.getElementById("letter");
@@ -496,12 +496,12 @@
 // When the user clicks on the password field, show the message box
         myInput.onfocus = function () {
             document.getElementById("message").style.display = "block";
-        }
+        };
 
 // When the user clicks outside of the password field, hide the message box
         myInput.onblur = function () {
             document.getElementById("message").style.display = "none";
-        }
+        };
 
 // When the user starts to type something inside the password field
         myInput.onkeyup = function () {
@@ -553,7 +553,7 @@
                 length.classList.remove("valid");
                 length.classList.add("invalid");
             }
-        }
+        };
 
         var myInput2 = document.getElementById("psw2");
         var letter2 = document.getElementById("letter2");
@@ -564,12 +564,12 @@
 // When the user clicks on the password field, show the message box
         myInput2.onfocus = function () {
             document.getElementById("message2").style.display = "block";
-        }
+        };
 
 // When the user clicks outside of the password field, hide the message box
         myInput2.onblur = function () {
             document.getElementById("message2").style.display = "none";
-        }
+        };
 
 // When the user starts to type something inside the password field
         myInput2.onkeyup = function () {
@@ -621,38 +621,29 @@
                 length2.classList.remove("valid");
                 length2.classList.add("invalid");
             }
-        }
+        };
         
-        var NInput = document.getElementById("em");
+        var NInput = document.getElementById("Nname");
         var Nletter = document.getElementById("Nletter");
 
-        eInput.onfocus = function () {
+        NInput.onfocus = function () {
             document.getElementById("Nmessage").style.display = "block";
-        }
-        eInput.onblur = function () {
+        };
+        NInput.onblur = function () {
             document.getElementById("Nmessage").style.display = "none";
         };
-        const Name = ^[a-zA-Z\s]+$;
-        eInput.onkeyup = function () {
-            if (!InvalidEstart.test(eInput.value)) {
-                enumber.classList.remove("einvalid");
-                enumber.classList.add("evalid");
+        const NameInvalid =  /^[a-zA-Z\s]+$/;
+        NInput.onkeyup = function () {
+            if (NameInvalid.test(NInput.value)) {
+                Nletter.classList.remove("Ninvalid");
+                Nletter.classList.add("Nvalid");
             } else {
-                enumber.classList.remove("evalid");
-                enumber.classList.add("einvalid");
-            }
-            if (EMAIL_REGEX.test(eInput.value)) {
-                estructure.classList.remove("einvalid");
-                estructure.classList.add("evalid");
-            } else {
-                estructure.classList.remove("evalid");
-                estructure.classList.add("einvalid");
-            }
-            if (eInput.value === "") {
-                enumber.classList.remove("evalid");
-                enumber.classList.add("einvalid");
-                estructure.classList.remove("evalid");
-                estructure.classList.add("einvalid");
+                Nletter.classList.remove("Nvalid");
+                Nletter.classList.add("Ninvalid");
+            }  
+            if (NInput.value === "") {
+                Nletter.classList.remove("Nvalid");
+                Nletter.classList.add("Ninvalid");
             }
         };
     </script>
