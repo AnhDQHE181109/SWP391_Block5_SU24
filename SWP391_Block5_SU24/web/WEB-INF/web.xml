@@ -73,17 +73,17 @@
         <servlet-class>Controller.SearchingController</servlet-class>
     </servlet>
     <servlet>
-<<<<<<< Updated upstream
+
         <servlet-name>FeedbackController</servlet-name>
         <servlet-class>Controller.FeedbackController</servlet-class>
-=======
+
         <servlet-name>ReturnRequestController</servlet-name>
         <servlet-class>Controller.ReturnRequestController</servlet-class>
     </servlet>
     <servlet>
         <servlet-name>ManageRequestController</servlet-name>
         <servlet-class>Controller.ManageRequestController</servlet-class>
->>>>>>> Stashed changes
+
     </servlet>
     <servlet-mapping>
         <servlet-name>LoginController</servlet-name>
@@ -182,16 +182,16 @@
         <url-pattern>/SearchingController</url-pattern>
     </servlet-mapping>
     <servlet-mapping>
-<<<<<<< Updated upstream
+
         <servlet-name>FeedbackController</servlet-name>
         <url-pattern>/FeedbackController</url-pattern>
-=======
+
         <servlet-name>ReturnRequestController</servlet-name>
         <url-pattern>/ReturnRequestController</url-pattern>
     </servlet-mapping>
     <servlet-mapping>
         <servlet-name>ManageRequestController</servlet-name>
         <url-pattern>/ManageRequestController</url-pattern>
->>>>>>> Stashed changes
+
     </servlet-mapping>
 </web-app>
