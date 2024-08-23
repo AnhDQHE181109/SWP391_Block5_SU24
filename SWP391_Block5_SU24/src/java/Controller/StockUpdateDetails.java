@@ -1,10 +1,12 @@
 package Controller;
+
 import model.DAOStock;
 import model.DAOStockImportDetail;
-import model.DAOProductStockImport;// Add this import
+import model.DAOProductStockImport;
 import entity.Stock;
 import entity.StockImportDetail;
 import entity.ProductStockImport;
+import entity.StockImportSummary; // Thêm import cho StockImportSummary
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
@@ -30,11 +32,13 @@ public class StockUpdateDetails extends HttpServlet {
             DAOStockImportDetail daoStockImportDetail = new DAOStockImportDetail();
             DAOStock daoStock = new DAOStock();
             DAOProductStockImport daoProductStockImport = new DAOProductStockImport();
-            AccountDAO daoAccount = new AccountDAO(); // Add this line
+            AccountDAO daoAccount = new AccountDAO(); 
 
+            // Get stock import details and product stock import
             List<StockImportDetail> stockImportDetails = daoStockImportDetail.getByImportID(importId);
             ProductStockImport productStockImport = daoProductStockImport.getProductStockImportById(importId);
 
+            // Get stock details
             Map<Integer, Stock> stockDetailsMap = new HashMap<>();
             for (StockImportDetail detail : stockImportDetails) {
                 int stockID = detail.getStockID();
@@ -46,6 +50,9 @@ public class StockUpdateDetails extends HttpServlet {
                 }
             }
 
+            // Get stock import summary
+            List<StockImportSummary> stockImportSummaries = daoStockImportDetail.getStockImportSummary(importId);
+
             // Get username from accountID
             String username = null;
             if (productStockImport != null) {
@@ -53,18 +60,26 @@ public class StockUpdateDetails extends HttpServlet {
                 username = daoAccount.getUsernameByAccountID(accountID);
             }
 
+            // Set attributes for JSP
             request.setAttribute("stockImportDetails", stockImportDetails);
             request.setAttribute("stockDetailsMap", stockDetailsMap);
             request.setAttribute("productStockImport", productStockImport);
-            request.setAttribute("username", username); // Add this line
+            request.setAttribute("username", username);
+            request.setAttribute("stockImportSummaries", stockImportSummaries); // Thêm dữ liệu summary
 
-            System.out.println("stockDetailsMap" + stockDetailsMap);
-            System.out.println("stockImportDetails" + stockImportDetails);
-            System.out.println("productStockImport" + productStockImport);
-            System.out.println("username" + username); // Add this line
+            // Log for debugging
+            System.out.println("stockDetailsMap: " + stockDetailsMap);
+            System.out.println("stockImportDetails: " + stockImportDetails);
+            System.out.println("productStockImport: " + productStockImport);
+            System.out.println("username: " + username);
+            System.out.println("stockImportSummaries: " + stockImportSummaries); // Thêm log cho summary
 
+            // Forward to JSP
             request.getRequestDispatcher("staff/stockUpdateDetails.jsp").forward(request, response);
         } catch (NumberFormatException e) {
+            response.sendRedirect("error.jsp");
+        } catch (Exception e) {
+            e.printStackTrace();
             response.sendRedirect("error.jsp");
         }
     }
