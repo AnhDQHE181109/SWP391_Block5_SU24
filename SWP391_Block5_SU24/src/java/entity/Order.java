@@ -11,7 +11,13 @@ public class Order {
     private Integer accountID;
     private Date orderDate;
     private String status;
-
+    private String productname;
+    private double price;
+    private double discount_amount;
+    private String imageURL;
+    private int quanity;
+    
+    
     public Order() {
     }
 

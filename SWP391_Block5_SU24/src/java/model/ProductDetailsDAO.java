@@ -7,6 +7,7 @@ package model;
 import entity.Brand;
 import entity.Category;
 import entity.Feedback;
+import entity.Order;
 import entity.Product;
 import entity.ProductDetails;
 import entity.ProductStockDetails;
@@ -748,4 +749,38 @@ public class ProductDetailsDAO extends DBConnect {
         return bestSellers;
     }
 
-}
+    public List<Order> getAllOrdersByCustomerId(int accountId) {
+        List<Order> orders = new ArrayList<>();
+        String sql = "SELECT o.OrderID, p.ProductName, p.Price, d.discount_amount, i.ImageURL, od.Quantity, "
+                + "(p.Price - ISNULL(d.discount_amount, 0)) * od.Quantity AS ProductTotal, "
+                + "SUM((p.Price - ISNULL(d.discount_amount, 0)) * od.Quantity) OVER (PARTITION BY o.OrderID) AS OrderTotal "
+                + "FROM Orders o "
+                + "JOIN OrderDetails od ON o.OrderID = od.OrderID "
+                + "JOIN Stock s ON od.StockID = s.StockID "
+                + "JOIN Products p ON s.ProductID = p.ProductID "
+                + "LEFT JOIN Discounts d ON p.ProductID = d.product_id "
+                + "LEFT JOIN ProductImages i ON s.StockID = i.StockID "
+                + "WHERE o.AccountID = ? "
+                + "ORDER BY o.OrderID";
+        try (PreparedStatement ps = conn.prepareStatement(sql)) {
+            ps.setInt(1, accountId);
+            ResultSet rs = ps.executeQuery();
+            while (rs.next()) {
+                Order order = new Order();
+                order.setOrderID(rs.getInt("OrderID"));
+                order.setProductName(rs.getString("ProductName"));
+                order.setPrice(rs.getDouble("Price"));
+                order.setDiscountAmount(rs.getDouble("discount_amount"));
+                order.setImageUrl(rs.getString("ImageURL"));
+                order.setQuantity(rs.getInt("Quantity"));
+                order.setProductTotal(rs.getDouble("ProductTotal"));
+                order.setOrderTotal(rs.getDouble("OrderTotal"));
+                orders.add(order);
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return orders;
+    }
+
+}`
