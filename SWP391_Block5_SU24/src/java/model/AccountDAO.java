@@ -24,7 +24,7 @@ public class AccountDAO extends MyDAO {
             while (rs.next()) {
                 int accountID = rs.getInt("AccountID");
                 String username = rs.getString("Username");
-                String fullname = rs.getString("Fullname");
+                String fullname = rs.getString("Name");
                 String hash = rs.getString("Hash");
                 String phoneNumber = rs.getString("PhoneNumber");
                 String email = rs.getString("Email");
@@ -57,7 +57,7 @@ public class AccountDAO extends MyDAO {
                 String address = rs.getString("Address");
                 String salt = rs.getString("Salt");
                 boolean status = rs.getBoolean("Status");
-                String fullname = rs.getString("Fullname");
+                String fullname = rs.getString("Name");
                 Account account = new Account(accountID, username, hash, phoneNumber, email, address, salt, role, status, fullname);
                 accountList.add(account);
             }
@@ -83,7 +83,7 @@ public class AccountDAO extends MyDAO {
                 int role = rs.getInt("Role");
                 String salt = rs.getString("Salt");
                 Boolean status = rs.getBoolean("Status");
-                String fullname = rs.getString("Fullname");
+                String fullname = rs.getString("Name");
                 account = new Account(accountID, username, hash, phoneNumber, email, address, salt, role, status, fullname);
             }
         } catch (Exception e) {
@@ -108,7 +108,7 @@ public class AccountDAO extends MyDAO {
                 int role = rs.getInt("Role");
                 String salt = rs.getString("Salt");
                 Boolean status = rs.getBoolean("Status");
-                String fullname = rs.getString("Fullname");
+                String fullname = rs.getString("Name");
                 account = new Account(accountID, username, hash, phoneNumber, email, address, salt, role, status);
             }
         } catch (Exception e) {
@@ -355,7 +355,7 @@ public class AccountDAO extends MyDAO {
             int role = rs.getInt("Role");
             String salt = rs.getString("Salt");
             boolean status = rs.getBoolean("Status");
-            String fullname = rs.getString("Fullname");
+            String fullname = rs.getString("Name");
             Account account = new Account(id, username, hash, phoneNumber, email, address, salt, role, status, fullname);
             accountList.add(account);
         }
