@@ -205,6 +205,20 @@ CREATE TABLE Wishlist (
     CONSTRAINT FK_Wishlist_Stock FOREIGN KEY (StockID) REFERENCES Stock(StockID)
 );
 GO
+-- Create ReturnRequests table
+CREATE TABLE ReturnRequests (
+    RequestID INT IDENTITY(1,1) PRIMARY KEY,
+    OrderID INT NOT NULL,
+    AccountID INT NOT NULL,
+    Reason NVARCHAR(255) NOT NULL,
+    Description TEXT NOT NULL,
+    RefundAmount DECIMAL(18,2) NOT NULL,
+    DateSubmitted DATETIME DEFAULT GETDATE() NOT NULL,
+    Status NVARCHAR(50) DEFAULT 'Pending',
+    CONSTRAINT FK_ReturnRequests_Orders FOREIGN KEY (OrderID) REFERENCES Orders(OrderID),
+    CONSTRAINT FK_ReturnRequests_Accounts FOREIGN KEY (AccountID) REFERENCES Accounts(AccountID)
+);
+GO
 USE ECommerceStore;
 GO
 
@@ -265,8 +279,8 @@ VALUES
 -- Insert data into Orders
 INSERT INTO Orders (AccountID, OrderDate, Status)
 VALUES 
-(1, '2024-05-13', 0),
-(2, '2024-08-18', 0);
+(1, '2024-08-18', 3),
+(2, '2024-05-13', 3);
 
 -- Insert data into Cart
 INSERT INTO Cart (AccountID, StockID, quantity, DiscountID, date_added)
@@ -305,3 +319,7 @@ INSERT INTO Wishlist (AccountID, StockID, DateAdded)
 VALUES 
 (1, 2, GETDATE()),
 (2, 3, GETDATE());
+
+INSERT INTO ReturnRequests (OrderID, AccountID, Reason, Description, RefundAmount, Status)
+VALUES 
+(1, 1, 'Damaged Product', 'The product arrived with a defect in the sole, making it unusable.', 140.00, 'Pending');
