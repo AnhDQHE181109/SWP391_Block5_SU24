@@ -15,7 +15,7 @@ import jakarta.servlet.http.HttpServletResponse;
  *
  * @author ASUS
  */
-public class ProductVariantsImportController extends HttpServlet {
+public class ProductStocksImportController extends HttpServlet {
 
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
@@ -58,7 +58,7 @@ public class ProductVariantsImportController extends HttpServlet {
         response.setContentType("text/html;charset=UTF-8");
         PrintWriter out = response.getWriter();
         
-        
+        request.getRequestDispatcher("staff/importProductStock.jsp").forward(request, response);
     }
 
     /**
