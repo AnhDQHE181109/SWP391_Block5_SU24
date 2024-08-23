@@ -5,16 +5,18 @@
 package Controller;
 
 import java.io.IOException;
-import java.io.PrintWriter;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
+import java.sql.Timestamp;
 import jakarta.servlet.ServletException;
+import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
-import java.sql.ResultSet;
 import model.DBConnect;
+import entity.Account;
+import java.io.PrintWriter;
 
 /**
  *
@@ -74,25 +76,34 @@ public class ReturnRequestController extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        String orderId = request.getParameter("orderId");
+        // Get the request parameters
+        int orderId = Integer.parseInt(request.getParameter("orderId"));
         String reason = request.getParameter("reason");
         String description = request.getParameter("description");
-        String refundAmount = request.getParameter("refund_amount");
-        String phoneNumber = request.getParameter("phone_number");
-        String email = request.getParameter("email");
+        double refundAmount = Double.parseDouble(request.getParameter("refund_amount"));
+        Account loggedInUser = (Account) request.getSession().getAttribute("account");
+        int accountId = loggedInUser.getAccountID();
 
-        // Debugging information
-        System.out.println("SubmitReturnRequestController: doPost called");
-        System.out.println("Order ID: " + orderId);
-        System.out.println("Reason: " + reason);
-        System.out.println("Description: " + description);
-        System.out.println("Refund Amount: " + refundAmount);
-        System.out.println("Phone Number: " + phoneNumber);
-        System.out.println("Email: " + email);
+        // Insert the return request into the database
+        try (Connection conn = new DBConnect().conn) {
+            String sql = "INSERT INTO ReturnRequests (OrderID, AccountID, Reason, Description, RefundAmount, DateSubmitted, Status) " +
+                         "VALUES (?, ?, ?, ?, ?, ?, ?)";
+            PreparedStatement ps = conn.prepareStatement(sql);
+            ps.setInt(1, orderId);
+            ps.setInt(2, accountId);
+            ps.setString(3, reason);
+            ps.setString(4, description);
+            ps.setDouble(5, refundAmount);
+            ps.setTimestamp(6, new Timestamp(System.currentTimeMillis())); // Current date and time
+            ps.setString(7, "Pending"); // Status is 'Pending' by default
+            ps.executeUpdate();
+            ps.close();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
 
-        // After processing, redirect the user to TestOrderList.jsp
-        response.sendRedirect(request.getContextPath() + "/customer/TestOrderList.jsp");
-        System.out.println("Redirecting to TestOrderList.jsp");
+        // Redirect the user to a confirmation page or back to the orders page
+        response.sendRedirect("customer/return_confirmation.jsp");
     }
   
 
