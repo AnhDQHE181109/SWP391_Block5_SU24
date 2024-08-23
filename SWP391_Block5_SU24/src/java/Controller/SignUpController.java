@@ -105,6 +105,7 @@ public class SignUpController extends HttpServlet {
         String email = request.getParameter("email");
         String address = request.getParameter("address");
         String repassword = request.getParameter("repassword");
+        String name = request.getParameter("name");
         boolean hasErrors = false;
         AccountDAO adao = new AccountDAO();
 
@@ -173,7 +174,7 @@ public class SignUpController extends HttpServlet {
                 hashedPassword = EncryptionHelper.hashPassword(password, salt);
             } catch (Exception e) {
             }
-            adao.addAccount(username, hashedPassword, pnum, email, address, 1, salt);
+            adao.addAccount(username, hashedPassword, pnum, email, address, 1, salt, name);
             request.setAttribute("signup_success", "true");
             request.getRequestDispatcher("login.jsp").forward(request, response);
         }
