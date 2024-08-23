@@ -227,6 +227,7 @@ public class DAOFeedback extends MyDAO {
 
                while (rs.next()) {
                    Feedback feedback = new Feedback();
+                   feedback.setFeedbackId(rs.getInt("feedback_id"));
                    feedback.setAccountID(rs.getInt("accountID"));
                    feedback.setStockID(rs.getInt("stockID"));
                    feedback.setRating(rs.getInt("rating"));
@@ -281,4 +282,76 @@ public class DAOFeedback extends MyDAO {
 
         return isSuccess;
     }
+    
+public List<Feedback> getallfbyFeedbackID(int feedbackId) {
+    List<Feedback> feedbackList = new ArrayList<>();
+    String sql = "SELECT f.feedback_id, f.rating, f.comment, f.created_at, " +
+                 "a.AccountID, a.Username, a.Fullname, a.Email, a.PhoneNumber, " +
+                 "p.ProductID, p.ProductName, p.Origin, p.Material, p.Price, " +
+                 "s.StockID, s.Size, s.Color, s.StockQuantity " +
+                 "FROM [ECommerceStore].[dbo].[Feedback] f " +
+                 "JOIN [ECommerceStore].[dbo].[Accounts] a ON f.AccountID = a.AccountID " +
+                 "JOIN [ECommerceStore].[dbo].[Stock] s ON f.StockID = s.StockID " +
+                 "JOIN [ECommerceStore].[dbo].[Products] p ON s.ProductID = p.ProductID " +
+                 "WHERE f.feedback_id = ?";
+
+    try {
+        ps = con.prepareStatement(sql);
+        ps.setInt(1, feedbackId); // Set the feedback ID parameter
+        rs = ps.executeQuery();
+
+        while (rs.next()) {
+            // Create Feedback object
+            Feedback feedback = new Feedback();
+            
+            // Populate feedback object with values from the ResultSet
+            feedback.setFeedbackId(rs.getInt("feedback_id"));
+            feedback.setAccountID(rs.getInt("AccountID"));
+            feedback.setRating(rs.getInt("rating"));
+            feedback.setComment(rs.getString("comment"));
+            feedback.setCreatedAt(rs.getDate("created_at"));
+            
+            // Set Account details (if needed, add them to your Feedback entity or process them separately)
+
+            // Create Stock object and set its properties
+            Stock stock = new Stock();
+            stock.setStockID(rs.getInt("StockID"));
+            stock.setProductID(rs.getInt("ProductID"));
+            stock.setSize(rs.getInt("Size"));
+            stock.setColor(rs.getString("Color"));
+            stock.setStockQuantity(rs.getInt("StockQuantity"));
+
+            // Set Stock in Feedback object if your Feedback entity supports it
+            feedback.setStockID(stock.getStockID()); // Make sure the Feedback class supports this
+
+            // Create Product object and set its properties
+            Product product = new Product();
+            product.setProductId(rs.getInt("ProductID"));
+            product.setProductName(rs.getString("ProductName"));
+            product.setOrigin(rs.getString("Origin"));
+            product.setMaterial(rs.getString("Material"));
+            product.setPrice(rs.getDouble("Price"));
+
+            // Set Product in Feedback object if your Feedback entity supports it
+            feedback.setProductID(product.getProductId()); // Make sure the Feedback class supports this
+
+            // Add feedback to the list
+            feedbackList.add(feedback);
+        }
+    } catch (SQLException e) {
+        e.printStackTrace();
+    } finally {
+        // Close resources
+        try {
+            if (rs != null) rs.close();
+            if (ps != null) ps.close();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+
+    return feedbackList;
+}
+
+    
 }

@@ -93,6 +93,8 @@ public class FeedbackController extends HttpServlet {
             request.setAttribute("totalPages", totalPages);
             request.setAttribute("currentPage", currentPage);
             request.getRequestDispatcher("manager/feedback.jsp").forward(request, response);
+            
+            System.out.println("paginatedFeedbackList: "+ paginatedFeedbackList);
 
         } catch (Exception e) {
             e.printStackTrace();
