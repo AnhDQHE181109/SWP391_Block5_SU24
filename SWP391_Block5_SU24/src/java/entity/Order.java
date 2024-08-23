@@ -7,6 +7,7 @@ package entity;
 import java.util.Date;
 
 public class Order {
+
     private int orderID;
     private Integer accountID;
     private Date orderDate;
@@ -17,6 +18,15 @@ public class Order {
     private int quantity;
     private double producttotal;
     private double ordertotal;
+    private double price;
+
+    public void setPrice(double price) {
+        this.price = price;
+    }
+
+    public double getPrice() {
+        return price;
+    }
 
     public String getProductName() {
         return productname;
@@ -65,7 +75,7 @@ public class Order {
     public void setOrdertotal(double ordertotal) {
         this.ordertotal = ordertotal;
     }
-    
+
     public Order() {
     }
 
@@ -108,5 +118,4 @@ public class Order {
         this.status = status;
     }
 
-   
 }
