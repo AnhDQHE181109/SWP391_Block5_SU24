@@ -73,6 +73,14 @@
         <servlet-class>Controller.SearchingController</servlet-class>
     </servlet>
     <servlet>
+        <servlet-name>AddProductController</servlet-name>
+        <servlet-class>Controller.AddProductController</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>OrderListController</servlet-name>
+        <servlet-class>Controller.OrderListController</servlet-class>
+    </servlet>
+    <servlet>
         <servlet-name>FeedbackController</servlet-name>
         <servlet-class>Controller.FeedbackController</servlet-class>
     </servlet>
@@ -185,6 +193,14 @@
         <url-pattern>/SearchingController</url-pattern>
     </servlet-mapping>
     <servlet-mapping>
+        <servlet-name>AddProductController</servlet-name>
+        <url-pattern>/AddProductController</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>OrderListController</servlet-name>
+        <url-pattern>/OrderListController</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>    
         <servlet-name>FeedbackController</servlet-name>
         <url-pattern>/FeedbackController</url-pattern>
     </servlet-mapping>
