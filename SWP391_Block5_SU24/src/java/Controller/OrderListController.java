@@ -73,7 +73,7 @@ public class OrderListController extends HttpServlet {
             request.setAttribute("orderList", orderList);
 
             // Forward the request to the JSP page for display
-            RequestDispatcher dispatcher = request.getRequestDispatcher("customer/orderlist.jsp");
+            RequestDispatcher dispatcher = request.getRequestDispatcher("customer/order_list.jsp");
             dispatcher.forward(request, response);
         } else {
             // If no customer is logged in, redirect to the login page

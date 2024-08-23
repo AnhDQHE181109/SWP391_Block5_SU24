@@ -66,7 +66,8 @@
             margin-top:40px;
             background-color:white;
             box-shadow: 20px 16px #88c8bc;
-            width:993px; height:546px;
+            width:993px;
+            height:546px;
         }
         .side-bar-user{
             margin:10px;
@@ -186,6 +187,10 @@
                             <tr><td></td><td style="padding-left:7px; padding-top:6px;color:red;">Profile</td></tr>
                             <tr><td></td><td style="padding-left:7px; padding-top:3px;padding-bottom:10px">Change Password</td></tr>
                             <tr style="color:black"><td><i style="padding-right:2px" class="fa-regular fa-bell"></i></td><td>Notification</td></tr>
+                            <tr style="color:black">
+                                <td><i style="padding-right:2px" class="fa-regular fa-list-alt"></i></td>
+                                <td><a href="order_list.jsp" style="text-decoration: none; color: black;">My Orders</a></td>
+                            </tr>
                         </table>
                     </div>
                 </div>
