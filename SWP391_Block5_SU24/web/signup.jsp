@@ -220,6 +220,38 @@
                 left: -35px;
                 content: "✖";
             }
+            
+            
+            #Nmessage{
+                display:none;
+                background: #f1f1f1;
+                color: #000;
+                position: relative;
+                padding: 0px 10px 10px 10px;
+                margin-bottom: 5px;
+            }
+            #Nmessage p {
+                padding: 0px 35px;
+                font-size: 14px;
+            }
+            .Nvalid {
+                color: green;
+            }
+
+            .Nvalid:before {
+                position: relative;
+                left: -35px;
+                content: "✔";
+            }
+            .Ninvalid {
+                color: red;
+            }
+
+            .Ninvalid:before {
+                position: relative;
+                left: -35px;
+                content: "✖";
+            }
         </style>
     </head>
     <body>
@@ -243,6 +275,14 @@
                             </div>
                             <%}%>
                             <form action="SignUpController" method="post" style='display: flex; flex-direction: column; align-items: center;'>
+                                <% if ("true".equals(request.getAttribute("error_name_invalid"))) { %>
+                                <p style="color:red" class="error">Invalid Name!</p>
+                                <% } %>
+                                <input style='margin:0px 12px 0px 12px; height: 40px; width:85%;' type="text" id="name" name="name" placeholder='Name' required value="${name != null ? name : ''}"><br>    
+                                <div id="Nmessage">          
+                                    <b>Name must not: </b>
+                                    <p id="Nletter" class="Ninvalid">Not contain any <b>special characters</b></p> 
+                                </div>
                                 <% if ("true".equals(request.getAttribute("error_username_invalid"))) { %>
                                 <p style="color:red" class="error">Invalid username!</p>
                                 <% } %>
@@ -256,8 +296,8 @@
                                 <p style="color:red" class="error">Username must contain a maximum of 20 characters!</p>
                                 <% } %>
                                 <input style='margin:0px 12px 0px 12px; height: 40px; width:85%;' type="text" id="usname" name="username" placeholder='Username' required value="${username != null ? username : ''}"><br>
-                                <div id="umessage">          
-                                    <b>Username not must: </b>
+                                <div id="Nmessage">          
+                                    <b>Username must not: </b>
                                     <p id="uletter" class="uinvalid">Not contain any of the following special characters: <br><b>/, \, <, >, &, $, #, %, ", (, ), !, ?, '</b>as well as <b></b> whitespace <br> characters</p> 
                                     <p id="ulength" class="uinvalid">Contain <b>maximum 20 characters</b></p>
                                 </div>
@@ -582,5 +622,38 @@
                 length2.classList.add("invalid");
             }
         }
+        
+        var NInput = document.getElementById("em");
+        var Nletter = document.getElementById("Nletter");
+
+        eInput.onfocus = function () {
+            document.getElementById("Nmessage").style.display = "block";
+        }
+        eInput.onblur = function () {
+            document.getElementById("Nmessage").style.display = "none";
+        };
+        const Name = ^[a-zA-Z\s]+$;
+        eInput.onkeyup = function () {
+            if (!InvalidEstart.test(eInput.value)) {
+                enumber.classList.remove("einvalid");
+                enumber.classList.add("evalid");
+            } else {
+                enumber.classList.remove("evalid");
+                enumber.classList.add("einvalid");
+            }
+            if (EMAIL_REGEX.test(eInput.value)) {
+                estructure.classList.remove("einvalid");
+                estructure.classList.add("evalid");
+            } else {
+                estructure.classList.remove("evalid");
+                estructure.classList.add("einvalid");
+            }
+            if (eInput.value === "") {
+                enumber.classList.remove("evalid");
+                enumber.classList.add("einvalid");
+                estructure.classList.remove("evalid");
+                estructure.classList.add("einvalid");
+            }
+        };
     </script>
 </html>

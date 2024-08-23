@@ -73,17 +73,20 @@
         <servlet-class>Controller.SearchingController</servlet-class>
     </servlet>
     <servlet>
-
         <servlet-name>FeedbackController</servlet-name>
         <servlet-class>Controller.FeedbackController</servlet-class>
-
+    </servlet>
+    <servlet>
         <servlet-name>ReturnRequestController</servlet-name>
         <servlet-class>Controller.ReturnRequestController</servlet-class>
     </servlet>
     <servlet>
         <servlet-name>ManageRequestController</servlet-name>
         <servlet-class>Controller.ManageRequestController</servlet-class>
-
+    </servlet>
+    <servlet>
+        <servlet-name>ProductVariantsImportController</servlet-name>
+        <servlet-class>Controller.ProductVariantsImportController</servlet-class>
     </servlet>
     <servlet-mapping>
         <servlet-name>LoginController</servlet-name>
@@ -182,16 +185,19 @@
         <url-pattern>/SearchingController</url-pattern>
     </servlet-mapping>
     <servlet-mapping>
-
         <servlet-name>FeedbackController</servlet-name>
         <url-pattern>/FeedbackController</url-pattern>
-
+    </servlet-mapping>
+    <servlet-mapping>
         <servlet-name>ReturnRequestController</servlet-name>
         <url-pattern>/ReturnRequestController</url-pattern>
     </servlet-mapping>
     <servlet-mapping>
         <servlet-name>ManageRequestController</servlet-name>
         <url-pattern>/ManageRequestController</url-pattern>
-
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>ProductVariantsImportController</servlet-name>
+        <url-pattern>/importProductVariants</url-pattern>
     </servlet-mapping>
 </web-app>

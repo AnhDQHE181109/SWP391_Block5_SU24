@@ -18,7 +18,29 @@ public class Account {
     private String salt;
     private int role;
     private boolean status;
+    private String fullname;
 
+    public String getFullname() {
+        return fullname;
+    }
+
+    public void setFullname(String fullname) {
+        this.fullname = fullname;
+    }
+
+    public Account(int accountID, String username, String hash, String phoneNumber, String email, String address, String salt, int role, boolean status, String fullname) {
+        this.accountID = accountID;
+        this.username = username;
+        this.hash = hash;
+        this.phoneNumber = phoneNumber;
+        this.email = email;
+        this.address = address;
+        this.salt = salt;
+        this.role = role;
+        this.status = status;
+        this.fullname = fullname;
+    }
+    
     public Account(int accountID, String username, String hash, String phoneNumber, String email, String address, String salt, int role) {
         this.accountID = accountID;
         this.username = username;
