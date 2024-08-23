@@ -97,7 +97,7 @@ public class ManageRequestController extends HttpServlet {
         }
         
         // Redirect back to manage_request.jsp
-        response.sendRedirect("manage_request.jsp");
+        response.sendRedirect("manager/manage_request.jsp");
     }
 
     /**

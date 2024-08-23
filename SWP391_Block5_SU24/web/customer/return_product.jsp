@@ -150,25 +150,15 @@
                     <div class="container">
                         <div class="row">
                             <div class="col-sm-7 col-md-9">
-                                <div id="colorlib-logo"><a href="index.jsp">Footwear</a></div>
+                                <div id="colorlib-logo"><a href="${pageContext.request.contextPath}/index.jsp">Footwear</a></div>
                             </div>
-                            <div class="col-sm-5 col-md-3">
-                                <form action="products.jsp" class="search-wrap" method="get">
-                                    <div class="form-group">
-                                        <input type="text" id="search-bar" name="query" class="form-control" placeholder="Search for more products...">
-                                        <button class="btn btn-primary submit-search text-center" type="submit"><i class="icon-search"></i></button>
-                                    </div>
-                                </form>
-                            </div>
+                            
                         </div>
                         <div class="row">
                             <div class="col-sm-12 text-left menu-1">
                                 <ul>
-                                    <li><a href="index.jsp">Home</a></li>
-                                    <li><a href="products.jsp">Products</a></li>
-                                    <li><a href="about.html">About</a></li>
-                                    <li><a href="contact.html">Contact</a></li>
-                                    <li class="cart"><a href="shoppingCart.jsp"><i class="icon-shopping-cart"></i> Cart [0]</a></li>
+                                    <li><a href="${pageContext.request.contextPath}/index.jsp">Home</a></li>
+                                    <li><a href="${pageContext.request.contextPath}/products.jsp">Products</a></li>
                                 </ul>
                             </div>
                         </div>
@@ -180,7 +170,7 @@
                 <div class="container">
                     <div class="row">
                         <div class="col">
-                            <p class="bread"><span><a href="index.jsp">Home</a></span> / <span>Request Return</span></p>
+                            <p class="bread"><span><a href="${pageContext.request.contextPath}/index.jsp">Home</a></span> / <span>Request Return</span></p>
                         </div>
                     </div>
                 </div>
@@ -200,6 +190,7 @@
 
                 <!-- Reason and Description Box -->
                 <form method="post" action="${pageContext.request.contextPath}/ReturnRequestController">
+                    <input type="hidden" name="orderId" value="<%= orderId %>">
                     <div class="return-product-box">
                         <div class="form-group">
                             <label for="return-reason">Reason for Return:</label>
