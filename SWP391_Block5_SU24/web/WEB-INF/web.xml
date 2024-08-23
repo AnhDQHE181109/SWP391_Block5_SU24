@@ -96,6 +96,10 @@
         <servlet-name>ProductStocksImportController</servlet-name>
         <servlet-class>Controller.ProductStocksImportController</servlet-class>
     </servlet>
+    <servlet>
+        <servlet-name>FeedbackDetailController</servlet-name>
+        <servlet-class>Controller.FeedbackDetailController</servlet-class>
+    </servlet>
     <servlet-mapping>
         <servlet-name>LoginController</servlet-name>
         <url-pattern>/LoginController</url-pattern>
@@ -200,7 +204,7 @@
         <servlet-name>OrderListController</servlet-name>
         <url-pattern>/OrderListController</url-pattern>
     </servlet-mapping>
-    <servlet-mapping>    
+    <servlet-mapping>
         <servlet-name>FeedbackController</servlet-name>
         <url-pattern>/FeedbackController</url-pattern>
     </servlet-mapping>
@@ -215,5 +219,9 @@
     <servlet-mapping>
         <servlet-name>ProductStocksImportController</servlet-name>
         <url-pattern>/importProductStocks</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>FeedbackDetailController</servlet-name>
+        <url-pattern>/FeedbackDetailController</url-pattern>
     </servlet-mapping>
 </web-app>
