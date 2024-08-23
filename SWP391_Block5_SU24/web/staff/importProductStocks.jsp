@@ -2,6 +2,8 @@
 <%@taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <%@page import = "entity.*" %>
 <%@page import = "java.util.*" %>
+<%@page import = "java.time.*" %>
+<%@page import = "java.time.format.DateTimeFormatter" %>
 <%@page import = "jakarta.servlet.http.HttpSession" %>
 
 <!DOCTYPE html>
@@ -45,6 +47,17 @@
         th {
             cursor: pointer;
         }
+
+        thead, tbody {
+            display: block;
+        }
+
+        tbody {
+            height: 350px; 
+            overflow-y: auto; 
+            overflow-x: hidden;
+        }
+
         </style>
 
     </head>
@@ -105,7 +118,7 @@
                                             <i class="fas fa-plus"></i> Add a new product
                                         </a> -->
                                         <label for="productName">Product: </label>
-                                        <input type="text" id="productName" name="productName" class="form-control" placeholder="" style="margin-right: 5px;"
+                                        <input type="text" id="productName" name="productName" class="form-control" placeholder="Product's name" style="margin-right: 5px;"
                                         required>
                                     </div> 
 
@@ -115,13 +128,13 @@
                                             <i class="fas fa-sort-amount-down"></i> Sort by Name (Asc)
                                         </button> -->
                                         <label for="productColor">Color: </label>
-                                        <input type="text" id="productColor" name="productColor" class="form-control" placeholder="" style="margin-right: 5px;"
+                                        <input type="text" id="productColor" name="productColor" class="form-control" placeholder="Color" style="margin-right: 5px;"
                                         required>
                                     </div>
 
                                     <div class="col-md-2" style="justify-content: center; align-items: center;">
                                         <label for="productSize">Size: </label>
-                                        <input type="text" id="productSize" name="productSize" class="form-control" placeholder="" style="margin-right: 5px;"
+                                        <input type="text" id="productSize" name="productSize" class="form-control" placeholder="Size" style="margin-right: 5px;"
                                         required>
                                     </div>
 
@@ -133,8 +146,8 @@
 
                                     <div class="col-md-2" style="justify-content: center; align-items: center;">
                                         <label for="productQuantity">Quantity: </label>
-                                        <input type="number" id="productQuantity" name="productQuantity" class="form-control" placeholder="Quantity" style="margin-right: 5px;"
-                                        required>
+                                        <input type="text" id="productQuantity" name="productQuantity" class="form-control" placeholder="Quantity" style="margin-right: 5px;"
+                                        onkeypress="return event.charCode >= 48 && event.charCode <= 57" required>
                                     </div>
 
                                     <div class="col-md-2" style="display: flex; justify-content: center; align-items: center;">
@@ -204,7 +217,7 @@
                                 List<Product> productsStocksList = (List<Product>) request.getAttribute("productsStocksList");
                             %>
                             
-                            <table class="table table-hover table-bordered" id="sampleTable">
+                            <table class="table table-hover table-bordered productsTable" id="productsTable">
                                 <thead>
                                     <tr>
                                         <th>#</th>
@@ -227,7 +240,7 @@
                                             int count = 1;
                                             for (ProductStockImport productStock : productsList) { %>
                                         <tr>
-                                            <td><%=count++ %></td>
+                                            <td><%=count %></td>
                                             <td><img style="width: 60px; height: 60px;" src="<%=productStock.getImageURL() %>"></td>
                                             <td><%=productStock.getProductName() %></td>
                                             <td><%=productStock.getProductColor() %></td>
@@ -237,6 +250,7 @@
                                             <td class="col-1">
                                                 <button class="btn btn-danger" onclick="location.href='importProductStocks?removeProduct=<%=count %>'">Remove</button>
                                             </td>
+                                            <% count++; %>
 
                                             <!-- <td>
                                                 <button class="update-product-btn" onclick="showUpdateForm('${product.bookID}', '${product.bookName}', '${product.authorName}', '${product.publisherName}', '${product.publisherDate}', '${product.price}', '${product.quantity}', '${product.detailbook}', '${product.img_1}', '${product.img_2}', '${product.img_3}', '${product.img_4}')">Update</button>
@@ -275,6 +289,29 @@
                                 </tbody>
                             </table>
 
+                            <div class="container">
+                                <div class="row">
+
+                                    <div class="col-sm">
+                                        <p>Employee: <b><%=account.getUsername() %></b></p>
+                                    </div>
+
+                                    <div class="col-sm">
+                                        <button class="btn btn-info">Import</button>
+                                    </div>
+
+                                    <div class="col-sm">
+                                        <% DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
+                                           LocalDateTime dateTime = LocalDateTime.now();
+                                           String formattedDateTime = dateTime.format(formatter);
+                                        %>
+                                        <p>Date: <b><%=formattedDateTime %></b></p>
+                                    </div>
+
+                                </div>
+                            </div>
+                            
+
                             <div>
                                 <c:if test="${currentPage > 1}">
                                     <a href="stocksManager?page=${currentPage - 1}">Previous</a>
@@ -305,7 +342,7 @@
                 console.log('Executed sort function');
 
                 var table, rows, switching, i, x, y, shouldSwitch, dir, switchCount = 0;
-                table = document.getElementById("sampleTable");
+                table = document.getElementById("productsTable");
                 switching = true;
                 // Set the sorting direction to ascending:
                 dir = "asc";
@@ -518,6 +555,25 @@
                     win.print();
                 }
             }
+        </script>
+        <script>
+            // Change the selector if needed
+            var $table = $('table.productsTable'),
+                $bodyCells = $table.find('tbody tr:first').children(),
+                colWidth;
+
+            $(window).resize(function() {
+                // Get the tbody columns width array
+                colWidth = $bodyCells.map(function() {
+                    return $(this).width();
+                }).get();
+
+                // Set the width of thead columns
+                $table.find('thead tr').children().each(function(i, v) {
+                    $(v).width(colWidth[i]);
+                });
+            }).resize();
+
         </script>
 
 <% String openPopup = (String) request.getAttribute("openPopup");
