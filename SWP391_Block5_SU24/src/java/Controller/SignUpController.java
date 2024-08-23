@@ -151,6 +151,10 @@ public class SignUpController extends HttpServlet {
             hasErrors = true;
             request.setAttribute("error_emailtaken", "true");
         }
+        if (!isValidName(name)) {
+            hasErrors = true;
+            request.setAttribute("error_name_invalid", "true");
+        }
         if (!pnum.matches("[0-9]+")) {
             hasErrors = true;
             request.setAttribute("error_phone_number", "true");
@@ -163,6 +167,7 @@ public class SignUpController extends HttpServlet {
         }
         if (hasErrors) {
             request.setAttribute("username", username);
+            request.setAttribute("name", name);
             request.setAttribute("pnum", pnum);
             request.setAttribute("email", email);
             request.setAttribute("address", address);
@@ -178,6 +183,10 @@ public class SignUpController extends HttpServlet {
             request.setAttribute("signup_success", "true");
             request.getRequestDispatcher("login.jsp").forward(request, response);
         }
+    }
+    public static boolean isValidName(String name) {
+        String regex = "^[a-zA-Z\\s]+$";
+        return name.matches(regex);
     }
 
     /**
