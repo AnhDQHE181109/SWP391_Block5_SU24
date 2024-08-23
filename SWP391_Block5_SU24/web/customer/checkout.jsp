@@ -190,9 +190,9 @@
 
 								<div class="col-md-12">
 									<div class="form-group">
-										<label for="fullname">Full Name</label>
-			                    	<input type="text" name="fullname" id="fullname" class="form-control" placeholder="Fullname"
-										   value="<%=billingDetails.getFullName() %>" style="color:black; font-weight: bold;" readonly>
+										<label for="name">Name</label>
+			                    	<input type="text" name="name" id="name" class="form-control" placeholder="Name"
+										   value="<%=billingDetails.getName() %>" style="color:black; font-weight: bold;" readonly>
 			                  </div>
 			               </div>
 

@@ -166,7 +166,7 @@ public class CheckoutController extends HttpServlet {
         
         CheckoutDAO coDAO = new CheckoutDAO();
         
-        String userFullname = coDAO.getFullnameByAccountID(accountID);
+        String userFullname = coDAO.getNameByAccountID(accountID);
         coDAO.addCartToOrder(accountID);
         
         request.setAttribute("userFullname", userFullname);
