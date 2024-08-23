@@ -153,7 +153,7 @@ public class AccountDAO extends MyDAO {
     }
 
     public boolean isUsernameTaken(String username) {
-        String sql = "SELECT COUNT(*) FROM Accounts WHERE Email = ?";
+        String sql = "SELECT COUNT(*) FROM Accounts WHERE Username = ?";
         try {
             ps = con.prepareStatement(sql);
             ps.setString(1, username);

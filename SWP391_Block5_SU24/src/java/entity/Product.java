@@ -33,7 +33,16 @@ public class Product {
     private String imageUrl;
     private Date dateAdded;
     private int wishlistedCount;
+    private int productstatus;
 
+    public int getProductStatus() {
+        return productstatus;
+    }
+
+    public void setProductStatus(int productstatus) {
+        this.productstatus = productstatus;
+    }
+    
     public void setImageUrl(String imageUrl) {
         this.imageUrl = imageUrl;
     }
@@ -75,7 +84,7 @@ public class Product {
         this.color = color;
         this.stockQuantity = stockQuantity;
     }
-    public Product(String productName, String origin, String material, double price, int categoryId, int brandId){
+    public Product(String productName, String origin, String material, double price, int categoryId, int brandId, int productstatus){
         this.productName = productName;
         this.origin = origin;
         this.material = material;
