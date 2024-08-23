@@ -770,24 +770,38 @@ public class ProductDetailsDAO extends DBConnect {
         return imageId;
     }
 
-    public List<Order> getAllOrdersByCustomerId(int accountId) {
+    public List<Order> getAllOrdersByCustomerId(int accountId, String status) {
         List<Order> orders = new ArrayList<>();
-        String sql = "SELECT o.OrderID, p.ProductName, od.SalePrice, i.ImageURL, od.Quantity, "
-                + "(od.SalePrice * od.Quantity) AS ProductTotal, "
-                + "SUM(od.SalePrice * od.Quantity) OVER (PARTITION BY o.OrderID) AS OrderTotal "
+
+        String query = "SELECT o.OrderID, o.AccountID, o.OrderDate, o.Status, "
+                + "p.ProductName, od.SalePrice, pi.ImageURL, od.Quantity, "
+                + "(od.Quantity * od.SalePrice) AS ProductTotal, "
+                + "(SELECT SUM(od2.Quantity * od2.SalePrice) "
+                + "FROM OrderDetails od2 WHERE od2.OrderID = o.OrderID) AS OrderTotal "
                 + "FROM Orders o "
                 + "JOIN OrderDetails od ON o.OrderID = od.OrderID "
                 + "JOIN Stock s ON od.StockID = s.StockID "
                 + "JOIN Products p ON s.ProductID = p.ProductID "
-                + "LEFT JOIN ProductImages i ON s.StockID = i.StockID "
-                + "WHERE o.AccountID = ? "
-                + "ORDER BY o.OrderID";
-        try (PreparedStatement ps = conn.prepareStatement(sql)) {
+                + "JOIN ProductImages pi ON s.StockID = pi.StockID "
+                + "WHERE o.AccountID = ?";
+
+        if (!status.equals("all")) {
+            query += " AND o.Status = ?";
+        }
+
+        try (PreparedStatement ps = conn.prepareStatement(query)) {
             ps.setInt(1, accountId);
+            if (!status.equals("all")) {
+                ps.setInt(2, Integer.parseInt(status));
+            }
+
             ResultSet rs = ps.executeQuery();
             while (rs.next()) {
                 Order order = new Order();
                 order.setOrderID(rs.getInt("OrderID"));
+                order.setAccountID(rs.getInt("AccountID"));
+                order.setOrderDate(rs.getDate("OrderDate"));
+                order.setStatus(rs.getString("Status"));
                 order.setProductName(rs.getString("ProductName"));
                 order.setSalePrice(rs.getDouble("SalePrice"));
                 order.setImageUrl(rs.getString("ImageURL"));
@@ -799,6 +813,7 @@ public class ProductDetailsDAO extends DBConnect {
         } catch (SQLException e) {
             e.printStackTrace();
         }
+
         return orders;
     }
 

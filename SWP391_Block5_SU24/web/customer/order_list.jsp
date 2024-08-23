@@ -12,6 +12,10 @@
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <!DOCTYPE html>
 <%
+    String status = request.getParameter("status");
+    if (status == null) {
+        status = "all"; // Default to "all" if no status is selected
+    }
     ProductDetailsDAO pDAO = new ProductDetailsDAO();
     List<Product> bestSellers = pDAO.getBestSellers();
     // Retrieve the sorting parameter from the request
@@ -29,7 +33,7 @@
     } else {
         int accountId = loggedInUser.getAccountID();
         ProductDetailsDAO orderDAO = new ProductDetailsDAO();
-        orderItems = orderDAO.getAllOrdersByCustomerId(accountId); // Pass the sort parameter
+        orderItems = orderDAO.getAllOrdersByCustomerId(accountId, status); // Pass the sort parameter
     }
 %>
 <html>
@@ -87,9 +91,10 @@
             background-color: white;
             box-shadow: 20px 16px #88c8bc;
             width: 993px;
-            max-height: 600px; /* Set a maximum height for the main-bar */
-            overflow-y: auto; /* Enable vertical scrolling */
+            max-height: auto; /* Removes fixed height */
+            overflow: hidden; /* Ensures no scroll bars appear */
         }
+
         .side-bar-user {
             margin: 10px;
             width: 90%;
@@ -123,8 +128,8 @@
             margin-top: 10px;
         }
         .order-list {
-            max-height: 500px; /* Ensure the order list itself can scroll if necessary */
-            overflow-y: auto;
+            max-height: auto; /* Removes max height */
+            overflow: hidden; /* Ensures no scroll bars appear */
         }
         .order-item {
             display: flex;
@@ -134,6 +139,11 @@
             border-bottom: 1px solid #ddd;
             background-color: #fff;
             margin-bottom: 15px;
+        }
+        .product-cart {
+            display: flex;
+            justify-content: space-between;
+            width: 100%;
         }
         .order-item img {
             width: 100px;
@@ -184,74 +194,109 @@
             background-color: #ddd;
             color: black;
         }
-    </style>
-</style>
-<body>
-    <div id="page">
-        <nav class="colorlib-nav" role="navigation">
-            <div class="top-menu">
-                <div class="container">
-                    <div class="row">
-                        <div class="col-sm-7 col-md-9">
-                            <div id="colorlib-logo"><a href="${pageContext.request.contextPath}/index.jsp">Footwear</a></div>
-                        </div>
-                        <div class="col-sm-5 col-md-3">
-                            <form action="products.jsp" method="get" class="search-wrap">
-                                <div class="form-group position-relative">
-                                    <input type="search" name="query" id="search-bar" class="form-control search" placeholder="Search for products...">
-                                    <button class="btn btn-primary submit-search text-center" type="submit"><i class="icon-search"></i></button>
-                                    <div id="suggestions" class="dropdown-menu" style="display: none;
-                                         position: absolute;
-                                         width: 100%;"></div>
-                                </div>
-                            </form>
-                        </div>
-                    </div>
-                    <div class="row">
-                        <div class="col-sm-12 text-left menu-1">
-                            <ul>
-                                <li class="active"><a href="${pageContext.request.contextPath}/index.jsp">Home</a></li>
-                                <li><a class="active" href="${pageContext.request.contextPath}/products.jsp">Products</a></li>
-                                <li><a href="${pageContext.request.contextPath}/about.html">About</a></li>
-                                <li><a href="${pageContext.request.contextPath}/contact.html">Contact</a></li>
-                                    <% if (session.getAttribute("account") != null) { %>
-                                <li class="cart"><a href="wishlist.jsp"><i class="fa fa-heart"></i> Wishlist</a></li>
-                                    <%
-                                    int accountID = 0;
-                                    Account account = (Account)session.getAttribute("account");
-                                    if (account != null) {
-                                        accountID = account.getAccountID();
-                                    }
-                                    int cartItemsCount = pDAO.getCartItemsCount(accountID);
-                                    %>
-                                <li class="cart"><a href="shoppingCart"><i class="icon-shopping-cart"></i> Cart [<%=cartItemsCount %>]</a></li>
-                                <li class="cart"><a href="LogoutController">Logout</a></li>
-                                <li class="cart"><i class="fa-regular fa-user"></i> <a href="customer_profile.jsp"><%= ((Account) session.getAttribute("account")).getUsername() %></a></li>
-                                    <% } else { %>
-                                <li class="cart"><a href="signup.jsp">Sign Up</a></li>
-                                <li class="cart"><a href="login.jsp">Login</a></li>
-                                <li class="cart"><a href="shoppingCart"><i class="icon-shopping-cart"></i> Cart [0]</a></li>
-                                    <% } %>
+        .order-filter-bar {
+            display: flex;
+            justify-content: space-around;
+            background-color: #fff;
+            padding: 10px 0;
+            border-bottom: 1px solid #ddd;
+        }
 
-                            </ul>
+        .filter-options {
+            list-style: none;
+            display: flex;
+            padding: 0;
+            margin: 0;
+            justify-content: space-around;
+            width: 100%;
+        }
+
+        .filter-options li {
+            margin: 0 15px;
+        }
+
+        .filter-options a {
+            text-decoration: none;
+            color: #000;
+            padding: 10px 20px;
+            border-radius: 4px;
+            font-weight: 500;
+            font-size: 14px;
+        }
+
+        .filter-options a:hover,
+        .filter-options a.active {
+            background-color: #90ccbc;
+            color: #fff;
+        }
+    </style>
+    <body>
+        <div id="page">
+            <nav class="colorlib-nav" role="navigation">
+                <div class="top-menu">
+                    <div class="container">
+                        <div class="row">
+                            <div class="col-sm-7 col-md-9">
+                                <div id="colorlib-logo"><a href="${pageContext.request.contextPath}/index.jsp">Footwear</a></div>
+                            </div>
+                            <div class="col-sm-5 col-md-3">
+                                <form action="products.jsp" method="get" class="search-wrap">
+                                    <div class="form-group position-relative">
+                                        <input type="search" name="query" id="search-bar" class="form-control search" placeholder="Search for products...">
+                                        <button class="btn btn-primary submit-search text-center" type="submit"><i class="icon-search"></i></button>
+                                        <div id="suggestions" class="dropdown-menu" style="display: none;
+                                             position: absolute;
+                                             width: 100%;"></div>
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-sm-12 text-left menu-1">
+                                <ul>
+                                    <li class="active"><a href="${pageContext.request.contextPath}/index.jsp">Home</a></li>
+                                    <li><a class="active" href="${pageContext.request.contextPath}/products.jsp">Products</a></li>
+                                    <li><a href="${pageContext.request.contextPath}/about.html">About</a></li>
+                                    <li><a href="${pageContext.request.contextPath}/contact.html">Contact</a></li>
+                                        <% if (session.getAttribute("account") != null) { %>
+                                    <li class="cart"><a href="wishlist.jsp"><i class="fa fa-heart"></i> Wishlist</a></li>
+                                        <%
+                                        int accountID = 0;
+                                        Account account = (Account)session.getAttribute("account");
+                                        if (account != null) {
+                                            accountID = account.getAccountID();
+                                        }
+                                        int cartItemsCount = pDAO.getCartItemsCount(accountID);
+                                        %>
+                                    <li class="cart"><a href="shoppingCart"><i class="icon-shopping-cart"></i> Cart [<%=cartItemsCount %>]</a></li>
+                                    <li class="cart"><a href="LogoutController">Logout</a></li>
+                                    <li class="cart"><i class="fa-regular fa-user"></i> <a href="customer_profile.jsp"><%= ((Account) session.getAttribute("account")).getUsername() %></a></li>
+                                        <% } else { %>
+                                    <li class="cart"><a href="signup.jsp">Sign Up</a></li>
+                                    <li class="cart"><a href="login.jsp">Login</a></li>
+                                    <li class="cart"><a href="shoppingCart"><i class="icon-shopping-cart"></i> Cart [0]</a></li>
+                                        <% } %>
+
+                                </ul>
+                            </div>
                         </div>
                     </div>
                 </div>
-            </div>
-            <div class="sale">
-                <div class="container">
-                    <div class="row">
-                        <div class="col-sm-8 offset-sm-2 text-center">
-                            <div class="row">
-                                <div class="owl-carousel2">
-                                    <div class="item">
-                                        <div class="col">
-                                            <h3><a href="#">25% off (Almost) Everything! Use Code: Summer Sale</a></h3>
+                <div class="sale">
+                    <div class="container">
+                        <div class="row">
+                            <div class="col-sm-8 offset-sm-2 text-center">
+                                <div class="row">
+                                    <div class="owl-carousel2">
+                                        <div class="item">
+                                            <div class="col">
+                                                <h3><a href="#">25% off (Almost) Everything! Use Code: Summer Sale</a></h3>
+                                            </div>
                                         </div>
-                                    </div>
-                                    <div class="item">
-                                        <div class="col">
-                                            <h3><a href="#">Our biggest sale yet 50% off all summer shoes</a></h3>
+                                        <div class="item">
+                                            <div class="col">
+                                                <h3><a href="#">Our biggest sale yet 50% off all summer shoes</a></h3>
+                                            </div>
                                         </div>
                                     </div>
                                 </div>
@@ -259,100 +304,116 @@
                         </div>
                     </div>
                 </div>
-            </div>
-        </nav>
-        <div class="profile_container">
-            <div class="side-bar" style="width:180px; height:546px;">
-                <div class="side-bar-user"><div style="display:inline-block"><i style="font-size:48px;" class="fa-solid fa-user"></i></div><div style="display:inline-block; padding-left: 10px;"><span style="font-weight: 600">User</span><br><i style="margin-right:3px" class="fa-solid fa-pen"></i>Edit Profile</div></div>
-                <div class="side-bar-nav">
-                    <table>
-                        <tr><th></th><th></th></tr>
-                        <tr style="color:black"><td><i style="padding-right:2px" class="fa-regular fa-user"></i></td><td>My Account</td></tr>
-                        <tr><td></td><td style="padding-left:7px; padding-top:6px;color:red;">Profile</td></tr>
-                        <tr><td></td><td style="padding-left:7px; padding-top:3px;padding-bottom:10px">Change Password</td></tr>
-                        <tr style="color:black"><td><i style="padding-right:2px" class="fa-regular fa-bell"></i></td><td>Notification</td></tr>
-                        <tr style="color:black">
-                            <td><i style="padding-right:2px" class="fa-regular fa-list-alt"></i></td>
-                            <td><a href="order_list.jsp" style="text-decoration: none; color: black;">My Orders</a></td>
-                        </tr>
-                    </table>
+            </nav>
+            <div class="profile_container">
+                <div class="side-bar" style="width:180px; height:546px;">
+                    <div class="side-bar-user"><div style="display:inline-block"><i style="font-size:48px;" class="fa-solid fa-user"></i></div><div style="display:inline-block; padding-left: 10px;"><span style="font-weight: 600">User</span><br><i style="margin-right:3px" class="fa-solid fa-pen"></i>Edit Profile</div></div>
+                    <div class="side-bar-nav">
+                        <table>
+                            <tr><th></th><th></th></tr>
+                            <tr style="color:black"><td><i style="padding-right:2px" class="fa-regular fa-user"></i></td><td>My Account</td></tr>
+                            <tr><td></td><td style="padding-left:7px; padding-top:6px;color:red;">Profile</td></tr>
+                            <tr><td></td><td style="padding-left:7px; padding-top:3px;padding-bottom:10px">Change Password</td></tr>
+                            <tr style="color:black"><td><i style="padding-right:2px" class="fa-regular fa-bell"></i></td><td>Notification</td></tr>
+                            <tr style="color:black">
+                                <td><i style="padding-right:2px" class="fa-regular fa-list-alt"></i></td>
+                                <td><a href="order_list.jsp" style="text-decoration: none; color: black;">My Orders</a></td>
+                            </tr>
+                        </table>
+                    </div>
                 </div>
-            </div>
-            <div class="main-bar">
-                <div class="top-main-bar"><span style="font-size:18px;font-weight: 500">My Profile</span><br>Manage and protect your account</div>
-                <div class="body-main-bar">
-                    <% if (orderItems != null && !orderItems.isEmpty()) { %>
-                    <div class="order-list">
-                        <%
-                            int currentOrderId = -1;
-                            double totalOrderAmount = 0;
-                            for (Order order : orderItems) {
-                                if (order.getOrderID() != currentOrderId) {
+                <div class="main-bar">
+                    <div class="body-main-bar">
+                        <div class="order-filter-bar">
+                            <ul class="filter-options">
+                                <a href="?status=all">All</a>
+                                <a href="?status=0">Pending</a>
+                                <a href="?status=1">Process</a>
+                                <a href="?status=2">Delivering</a>
+                                <a href="?status=3">Done</a>
+                                <a href="?status=4">Canceled</a>
+                                <a href="?status=5">Returned</a>
+                            </ul>
+                        </div>
+
+                        <div class="body-main-bar">
+                            <% if (orderItems != null && !orderItems.isEmpty()) { %>
+                            <div class="order-list">
+                                <%
+                                    int currentOrderId = -1;
+                                    double totalOrderAmount = 0;
+                                    for (Order order : orderItems) {
+                                        if (order.getOrderID() != currentOrderId) {
+                                            if (currentOrderId != -1) {
+                                                out.println("<div><strong>Total Order Amount: $" + totalOrderAmount + "</strong></div>");
+                                                out.println("</div>");
+                                            }
+                                            currentOrderId = order.getOrderID();
+                                            totalOrderAmount = 0;
+                                            out.println("<div class='order'>");
+                                            out.println("<div class='order-products'>");
+                                        }
+                                        totalOrderAmount += order.getProducttotal();
+                                %>
+                                <div class="product-cart d-flex">
+                                    <div class="one-forth">
+                                        <div class="product-img" style="background-image: url(${pageContext.request.contextPath}/<%= order.getImageUrl() %>);"></div>
+                                        <div class="display-tc">
+                                            <h3><%= order.getProductName() %></h3>
+                                        </div>
+                                    </div>
+                                    <div class="one-eight text-center">
+                                        <div class="display-tc">
+                                            <span class="price">x<%= order.getQuantity() %></span>
+                                        </div>
+                                    </div>
+                                    <div class="one-eight text-center">
+                                        <div class="display-tc">
+                                            <span class="price">$<%= order.getSalePrice() %></span>
+                                        </div>
+                                    </div>
+
+                                    <div class="one-eight text-center">
+                                        <div class="display-tc">
+                                            <span class="total">$<%= order.getProducttotal() %></span>
+                                        </div>
+                                    </div>
+                                </div>
+                                <% } 
                                     if (currentOrderId != -1) {
                                         out.println("<div><strong>Total Order Amount: $" + totalOrderAmount + "</strong></div>");
                                         out.println("</div>");
                                     }
-                                    currentOrderId = order.getOrderID();
-                                    totalOrderAmount = 0;
-                                    out.println("<div class='order'>");
-                                    out.println("<div class='order-products'>");
-                                }
-                                totalOrderAmount += order.getProducttotal();
-                        %>
-                        <div class="product-cart d-flex">
-                            <div class="one-forth">
-                                <div class="product-img" style="background-image: url(${pageContext.request.contextPath}/<%= order.getImageUrl() %>);"></div>
-                                <div class="display-tc">
-                                    <h3><%= order.getProductName() %></h3>
-                                </div>
+                                %>
                             </div>
-                            <div class="one-eight text-center">
-                                <div class="display-tc">
-                                    <span class="price">$<%= order.getSalePrice() %></span>
-                                </div>
-                            </div>
-
-                            <div class="one-eight text-center">
-                                <div class="display-tc">
-                                    <span class="total">$<%= order.getProducttotal() %></span>
-                                </div>
-                            </div>
+                            <% } else { %>
+                            <div>No orders found.</div>
+                            <% } %>
                         </div>
-                        <% } 
-                            if (currentOrderId != -1) {
-                                out.println("<div><strong>Total Order Amount: $" + totalOrderAmount + "</strong></div>");
-                                out.println("</div>");
-                            }
-                        %>
                     </div>
-                    <% } else { %>
-                    <div>No orders found.</div>
-                    <% } %>
                 </div>
             </div>
-        </div>
-    </div>
-</body>
-<script src="${pageContext.request.contextPath}/js/jquery.min.js"></script>
-<!-- popper -->
-<script src="${pageContext.request.contextPath}/js/popper.min.js"></script>
-<!-- bootstrap 4.1 -->
-<script src="${pageContext.request.contextPath}/js/bootstrap.min.js"></script>
-<!-- jQuery easing -->
-<script src="${pageContext.request.contextPath}/js/jquery.easing.1.3.js"></script>
-<!-- Waypoints -->
-<script src="${pageContext.request.contextPath}/js/jquery.waypoints.min.js"></script>
-<!-- Flexslider -->
-<script src="${pageContext.request.contextPath}/js/jquery.flexslider-min.js"></script>
-<!-- Owl carousel -->
-<script src="${pageContext.request.contextPath}/js/owl.carousel.min.js"></script>
-<!-- Magnific Popup -->
-<script src="${pageContext.request.contextPath}/js/jquery.magnific-popup.min.js"></script>
-<script src="${pageContext.request.contextPath}/js/magnific-popup-options.js"></script>
-<!-- Date Picker -->
-<script src="${pageContext.request.contextPath}/js/bootstrap-datepicker.js"></script>
-<!-- Stellar Parallax -->
-<script src="${pageContext.request.contextPath}/js/jquery.stellar.min.js"></script>
-<!-- Main -->
-<script src="${pageContext.request.contextPath}/js/main.js"></script>
+    </body>
+    <script src="${pageContext.request.contextPath}/js/jquery.min.js"></script>
+    <!-- popper -->
+    <script src="${pageContext.request.contextPath}/js/popper.min.js"></script>
+    <!-- bootstrap 4.1 -->
+    <script src="${pageContext.request.contextPath}/js/bootstrap.min.js"></script>
+    <!-- jQuery easing -->
+    <script src="${pageContext.request.contextPath}/js/jquery.easing.1.3.js"></script>
+    <!-- Waypoints -->
+    <script src="${pageContext.request.contextPath}/js/jquery.waypoints.min.js"></script>
+    <!-- Flexslider -->
+    <script src="${pageContext.request.contextPath}/js/jquery.flexslider-min.js"></script>
+    <!-- Owl carousel -->
+    <script src="${pageContext.request.contextPath}/js/owl.carousel.min.js"></script>
+    <!-- Magnific Popup -->
+    <script src="${pageContext.request.contextPath}/js/jquery.magnific-popup.min.js"></script>
+    <script src="${pageContext.request.contextPath}/js/magnific-popup-options.js"></script>
+    <!-- Date Picker -->
+    <script src="${pageContext.request.contextPath}/js/bootstrap-datepicker.js"></script>
+    <!-- Stellar Parallax -->
+    <script src="${pageContext.request.contextPath}/js/jquery.stellar.min.js"></script>
+    <!-- Main -->
+    <script src="${pageContext.request.contextPath}/js/main.js"></script>
 </html>
