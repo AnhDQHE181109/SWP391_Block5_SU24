@@ -185,8 +185,6 @@
                                     <%
                                         } else { 
                                             for (Product product : productsList) { %>
-
-
                                         <tr>
                                             <td><img style="width: 60px; height: 60px;" src="<%=product.getImageURL() %>"></td>
                                             <td><%=product.getBrandName() %></td>
@@ -199,7 +197,6 @@
                                                     <!-- Popup content for each order -->
                                                     <div class="popup-content">
                                                       <form id="stocksForm_<%=product.getProductName() %>" action="stocksManager" method="post">
-
                                                         <div class="row">
                                                             <p class="h2">Stocks available for <%=product.getProductName() %></p>
                                                             <table class="table">
