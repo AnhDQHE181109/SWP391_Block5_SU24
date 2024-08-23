@@ -144,7 +144,7 @@
 								    %>
                                         <li class="cart"><a href="shoppingCart"><i class="icon-shopping-cart"></i> Cart [<%=cartItemsCount %>]</a></li>
                                         <li class="cart"><a href="LogoutController">Logout</a></li>
-                                        <li class="cart"><i class="fa-regular fa-user"></i> <%= ((Account) session.getAttribute("account")).getUsername() %></li>
+                                        <li class="cart"><i class="fa-regular fa-user"></i> <a href="customer/customer_profile.jsp"><%= ((Account) session.getAttribute("account")).getUsername() %></a></li>
                                     <% } else { %>
                                         <li class="cart"><a href="signup.jsp">Sign Up</a></li>
                                         <li class="cart"><a href="login.jsp">Login</a></li>

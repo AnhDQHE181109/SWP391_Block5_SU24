@@ -38,25 +38,19 @@ public class Stock {
         this.productID = productID;
     }
 
-    public int getSizeID() {
-        return size;
-    }
-
-    public void setSizeID(int size) {
-        this.size = size;
-    }
-
     public int getSize() {
         return size;
+    }
+
+    public void setSize(int size) {
+        this.size = size;
     }
 
     public String getColor() {
         return color;
     }
 
-
-
-    public void setColorID(String color) {
+    public void setColor(String color) {
         this.color = color;
     }
 
@@ -67,6 +61,13 @@ public class Stock {
     public void setStockQuantity(int stockQuantity) {
         this.stockQuantity = stockQuantity;
     }
+
+    @Override
+    public String toString() {
+        return "Stock{" + "stockID=" + stockID + ", productID=" + productID + ", size=" + size + ", color=" + color + ", stockQuantity=" + stockQuantity + '}';
+    }
+
+    
 
     
 }
