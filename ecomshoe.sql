@@ -43,7 +43,7 @@ GO
 CREATE TABLE Accounts(
     AccountID INT IDENTITY(1,1) PRIMARY KEY,
     Username NVARCHAR(100) NOT NULL, 
-	Fullname NVARCHAR(800) NOT NULL, 
+	Name NVARCHAR(800) NOT NULL, 
     Hash TEXT NOT NULL,
     PhoneNumber NVARCHAR(20) NULL,
     Email NVARCHAR(100) UNIQUE NULL,
@@ -205,16 +205,30 @@ CREATE TABLE Wishlist (
     CONSTRAINT FK_Wishlist_Stock FOREIGN KEY (StockID) REFERENCES Stock(StockID)
 );
 GO
+-- Create ReturnRequests table
+CREATE TABLE ReturnRequests (
+    RequestID INT IDENTITY(1,1) PRIMARY KEY,
+    OrderID INT NOT NULL,
+    AccountID INT NOT NULL,
+    Reason NVARCHAR(255) NOT NULL,
+    Description TEXT NOT NULL,
+    RefundAmount DECIMAL(18,2) NOT NULL,
+    DateSubmitted DATETIME DEFAULT GETDATE() NOT NULL,
+    Status NVARCHAR(50) DEFAULT 'Pending',
+    CONSTRAINT FK_ReturnRequests_Orders FOREIGN KEY (OrderID) REFERENCES Orders(OrderID),
+    CONSTRAINT FK_ReturnRequests_Accounts FOREIGN KEY (AccountID) REFERENCES Accounts(AccountID)
+);
+GO
 USE ECommerceStore;
 GO
 
 -- Insert data into Accounts
-INSERT INTO Accounts (Username, Fullname, Hash, PhoneNumber, Email, Address, Role, Salt, Status)
+INSERT INTO Accounts (Username, Name, Hash, PhoneNumber, Email, Address, Role, Salt, Status)
 VALUES 
 ('johndoe', 'John Doe', 'NqmCu0KLyfdegTojOpWmaAC8gODT1EfFxKtyJ9tfwUDneUmaWlo7TiaWJYzGnaWaYcWsUtytBL/iqltP+MLvVA==', '0984567890', 'johndoe@example.com', '123 Main St, Anytown, USA', 1, 'jMxFrhzK+pkZRnCz7jEkew==',1),
 ('janedoe', 'Jane Doe', 'NqmCu0KLyfdegTojOpWmaAC8gODT1EfFxKtyJ9tfwUDneUmaWlo7TiaWJYzGnaWaYcWsUtytBL/iqltP+MLvVA==', '0936543210', 'janedoe@example.com', '456 Elm St, Othertown, USA', 2, 'jMxFrhzK+pkZRnCz7jEkew==',1),
 ('alice', 'Alice Doe', 'NqmCu0KLyfdegTojOpWmaAC8gODT1EfFxKtyJ9tfwUDneUmaWlo7TiaWJYzGnaWaYcWsUtytBL/iqltP+MLvVA==', '0971234567', 'alice@example.com', '789 Maple St, Sometown, USA', 3, 'jMxFrhzK+pkZRnCz7jEkew==',1),
-('long', 'Long Vu', 'NqmCu0KLyfdegTojOpWmaAC8gODT1EfFxKtyJ9tfwUDneUmaWlo7TiaWJYzGnaWaYcWsUtytBL/iqltP+MLvVA==', '0961234567', 'long@example.com', '789 Maple St, Sometown, USA', 2, 'jMxFrhzK+pkZRnCz7jEkew==',0);
+('long', 'Long Vu', 'NqmCu0KLyfdegTojOpWmaAC8gODT1EfFxKtyJ9tfwUDneUmaWlo7TiaWJYzGnaWaYcWsUtytBL/iqltP+MLvVA==', '0961234567', 'long@example.com', '789 Maple St, Sometown, USA', 4, 'jMxFrhzK+pkZRnCz7jEkew==',1);
 
 
 
@@ -265,8 +279,8 @@ VALUES
 -- Insert data into Orders
 INSERT INTO Orders (AccountID, OrderDate, Status)
 VALUES 
-(1, '2024-05-13', 0),
-(2, '2024-08-18', 0);
+(1, '2024-08-18', 3),
+(2, '2024-05-13', 3);
 
 -- Insert data into Cart
 INSERT INTO Cart (AccountID, StockID, quantity, DiscountID, date_added)
@@ -305,3 +319,7 @@ INSERT INTO Wishlist (AccountID, StockID, DateAdded)
 VALUES 
 (1, 2, GETDATE()),
 (2, 3, GETDATE());
+
+INSERT INTO ReturnRequests (OrderID, AccountID, Reason, Description, RefundAmount, Status)
+VALUES 
+(1, 1, 'Damaged Product', 'The product arrived with a defect in the sole, making it unusable.', 140.00, 'Pending');

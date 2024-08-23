@@ -24,6 +24,7 @@ public class AccountDAO extends MyDAO {
             while (rs.next()) {
                 int accountID = rs.getInt("AccountID");
                 String username = rs.getString("Username");
+                String fullname = rs.getString("Name");
                 String hash = rs.getString("Hash");
                 String phoneNumber = rs.getString("PhoneNumber");
                 String email = rs.getString("Email");
@@ -31,7 +32,7 @@ public class AccountDAO extends MyDAO {
                 int role = rs.getInt("Role");
                 String salt = rs.getString("Salt");
                 Boolean status = rs.getBoolean("Status");
-                Account account = new Account(accountID, username, hash, phoneNumber, email, address, salt, role);
+                Account account = new Account(accountID, username, hash, phoneNumber, email, address, salt, role, status, fullname);
                 accountList.add(account);
             }
         } catch (Exception e) {
@@ -55,7 +56,9 @@ public class AccountDAO extends MyDAO {
                 String email = rs.getString("Email");
                 String address = rs.getString("Address");
                 String salt = rs.getString("Salt");
-                Account account = new Account(accountID, username, hash, phoneNumber, email, address, salt, role);
+                boolean status = rs.getBoolean("Status");
+                String fullname = rs.getString("Name");
+                Account account = new Account(accountID, username, hash, phoneNumber, email, address, salt, role, status, fullname);
                 accountList.add(account);
             }
         } catch (Exception e) {
@@ -80,7 +83,8 @@ public class AccountDAO extends MyDAO {
                 int role = rs.getInt("Role");
                 String salt = rs.getString("Salt");
                 Boolean status = rs.getBoolean("Status");
-                account = new Account(accountID, username, hash, phoneNumber, email, address, salt, role, status);
+                String fullname = rs.getString("Name");
+                account = new Account(accountID, username, hash, phoneNumber, email, address, salt, role, status, fullname);
             }
         } catch (Exception e) {
             e.printStackTrace();
@@ -104,6 +108,7 @@ public class AccountDAO extends MyDAO {
                 int role = rs.getInt("Role");
                 String salt = rs.getString("Salt");
                 Boolean status = rs.getBoolean("Status");
+                String fullname = rs.getString("Name");
                 account = new Account(accountID, username, hash, phoneNumber, email, address, salt, role, status);
             }
         } catch (Exception e) {
@@ -177,8 +182,8 @@ public class AccountDAO extends MyDAO {
         return false;
     }
 
-    public boolean addAccount(String username, String hash, String phoneNumber, String email, String address, int role, String salt) {
-        String sql = "INSERT INTO Accounts (Username, Hash, PhoneNumber, Email, Address, Role, Salt) VALUES (?, ?, ?, ?, ?, ?, ?)";
+    public boolean addAccount(String username, String hash, String phoneNumber, String email, String address, int role, String salt, String fullname) {
+        String sql = "INSERT INTO Accounts (Username, Hash, PhoneNumber, Email, Address, Role, Salt, Name) VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
         try {
             ps = con.prepareStatement(sql);
             ps.setString(1, username);
@@ -188,6 +193,7 @@ public class AccountDAO extends MyDAO {
             ps.setString(5, address);
             ps.setInt(6, role);
             ps.setString(7, salt);
+            ps.setString(8, fullname);
             int rowsAffected = ps.executeUpdate();
             return rowsAffected > 0;
         } catch (Exception e) {

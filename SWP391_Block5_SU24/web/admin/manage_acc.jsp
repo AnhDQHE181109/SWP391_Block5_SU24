@@ -120,9 +120,14 @@
                         </div>
                     </div>
                     <div class="navbar-nav w-100">
-                        <a href="manager_home.jsp" class="nav-item nav-link"><i class="fa fa-tachometer-alt me-2"></i>Dashboard</a>
-                        <a href="addStaffAccount.jsp" class="nav-item nav-link"><i class="fa fa-keyboard me-2"></i>Forms</a>
-                        <a href="manager_table.jsp" class="nav-item nav-link active"><i class="fa fa-table me-2"></i>Tables</a>
+                        <div class="nav-item dropdown">
+                            <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown">Account Management</a>
+                            <div class="dropdown-menu bg-transparent border-0">
+                                <a href="manage_acc.jsp" class="dropdown-item">View all account</a>
+                                <a href="addStaffAccount.jsp" class="dropdown-item">Create account</a>
+                                
+                            </div>
+                        </div>
                         
                     </div>
                 </nav>
@@ -423,7 +428,7 @@
         <script src="${pageContext.request.contextPath}/lib/tempusdominus/js/tempusdominus-bootstrap-4.min.js"></script>
 
         <!-- Template Javascript -->
-        <script src="js/main.js"></script>
+        <script src="${pageContext.request.contextPath}/js/main.js"></script>
     </body>
 
 </html>

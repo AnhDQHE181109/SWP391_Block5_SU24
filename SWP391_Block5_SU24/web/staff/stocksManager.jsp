@@ -68,6 +68,9 @@
                         <li><a class="app-menu__item" href="stocksManager"><i
                                     class='app-menu__icon bx bx-purchase-tag-alt'></i><span class="app-menu__label">Products</span></a>
                         </li>
+                        <li><a class="app-menu__item" href="importProductVariants"><i
+                            class='app-menu__icon bx bx-purchase-tag-alt'></i><span class="app-menu__label">Import product variants</span></a>
+                        </li>
                         <li><a class="app-menu__item" href="Ordercontroller"><i class='app-menu__icon bx bx-task'></i><span
                                     class="app-menu__label">Orders</span></a></li>
                         <li><a class="app-menu__item" href="productStockImport"><i class='app-menu__icon bx bx-task'></i><span
@@ -182,18 +185,21 @@
                                     <%
                                         } else { 
                                             for (Product product : productsList) { %>
-                                    <tr>
-                                        <td style="width: 20%"><img style="max-width: 50%; " src="<%=product.getImageURL() %>"></td>
-                                        <td><%=product.getBrandName() %></td>
-                                        <td><%=product.getProductName() %></td>
-                                        <td><%=product.getCategoryName() %></td>
-                                        <% if (account.getRole() == 2) { %>
-                                        <td class="col-1">
-                                            <button class="btn btn-info" onclick="openPopup('popup_<%=product.getProductId() %>')">View variants</button>
-                                            <div id="popup_<%=product.getProductId() %>" class="popup" style="display: none;">
-                                                <!-- Popup content for each order -->
-                                                <div class="popup-content">
-                                                    <form id="stocksForm_<%=product.getProductName() %>" action="stocksManager" method="post">
+
+
+                                        <tr>
+                                            <td><img style="width: 60px; height: 60px;" src="<%=product.getImageURL() %>"></td>
+                                            <td><%=product.getBrandName() %></td>
+                                            <td><%=product.getProductName() %></td>
+                                            <td><%=product.getCategoryName() %></td>
+                                            <% if (account.getRole() == 2) { %>
+                                            <td class="col-1">
+                                                <button class="btn btn-info" onclick="openPopup('popup_<%=product.getProductId() %>')">View variants</button>
+                                                <div id="popup_<%=product.getProductId() %>" class="popup" style="display: none;">
+                                                    <!-- Popup content for each order -->
+                                                    <div class="popup-content">
+                                                      <form id="stocksForm_<%=product.getProductName() %>" action="stocksManager" method="post">
+
                                                         <div class="row">
                                                             <p class="h2">Stocks available for <%=product.getProductName() %></p>
                                                             <table class="table">
