@@ -8,7 +8,7 @@
 <html lang="en">
     <%Account account = (Account) session.getAttribute("account");%>
     <head>
-        <title>Import product stock</title>
+        <title>Import product stocks</title>
         <meta charset="utf-8">
         <meta http-equiv="X-UA-Compatible" content="IE=edge">
         <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -69,7 +69,7 @@
                                     class='app-menu__icon bx bx-purchase-tag-alt'></i><span class="app-menu__label">Products</span></a>
                         </li>
                         <li><a class="app-menu__item" href="importProductStocks"><i
-                            class='app-menu__icon bx bx-purchase-tag-alt'></i><span class="app-menu__label">Import product variants</span></a>
+                            class='app-menu__icon bx bx-purchase-tag-alt'></i><span class="app-menu__label">Import product stocks</span></a>
                         </li>
                         <li><a class="app-menu__item" href="Ordercontroller"><i class='app-menu__icon bx bx-task'></i><span
                                     class="app-menu__label">Orders</span></a></li>
@@ -89,32 +89,71 @@
         <main class="app-content">
             <div class="app-title">
                 <ul class="app-breadcrumb breadcrumb side">
-                    <li class="breadcrumb-item active"><a href="#"><b>All Products</b></a></li>
+                    <li class="breadcrumb-item active"><a href="#"><b>Import product stocks</b></a></li>
                 </ul>
             </div>
             <div class="row">
                 <div class="col-md-12">
                     <div class="tile">
                         <div class="tile-body">
+                          <form action="importProductStocks" method="post">
+
                             <div class="row element-button">
-                                <div class="col-md-4" style="display: flex; justify-content: flex-start; align-items: center;">
-                                    <!-- <a class="btn btn-add btn-sm" href="product_manage?action=insert" title="Thêm">
-                                        <i class="fas fa-plus"></i> Add a new product
-                                    </a> -->
-                                </div> 
-                                <div class="col-md-4" style="display: flex; justify-content: center; align-items: center;">
-                                    <!-- Button for sorting -->
-                                    <!-- <button onclick="sortTableByNameAscendingDescending()" class="btn btn-primary btn-sm" id="sortButton">
-                                        <i class="fas fa-sort-amount-down"></i> Sort by Name (Asc)
-                                    </button> -->
-                                </div>
-                                <div class="col-md-4" style="display: flex; justify-content: flex-end; align-items: center;">
+
+                                    <div class="col-md-2" style=" justify-content: flex-start; align-items: center;">
+                                        <!-- <a class="btn btn-add btn-sm" href="product_manage?action=insert" title="Thêm">
+                                            <i class="fas fa-plus"></i> Add a new product
+                                        </a> -->
+                                        <label for="productName">Product: </label>
+                                        <input type="text" id="productName" name="productName" class="form-control" placeholder="" style="margin-right: 5px;"
+                                        required>
+                                    </div> 
+
+                                    <div class="col-md-2" style="justify-content: center; align-items: center;">
+                                        <!-- Button for sorting -->
+                                        <!-- <button onclick="sortTableByNameAscendingDescending()" class="btn btn-primary btn-sm" id="sortButton">
+                                            <i class="fas fa-sort-amount-down"></i> Sort by Name (Asc)
+                                        </button> -->
+                                        <label for="productColor">Color: </label>
+                                        <input type="text" id="productColor" name="productColor" class="form-control" placeholder="" style="margin-right: 5px;"
+                                        required>
+                                    </div>
+
+                                    <div class="col-md-2" style="justify-content: center; align-items: center;">
+                                        <label for="productSize">Size: </label>
+                                        <input type="text" id="productSize" name="productSize" class="form-control" placeholder="" style="margin-right: 5px;"
+                                        required>
+                                    </div>
+
+                                    <div class="col-md-2" style="justify-content: center; align-items: center;">
+                                        <label for="supplierName">Supplier name: </label>
+                                        <input type="text" id="supplierName" name="supplierName" class="form-control" placeholder="Supplier name" style="margin-right: 5px;"
+                                        required>
+                                    </div>
+
+                                    <div class="col-md-2" style="justify-content: center; align-items: center;">
+                                        <label for="productQuantity">Quantity: </label>
+                                        <input type="number" id="productQuantity" name="productQuantity" class="form-control" placeholder="Quantity" style="margin-right: 5px;"
+                                        required>
+                                    </div>
+
+                                    <div class="col-md-2" style="display: flex; justify-content: center; align-items: center;">
+                                        <button type="submit" class="btn btn-success btn-sm" id="sortButton">
+                                            ADD 
+                                        </button>
+                                    </div>
+
+                                
+                                
+                                <!-- <div class="col-md-4" style="display: flex; justify-content: flex-end; align-items: center;">
                                     <input type="text" id="searchInput" class="form-control" placeholder="Search by name.." style="margin-right: 5px;">
                                     <button onclick="searchProductsByName()" class="btn btn-primary btn-sm">
                                         <i class="ti-search"></i> Search
                                     </button>
-                                </div>
+                                </div> -->
                             </div>
+
+                          </form>
 
                             
                             <div id="popupAddNewProductForm" class="popup" style="display: none;">
@@ -161,146 +200,42 @@
 
 
                             <%
-                                List<Product> productsList = (List<Product>) request.getAttribute("productsList");
+                                List<ProductStockImport> productsList = (List<ProductStockImport>) request.getAttribute("productsList");
                                 List<Product> productsStocksList = (List<Product>) request.getAttribute("productsStocksList");
                             %>
                             
                             <table class="table table-hover table-bordered" id="sampleTable">
                                 <thead>
                                     <tr>
-                                        <th>Picture</th>
-                                        <th onclick="sortTableAscendingDescending(1)">Brand</th>
-                                        <th onclick="sortTableAscendingDescending(2)">Name</th>
-                                        <th onclick="sortTableAscendingDescending(3)">Category</th>
-                                        <% if (account.getRole() == 2) { %>
-                                        <th> </th>
-                                        <% } %>
+                                        <th>#</th>
+                                        <th>Image</th>
+                                        <th onclick="sortTableAscendingDescending(1)">Product</th>
+                                        <th onclick="sortTableAscendingDescending(2)">Color</th>
+                                        <th onclick="sortTableAscendingDescending(3)">Size</th>
+                                        <th onclick="sortTableAscendingDescending(4)">Supplier name</th>
+                                        <th onclick="sortTableAscendingDescending(5)">Quantity</th>
+                                        <th onclick="">Remove</th>
                                     </tr>
                                 </thead>
                                 <tbody>
                                     <%  if (productsList == null || productsList.isEmpty()) { %>
                                         <tr>
-                                            <td class="col-sm-8 col-md-6">No products available in the system!</td>
+                                            
                                         </tr>
                                     <%
                                         } else { 
-                                            for (Product product : productsList) { %>
+                                            int count = 1;
+                                            for (ProductStockImport productStock : productsList) { %>
                                         <tr>
-                                            <td><img style="width: 60px; height: 60px;" src="<%=product.getImageURL() %>"></td>
-                                            <td><%=product.getBrandName() %></td>
-                                            <td><%=product.getProductName() %></td>
-                                            <td><%=product.getCategoryName() %></td>
-                                            <% if (account.getRole() == 2) { %>
+                                            <td><%=count++ %></td>
+                                            <td><img style="width: 60px; height: 60px;" src="<%=productStock.getImageURL() %>"></td>
+                                            <td><%=productStock.getProductName() %></td>
+                                            <td><%=productStock.getProductColor() %></td>
+                                            <td><%=productStock.getProductSize() %></td>
+                                            <td><%=productStock.getSupplierName() %></td>
+                                            <td><%=productStock.getQuantity() %></td>
                                             <td class="col-1">
-                                                <button class="btn btn-info" onclick="openPopup('popup_<%=product.getProductId() %>')">View variants</button>
-                                                <div id="popup_<%=product.getProductId() %>" class="popup" style="display: none;">
-                                                    <!-- Popup content for each order -->
-                                                    <div class="popup-content">
-                                                      <form id="stocksForm_<%=product.getProductName() %>" action="stocksManager" method="post">
-                                                        <div class="row">
-                                                            <p class="h2">Stocks available for <%=product.getProductName() %></p>
-                                                            <table class="table">
-                                                                <thead>
-                                                                  <tr>
-                                                                    <th scope="col">#</th>
-                                                                    <th scope="col">Size</th>
-                                                                    <th scope="col">Color</th>
-                                                                    <th scope="col">Quantity</th>
-                                                                  </tr>
-                                                                </thead>
-                                                                <tbody>
-                                                                    <% if (productsStocksList == null || productsStocksList.isEmpty()) { %>
-                                                                        <tr>
-                                                                            <th>Error! Product's stocks are empty!</th>
-                                                                        </tr>
-                                                                    <% } else { 
-                                                                           int i = 1;
-                                                                           for (Product productStocks : productsStocksList) {
-                                                                            if (product.getProductName().equalsIgnoreCase(productStocks.getProductName())) {
-                                                                             %>
-                                                                             <tr>
-                                                                                <th scope="row"><%=i %></th>
-                                                                                <td><%=productStocks.getSize() %></td>
-                                                                                <td><%=productStocks.getColor() %></td>
-                                                                                <td><input type="number" class="form-control" 
-                                                                                    name="<%=productStocks.getStockID()%>_quantity"
-                                                                                    id="<%=productStocks.getStockID()%>_quantity" 
-                                                                                    value="<%=productStocks.getTotalQuantity() %>" required min="0" max="99" onkeypress="return event.charCode >= 48 && event.charCode <= 57"
-                                                                                    onfocusout="checkIfFieldEmpty('<%=productStocks.getStockID()%>_quantity', '<%=productStocks.getTotalQuantity() %>')"></td>
-                                                                              </tr>
-                                                                    <%      i++;
-                                                                            }
-                                                                           }
-                                                                       } %>
-                                                                </tbody>
-                                                              </table>
-                                                        </div>
-                                                    </form>
-                                                        <div id="submit-type" class="col-md-12">
-                                                            <button type="button" class="btn btn-danger col-md-3" onclick="closePopup('popup_<%=product.getProductId() %>')">Close</button>
-                                                            <button type="button" onclick="document.getElementById(&quot;stocksForm_<%=product.getProductName() %>&quot;).submit()" class="btn btn-primary col-md-3">Update</button>
-                                                            <button type="button" class="btn btn-success col-md-6" onclick="openPopup('popupAddNewVariantForm_<%=product.getProductId() %>')">Add a new variant</button>
-                                                        </div>
-                                                    
-                                                    </div>
-                                                </div>
-
-                                                <div id="popupAddNewVariantForm_<%=product.getProductId() %>" class="popup" style="display: none;">
-                                                    <!-- Popup content for each order -->
-                                                    <div class="popup-content">
-                                                        <div class="row">
-                                                            <p class="h2">Add a new variant for <%=product.getProductName() %></p>
-                                                            
-                                                            <form id="addNewVariantForm_<%=product.getProductId() %>" action="stocksManager" method="get">
-                                                                <div class="input-group mb-3">
-                                                                    <div class="input-group-prepend">
-                                                                      <span class="input-group-text" id="basic-addon1">Size</span>
-                                                                    </div>
-                                                                    <input type="number" id="newVariantSize_<%=product.getProductId() %>" name="newVariantSize_<%=product.getProductId() %>" class="form-control" placeholder="Size"
-                                                                    aria-label="Size" aria-describedby="basic-addon1" required min="28" max="40"
-                                                                    onblur="validateEmptyMinMax('newVariantSize_<%=product.getProductId() %>', 28, 40, 'Size')"
-                                                                    onkeypress="return event.charCode >= 48 && event.charCode <= 57">
-                                                                  </div>
-                        
-                                                                <div class="input-group mb-3">
-                                                                    <div class="input-group-prepend">
-                                                                      <span class="input-group-text" id="basic-addon1">Color</span>
-                                                                    </div>
-                                                                    <!-- <input type="text" id="newVariantColor_<%=product.getProductId() %>" name="newVariantColor_<%=product.getProductId() %>" class="form-control" placeholder="Color" 
-                                                                    aria-label="Color" aria-describedby="basic-addon1" required
-                                                                    onfocusout="checkIfFieldEmpty('newVariantColor_<%=product.getProductId() %>', 'Size')"> -->
-                                                                    <select class="form-select" name="newVariantColor_<%=product.getProductId() %>" id="newVariantColor_<%=product.getProductId() %>"
-                                                                        aria-label="Color" aria-describedby="basic-addon1">
-                                                                        <option value="White">White</option>
-                                                                        <option value="Black">Black</option>
-                                                                        <option value="Red">Red</option>
-                                                                        <option value="Pink">Pink</option>
-                                                                        <option value="Yellow">Yellow</option>
-                                                                    </select>
-                                                                </div>
-                        
-                                                                <div class="input-group mb-3">
-                                                                    <div class="input-group-prepend">
-                                                                      <span class="input-group-text" id="basic-addon1">Quantity</span>
-                                                                    </div>
-                                                                    <input type="number" id="newVariantQuantity_<%=product.getProductId() %>" name="newVariantQuantity_<%=product.getProductId() %>" class="form-control" placeholder="Quantity" 
-                                                                    aria-label="Quantity" aria-describedby="basic-addon1" required min="1" max="99"
-                                                                    onblur="validateEmptyMinMax('newVariantQuantity_<%=product.getProductId() %>', 1, 99, 'Quantity')"
-                                                                    onkeypress="return event.charCode >= 48 && event.charCode <= 57">
-                                                                </div>
-
-                                                                <input type="text" name="newVariantProductID" value="<%=product.getProductId() %>" hidden>
-                        
-                                                            </form>
-
-                                                            <div id="submit-type" class="col-md-12">
-                                                                <button type="button" class="btn btn-danger col-md-3" onclick="closePopup('popupAddNewVariantForm_<%=product.getProductId() %>')">Close</button>
-                                                                <button type="button" class="btn btn-success col-md-9" onclick="document.getElementById(&quot;addNewVariantForm_<%=product.getProductId() %>&quot;).submit()">ADD</button>
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                </div>
-
+                                                <button class="btn btn-danger" onclick="location.href='importProductStocks?removeProduct=<%=count %>'">Remove</button>
                                             </td>
 
                                             <!-- <td>
@@ -335,7 +270,6 @@
 
                                             </td> -->
                                         </tr>
-                                        <% } %>
                                     <% }
                                         } %>
                                 </tbody>
@@ -353,57 +287,6 @@
                                 <c:if test="${currentPage < totalPages}">
                                     <a href="stocksManager?page=${currentPage + 1}">Next</a>
                                 </c:if>
-                            </div>
-
-                            <%
-                                List<Product> outOfStocksList = (List<Product>) request.getAttribute("outOfStocksList");
-                                String outOfStocksProductName = (String) request.getAttribute("outOfStocksProductName");
-                                String popupDisplay = (String) request.getAttribute("popupDisplay");
-                                if (outOfStocksProductName == null) {
-                                    outOfStocksProductName = "";
-                                }
-                                if (popupDisplay == null) {
-                                    popupDisplay = "display: none;";
-                                }
-                            %>
-                            <div id="popup_outOfStockConfirm" class="popup" style="<%=popupDisplay %>">
-                                <!-- Popup content for each order -->
-                                <div class="popup-content">
-                                  <form action="stocksManager" method="post">
-                                    <div class="row">
-                                        <p class="h2">Are you sure these items are out of stock for <%=outOfStocksProductName %>?</p>
-                                        
-                                        <table class="table">
-                                            <thead>
-                                            <tr>
-                                                <th scope="col">#</th>
-                                                <th scope="col">Size</th>
-                                                <th scope="col">Color</th>
-                                                </tr>
-                                            </thead>
-                                            <tbody>
-                                            <% int i = 1;
-                                            if (outOfStocksList != null) {
-                                                for (Product outOfStocks : outOfStocksList) { %>
-                                            <tr>
-                                                <th scope="col"><%=i++ %></th>
-                                                <th scope="col"><%=outOfStocks.getSize() %></th>
-                                                <th scope="col"><%=outOfStocks.getColor() %></th>
-                                            </tr>
-                                            <% 
-                                                }
-                                            } %>
-                                            </tbody>
-                                        </table>
-
-                                        <div id="submit-type" class="col-md-12">
-                                            <button type="submit" name="confirmYes" value="yes" class="btn btn-success col-md-6">Yes</button>
-                                            <button type="submit" name="confirmNo" value="no" class="btn btn-danger col-md-6">No</button>
-                                        </div>
-
-                                    </div>
-                                </form>
-                                </div>
                             </div>
 
                         </div>

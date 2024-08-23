@@ -4,12 +4,17 @@
  */
 package Controller;
 
+import entity.Account;
+import entity.ProductStockImport;
 import java.io.IOException;
 import java.io.PrintWriter;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import jakarta.servlet.http.HttpSession;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  *
@@ -58,7 +63,38 @@ public class ProductStocksImportController extends HttpServlet {
         response.setContentType("text/html;charset=UTF-8");
         PrintWriter out = response.getWriter();
         
-        request.getRequestDispatcher("staff/importProductStock.jsp").forward(request, response);
+        HttpSession session = request.getSession();
+        Account account = (Account) session.getAttribute("account");
+        if (account == null) {
+            out.println("<script type=\"text/javascript\">");
+            out.println("alert('You must be logged in to do that!')");
+            out.println("location.href=\"login.jsp\"");
+            out.println("</script>");
+            return;
+        }
+        int accountID = account.getAccountID();
+        
+        List<ProductStockImport> productsList = (List<ProductStockImport>) session.getAttribute("productsList");
+        
+        String removeProductIn = request.getParameter("removeProduct");
+        if (removeProductIn != null) {
+            int removeProduct = 0;
+            
+            try {
+                removeProduct = Integer.parseInt(removeProductIn);
+            } catch (NumberFormatException e) {
+                System.out.println("removeProduct: " + e);
+                request.setAttribute("productsList", productsList);
+                request.setAttribute("errorMessage", "Invalid request parameter!");
+                request.getRequestDispatcher("staff/importProductStocks.jsp").forward(request, response);
+                return;
+            }
+            
+            productsList.remove(removeProduct - 1);
+        }
+        
+        request.setAttribute("productsList", productsList);
+        request.getRequestDispatcher("staff/importProductStocks.jsp").forward(request, response);
     }
 
     /**
@@ -72,7 +108,55 @@ public class ProductStocksImportController extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        processRequest(request, response);
+        response.setContentType("text/html;charset=UTF-8");
+        PrintWriter out = response.getWriter();
+        
+        HttpSession session = request.getSession();
+        Account account = (Account) session.getAttribute("account");
+        if (account == null) {
+            out.println("<script type=\"text/javascript\">");
+            out.println("alert('You must be logged in to do that!')");
+            out.println("location.href=\"login.jsp\"");
+            out.println("</script>");
+            return;
+        }
+        int accountID = account.getAccountID();
+        
+        String productName = request.getParameter("productName");
+        String productColor = request.getParameter("productColor");
+        String productSizeIn = request.getParameter("productSize");
+        String supplierName = request.getParameter("supplierName");
+        String productQuantityIn = request.getParameter("productQuantity");
+
+//        out.println("POSTED");
+
+        List<ProductStockImport> productsList = (List<ProductStockImport>) session.getAttribute("productsList");
+
+        if (productsList == null) {
+            productsList = new ArrayList<>();
+            session.setAttribute("productsList", productsList);
+        }
+        
+        int productSize = 0;
+        int productQuantity = 0;
+        try {
+            productSize = Integer.parseInt(productSizeIn);
+            productQuantity = Integer.parseInt(productQuantityIn);
+        } catch (NumberFormatException e) {
+            System.out.println("productSize / productQuantity: " + e);
+            request.setAttribute("errorMessage", "Product size or quantity is invalid!");
+            request.setAttribute("productsList", productsList);
+            request.getRequestDispatcher("staff/importProductStocks.jsp").forward(request, response);
+            return;
+        }
+        
+        ProductStockImport productStock = new 
+        ProductStockImport("", supplierName, productName, productColor, productSize, productQuantity);
+        
+        productsList.add(productStock);
+        
+        request.setAttribute("productsList", productsList);
+        request.getRequestDispatcher("staff/importProductStocks.jsp").forward(request, response);
     }
 
     /**

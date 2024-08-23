@@ -109,7 +109,7 @@
                                     </button> -->
                                 </div>
                                 <div class="col-md-4" style="display: flex; justify-content: flex-end; align-items: center;">
-                                    <input type="text" id="searchInput" class="form-control" placeholder="Search by name.." style="margin-right: 5px;">
+                                    <input type="text" id="searchInput" class="form-control" onkeyup="searchProductsByName()" placeholder="Search by name.." style="margin-right: 5px;">
                                     <button onclick="searchProductsByName()" class="btn btn-primary btn-sm">
                                         <i class="ti-search"></i> Search
                                     </button>
