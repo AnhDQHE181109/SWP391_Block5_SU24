@@ -127,14 +127,6 @@
         <div class="main-bar">
             <div class="feedback-form">
                 <h2>Leave Your Feedback</h2>
-                <div class="product-details d-flex">
-                    <img src="<%= order.getImageUrl() %>" alt="<%= order.getProductName() %>">
-                    <div>
-                        <h3><%= order.getProductName() %></h3>
-                        <p>Quantity: <%= order.getQuantity() %></p>
-                        <p>Price: $<%= order.getSalePrice() %></p>
-                    </div>
-                </div>
                 <form action="${pageContext.request.contextPath}/SubmitFeedbackController" method="post">
                     <input type="hidden" name="orderId" value="<%= order.getOrderID() %>">
                     <input type="hidden" name="accountId" value="<%= loggedInUser.getAccountID() %>">

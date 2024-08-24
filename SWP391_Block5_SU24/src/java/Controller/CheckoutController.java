@@ -16,6 +16,7 @@ import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
 import java.util.List;
 import model.CheckoutDAO;
+import model.NotificationAlertDAO;
 import model.ProductDetailsDAO;
 import model.ShoppingCartDAO;
 
@@ -165,6 +166,9 @@ public class CheckoutController extends HttpServlet {
         }
         
         CheckoutDAO coDAO = new CheckoutDAO();
+        
+        NotificationAlertDAO notiDAO = new NotificationAlertDAO();
+        notiDAO.send(accountID, "Your order is being processed!", "${pageContext.request.contextPath}/customer/order_list.jsp");
         
         String userFullname = coDAO.getNameByAccountID(accountID);
         coDAO.addCartToOrder(accountID);
