@@ -238,12 +238,13 @@
         }
 
         .cart.dropdown:hover .dropdown-menu {
-            display: block;
+            display: block;}
         .noti{
             min-height: 50px;
             border-radius: 2px;
             border: 2px solid gray;
             margin:10px;
+            
         }
         .notir{
             min-height: 50px;
