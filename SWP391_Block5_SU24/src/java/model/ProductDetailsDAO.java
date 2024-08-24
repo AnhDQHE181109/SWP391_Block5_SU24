@@ -845,12 +845,12 @@ public class ProductDetailsDAO extends DBConnect {
     public Order getOrderById(int orderId) {
         Order order = null;
         try {
-            String sql = "SELECT o.OrderID, o.AccountID, o.OrderDate, o.Status, od.Quantity, od.SalePrice, p.ProductName, p.ImageID, pi.ImageURL "
+            String sql = "SELECT o.OrderID, o.AccountID, o.OrderDate, o.Status, od.Quantity, od.SalePrice, p.ProductName, pi.ImageURL "
                     + "FROM Orders o "
                     + "JOIN OrderDetails od ON o.OrderID = od.OrderID "
                     + "JOIN Stock s ON od.StockID = s.StockID "
                     + "JOIN Products p ON s.ProductID = p.ProductID "
-                    + "JOIN ProductImages pi ON p.ImageID = pi.ImageID "
+                    + "JOIN ProductImages pi ON s.StockID = pi.StockID "
                     + "WHERE o.OrderID = ?";
             PreparedStatement ps = conn.prepareStatement(sql);
             ps.setInt(1, orderId);
@@ -865,7 +865,7 @@ public class ProductDetailsDAO extends DBConnect {
                 order.setQuantity(rs.getInt("Quantity"));
                 order.setSalePrice(rs.getDouble("SalePrice"));
                 order.setProductName(rs.getString("ProductName"));
-                order.setImageUrl(rs.getString("ImageURL"));
+                order.setImageUrl(rs.getString("ImageURL")); // Set the image URL
                 order.setProducttotal(order.getQuantity() * order.getSalePrice());
             }
 
