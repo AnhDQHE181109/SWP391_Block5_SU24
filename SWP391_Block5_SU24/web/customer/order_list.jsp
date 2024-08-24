@@ -36,7 +36,6 @@
         ProductDetailsDAO orderDAO = new ProductDetailsDAO();
         orderItems = orderDAO.getAllOrdersByCustomerId(accountId, status); // Pass the sort parameter
     }
-    boolean showErrorPass = "true".equals(request.getParameter("error_auth_pass"));
 %>
 <%Account account = (Account)session.getAttribute("account");%> 
 <html>

@@ -218,6 +218,12 @@
             padding: 0px 10px 10px 10px;
             margin-bottom: 5px;
         }
+        .noti{
+            min-height: 50px;
+            
+            border-radius: 2px;
+            border: 2px solid gray;
+        }
     </style>
     <body>
         <%        
@@ -341,7 +347,13 @@
                     <div class="top-main-bar"><span style="font-size:18px;font-weight: 500">My Notification</span><br>View your notifiaction</div>
                     <div class="body-main-bar">
                         <div style="width:80%;height:80%; margin-left:50px;margin-top:30px;">
-                            
+                            <% if(request.getAttribute("notilist")!=null){
+                                List<NotificationAlert> notilist = (List<NotificationAlert>) request.getAttribute("notilist");%>
+                            <%for(NotificationAlert n: notilist){%>
+                            <div class='noti'>
+                                <div style='width:100%; margin:2px'><%= n.getNotiMessage()%></div><div style='width:100%; padding:5px; text-align: right'><%= n.getNotiDate()%></div> 
+                            </div>
+                            <%}}%>
                         </div>
                     </div>
                 </div>
