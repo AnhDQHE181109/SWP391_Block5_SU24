@@ -913,4 +913,30 @@ public class ProductDetailsDAO extends DBConnect {
         return isSuccess;
     }
 
+    public List<Product> getDiscountedProducts() {
+        List<Product> discountedProducts = new ArrayList<>();
+        String sql = "SELECT p.ProductID, p.ProductName, p.Origin, p.Material, p.Price, p.ImageID, d.discount_amount "
+                + "FROM Products p "
+                + "INNER JOIN Discounts d ON p.ProductID = d.product_id";
+        try {
+            Statement st = conn.createStatement();
+            ResultSet rs = st.executeQuery(sql);
+            while (rs.next()) {
+                Product product = new Product();
+                product.setProductId(rs.getInt("ProductID"));
+                product.setProductName(rs.getString("ProductName"));
+                product.setOrigin(rs.getString("Origin"));
+                product.setMaterial(rs.getString("Material"));
+                product.setPrice(rs.getDouble("Price") - rs.getDouble("discount_amount")); // Apply discount
+                product.setImageId(rs.getInt("ImageID"));
+                discountedProducts.add(product);
+            }
+            rs.close();
+            st.close();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return discountedProducts;
+    }
+
 }

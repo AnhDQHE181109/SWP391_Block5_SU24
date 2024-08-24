@@ -12,6 +12,7 @@
 <%
     ProductDetailsDAO pDAO = new ProductDetailsDAO();
     List<Product> bestSellers = pDAO.getBestSellers();
+    List<Product> discountedProducts = pDAO.getDiscountedProducts();
 %>
 <html>
     <head>
@@ -310,6 +311,26 @@
                     </div>
                     <div class="row row-pb-md">
                         <% for (Product product : bestSellers) { %>
+                        <div class="col-lg-3 mb-4 text-center">
+                            <div class="product-entry border">
+                                <a href="ProductDetailsController?productID=<%=product.getProductId() %>" class="prod-img">
+                                    <img src="<%= product.getImageURL() %>" class="img-fluid" alt="Product Image">
+                                </a>
+                                <div class="desc">
+                                    <h2><a href="ProductDetailsController?productID=<%=product.getProductId() %>"><%= product.getProductName() %></a></h2>
+                                    <span class="price"><%= product.getPrice() %></span>
+                                </div>
+                            </div>
+                        </div>
+                        <% } %>
+                    </div>
+                    <div class="row">
+                        <div class="col-sm-8 offset-sm-2 text-center colorlib-heading">
+                            <h2>On Sale</h2>
+                        </div>
+                    </div>
+                    <div class="row row-pb-md">
+                        <% for (Product product : discountedProducts) { %>
                         <div class="col-lg-3 mb-4 text-center">
                             <div class="product-entry border">
                                 <a href="ProductDetailsController?productID=<%=product.getProductId() %>" class="prod-img">

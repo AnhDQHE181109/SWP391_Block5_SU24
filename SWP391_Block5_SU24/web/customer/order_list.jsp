@@ -466,17 +466,16 @@
                                             <button type="submit" class="btn btn-warning">Request Return</button>
                                         </form>
                                     </div>
-                                </div>
-                                            <div class="one-eight text-center">
-        <div class="display-tc">
-            <form method="get" action="feedback.jsp">
-                <input type="hidden" name="orderId" value="<%= order.getOrderID() %>">
-                <button type="submit" class="btn btn-primary">Give Feedback</button>
-            </form>
-        </div>
-    </div>
+                                </div>                            
                                 <% } } %>
-
+                                <div class="one-eight text-center">
+                                    <div class="display-tc">
+                                        <form method="get" action="feedback.jsp">
+                                            <input type="hidden" name="orderId" value="<%= order.getOrderID() %>">
+                                            <button type="submit" class="btn btn-primary">Give Feedback</button>
+                                        </form>
+                                    </div>
+                                </div>
                             </div>
                             <% 
                                 } // End of for loop
