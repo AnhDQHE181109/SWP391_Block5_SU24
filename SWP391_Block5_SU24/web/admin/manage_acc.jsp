@@ -1,9 +1,3 @@
-<%-- 
-    Document   : table.jsp
-    Created on : Aug 7, 2024, 9:53:36 PM
-    Author     : nobbe
---%>
-
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <%@ page import="model.AccountDAO" %>
 <%@ page import="entity.Account" %>
@@ -42,54 +36,29 @@
         <link href="${pageContext.request.contextPath}/css/manager.css" rel="stylesheet">
 
         <script>
-        function editAccount(accountId, username, email, phoneNumber, address, role) {
-            document.querySelector('#editForm [name="accountId"]').value = accountId;
-            document.querySelector('#editForm #username').value = username;
-            document.querySelector('#editForm #email').value = email;
-            document.querySelector('#editForm #phoneNumber').value = phoneNumber;
-            document.querySelector('#editForm #address').value = address;
-            document.querySelector('#editForm #role').value = role;
-            // Show the modal
-            $('#editModal').modal('show');
-        }
+            function filterAccounts() {
+                const role = document.getElementById("roleFilter").value;
+                window.location.href = `manage_acc.jsp?role=` + role;
+            }
 
-        function updateAccount(event) {
-    event.preventDefault(); // Prevent form submission
+            function editAccount(accountId, username, name, email, phoneNumber, address) {
+                document.querySelector('#editForm [name="accountId"]').value = accountId;
+                document.querySelector('#editForm #username').value = username;
+                document.querySelector('#editForm #name').value = name;
+                document.querySelector('#editForm #email').value = email;
+                document.querySelector('#editForm #phoneNumber').value = phoneNumber;
+                document.querySelector('#editForm #address').value = address;
 
-    const formData = new FormData(event.target);
-    const accountId = formData.get('accountId');
-    const newEmail = formData.get('email');
-    const newPhoneNumber = formData.get('phoneNumber');
-    const newAddress = formData.get('address');
+                // Show the modal
+                $('#editModal').modal('show');
+            }
 
-    fetch('${pageContext.request.contextPath}/AccountManagementController', {
-        method: 'POST',
-        headers: {
-            'Content-Type': 'application/x-www-form-urlencoded',
-        },
-        body: new URLSearchParams({
-            id: accountId,
-            email: newEmail,
-            phoneNumber: newPhoneNumber,
-            address: newAddress
-        })
-    })
-    .then(response => {
-        if (response.ok) {
-            alert('Account updated successfully!');
-            location.reload(); // Reload to see the changes
-        } else {
-            return response.text().then(text => {
-                alert(text);
-            });
-        }
-    })
-    .catch(error => {
-        console.error('Error updating account:', error);
-        alert('An error occurred while updating the account. Please try again later.');
-    });
-}
-    </script>
+            function updateStatus(accountId, status) {
+                if (confirm("Are you sure you want to " + (status === 1 ? "activate" : "deactivate") + " this account?")) {
+                    window.location.href = `${pageContext.request.contextPath}/UpdateAccountController?action=updateStatus&accountId=${accountId}&status=${status}`;
+                }
+            }
+        </script>
     </head>
 
     <body>
@@ -101,7 +70,6 @@
                 </div>
             </div>
             <!-- Spinner End -->
-
 
             <!-- Sidebar Start -->
             <div class="sidebar pe-4 pb-3">
@@ -115,7 +83,7 @@
                             <div class="bg-success rounded-circle border border-2 border-white position-absolute end-0 bottom-0 p-1"></div>
                         </div>
                         <div class="ms-3">
-                            <h6 class="mb-0">Jhon Doe</h6>
+                            <h6 class="mb-0">John Doe</h6>
                             <span>Admin</span>
                         </div>
                     </div>
@@ -125,15 +93,12 @@
                             <div class="dropdown-menu bg-transparent border-0">
                                 <a href="manage_acc.jsp" class="dropdown-item">View all account</a>
                                 <a href="addStaffAccount.jsp" class="dropdown-item">Create account</a>
-                                
                             </div>
                         </div>
-                        
                     </div>
                 </nav>
             </div>
             <!-- Sidebar End -->
-
 
             <!-- Content Start -->
             <div class="content">
@@ -159,7 +124,7 @@
                                     <div class="d-flex align-items-center">
                                         <img class="rounded-circle" src="images/user.jpg" alt="" style="width: 40px; height: 40px;">
                                         <div class="ms-2">
-                                            <h6 class="fw-normal mb-0">Jhon send you a message</h6>
+                                            <h6 class="fw-normal mb-0">John sent you a message</h6>
                                             <small>15 minutes ago</small>
                                         </div>
                                     </div>
@@ -169,29 +134,19 @@
                                     <div class="d-flex align-items-center">
                                         <img class="rounded-circle" src="images/user.jpg" alt="" style="width: 40px; height: 40px;">
                                         <div class="ms-2">
-                                            <h6 class="fw-normal mb-0">Jhon send you a message</h6>
+                                            <h6 class="fw-normal mb-0">John sent you a message</h6>
                                             <small>15 minutes ago</small>
                                         </div>
                                     </div>
                                 </a>
                                 <hr class="dropdown-divider">
-                                <a href="#" class="dropdown-item">
-                                    <div class="d-flex align-items-center">
-                                        <img class="rounded-circle" src="images/user.jpg" alt="" style="width: 40px; height: 40px;">
-                                        <div class="ms-2">
-                                            <h6 class="fw-normal mb-0">Jhon send you a message</h6>
-                                            <small>15 minutes ago</small>
-                                        </div>
-                                    </div>
-                                </a>
-                                <hr class="dropdown-divider">
-                                <a href="#" class="dropdown-item text-center">See all message</a>
+                                <a href="#" class="dropdown-item text-center">See all messages</a>
                             </div>
                         </div>
                         <div class="nav-item dropdown">
                             <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown">
                                 <i class="fa fa-bell me-lg-2"></i>
-                                <span class="d-none d-lg-inline-flex">Notificatin</span>
+                                <span class="d-none d-lg-inline-flex">Notification</span>
                             </a>
                             <div class="dropdown-menu dropdown-menu-end bg-light border-0 rounded-0 rounded-bottom m-0">
                                 <a href="#" class="dropdown-item">
@@ -227,129 +182,105 @@
                 </nav>
                 <!-- Navbar End -->
 
+                <!-- Error message display -->
+                <%
+                    String error = request.getParameter("error");
+                    if (error != null) {
+                %>
+                <div class="alert alert-danger">
+                    <%= error %>
+                </div>
+                <% } %>
+
+                <!-- Success message display -->
+                <%
+                    String success = request.getParameter("success");
+                    if (success != null) {
+                %>
+                <div class="alert alert-success">
+                    Account updated successfully!
+                </div>
+                <% } %> <!-- Make sure this is closed properly -->
 
                 <!-- Table Start -->
                 <div class="container-fluid pt-4 px-4">
-        <div class="row g-4">
-            <div class="col-12">
-                <div class="bg-light rounded h-100 p-4">
-                    <h6 class="mb-4">Staff Account Table</h6>
+                    <div class="row g-4">
+                        <div class="col-12">
+                            <div class="bg-light rounded h-100 p-4">
+                                <h6 class="mb-4">Account Management</h6>
 
-                    <div class="table-responsive">
-                        <table class="table">
-                            <thead>
-                                <tr>
-                                    <th scope="col">Account ID</th>
-                                    <th scope="col">Username</th>
-                                    <th scope="col">Phone Number</th>
-                                    <th scope="col">Email</th>
-                                    <th scope="col">Address</th>
-                                    <th scope="col">Role</th>
-                                    <th scope="col">Actions</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                <!-- Staff account rows will be inserted here -->
-                                <%
-                                AccountDAO accountDAO = new AccountDAO();
-                                List<Account> staffAccounts = accountDAO.getAccountsByRole(2);
-                                for (Account account : staffAccounts) {
-                                %>
-                                <tr>
-                                    <td><%= account.getAccountID() %></td>
-                                    <td><%= account.getUsername() %></td>
-                                    <td><%= account.getPhoneNumber() %></td>
-                                    <td><%= account.getEmail() %></td>
-                                    <td><%= account.getAddress() %></td>
-                                    <td><%= account.getRole() %></td>
-                                    <td>
-                                        <button class="btn btn-primary btn-sm" onclick="editAccount(<%= account.getAccountID() %>, '<%= account.getUsername() %>', '<%= account.getEmail() %>', '<%= account.getPhoneNumber() %>', '<%= account.getAddress() %>', <%= account.getRole() %>)">Edit</button>
-                                    </td>
-                                </tr>
-                                <% } %>
-                            </tbody>
-                        </table>
+                                <!-- Role Filter Dropdown -->
+                                <div class="mb-3">
+                                    <label for="roleFilter" class="form-label">Choose Account Role</label>
+                                    <select id="roleFilter" class="form-select" onchange="filterAccounts()">
+                                        <option value="all" <% if (request.getParameter("role") == null || request.getParameter("role").equals("all")) { %> selected <% } %>>All</option>
+                                        <option value="1" <% if ("1".equals(request.getParameter("role"))) { %> selected <% } %>>Customer</option>
+                                        <option value="2" <% if ("2".equals(request.getParameter("role"))) { %> selected <% } %>>Staff</option>
+                                        <option value="3" <% if ("3".equals(request.getParameter("role"))) { %> selected <% } %>>Manager</option>
+                                        <option value="4" <% if ("4".equals(request.getParameter("role"))) { %> selected <% } %>>Admin</option>
+                                    </select>
+                                </div>
+
+                                <div class="table-responsive">
+                                    <table class="table">
+                                        <thead>
+                                            <tr>
+                                                <th scope="col">Account ID</th>
+                                                <th scope="col">Username</th>
+                                                <th scope="col">Phone Number</th>
+                                                <th scope="col">Email</th>
+                                                <th scope="col">Address</th>
+                                                <th scope="col">Role</th>
+                                                <th scope="col">Actions</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <!-- Account rows based on role -->
+                                            <%
+                                                AccountDAO accountDAO = new AccountDAO();
+                                                List<Account> accounts;
+                                                String selectedRole = request.getParameter("role");
+
+                                                if (selectedRole == null || selectedRole.equals("all")) {
+                                                    accounts = accountDAO.getAccounts(); // Assuming this method exists
+                                                } else {
+                                                    int role = Integer.parseInt(selectedRole);
+                                                    accounts = accountDAO.getAccountsByRole(role);
+                                                }
+
+                                                for (Account account : accounts) {
+                                            %>
+                                            <tr>
+                                                <td><%= account.getAccountID() %></td>
+                                                <td><%= account.getUsername() %></td>
+                                                <td><%= account.getPhoneNumber() %></td>
+                                                <td><%= account.getEmail() %></td>
+                                                <td><%= account.getAddress() %></td>
+                                                <td><%= account.getRole() %></td>
+                                                <td>
+                                                    <% if (account.getRole() != 1) { %>
+                                                    <button class="btn btn-primary btn-sm" 
+                                                            onclick="editAccount(
+                                                            <%= account.getAccountID() %>,
+                                                                            '<%= account.getUsername() %>',
+                                                                            '<%= account.getName() %>',
+                                                                            '<%= account.getEmail() %>',
+                                                                            '<%= account.getPhoneNumber() %>',
+                                                                            '<%= account.getAddress() %>'
+                                                                            )">Edit</button>
+                                                    <% } %>
+                                                    
+                                                </td>
+                                            </tr>
+                                            <% } %>
+                                        </tbody>
+                                    </table>
+                                </div>
+
+                            </div>
+                        </div>
                     </div>
-
                 </div>
-            </div>
-
-            <div class="col-12">
-                <div class="bg-light rounded h-100 p-4">
-                    <h6 class="mb-4">Customer Account Table</h6>
-
-                    <div class="table-responsive">
-                        <table class="table">
-                            <thead>
-                                <tr>
-                                    <th scope="col">Account ID</th>
-                                    <th scope="col">Username</th>
-                                    <th scope="col">Phone Number</th>
-                                    <th scope="col">Email</th>
-                                    <th scope="col">Address</th>
-                                    <th scope="col">Role</th>
-                                    <th scope="col">Actions</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                <!-- Customer account rows will be inserted here -->
-                                <%
-                                List<Account> customerAccounts = accountDAO.getAccountsByRole(1);
-                                for (Account account : customerAccounts) {
-                                %>
-                                <tr>
-                                    <td><%= account.getAccountID() %></td>
-                                    <td><%= account.getUsername() %></td>
-                                    <td><%= account.getPhoneNumber() %></td>
-                                    <td><%= account.getEmail() %></td>
-                                    <td><%= account.getAddress() %></td>
-                                    <td><%= account.getRole() %></td>
-                                    
-                                </tr>
-                                <% } %>
-                            </tbody>
-                        </table>
-                    </div>
-
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <!-- Edit Account Modal -->
-    <div class="modal fade" id="editModal" tabindex="-1" aria-labelledby="editModalLabel" aria-hidden="true">
-        <div class="modal-dialog">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title" id="editModalLabel">Edit Account</h5>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                </div>
-                <div class="modal-body">
-                    <form id="editForm" onsubmit="updateAccount(event)">
-                        <input type="hidden" name="accountId" />
-                        <div class="mb-3">
-                            <label for="username" class="form-label">Username</label>
-                            <input type="text" class="form-control" id="username" name="username" disabled>
-                        </div>
-                        <div class="mb-3">
-                            <label for="email" class="form-label">Email</label>
-                            <input type="email" class="form-control" id="email" name="email">
-                        </div>
-                        <div class="mb-3">
-                            <label for="phoneNumber" class="form-label">Phone Number</label>
-                            <input type="text" class="form-control" id="phoneNumber" name="phoneNumber">
-                        </div>
-                        <div class="mb-3">
-                            <label for="address" class="form-label">Address</label>
-                            <input type="text" class="form-control" id="address" name="address">
-                        </div>
-                        <input type="hidden" id="role" name="role" />
-                        <button type="submit" class="btn btn-primary">Save Changes</button>
-                    </form>
-                </div>
-            </div>
-        </div>
-    </div>
                 <!-- Table End -->
 
                 <!-- Edit Account Modal -->
@@ -361,37 +292,56 @@
                                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                             </div>
                             <div class="modal-body">
-                                <form id="editForm">
+                                <form id="editForm" action="${pageContext.request.contextPath}/UpdateAccountController" method="post">
                                     <input type="hidden" name="accountId" />
+
                                     <div class="mb-3">
                                         <label for="username" class="form-label">Username</label>
                                         <input type="text" class="form-control" id="username" name="username" disabled>
                                     </div>
+
                                     <div class="mb-3">
-                                        <label for="email" class="form-label">Email</label>
-                                        <input type="email" class="form-control" id="email" name="email">
+                                        <label for="name" class="form-label">Name</label>
+                                        <input type="text" class="form-control" id="name" name="name">
                                     </div>
+
                                     <div class="mb-3">
                                         <label for="password" class="form-label">Password</label>
                                         <input type="password" class="form-control" id="password" name="password">
                                     </div>
+
+                                    <div class="mb-3">
+                                        <label for="email" class="form-label">Email</label>
+                                        <input type="email" class="form-control" id="email" name="email">
+                                    </div>
+
                                     <div class="mb-3">
                                         <label for="phoneNumber" class="form-label">Phone Number</label>
-                                        <input type="text" class="form-control" id="phoneNumber" name="phoneNumber" disabled>
+                                        <input type="text" class="form-control" id="phoneNumber" name="phoneNumber">
                                     </div>
+
                                     <div class="mb-3">
-                                        <label for="address" class="form-label">Address</label>
-                                        <input type="text" class="form-control" id="address" name="address" disabled>
+                                        <label for="address" class="form-label">Address (optional)</label>
+                                        <input type="text" class="form-control" id="address" name="address">
                                     </div>
+
+                                    <!-- Role selection -->
+                                    <div class="mb-3">
+                                        <label for="role" class="form-label">Role</label>
+                                        <select class="form-control" id="role" name="role">
+                                            <option value="2">Staff</option>
+                                            <option value="3">Manager</option>
+                                            <option value="4">Admin</option>
+                                        </select>
+                                    </div>
+
+                                    <button type="submit" class="btn btn-primary">Save Changes</button>
                                 </form>
-                            </div>
-                            <div class="modal-footer">
-                                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                                <button type="submit" form="editForm" class="btn btn-primary">Save Changes</button>
                             </div>
                         </div>
                     </div>
                 </div>
+                <!-- Edit Account Modal End -->
 
                 <!-- Footer Start -->
                 <div class="container-fluid pt-4 px-4">
@@ -401,7 +351,6 @@
                                 &copy; <a href="#">Your Site Name</a>, All Right Reserved. 
                             </div>
                             <div class="col-12 col-sm-6 text-center text-sm-end">
-                                <!--/*** This template is free as long as you keep the footer author’s credit link/attribution link/backlink. If you'd like to use the template without the footer author’s credit link/attribution link/backlink, you can purchase the Credit Removal License from "https://htmlcodex.com/credit-removal". Thank you for your support. ***/-->
                                 Designed By <a href="https://htmlcodex.com">HTML Codex</a>
                             </div>
                         </div>
