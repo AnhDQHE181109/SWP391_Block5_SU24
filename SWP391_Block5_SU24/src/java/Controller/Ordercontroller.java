@@ -62,13 +62,26 @@ protected void doGet(HttpServletRequest request, HttpServletResponse response)
 
         if (usernameSearch != null && !usernameSearch.trim().isEmpty()) {
             orderList = daoOrder.getOrdersByUsername(usernameSearch, sortOrder);
-        } else if (orderDateSearch != null && !orderDateSearch.trim().isEmpty()) {
+        } 
+        
+        else if (orderDateSearch != null && !orderDateSearch.trim().isEmpty()) {
             orderList = daoOrder.getOrdersByDate(orderDateSearch, sortOrder);
-        } else if (statusSearch != null && !statusSearch.trim().isEmpty()) {
+        }
+        
+        else if (statusSearch != null && !statusSearch.trim().isEmpty()) {
             orderList = daoOrder.getOrdersByStatus(statusSearch, sortOrder);
-        } else if (startDate != null && !startDate.trim().isEmpty() && endDate != null && !endDate.trim().isEmpty()) {
+        } 
+        
+        else if (startDate != null && !startDate.trim().isEmpty() && endDate != null && !endDate.trim().isEmpty()) {
             orderList = daoOrder.getOrdersByDateRange(startDate, endDate, sortOrder);
-        } else {
+        }
+        
+                else if (sortOrder != null ) {
+            orderList = daoOrder.getAllOrdersbysortdate(sortOrder);
+        }
+                
+        
+        else {
             orderList = daoOrder.getAllOrders(sortOrder);
         }
     }

@@ -44,6 +44,8 @@ public class Orderdetailcontroller extends HttpServlet {
         String status  = request.getParameter("status");
         String adress  = request.getParameter("adress");
         String phone  = request.getParameter("phone");
+         String user  = request.getParameter("user");
+
         
 
         if (orderIdParam != null && !orderIdParam.isEmpty()) {
@@ -76,6 +78,9 @@ public class Orderdetailcontroller extends HttpServlet {
             request.setAttribute("status", status);
             request.setAttribute("adress", adress);
             request.setAttribute("phone", phone);
+             request.setAttribute("user", user);
+
+            
        
 
             
@@ -83,6 +88,7 @@ public class Orderdetailcontroller extends HttpServlet {
             System.out.println("productNameMap" + productNameMap);
             System.out.println("status"+status);
             System.out.println("adress"+adress);
+            System.out.println("user :" +user);
             
             // Forward request and response to JSP page
             request.getRequestDispatcher("staff/orderdetail.jsp").forward(request, response);
