@@ -41,10 +41,17 @@
     
     <script>
     function validateForm() {
+        let fullname = document.getElementById("fullname").value;
         let username = document.getElementById("username").value;
         let password = document.getElementById("password").value;
         let phoneNumber = document.getElementById("phoneNumber").value;
         let email = document.getElementById("email").value;
+
+        // Fullname validation (optional, depending on your requirements)
+        if (fullname.trim() === "") {
+            alert("Full name is required.");
+            return false;
+        }
 
         // Username validation
         let usernamePattern = /^[^\s\/\\<>&$#%"\'!?()]+$/;
@@ -91,6 +98,7 @@
         <!-- Spinner End -->
 
 
+        <!-- Sidebar Start -->
         <!-- Sidebar Start -->
         <div class="sidebar pe-4 pb-3">
                 <nav class="navbar bg-light navbar-light">
@@ -173,6 +181,16 @@
                                 </div>
                             </a>
                             <hr class="dropdown-divider">
+                            <a href="#" class="dropdown-item">
+                                <div class="d-flex align-items-center">
+                                    <img class="rounded-circle" src="images/user.jpg" alt="" style="width: 40px; height: 40px;">
+                                    <div class="ms-2">
+                                        <h6 class="fw-normal mb-0">Jhon send you a message</h6>
+                                        <small>15 minutes ago</small>
+                                    </div>
+                                </div>
+                            </a>
+                            <hr class="dropdown-divider">
                             <a href="#" class="dropdown-item text-center">See all message</a>
                         </div>
                     </div>
@@ -222,7 +240,11 @@
         <c:if test="${not empty message}">
             <div class="alert alert-info">${message}</div>
         </c:if>
-        <form action="CreateStaffController" method="post" onsubmit="return validateForm();">
+        <form action="${pageContext.request.contextPath}/CreateStaffController" method="post" onsubmit="return validateForm();">
+            <div class="mb-3">
+                <label for="fullname" class="form-label">Full Name</label>
+                <input type="text" class="form-control" id="fullname" name="fullname" required>
+            </div>
             <div class="mb-3">
                 <label for="username" class="form-label">Username</label>
                 <input type="text" class="form-control" id="username" name="username" required>

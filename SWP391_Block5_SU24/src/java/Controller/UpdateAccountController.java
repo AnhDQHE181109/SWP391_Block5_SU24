@@ -89,35 +89,40 @@ public class UpdateAccountController extends HttpServlet {
 
         AccountDAO accountDAO = new AccountDAO();
         Validator validator = new Validator();
-        Account account = accountDAO.getAccountById(Integer.parseInt(accountId)); // Assuming you have a method to get account by ID
+        Account account = accountDAO.getAccountById(Integer.parseInt(accountId));
 
         // Validate input
         if (name == null || name.isEmpty()) {
             request.setAttribute("error", "Name cannot be empty.");
+            request.setAttribute("account", account);
             request.getRequestDispatcher("/admin/manage_acc.jsp").forward(request, response);
             return;
         }
 
         if (email == null || !validator.isValidEmail(email)) {
             request.setAttribute("error", "Invalid email format.");
+            request.setAttribute("account", account);
             request.getRequestDispatcher("/admin/manage_acc.jsp").forward(request, response);
             return;
         }
 
-        if (!validator.isEmailUnique(email) && !email.equals(account.getEmail())) {
+        if (!email.equals(account.getEmail()) && !validator.isEmailUnique(email)) {
             request.setAttribute("error", "Email is already taken.");
+            request.setAttribute("account", account);
             request.getRequestDispatcher("/admin/manage_acc.jsp").forward(request, response);
             return;
         }
 
         if (phoneNumber == null || !validator.isValidPhoneNumber(phoneNumber)) {
             request.setAttribute("error", "Invalid phone number.");
+            request.setAttribute("account", account);
             request.getRequestDispatcher("/admin/manage_acc.jsp").forward(request, response);
             return;
         }
 
-        if (!validator.isPhoneNumberUnique(phoneNumber) && !phoneNumber.equals(account.getPhoneNumber())) {
+        if (!phoneNumber.equals(account.getPhoneNumber()) && !validator.isPhoneNumberUnique(phoneNumber)) {
             request.setAttribute("error", "Phone number is already taken.");
+            request.setAttribute("account", account);
             request.getRequestDispatcher("/admin/manage_acc.jsp").forward(request, response);
             return;
         }
@@ -142,17 +147,19 @@ public class UpdateAccountController extends HttpServlet {
                         break;
                 }
                 request.setAttribute("error", passwordErrorMessage);
+                request.setAttribute("account", account);
                 request.getRequestDispatcher("/admin/manage_acc.jsp").forward(request, response);
                 return;
             }
 
             try {
-                String salt = account.getSalt(); // Retrieve the existing salt
+                String salt = account.getSalt();
                 String hashedPassword = EncryptionHelper.hashPassword(password, salt);
                 account.setHash(hashedPassword);
             } catch (NoSuchAlgorithmException | InvalidKeySpecException e) {
                 e.printStackTrace();
                 request.setAttribute("error", "An error occurred while processing the password. Please try again.");
+                request.setAttribute("account", account);
                 request.getRequestDispatcher("/admin/manage_acc.jsp").forward(request, response);
                 return;
             }
@@ -167,7 +174,7 @@ public class UpdateAccountController extends HttpServlet {
 
         // Update the account in the database
         accountDAO.updateAccount(account);
-        response.sendRedirect(request.getContextPath() + "/admin/manage_acc.jsp?success=true");
+        response.sendRedirect(request.getContextPath() + "/admin/manage_acc.jsp?success=Account updated successfully");
 }
 
     /**
