@@ -157,6 +157,28 @@
             border: 2px solid yellowgreen;
             outline: none;
         }
+        .cart.dropdown .dropdown-menu {
+            position: absolute;
+            top: 100%;
+            left: 0;
+            right: 0;
+            display: none;
+            z-index: 1000;
+            min-width: 160px;
+            padding: 5px 0;
+            margin: 0;
+            font-size: 14px;
+            color: #333;
+            text-align: left;
+            background-color: #fff;
+            border: 1px solid rgba(0, 0, 0, 0.15);
+            border-radius: 4px;
+            box-shadow: 0 6px 12px rgba(0, 0, 0, 0.175);
+        }
+
+        .cart.dropdown:hover .dropdown-menu {
+            display: block;
+        }
     </style>
     <body>
         <%
@@ -276,7 +298,15 @@
                                     <li><a href="${pageContext.request.contextPath}/about.html">About</a></li>
                                     <li><a href="${pageContext.request.contextPath}/contact.html">Contact</a></li>
                                         <% if (session.getAttribute("account") != null) { %>
-                                    <li class="cart active"><i style='color:#9bcbbc' class="fa-regular fa-user"></i> <a href="${pageContext.request.contextPath}/customer/customer_profile.jsp"><%= ((Account) session.getAttribute("account")).getUsername() %></a></li>
+                                    <li class="cart dropdown">
+                                        <a href="#" class="dropdown-toggle" id="userDropdown" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                            <i class="fa-regular fa-user"></i> <%= ((Account) session.getAttribute("account")).getUsername() %>
+                                        </a>
+                                        <div class="dropdown-menu dropdown-menu-right" aria-labelledby="userDropdown">
+                                            <a class="dropdown-item" href="customer/customer_profile.jsp">Profile</a>
+                                            <a class="dropdown-item" href="LogoutController">Logout</a>
+                                        </div>
+                                    </li>
                                     <li class="cart"><a href="wishlist.jsp"><i class="fa fa-heart"></i> Wishlist</a></li>
                                         <%
                                         int accountID = 0;
@@ -349,7 +379,7 @@
                                     <%if("true".equals(request.getAttribute("suchange"))){%><tr><td></td><td style="color:#4ac421">Profile changed successful!</td></tr><%}%>
                                     <tr><td style="width:150px;padding-bottom: 15px; text-align: right; padding-right: 3%">Username</td><td><input class='protbox' type="text" disabled value="<%= account.getUsername()%>"></td></tr>
                                     <tr><td></td><td><span>Username can not be changed</span></td></tr>
-                                     <%if("true".equals(request.getAttribute("name_error"))){%><tr><td></td><td style="color:red">Invalid name!</td></tr><%}%>                                   
+                                    <%if("true".equals(request.getAttribute("name_error"))){%><tr><td></td><td style="color:red">Invalid name!</td></tr><%}%>                                   
                                     <tr><td style="width:150px; text-align: right; padding-right: 3%;">Name</td><td style='padding-top: 25px'><input class="protbox" type="text" name='name' required value='<%= account.getFullname()%>'></td></tr>
                                     <tr><td></td><td><span>Name must not contain special characters</span></td></tr>
                                     <tr><td style="width:150px; text-align: right;padding-top: 25px; padding-right: 3%;">Email</td><td style='padding-top: 25px'><span class="protbox" type="text" name='email'><%= account.getEmail()%></span> <a style='color:blue;text-decoration: underline' onclick='openSbox("email")'>Change</a></td></tr>
@@ -462,5 +492,15 @@
                                         }
 
                                         window.onload = startTimer;
+    </script>
+    <script>
+        document.addEventListener('click', function (event) {
+            var isClickInside = document.getElementById('userDropdown').contains(event.target);
+
+            if (!isClickInside) {
+                // Close the dropdown
+                document.querySelector('.cart.dropdown .dropdown-menu').style.display = 'none';
+            }
+        });
     </script>
 </html>

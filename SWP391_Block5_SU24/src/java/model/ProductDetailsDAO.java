@@ -828,9 +828,10 @@ public class ProductDetailsDAO extends DBConnect {
             e.printStackTrace();
         }
     }
+
     public void addToCart(int accountId, int stockId, int quantity) {
-        String sql = "INSERT INTO Cart (AccountID, StockID, quantity, DiscountID, date_added) " +
-                     "VALUES (?, ?, ?, NULL, GETDATE())";
+        String sql = "INSERT INTO Cart (AccountID, StockID, quantity, DiscountID, date_added) "
+                + "VALUES (?, ?, ?, NULL, GETDATE())";
         try (PreparedStatement ps = conn.prepareStatement(sql)) {
             ps.setInt(1, accountId);
             ps.setInt(2, stockId);
@@ -840,4 +841,76 @@ public class ProductDetailsDAO extends DBConnect {
             e.printStackTrace();
         }
     }
+
+    public Order getOrderById(int orderId) {
+        Order order = null;
+        try {
+            String sql = "SELECT o.OrderID, o.AccountID, o.OrderDate, o.Status, od.Quantity, od.SalePrice, p.ProductName, p.ImageID, pi.ImageURL "
+                    + "FROM Orders o "
+                    + "JOIN OrderDetails od ON o.OrderID = od.OrderID "
+                    + "JOIN Stock s ON od.StockID = s.StockID "
+                    + "JOIN Products p ON s.ProductID = p.ProductID "
+                    + "JOIN ProductImages pi ON p.ImageID = pi.ImageID "
+                    + "WHERE o.OrderID = ?";
+            PreparedStatement ps = conn.prepareStatement(sql);
+            ps.setInt(1, orderId);
+            ResultSet rs = ps.executeQuery();
+
+            if (rs.next()) {
+                order = new Order();
+                order.setOrderID(rs.getInt("OrderID"));
+                order.setAccountID(rs.getInt("AccountID"));
+                order.setOrderDate(rs.getDate("OrderDate"));
+                order.setStatus(rs.getString("Status"));
+                order.setQuantity(rs.getInt("Quantity"));
+                order.setSalePrice(rs.getDouble("SalePrice"));
+                order.setProductName(rs.getString("ProductName"));
+                order.setImageUrl(rs.getString("ImageURL"));
+                order.setProducttotal(order.getQuantity() * order.getSalePrice());
+            }
+
+            rs.close();
+            ps.close();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return order;
+    }
+
+    public boolean addFeedback(int orderId, int accountId, int rating, String comment) {
+        boolean isSuccess = true;
+        try {
+            String sql = "INSERT INTO Feedback (AccountID, StockID, rating, comment) "
+                    + "VALUES (?, ?, ?, ?)";
+
+            // Retrieve all StockIDs related to the order
+            String stockIdQuery = "SELECT StockID FROM OrderDetails WHERE OrderID = ?";
+            PreparedStatement stockIdStmt = conn.prepareStatement(stockIdQuery);
+            stockIdStmt.setInt(1, orderId);
+            ResultSet rs = stockIdStmt.executeQuery();
+
+            // Loop through each StockID and insert feedback
+            PreparedStatement ps = conn.prepareStatement(sql);
+            while (rs.next()) {
+                int stockId = rs.getInt("StockID");
+                ps.setInt(1, accountId);
+                ps.setInt(2, stockId);
+                ps.setInt(3, rating);
+                ps.setString(4, comment);
+
+                int rowsAffected = ps.executeUpdate();
+                if (rowsAffected <= 0) {
+                    isSuccess = false;  // If any insert fails, mark as unsuccessful
+                }
+            }
+
+            rs.close();
+            ps.close();
+        } catch (SQLException e) {
+            e.printStackTrace();
+            isSuccess = false;
+        }
+        return isSuccess;
+    }
+
 }

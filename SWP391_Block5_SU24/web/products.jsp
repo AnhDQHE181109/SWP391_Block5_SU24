@@ -38,27 +38,27 @@
         flex-grow: 1;
     }
     .cart.dropdown .dropdown-menu {
-            position: absolute;
-            top: 100%;
-            left: 0;
-            right: 0;
-            display: none;
-            z-index: 1000;
-            min-width: 160px;
-            padding: 5px 0;
-            margin: 0;
-            font-size: 14px;
-            color: #333;
-            text-align: left;
-            background-color: #fff;
-            border: 1px solid rgba(0, 0, 0, 0.15);
-            border-radius: 4px;
-            box-shadow: 0 6px 12px rgba(0, 0, 0, 0.175);
-        }
+        position: absolute;
+        top: 100%;
+        left: 0;
+        right: 0;
+        display: none;
+        z-index: 1000;
+        min-width: 160px;
+        padding: 5px 0;
+        margin: 0;
+        font-size: 14px;
+        color: #333;
+        text-align: left;
+        background-color: #fff;
+        border: 1px solid rgba(0, 0, 0, 0.15);
+        border-radius: 4px;
+        box-shadow: 0 6px 12px rgba(0, 0, 0, 0.175);
+    }
 
-        .cart.dropdown:hover .dropdown-menu {
-            display: block;
-        }
+    .cart.dropdown:hover .dropdown-menu {
+        display: block;
+    }
 </style>
 <%
     ProductDetailsDAO pDAO = new ProductDetailsDAO();
