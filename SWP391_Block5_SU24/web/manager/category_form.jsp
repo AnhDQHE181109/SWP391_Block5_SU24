@@ -162,11 +162,7 @@
                 <label for="categoryName">Category Name:</label>
                 <input type="text" id="categoryName" name="categoryName" value="${category.categoryName}" required>
 
-                <label for="categoryStatus">Category Status:</label>
-                <select id="categoryStatus" name="categoryStatus" required>
-                    <option value="1" ${category.categoryStatus == 1 ? 'selected' : ''}>Active</option>
-                    <option value="0" ${category.categoryStatus != 1 ? 'selected' : ''}>Inactive</option>
-                </select>
+
 
                 <input type="submit" value="${empty category.categoryId ? 'Create' : 'Update'} Category">
             </form>

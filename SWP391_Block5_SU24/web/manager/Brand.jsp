@@ -154,16 +154,7 @@
                                     <i class="fas fa-edit"></i> Edit
                                 </button>
                             </form>
-                            <!-- Status Change Form -->
-                            <form action="BrandController" method="post" style="display:inline;" 
-                                  onsubmit="return confirmStatusChange(this, ${brand.brandstatus});">
-                                <input type="hidden" name="brandId" value="${brand.brandId}" />
-                                <input type="hidden" name="action" value="updatestatus" />
-                                <input type="hidden" name="brandstatus" value="${brand.brandstatus == 0 ? 1 : 0}" />
-                                <button type="submit" class="btn btn-danger btn-sm">
-                                    <i class="fas fa-exchange-alt"></i> Change Status
-                                </button>
-                            </form>
+
                         </div>
                     </td>
                 </tr>
