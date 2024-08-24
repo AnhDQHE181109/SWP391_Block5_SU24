@@ -90,6 +90,7 @@ public class ChangeEmailController extends HttpServlet {
             request.setAttribute("error_emailtaken", "true");
         }
         if (hasErrors) {
+            request.setAttribute("et", email);
             request.setAttribute("autho", "true");
             request.getRequestDispatcher("customer/change1.jsp").forward(request, response);
         } else {

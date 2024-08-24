@@ -342,7 +342,6 @@
                                     <li class="cart"><a href="login.jsp">Login</a></li>
                                     <li class="cart"><a href="${pageContext.request.contextPath}/shoppingCart"><i class="icon-shopping-cart"></i> Cart [0]</a></li>
                                         <% } %>
-
                                 </ul>
                             </div>
                         </div>
@@ -404,7 +403,7 @@
                                             <p style="color:red" class="error">Email already registered to another account!</p>
                                             <% } %>
                                         </td></tr>
-                                    <tr><td style="width:150px; text-align: right;padding-top: 25px; padding-right: 3%;">New Email</td><td style='padding-top: 25px'><input required class="protbox" id="em" type="text" name='email'></td></tr>
+                                    <tr><td style="width:150px; text-align: right;padding-top: 25px; padding-right: 3%;">New Email</td><td style='padding-top: 25px'><input required class="protbox" id="em" type="text" name='email' value="${et != null ? et : ''}"></td></tr>
                                     <tr><td></td><td><div id="emessage">          
                                                 <b>Email must:</b>
                                                 <p id="estructure" class="einvalid">Follow the email structure: <ul><li>local@domainname.topleveldomain</li><li>domainname part of email must contain at least 2 characters</li><li>topleveldomain part of email must contain at least 2 characters</li></ul></p>
