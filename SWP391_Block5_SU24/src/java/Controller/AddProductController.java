@@ -1,107 +1,97 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/JSP_Servlet/Servlet.java to edit this template
- */
 package Controller;
 
+import entity.Account;
 import entity.Product;
-import jakarta.servlet.RequestDispatcher;
 import java.io.IOException;
-import java.io.PrintWriter;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
-import model.ProductDetailsDAO;
+import jakarta.servlet.http.HttpSession;
+import model.DAOProduct;
 
-/**
- *
- * @author Admin
- */
 public class AddProductController extends HttpServlet {
 
-    /**
-     * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
-     * methods.
-     *
-     * @param request servlet request
-     * @param response servlet response
-     * @throws ServletException if a servlet-specific error occurs
-     * @throws IOException if an I/O error occurs
-     */
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
-        try (PrintWriter out = response.getWriter()) {
-            /* TODO output your page here. You may use following sample code. */
-            out.println("<!DOCTYPE html>");
-            out.println("<html>");
-            out.println("<head>");
-            out.println("<title>Servlet AddProductController</title>");
-            out.println("</head>");
-            out.println("<body>");
-            out.println("<h1>Servlet AddProductController at " + request.getContextPath() + "</h1>");
-            out.println("</body>");
-            out.println("</html>");
-        }
+        // Your existing processRequest code, if needed
     }
 
-    // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
-    /**
-     * Handles the HTTP <code>GET</code> method.
-     *
-     * @param request servlet request
-     * @param response servlet response
-     * @throws ServletException if a servlet-specific error occurs
-     * @throws IOException if an I/O error occurs
-     */
-    @Override
-    protected void doGet(HttpServletRequest request, HttpServletResponse response)
-            throws ServletException, IOException {
-        processRequest(request, response);
-    }
-
-    /**
-     * Handles the HTTP <code>POST</code> method.
-     *
-     * @param request servlet request
-     * @param response servlet response
-     * @throws ServletException if a servlet-specific error occurs
-     * @throws IOException if an I/O error occurs
-     */
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
+        request.setCharacterEncoding("UTF-8");
+
+        // Retrieve form parameters
         String productName = request.getParameter("productName");
-        double price = Double.parseDouble(request.getParameter("price"));
-        int brandId = Integer.parseInt(request.getParameter("brandId"));
-        int categoryId = Integer.parseInt(request.getParameter("categoryId"));
-        String material = request.getParameter("material");
         String origin = request.getParameter("origin");
-        int productstatus = 0;
+        String material = request.getParameter("material");
+        String priceStr = request.getParameter("price");
+        String categoryIdStr = request.getParameter("categoryId");
+        String brandIdStr = request.getParameter("brandId");
+        String productStatusStr = request.getParameter("productStatus");
 
-        Product product = new Product(productName, origin, material, price, categoryId, brandId, productstatus);
+        // Convert form parameters to appropriate data types
+        double price = Double.parseDouble(priceStr);
+        int categoryId = Integer.parseInt(categoryIdStr);
+        int brandId = Integer.parseInt(brandIdStr);
+        int productStatus = Integer.parseInt(productStatusStr);
 
-        ProductDetailsDAO dao = new ProductDetailsDAO();
-        boolean isSuccess = dao.addProduct(product);
+        // Create Product object
+        Product product = new Product();
+        product.setProductName(productName);
+        product.setOrigin(origin);
+        product.setMaterial(material);
+        product.setPrice(price);
+        product.setCategoryId(categoryId);
+        product.setBrandId(brandId);
+        product.setProductStatus(productStatus);
 
-        if (isSuccess) {
-            response.sendRedirect("staff/stocksManager.jsp");
-        } else {
-            request.setAttribute("errorMessage", "Error adding product. Please try again.");
-            RequestDispatcher dispatcher = request.getRequestDispatcher("staff/addproduct.jsp");
-            dispatcher.forward(request, response);
+        // Use DAO to add product to the database
+        DAOProduct daoProduct = new DAOProduct();
+        daoProduct.addProduct(product);
+
+        // Retrieve the latest product ID
+        int latestProductId = daoProduct.getLatestProductId();
+
+        // Get the accountID from the session
+        HttpSession session = request.getSession();
+        Account account = (Account) session.getAttribute("account");
+        if (account != null) {
+            int accountId = account.getAccountID();
+            // Store accountID and latestProductId in the session
+            session.setAttribute("accountID", accountId);
+            session.setAttribute("latestProductId", latestProductId);
+            System.out.println("accountId :" +accountId);
+            System.out.println("latestProductId : "+latestProductId);
         }
+
+        request.setAttribute("productID", latestProductId);
+
+        // Use sendRedirect to navigate to AddVariantController
+        response.sendRedirect("AddVariantController?productID=" + latestProductId);
+      
     }
 
-    /**
-     * Returns a short description of the servlet.
-     *
-     * @return a String containing servlet description
-     */
+    @Override
+    protected void doGet(HttpServletRequest request, HttpServletResponse response)
+            throws ServletException, IOException {
+        HttpSession session = request.getSession();
+        Account account = (Account) session.getAttribute("account");
+        if (account == null) {
+            response.sendError(HttpServletResponse.SC_FORBIDDEN, "You do not have permission to access this page.");
+            return;
+        }
+        if (account.getRole() == 1) {
+            response.sendError(HttpServletResponse.SC_FORBIDDEN, "You do not have permission to access this page.");
+            return;
+        }
+        processRequest(request, response);
+    }
+
     @Override
     public String getServletInfo() {
-        return "Short description";
-    }// </editor-fold>
-
+        return "Servlet for adding a new product.";
+    }
 }

@@ -11,7 +11,7 @@ public class DAOProduct extends MyDAO {
     public List<Product> getAllProducts() {
         List<Product> products = new ArrayList<>();
         try {
-            xSql = "SELECT [ProductID], [ProductName], [Origin], [Material], [Price], [TotalQuantity], [CategoryID], [BrandID], [ImageID] FROM [ECommerceStore].[dbo].[Products]";
+            xSql = "SELECT [ProductID], [ProductName], [Origin], [Material], [Price], [TotalQuantity], [CategoryID], [BrandID], [ImageID], [ProductStatus] FROM [ECommerceStore].[dbo].[Products]";
             ps = con.prepareStatement(xSql);
             rs = ps.executeQuery();
             while (rs.next()) {
@@ -25,6 +25,7 @@ public class DAOProduct extends MyDAO {
                 product.setCategoryId(rs.getInt("CategoryID"));
                 product.setBrandId(rs.getInt("BrandID"));
                 product.setImageId(rs.getInt("ImageID"));
+                product.setProductStatus(rs.getInt("ProductStatus"));  // Updated to include ProductStatus
                 
                 products.add(product);
             }
@@ -39,7 +40,7 @@ public class DAOProduct extends MyDAO {
     // Thêm sản phẩm mới vào cơ sở dữ liệu
     public void addProduct(Product product) {
         try {
-            xSql = "INSERT INTO [ECommerceStore].[dbo].[Products] ([ProductName], [Origin], [Material], [Price], [TotalQuantity], [CategoryID], [BrandID], [ImageID]) VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
+            xSql = "INSERT INTO [ECommerceStore].[dbo].[Products] ([ProductName], [Origin], [Material], [Price], [TotalQuantity], [CategoryID], [BrandID],  [ProductStatus]) VALUES (?, ?, ?, ?, ?, ?, ?,  ?)";
             ps = con.prepareStatement(xSql);
             ps.setString(1, product.getProductName());
             ps.setString(2, product.getOrigin());
@@ -48,7 +49,7 @@ public class DAOProduct extends MyDAO {
             ps.setInt(5, product.getTotalQuantity());
             ps.setInt(6, product.getCategoryId());
             ps.setInt(7, product.getBrandId());
-            ps.setInt(8, product.getImageId());
+            ps.setInt(8, product.getProductStatus());  // Updated to include ProductStatus
             
             ps.executeUpdate();
         } catch (SQLException e) {
@@ -61,7 +62,7 @@ public class DAOProduct extends MyDAO {
     // Cập nhật thông tin sản phẩm
     public void updateProduct(Product product) {
         try {
-            xSql = "UPDATE [ECommerceStore].[dbo].[Products] SET [ProductName] = ?, [Origin] = ?, [Material] = ?, [Price] = ?, [TotalQuantity] = ?, [CategoryID] = ?, [BrandID] = ?, [ImageID] = ? WHERE [ProductID] = ?";
+            xSql = "UPDATE [ECommerceStore].[dbo].[Products] SET [ProductName] = ?, [Origin] = ?, [Material] = ?, [Price] = ?, [TotalQuantity] = ?, [CategoryID] = ?, [BrandID] = ?, [ImageID] = ?, [ProductStatus] = ? WHERE [ProductID] = ?";
             ps = con.prepareStatement(xSql);
             ps.setString(1, product.getProductName());
             ps.setString(2, product.getOrigin());
@@ -71,7 +72,8 @@ public class DAOProduct extends MyDAO {
             ps.setInt(6, product.getCategoryId());
             ps.setInt(7, product.getBrandId());
             ps.setInt(8, product.getImageId());
-            ps.setInt(9, product.getProductId());
+            ps.setInt(9, product.getProductStatus());  // Updated to include ProductStatus
+            ps.setInt(10, product.getProductId());
             
             ps.executeUpdate();
         } catch (SQLException e) {
@@ -95,11 +97,11 @@ public class DAOProduct extends MyDAO {
         }
     }
 
-        // Lấy thông tin sản phẩm dựa trên ProductID
+    // Lấy thông tin sản phẩm dựa trên ProductID
     public Product getProductById(int productId) {
         Product product = null;
         try {
-            xSql = "SELECT * FROM [ECommerceStore].[dbo].[Products] WHERE [ProductID] = ?";
+            xSql = "SELECT [ProductID], [ProductName], [Origin], [Material], [Price], [TotalQuantity], [CategoryID], [BrandID], [ImageID], [ProductStatus] FROM [ECommerceStore].[dbo].[Products] WHERE [ProductID] = ?";
             ps = con.prepareStatement(xSql);
             ps.setInt(1, productId);
             rs = ps.executeQuery();
@@ -114,6 +116,7 @@ public class DAOProduct extends MyDAO {
                 product.setCategoryId(rs.getInt("CategoryID"));
                 product.setBrandId(rs.getInt("BrandID"));
                 product.setImageId(rs.getInt("ImageID"));
+                product.setProductStatus(rs.getInt("ProductStatus"));  // Updated to include ProductStatus
             }
         } catch (SQLException e) {
             e.printStackTrace();
@@ -124,7 +127,42 @@ public class DAOProduct extends MyDAO {
     }
     
     
+       // Cập nhật ImageID cho sản phẩm dựa trên ProductID
+    public void updateProductImage(int productId, int imageId) {
+        try {
+            xSql = "UPDATE [ECommerceStore].[dbo].[Products] SET [ImageID] = ? WHERE [ProductID] = ?";
+            ps = con.prepareStatement(xSql);
+            ps.setInt(1, imageId);
+            ps.setInt(2, productId);
+            
+            ps.executeUpdate();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        } finally {
+            closeResources();
+        }
+    }
     
+    
+    // Lấy ra productID mới nhất
+public int getLatestProductId() {
+    int latestProductId = -1;
+    try {
+        xSql = "SELECT TOP 1 [ProductID] FROM [ECommerceStore].[dbo].[Products] ORDER BY [ProductID] DESC";
+        ps = con.prepareStatement(xSql);
+        rs = ps.executeQuery();
+        if (rs.next()) {
+            latestProductId = rs.getInt("ProductID");
+        }
+    } catch (SQLException e) {
+        e.printStackTrace();
+    } finally {
+        closeResources();
+    }
+    return latestProductId;
+}
+    
+
     // Đóng các tài nguyên sau khi sử dụng
     private void closeResources() {
         try {

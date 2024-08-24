@@ -13,24 +13,35 @@ public class DAOProductImages extends MyDAO {
         super();
     }
 
-    // Method to add a new ProductImage
-    public boolean addProductImage(ProductImage productImage) {
-        boolean result = false;
-        String sql = "INSERT INTO ProductImages (imageID, stockID, imageURL) VALUES (?, ?, ?)";
-        try {
-            ps = con.prepareStatement(sql);
-            ps.setInt(1, productImage.getImageID());
-            ps.setInt(2, productImage.getStockID());
-            ps.setString(3, productImage.getImageURL());
-            int rowsAffected = ps.executeUpdate();
-            result = (rowsAffected > 0);
-        } catch (SQLException e) {
-            e.printStackTrace();
-        } finally {
-            closeResources();
+// DAOProductImages.java
+public int addProductImage(ProductImage productImage) {
+    int imageId = -1; // Default to -1 if insertion fails
+    String sqlInsert = "INSERT INTO ProductImages (stockID, imageURL) VALUES (?, ?)";
+    String sqlSelect = "SELECT TOP 1 ImageID FROM ProductImages ORDER BY ImageID DESC"; // Query to get the last inserted ImageID
+
+    try {
+        // Insert the ProductImage
+        ps = con.prepareStatement(sqlInsert);
+        ps.setInt(1, productImage.getStockID());
+        ps.setString(2, productImage.getImageURL());
+        int rowsAffected = ps.executeUpdate();
+
+        if (rowsAffected > 0) {
+            // Retrieve the last inserted ImageID
+            ps = con.prepareStatement(sqlSelect);
+            ResultSet rs = ps.executeQuery();
+            if (rs.next()) {
+                imageId = rs.getInt("ImageID");
+            }
         }
-        return result;
+    } catch (Exception e) {
+        e.printStackTrace();
+    } finally {
+        closeResources();
     }
+    return imageId;
+}
+
 
     // Method to update a ProductImage
     public boolean updateProductImage(ProductImage productImage) {
