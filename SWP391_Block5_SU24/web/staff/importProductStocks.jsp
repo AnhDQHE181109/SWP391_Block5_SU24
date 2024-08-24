@@ -160,7 +160,7 @@
                                     <div class="col-md-2" style="justify-content: center; align-items: center;">
                                         <label for="productSize">Size: </label>
                                         <input type="text" id="productSize" name="productSize" class="form-control" placeholder="Size" style="margin-right: 5px;"
-                                        required>
+                                        onkeypress="return event.charCode >= 48 && event.charCode <= 57" required>
                                     </div>
 
                                     <div class="col-md-2" style="justify-content: center; align-items: center;">
