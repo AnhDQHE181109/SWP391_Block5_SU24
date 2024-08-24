@@ -43,6 +43,18 @@ public class AccountDAO extends MyDAO {
         return accountList;
     }
 
+    public void updateAccount(String name, String address, int uid) {
+        String sql = "UPDATE Accounts SET Name = ?, Address = ? WHERE AccountID = ?";
+        try {
+            ps = con.prepareStatement(sql);
+            ps.setString(1, name);
+            ps.setString(2, address);
+            ps.setInt(3, uid);
+            ps.executeUpdate();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
     public List<Account> getAccountsByRole(int role) {
         String sql = "SELECT * FROM Accounts WHERE Role = ?";
         List<Account> accountList = new ArrayList<>();
@@ -78,6 +90,32 @@ public class AccountDAO extends MyDAO {
             rs = ps.executeQuery();
             if (rs.next()) {
                 int accountID = rs.getInt("AccountID");
+                String email = rs.getString("Email");
+                String hash = rs.getString("Hash");
+                String phoneNumber = rs.getString("PhoneNumber");
+                String address = rs.getString("Address");
+                int role = rs.getInt("Role");
+                String salt = rs.getString("Salt");
+                Boolean status = rs.getBoolean("Status");
+                String fullname = rs.getString("Name");
+                account = new Account(accountID, username, hash, phoneNumber, email, address, salt, role, status, fullname);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return account;
+    }
+
+    public Account getAccount(int id) {
+        String sql = "SELECT * FROM Accounts WHERE AccountID = ?";
+        Account account = null;
+        try {
+            ps = con.prepareStatement(sql);
+            ps.setInt(1, id);
+            rs = ps.executeQuery();
+            if (rs.next()) {
+                int accountID = rs.getInt("AccountID");
+                String username = rs.getString("Username");
                 String email = rs.getString("Email");
                 String hash = rs.getString("Hash");
                 String phoneNumber = rs.getString("PhoneNumber");

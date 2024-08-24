@@ -86,11 +86,11 @@ public class ChangeController extends HttpServlet {
             return;
         } else {
             if (type.equals("email")) {
-                session.setAttribute("autho", "true");
+                request.setAttribute("autho", "true");
                 request.getRequestDispatcher(request.getContextPath()+"/customer/change1.jsp").forward(request, response);
                 return;
             } else {
-                session.setAttribute("autho", "true");
+                request.setAttribute("autho", "true");
                 request.getRequestDispatcher(request.getContextPath()+"/customer/change2.jsp").forward(request, response);
                 return;
             }

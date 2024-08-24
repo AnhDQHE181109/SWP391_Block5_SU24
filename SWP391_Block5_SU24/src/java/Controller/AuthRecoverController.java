@@ -104,6 +104,8 @@ public class AuthRecoverController extends HttpServlet {
         Account temp = adao.getAccountbyEmail((String) session.getAttribute("email"));
         try {
             String t = EncryptionHelper.hashPassword(newpass, temp.getSalt());
+            System.out.println(t);
+            System.out.println(temp.getSalt());
             if (t.equals(temp.getHash())) {
                 request.setAttribute("error_password_dupe", "true");
                 request.getRequestDispatcher("recover.jsp").forward(request, response);
