@@ -15,6 +15,7 @@ import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
 import java.util.ArrayList;
 import java.util.List;
+import model.ProductStocksImportDAO;
 
 /**
  *
@@ -39,7 +40,7 @@ public class ProductStocksImportController extends HttpServlet {
             out.println("<!DOCTYPE html>");
             out.println("<html>");
             out.println("<head>");
-            out.println("<title>Servlet ProductVariantsImportController</title>");            
+            out.println("<title>Servlet ProductVariantsImportController</title>");
             out.println("</head>");
             out.println("<body>");
             out.println("<h1>Servlet ProductVariantsImportController at " + request.getContextPath() + "</h1>");
@@ -62,7 +63,7 @@ public class ProductStocksImportController extends HttpServlet {
             throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
         PrintWriter out = response.getWriter();
-        
+
         HttpSession session = request.getSession();
         Account account = (Account) session.getAttribute("account");
         if (account == null) {
@@ -73,13 +74,15 @@ public class ProductStocksImportController extends HttpServlet {
             return;
         }
         int accountID = account.getAccountID();
-        
+
+        ProductStocksImportDAO psiDAO = new ProductStocksImportDAO();
+
         List<ProductStockImport> productsList = (List<ProductStockImport>) session.getAttribute("productsList");
-        
+
         String removeProductIn = request.getParameter("removeProduct");
         if (removeProductIn != null) {
             int removeProduct = 0;
-            
+
             try {
                 removeProduct = Integer.parseInt(removeProductIn);
             } catch (NumberFormatException e) {
@@ -89,10 +92,49 @@ public class ProductStocksImportController extends HttpServlet {
                 request.getRequestDispatcher("staff/importProductStocks.jsp").forward(request, response);
                 return;
             }
-            
+
             productsList.remove(removeProduct - 1);
         }
-        
+
+        String saveChanges = request.getParameter("saveChanges");
+        if (saveChanges != null) {
+            psiDAO.logUpdatedProducts(accountID, productsList.get(0).getSupplierName(), productsList);
+            
+            for (ProductStockImport productStock : productsList) {
+                int productID = psiDAO.getProductIDbyProductName(productStock.getProductName());
+                int stockID = psiDAO.getStockIDbyColorSizeProductID(productStock.getProductColor(), 
+                        productStock.getProductSize(), productID);
+                
+                psiDAO.incrementQuantityToStockID(productStock.getQuantity(), stockID);
+            }
+            
+            request.setAttribute("displayMessage", "Written changes into the system!");
+            productsList.clear();
+        }
+
+        String searchTerms = request.getParameter("search");
+        if (searchTerms != null) {
+            List<ProductStockImport> resultsList = psiDAO.findProductsByCriteria(searchTerms);
+            List<String> suggestions = new ArrayList<>();
+
+            for (ProductStockImport productStock : resultsList) {
+                String suggestionHTML = "<div class='dropdown-item d-flex align-items-center'>"
+                        + "<img src='" + productStock.getImageURL() + "' alt='" + productStock.getProductName() + "' class='img-thumbnail' style='width: 50px; height: 50px; margin-right: 10px;'>"
+                        + "<span>" + productStock.getProductName() + "</span></div>";
+                suggestions.add(suggestionHTML);
+            }
+
+            response.setContentType("text/html");
+
+            // Output the suggestions as HTML
+            for (String suggestion : suggestions) {
+                out.println(suggestion);
+            }
+
+            return;
+
+        }
+
         request.setAttribute("productsList", productsList);
         request.getRequestDispatcher("staff/importProductStocks.jsp").forward(request, response);
     }
@@ -110,7 +152,7 @@ public class ProductStocksImportController extends HttpServlet {
             throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
         PrintWriter out = response.getWriter();
-        
+
         HttpSession session = request.getSession();
         Account account = (Account) session.getAttribute("account");
         if (account == null) {
@@ -122,6 +164,8 @@ public class ProductStocksImportController extends HttpServlet {
         }
         int accountID = account.getAccountID();
         
+        ProductStocksImportDAO psiDAO = new ProductStocksImportDAO();
+
         String productName = request.getParameter("productName");
         String productColor = request.getParameter("productColor");
         String productSizeIn = request.getParameter("productSize");
@@ -129,14 +173,13 @@ public class ProductStocksImportController extends HttpServlet {
         String productQuantityIn = request.getParameter("productQuantity");
 
 //        out.println("POSTED");
-
         List<ProductStockImport> productsList = (List<ProductStockImport>) session.getAttribute("productsList");
 
         if (productsList == null) {
             productsList = new ArrayList<>();
             session.setAttribute("productsList", productsList);
         }
-        
+
         int productSize = 0;
         int productQuantity = 0;
         try {
@@ -149,12 +192,14 @@ public class ProductStocksImportController extends HttpServlet {
             request.getRequestDispatcher("staff/importProductStocks.jsp").forward(request, response);
             return;
         }
+
+        int productID = psiDAO.getProductIDbyProductName(productName);
+        String imageURL = psiDAO.getImageURLbyProductID(productID);
         
-        ProductStockImport productStock = new 
-        ProductStockImport("", supplierName, productName, productColor, productSize, productQuantity);
-        
+        ProductStockImport productStock = new ProductStockImport(imageURL, supplierName, productName, productColor, productSize, productQuantity);
+
         productsList.add(productStock);
-        
+
         request.setAttribute("productsList", productsList);
         request.getRequestDispatcher("staff/importProductStocks.jsp").forward(request, response);
     }
