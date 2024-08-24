@@ -57,7 +57,7 @@ public class EditProductController extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        
+
     }
 
     /**
@@ -86,14 +86,18 @@ public class EditProductController extends HttpServlet {
             boolean updateSuccess = pDAO.updateProduct(product);
 
             if (updateSuccess) {
-                response.sendRedirect("staff/stockManage.jsp?status=updated");
+
+                // Redirect to StocksManagementController to fetch updated data and display in stocksManager.jsp
+                response.sendRedirect("stocksManager");
             } else {
-                response.sendRedirect("staff/stockManage.jsp?status=error");
+                response.sendRedirect("stocksManager?status=error");
+
             }
 
         } catch (Exception e) {
             e.printStackTrace();
-            response.sendRedirect("staff/stockManage.jsp?status=error");
+            response.sendRedirect("stocksManager?status=error");
+
         }
 
     }
