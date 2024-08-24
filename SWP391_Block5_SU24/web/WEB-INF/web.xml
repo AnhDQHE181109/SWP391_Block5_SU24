@@ -118,6 +118,14 @@
         <servlet-name>ChangeCustomerController</servlet-name>
         <servlet-class>Controller.ChangeCustomerController</servlet-class>
     </servlet>
+    <servlet>
+        <servlet-name>AddVariantController</servlet-name>
+        <servlet-class>Controller.AddVariantController</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>UploadImageController</servlet-name>
+        <servlet-class>Controller.UploadImageController</servlet-class>
+    </servlet>
     <servlet-mapping>
         <servlet-name>LoginController</servlet-name>
         <url-pattern>/LoginController</url-pattern>
@@ -259,5 +267,13 @@
     <servlet-mapping>
         <servlet-name>ChangeCustomerController</servlet-name>
         <url-pattern>/ChangeCustomerController</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>AddVariantController</servlet-name>
+        <url-pattern>/AddVariantController</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>UploadImageController</servlet-name>
+        <url-pattern>/UploadImageController</url-pattern>
     </servlet-mapping>
 </web-app>
