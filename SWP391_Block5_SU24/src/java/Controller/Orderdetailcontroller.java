@@ -97,44 +97,50 @@ protected void doPost(HttpServletRequest request, HttpServletResponse response)
         throws ServletException, IOException {
     String orderIdParam = request.getParameter("orderId");
     String newStatus = request.getParameter("newStatus");
-    NotificationAlertDAO notidao = new NotificationAlertDAO();
-    
+
     if (orderIdParam != null && !orderIdParam.isEmpty() && newStatus != null && !newStatus.isEmpty()) {
         int orderId = Integer.parseInt(orderIdParam);
         
-        // Get the account ID from the session
-        HttpSession session = request.getSession();
-        Account account = (Account) session.getAttribute("account");
-        if (account == null) {
-            response.sendError(HttpServletResponse.SC_FORBIDDEN, "You do not have permission to perform this action.");
+        // Create an instance of DAOOrder to call getAccountIDByOrderID
+        DAOOrder daoOrder = new DAOOrder();
+        int accountId = daoOrder.getAccountIDByOrderID(orderId);
+        
+        if (accountId == -1) {
+            request.setAttribute("errorMessage", "Order ID not found.");
+            doGet(request, response); // Reuse doGet to show the page again
             return;
         }
-        
-        int accountId = account.getAccountID();  // Assuming getId() returns the account ID
+
         String notiMessage = "";
         String notiPath = request.getContextPath() + "/customer/order_list.jsp";  // Set the default notification path
 
         // Determine the notification message based on newStatus
-        if ("1".equals(newStatus)) {
-            notiMessage = "Order " + orderId + " status has changed from pending to processing.";
-        } else if ("2".equals(newStatus)) {
-            notiMessage = "Order " + orderId + " status has changed from processing to shipping.";
-        } else {
-            // Handle invalid status
-            request.setAttribute("errorMessage", "Invalid order status.");
-            doGet(request, response); // Reuse doGet to show the page again
-            return;
+        switch (newStatus) {
+            case "1":
+                notiMessage = "Order " + orderId + " status has changed from pending to processing.";
+                break;
+            case "2":
+                notiMessage = "Order " + orderId + " status has changed from processing to shipping.";
+                break;
+            case "4":
+                notiMessage = "Order " + orderId + " status has changed to a caceled ."; // Add appropriate message
+                break;
+            default:
+                // Handle invalid status
+                request.setAttribute("errorMessage", "Invalid order status.");
+                doGet(request, response); // Reuse doGet to show the page again
+                return;
         }
         
-        System.out.println("newStatus : " +newStatus);
+        System.out.println("newStatus : " + newStatus);
         
-        // Create an instance of DAOOrder to call updateOrderStatus
-        DAOOrder daoOrder = new DAOOrder();
+        // Update the order status
         int updateResult = daoOrder.updateOrderStatus(orderId, newStatus); // Call the instance method
         
         if (updateResult > 0) {
             // Successfully updated the order status
             // Send a notification
+            NotificationAlertDAO notidao = new NotificationAlertDAO();
             notidao.send(accountId, notiMessage, notiPath);
             
             // Redirect to order list after confirming
@@ -144,12 +150,14 @@ protected void doPost(HttpServletRequest request, HttpServletResponse response)
             request.setAttribute("errorMessage", "Unable to update order status. Please try again.");
             doGet(request, response); // Reuse doGet to show the page again
         }
-    } else {    
+    } else {
         // Handle the missing orderId or newStatus
         request.setAttribute("errorMessage", "Invalid order ID or status.");
         doGet(request, response); // Reuse doGet to show the page again
     }
 }
+
+
 }
 
 
