@@ -164,10 +164,10 @@
                                             <input type="text" id="productColor" name="productColor" class="form-control" placeholder="Color" style="margin-right: 5px;"
                                                 readonly>
                                         <% } else { %>
-                                            <select id="colorSelect" class="form-control" onchange="filterSizesByColor(this)">
+                                            <select id="colorSelect" name="productColor" class="form-control" onchange="filterSizesByColor(this)">
                                                 <% for (ProductStockImport productColor : productColors) {
                                                     if (selectedColor.equalsIgnoreCase(productColor.getProductColor())) { %>
-                                                        <option value="<%=productColor.getProductColor() %>" checked><%=productColor.getProductColor() %></option>
+                                                        <option value="<%=productColor.getProductColor() %>" selected><%=productColor.getProductColor() %></option>
                                                 <%  } else { %>
                                                         <option value="<%=productColor.getProductColor() %>"><%=productColor.getProductColor() %></option>
                                                 <% }
@@ -187,7 +187,7 @@
                                                 <input type="text" id="productSize" name="productSize" class="form-control" placeholder="Size" style="margin-right: 5px;"
                                                 readonly>
                                         <%  } else { %>
-                                            <select class="form-control">
+                                            <select name="productSize" class="form-control">
                                                 <% for (ProductStockImport productSize : productSizes) { %>
                                                     <option value="<%=productSize.getProductSize() %>"><%=productSize.getProductSize() %></option>
                                                 <% } %>
