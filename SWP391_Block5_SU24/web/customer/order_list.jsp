@@ -387,6 +387,13 @@
                                     <button type="submit" class="btn btn-success">Buy Again</button>
                                 </form>
                             </div>
+                            <% } else if ("2".equals(lastOrder.getStatus())) { %>
+                            <div class="order-actions text-center">
+                                <form action="${pageContext.request.contextPath}/OrderReceivedController" method="post">
+                                    <input type="hidden" name="orderId" value="<%= currentOrderId %>" />
+                                    <button type="submit" class="btn btn-primary">Order Received</button>
+                                </form>
+                            </div>
                             <% } 
                             out.println("</div>"); // End of order div
                         }
@@ -460,14 +467,14 @@
                                         </form>
                                     </div>
                                 </div>
-                                <div class="one-eight text-center">
-                                    <div class="display-tc">
-                                        <form method="get" action="feedback.jsp">
-                                            <input type="hidden" name="orderId" value="<%= order.getOrderID() %>">
-                                            <button type="submit" class="btn btn-primary">Give Feedback</button>
-                                        </form>
-                                    </div>
-                                </div>
+                                            <div class="one-eight text-center">
+        <div class="display-tc">
+            <form method="get" action="feedback.jsp">
+                <input type="hidden" name="orderId" value="<%= order.getOrderID() %>">
+                <button type="submit" class="btn btn-primary">Give Feedback</button>
+            </form>
+        </div>
+    </div>
                                 <% } } %>
 
                             </div>
@@ -492,6 +499,13 @@
                                     <button type="submit" class="btn btn-success">Buy Again</button>
                                 </form>
                             </div>
+                            <% } else if ("2".equals(lastOrder.getStatus())) { %>
+                            <div class="order-actions text-center">
+                                <form action="${pageContext.request.contextPath}/OrderReceivedController" method="post">
+                                    <input type="hidden" name="orderId" value="<%= currentOrderId %>" />
+                                    <button type="submit" class="btn btn-primary">Order Received</button>
+                                </form>
+                            </div>
                             <% }
                             out.println("</div>"); // End of order div
                         }
@@ -501,6 +515,7 @@
                             <% } %>
                         </div>
                     </div>
+
 
 
 
