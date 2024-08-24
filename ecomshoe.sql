@@ -58,7 +58,7 @@ GO
 CREATE TABLE Categories (
     CategoryID INT IDENTITY(1,1) PRIMARY KEY,
     CategoryName NVARCHAR(100) NOT NULL,
-	CategoryStatus int not null 
+	CategoryStatus int  null 
 );
 GO
 
@@ -66,7 +66,7 @@ GO
 CREATE TABLE Brand (
     BrandID INT IDENTITY(1,1) PRIMARY KEY,
     BrandName NVARCHAR(100) NOT NULL , 
-	BrandStatus int not null 
+	BrandStatus int  null 
 );
 GO
 
@@ -225,7 +225,7 @@ GO
 -- Insert data into Accounts
 INSERT INTO Accounts (Username, Name, Hash, PhoneNumber, Email, Address, Role, Salt, Status)
 VALUES 
-('johndoe', 'John Doe', 'NqmCu0KLyfdegTojOpWmaAC8gODT1EfFxKtyJ9tfwUDneUmaWlo7TiaWJYzGnaWaYcWsUtytBL/iqltP+MLvVA==', '0984567890', 'plsnottakenpls@gmail.com', '123 Main St, Anytown, USA', 1, 'jMxFrhzK+pkZRnCz7jEkew==',1),
+('johndoe', 'John Doe', 'NqmCu0KLyfdegTojOpWmaAC8gODT1EfFxKtyJ9tfwUDneUmaWlo7TiaWJYzGnaWaYcWsUtytBL/iqltP+MLvVA==', '0984567890', 'johndoe@example.com', '123 Main St, Anytown, USA', 1, 'jMxFrhzK+pkZRnCz7jEkew==',1),
 ('janedoe', 'Jane Doe', 'NqmCu0KLyfdegTojOpWmaAC8gODT1EfFxKtyJ9tfwUDneUmaWlo7TiaWJYzGnaWaYcWsUtytBL/iqltP+MLvVA==', '0936543210', 'janedoe@example.com', '456 Elm St, Othertown, USA', 2, 'jMxFrhzK+pkZRnCz7jEkew==',1),
 ('alice', 'Alice Doe', 'NqmCu0KLyfdegTojOpWmaAC8gODT1EfFxKtyJ9tfwUDneUmaWlo7TiaWJYzGnaWaYcWsUtytBL/iqltP+MLvVA==', '0971234567', 'alice@example.com', '789 Maple St, Sometown, USA', 3, 'jMxFrhzK+pkZRnCz7jEkew==',1),
 ('long', 'Long Vu', 'NqmCu0KLyfdegTojOpWmaAC8gODT1EfFxKtyJ9tfwUDneUmaWlo7TiaWJYzGnaWaYcWsUtytBL/iqltP+MLvVA==', '0961234567', 'long@example.com', '789 Maple St, Sometown, USA', 4, 'jMxFrhzK+pkZRnCz7jEkew==',1);
@@ -235,23 +235,47 @@ VALUES
 -- Insert data into Categories
 INSERT INTO Categories (CategoryName,CategoryStatus)
 VALUES 
-('Shoes', 0),
-('Bags',0),
-('Clothing',0);
+('Athletic Shoes', 0),
+('running shoes ' ,0),
+('High Heels',0),
+('Sandals',0),
+('sports',0);
 
 -- Insert data into Brand
 INSERT INTO Brand (BrandName,BrandStatus)
 VALUES 
 ('Nike',0),
 ('Adidas',0),
-('Puma',0);
+('Puma',0),
+('Bittis',0),
+('Converse ',0);
 
--- Insert data into Products
+-- Insert data into Products with ProductStatus = 1
 INSERT INTO Products (ProductName, Origin, Material, Price, TotalQuantity, CategoryID, BrandID, ImageID, ProductStatus)
 VALUES 
-('Air Max 2021', 'Vietnam', 'Leather', 150.00, 100, 1, 1, 2, 1),
-('Ultraboost 21', 'Germany', 'Synthetic', 180.00, 200, 1, 2, 3, 1),
-('Suede Classic', 'Vietnam', 'Suede', 120.00, 150, 1, 3, 4, 1);
+-- Nike Products
+('Nike Air Max 270', 'Vietnam', 'Mesh', 150.00, 50, 1, 1, NULL, 1),
+('Nike Air Force 1', 'Vietnam', 'Leather', 120.00, 75, 1, 1, NULL, 1),
+('Nike Free RN', 'Vietnam', 'Flyknit', 130.00, 60, 4, 1, NULL, 1),
+
+-- Adidas Products
+('Adidas Ultraboost 22', 'Germany', 'Primeknit', 180.00, 80, 1, 2, NULL, 1),
+('Adidas Stan Smith', 'Vietnam', 'Leather', 100.00, 100, 2, 2, NULL, 1),
+('Adidas NMD R1', 'Vietnam', 'Mesh', 140.00, 70, 4, 2, NULL, 1),
+
+-- Puma Products
+('Puma RS-X', 'Vietnam', 'Mesh', 110.00, 90, 1, 3, NULL, 1),
+('Puma Suede Classic', 'Vietnam', 'Suede', 95.00, 85, 2, 3, NULL, 1),
+('Puma Future Rider', 'Vietnam', 'Nylon', 125.00, 65, 4, 3, NULL, 1),
+
+-- Reebok Products
+('Reebok Classic Leather', 'Vietnam', 'Leather', 110.00, 55, 1, 4, NULL, 1),
+('Reebok Zig Kinetica', 'Vietnam', 'Mesh', 160.00, 40, 4, 4, NULL, 1),
+
+-- Under Armour Products
+('Under Armour HOVR Phantom', 'Vietnam', 'Mesh', 140.00, 45, 1, 5, NULL, 1),
+('Under Armour Charged Assert 8', 'Vietnam', 'Mesh', 90.00, 60, 2, 5, NULL, 1);
+
 
 -- Insert data into ProductStockImport
 INSERT INTO ProductStockImport (AccountID, ImportDate,ImportAction,SupplierName)
@@ -264,9 +288,21 @@ VALUES
 INSERT INTO Stock (ProductID, Size, Color, StockQuantity, ImportID)
 VALUES 
 (1, 42, 'Red', 50, 1),
-(1, 43, 'Blue', 50, 1),
-(2, 42, 'White', 100, 2),
-(3, 40, 'Black', 75, 2);
+(1, 43, 'Blue', 30, 2),
+(2, 42, 'White', 100, 3),
+(2, 44, 'Black', 60, 3),
+(3, 40, 'Black', 75, 4),
+(3, 41, 'Green', 20, 5),
+(4, 39, 'Yellow', 80, 5),
+(4, 38, 'Blue', 40, 6),
+(5, 45, 'Pink', 90, 7),
+(5, 40, 'Gray', 25, 8),
+(6, 37, 'Brown', 100, 9),
+(7, 46, 'Orange', 50, 10),
+(8, 42, 'Purple', 15, 11),
+(9, 44, 'White', 70, 12),
+(10, 39, 'Red', 45, 13);
+
 
 -- Insert data into StockImportDetail
 INSERT INTO StockImportDetail (StockID, ImportID, StockQuantity)
@@ -279,8 +315,33 @@ VALUES
 -- Insert data into Orders
 INSERT INTO Orders (AccountID, OrderDate, Status)
 VALUES 
-(1, '2024-08-18', 3),
-(2, '2024-05-13', 3);
+-- Orders for AccountID 1 (johndoe)
+(1, '2024-08-01', 1),  -- OrderID 1
+(1, '2024-08-05', 0),  -- OrderID 2
+(1, '2024-08-10', 1),  -- OrderID 3
+(1, '2024-08-15', 0),  -- OrderID 4
+(1, '2024-08-20', 1),  -- OrderID 5
+
+-- Orders for AccountID 2 (janedoe)
+(2, '2024-04-22', 1),  -- OrderID 6
+(2, '2024-04-24', 0),  -- OrderID 7
+(2, '2024-04-20', 1),  -- OrderID 8
+(2, '2024-04-01', 0),  -- OrderID 9
+(2, '2024-04-05', 1),  -- OrderID 10
+
+-- Orders for AccountID 3 (alice)
+(3, '2023-12-07', 1),  -- OrderID 11
+(3, '2023-12-10', 0),  -- OrderID 12
+(3, '2023-12-15', 1),  -- OrderID 13
+(3, '2023-12-20', 0),  -- OrderID 14
+(3, '2023-12-25', 1),  -- OrderID 15
+
+-- Orders for AccountID 4 (long)
+(4, '2024-10-01', 1),  -- OrderID 16
+(4, '2024-10-05', 0),  -- OrderID 17
+(4, '2024-10-10', 1),  -- OrderID 18
+(4, '2024-10-15', 0),  -- OrderID 19
+(4, '2024-10-20', 1);  -- OrderID 20
 
 -- Insert data into Cart
 INSERT INTO Cart (AccountID, StockID, quantity, DiscountID, date_added)
@@ -303,8 +364,85 @@ VALUES
 -- Insert data into OrderDetails
 INSERT INTO OrderDetails (OrderID, StockID, Quantity, SalePrice)
 VALUES 
-(1, 1, 2, 140.00),
-(2, 3, 1, 170.00);
+-- Details for OrderID 1 (johndoe)
+(1, 1, 2, 150.00),  -- Nike Air Max 270
+(1, 3, 1, 130.00),  -- Nike Free RN
+
+-- Details for OrderID 2 (johndoe)
+(2, 2, 1, 120.00),  -- Nike Air Force 1
+(2, 4, 2, 180.00),  -- Adidas Ultraboost 22
+
+-- Details for OrderID 3 (johndoe)
+(3, 5, 1, 110.00),  -- Puma RS-X
+(3, 6, 2, 95.00),   -- Puma Suede Classic
+
+-- Details for OrderID 4 (johndoe)
+(4, 7, 1, 160.00),  -- Reebok Zig Kinetica
+(4, 8, 1, 90.00),   -- Under Armour Charged Assert 8
+
+-- Details for OrderID 5 (johndoe)
+(5, 1, 2, 150.00),  -- Nike Air Max 270
+(5, 2, 1, 120.00),  -- Nike Air Force 1
+
+-- Details for OrderID 6 (janedoe)
+(6, 3, 1, 130.00),  -- Nike Free RN
+(6, 4, 2, 180.00),  -- Adidas Ultraboost 22
+
+-- Details for OrderID 7 (janedoe)
+(7, 5, 1, 110.00),  -- Puma RS-X
+(7, 6, 2, 95.00),   -- Puma Suede Classic
+
+-- Details for OrderID 8 (janedoe)
+(8, 7, 1, 160.00),  -- Reebok Zig Kinetica
+(8, 8, 1, 90.00),   -- Under Armour Charged Assert 8
+
+-- Details for OrderID 9 (janedoe)
+(9, 1, 2, 150.00),  -- Nike Air Max 270
+(9, 3, 1, 130.00),  -- Nike Free RN
+
+-- Details for OrderID 10 (janedoe)
+(10, 2, 1, 120.00), -- Nike Air Force 1
+(10, 4, 2, 180.00), -- Adidas Ultraboost 22
+
+-- Details for OrderID 11 (alice)
+(11, 5, 1, 110.00), -- Puma RS-X
+(11, 6, 2, 95.00),  -- Puma Suede Classic
+
+-- Details for OrderID 12 (alice)
+(12, 7, 1, 160.00), -- Reebok Zig Kinetica
+(12, 8, 1, 90.00),  -- Under Armour Charged Assert 8
+
+-- Details for OrderID 13 (alice)
+(13, 1, 2, 150.00), -- Nike Air Max 270
+(13, 2, 1, 120.00), -- Nike Air Force 1
+
+-- Details for OrderID 14 (alice)
+(14, 3, 1, 130.00), -- Nike Free RN
+(14, 4, 2, 180.00), -- Adidas Ultraboost 22
+
+-- Details for OrderID 15 (alice)
+(15, 5, 1, 110.00), -- Puma RS-X
+(15, 6, 2, 95.00), -- Puma Suede Classic
+
+-- Details for OrderID 16 (long)
+(16, 7, 1, 160.00), -- Reebok Zig Kinetica
+(16, 8, 1, 90.00),  -- Under Armour Charged Assert 8
+
+-- Details for OrderID 17 (long)
+(17, 1, 2, 150.00), -- Nike Air Max 270
+(17, 3, 1, 130.00),-- Nike Free RN
+
+-- Details for OrderID 18 (long)
+(18, 2, 1, 120.00), -- Nike Air Force 1
+(18, 4, 2, 180.00),-- Adidas Ultraboost 22
+
+-- Details for OrderID 19 (long)
+(19, 5, 1, 110.00), -- Puma RS-X
+(19, 6, 2, 95.00), -- Puma Suede Classic
+
+-- Details for OrderID 20 (long)
+(20, 7, 1, 160.00), -- Reebok Zig Kinetica
+(20, 8, 1, 90.00); -- Under Armour Charged Assert 8
 
 -- Insert data into ProductImages (now using StockID)
 INSERT INTO ProductImages (StockID, ImageURL)

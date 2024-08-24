@@ -295,8 +295,7 @@
                                 <ul>
                                     <li><a href="${pageContext.request.contextPath}/index.jsp">Home</a></li>
                                     <li><a class="active" href="${pageContext.request.contextPath}/products.jsp">Products</a></li>
-                                    <li><a href="${pageContext.request.contextPath}/about.html">About</a></li>
-                                    <li><a href="${pageContext.request.contextPath}/contact.html">Contact</a></li>
+                                    
                                         <% if (session.getAttribute("account") != null) { %>
                                     <li class="cart dropdown">
                                         <a href="#" class="dropdown-toggle" id="userDropdown" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">

@@ -106,11 +106,11 @@ public class CategoryController extends HttpServlet {
     private void createCategory(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         String categoryName = request.getParameter("categoryName");
-        int categoryStatus = Integer.parseInt(request.getParameter("categoryStatus"));
+        
         
         Category category = new Category();
         category.setCategoryName(categoryName);
-        category.setCategoryStatus(categoryStatus);
+      ;
         
         System.out.println("categoryName "+categoryName);
         

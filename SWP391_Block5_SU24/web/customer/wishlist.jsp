@@ -1,8 +1,8 @@
 <%@ page import="java.util.List" %>
 <%@ page import="java.util.ArrayList" %>
-<%@ page import="entity.Product" %>
+<%@ page import="entity.*" %>
 <%@ page import="entity.Account" %>
-<%@ page import="model.WishlistDAO" %>
+<%@ page import="model.*" %>
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <!DOCTYPE HTML>
 <%
@@ -12,6 +12,7 @@
     // Initialize the wishlistItems variable
     List<Product> wishlistItems = new ArrayList<>();
 
+    int cartItemsCount = 0;
     // Retrieve the account ID from the session using the correct attribute name
     Account loggedInUser = (Account) session.getAttribute("account");
     if (loggedInUser == null) {
@@ -22,6 +23,9 @@
         int accountId = loggedInUser.getAccountID();
         WishlistDAO wishlistDAO = new WishlistDAO();
         wishlistItems = wishlistDAO.getWishlistItems(accountId, sort); // Pass the sort parameter
+        
+        ShoppingCartDAO scDAO = new ShoppingCartDAO();
+        cartItemsCount = scDAO.getCartItemsByAccountID(loggedInUser.getAccountID()).size();
     }
 %>
 
@@ -50,10 +54,10 @@
         <style>
             #suggestions {
                 position: absolute;
-                width: 100%; /* Make it as wide as the search bar */
-                z-index: 1000; /* Ensure it is above other content */
-                background-color: white; /* Background color for the dropdown */
-                border: 1px solid #ddd; /* Add border to distinguish it */
+                width: 100%; 
+                z-index: 1000; 
+                background-color: white; 
+                border: 1px solid #ddd; 
             }
 
             #suggestions .list-group-item {
@@ -119,19 +123,19 @@
                                 <ul>
                                     <li><a href="${pageContext.request.contextPath}/index.jsp">Home</a></li>
                                     <li><a href="${pageContext.request.contextPath}/products.jsp">Products</a></li>
-                                    <li><a href="${pageContext.request.contextPath}/about.html">About</a></li>
-                                    <li><a href="${pageContext.request.contextPath}/contact.html">Contact</a></li>
+                                    
                                     <li class="cart dropdown">
                                         <a href="#" class="dropdown-toggle" id="userDropdown" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                                             <i class="fa-regular fa-user"></i> <%= ((Account) session.getAttribute("account")).getUsername() %>
                                         </a>
                                         <div class="dropdown-menu dropdown-menu-right" aria-labelledby="userDropdown">
-                                            <a class="dropdown-item" href="customer/customer_profile.jsp">Profile</a>
-                                            <a class="dropdown-item" href="LogoutController">Logout</a>
+                                            <a class="dropdown-item" href="${pageContext.request.contextPath}/customer/customer_profile.jsp">Profile</a>
+                                            <a class="dropdown-item" href="${pageContext.request.contextPath}/LogoutController">Logout</a>
                                         </div>
                                     </li>
 
-                                    <li class="cart"><a href="${pageContext.request.contextPath}/shoppingCart"><i class="icon-shopping-cart"></i> Cart [0]</a></li>
+                                    <li class="cart"><a href="${pageContext.request.contextPath}/shoppingCart"><i class="icon-shopping-cart"></i> Cart [<%=cartItemsCount %>]</a></li>
+
                                     <li class="cart"><a href="wishlist.jsp"><i class="fa fa-heart"></i> Wishlist</a></li>
 
                                 </ul>
@@ -294,13 +298,13 @@
     </script>
     <script>
         document.addEventListener('click', function (event) {
-                var isClickInside = document.getElementById('userDropdown').contains(event.target);
+            var isClickInside = document.getElementById('userDropdown').contains(event.target);
 
-                if (!isClickInside) {
-                    // Close the dropdown
-                    document.querySelector('.cart.dropdown .dropdown-menu').style.display = 'none';
-                }
-            });
+            if (!isClickInside) {
+                // Close the dropdown
+                document.querySelector('.cart.dropdown .dropdown-menu').style.display = 'none';
+            }
+        });
     </script>
 </body>
 </html>

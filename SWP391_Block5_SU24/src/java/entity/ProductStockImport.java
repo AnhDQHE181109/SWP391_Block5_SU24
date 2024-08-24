@@ -133,12 +133,12 @@ public class ProductStockImport {
     public void setQuantity(int quantity) {
         this.quantity = quantity;
     }
-    
-    
 
     @Override
     public String toString() {
-        return "ProductStockImport{" + "importID=" + importID + ", accountID=" + accountID + ", importDate=" + importDate + ", ImportAction=" + ImportAction + ", SupplierName=" + SupplierName + '}';
+        return "ProductStockImport{" + "importID=" + importID + ", accountID=" + accountID + ", importDate=" + importDate + ", ImportAction=" + ImportAction + ", productID=" + productID + ", SupplierName=" + SupplierName + ", imageURL=" + imageURL + ", productName=" + productName + ", productColor=" + productColor + ", productSize=" + productSize + ", quantity=" + quantity + '}';
     }
+    
+    
 
 }

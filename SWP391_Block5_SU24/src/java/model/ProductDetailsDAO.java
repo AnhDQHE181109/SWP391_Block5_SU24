@@ -124,7 +124,7 @@ public class ProductDetailsDAO extends DBConnect {
     }
 
     public boolean updateProduct(Product product) {
-        String sql = "UPDATE Products SET productName = ?, origin = ?, material = ?, price = ?, brandId = ?, categoryId = ? WHERE productId = ?";
+        String sql = "UPDATE Products SET productName = ?, origin = ?, material = ?, price = ?, brandId = ?, categoryId = ? , [ProductStatus] = ? WHERE productId = ?";
         try (
                 PreparedStatement ps = conn.prepareStatement(sql)) {
 
@@ -134,7 +134,8 @@ public class ProductDetailsDAO extends DBConnect {
             ps.setDouble(4, product.getPrice());
             ps.setInt(5, product.getBrandId());
             ps.setInt(6, product.getCategoryId());
-            ps.setInt(7, product.getProductId());
+            ps.setInt(7, product.getProductStatus());
+            ps.setInt(8, product.getProductId());
 
             int rowsUpdated = ps.executeUpdate();
             return rowsUpdated > 0;
@@ -913,6 +914,7 @@ public class ProductDetailsDAO extends DBConnect {
         return isSuccess;
     }
 
+
     public List<Product> getDiscountedProducts() {
         List<Product> discountedProducts = new ArrayList<>();
         String sql = "SELECT p.ProductID, p.ProductName, p.Origin, p.Material, p.Price, p.ImageID, d.discount_amount "
@@ -939,4 +941,39 @@ public class ProductDetailsDAO extends DBConnect {
         return discountedProducts;
     }
 
+
+    
+    public List<Product> getBestSeller() {
+    List<Product> bestSellers = new ArrayList<>();
+    String sql = "SELECT s.StockID, p.ProductName, p.Price, s.Size, s.Color, SUM(od.Quantity) AS TotalQuantity, MIN(pi.ImageURL) AS ImageURL "
+               + "FROM OrderDetails od "
+               + "JOIN Stock s ON od.StockID = s.StockID "
+               + "JOIN Products p ON s.ProductID = p.ProductID "
+               + "LEFT JOIN ProductImages pi ON s.StockID = pi.StockID "
+               + "WHERE p.ProductStatus = 1 " // Ensure only active products are included
+               + "AND od.OrderID IN (SELECT OrderID FROM Orders WHERE Status = 1) " // Ensure only completed orders are considered
+               + "GROUP BY s.StockID, p.ProductName, p.Price, s.Size, s.Color "
+               + "ORDER BY TotalQuantity DESC";
+
+    try (Statement st = conn.createStatement(); ResultSet rs = st.executeQuery(sql)) {
+        while (rs.next()) {
+            Product product = new Product();
+            product.setStockID(rs.getInt("StockID"));
+            product.setProductName(rs.getString("ProductName"));
+            product.setPrice(rs.getDouble("Price"));
+            product.setSize(rs.getInt("Size"));
+            product.setColor(rs.getString("Color"));
+            product.setTotalQuantity(rs.getInt("TotalQuantity"));
+            product.setImageURL(rs.getString("ImageURL"));
+            bestSellers.add(product);
+        }
+    } catch (SQLException e) {
+        e.printStackTrace();
+    }
+    return bestSellers;
 }
+
+    
+
+}
+

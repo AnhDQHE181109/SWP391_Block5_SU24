@@ -79,8 +79,7 @@
 									</ul>
 								</li> -->
 								<li class="active"><a href="products.jsp">Products</a></li>
-								<li><a href="about.html">About</a></li>
-								<li><a href="contact.html">Contact</a></li>
+								
 								<%
 									Integer cartItemsCount = (Integer) request.getAttribute("cartItemsCount");
 								%>
@@ -210,33 +209,44 @@
 							</div>
 
 							<div>
-								<% for (ProductStockDetails productSize : productSizes) {
-									if (Integer.parseInt(selectedSize) == productSize.getSize()) { %>
-										<p>Available products: <%=productSize.getStockQuantity() %></p>
+								<% int availableProducts = 0;
+								for (ProductStockDetails productSize : productSizes) {
+									if (Integer.parseInt(selectedSize) == productSize.getSize()) {
+										availableProducts = productSize.getStockQuantity(); %>
+										<p>Available products: <%=availableProducts %></p>
 								<%	}
 								} %>
 							</div>
 
-							<div class="input-group mb-4">
-								<span class="input-group-btn">
-									<button type="button" class="quantity-left-minus btn"  data-type="minus" data-field="">
-								<i class="icon-minus2"></i>
+							<% if (availableProducts == 0) { %>
+								<div class="row">
+									<div class="col-sm-12 text-center">
+										<h2>Product with such variant is sold out!</h2>
+										<p class="text-left"><a href="ProductDetailsController?addToWishlistProduct=<%=productColors.get(0).getProductID() %>&addToWishlistColor=<%=selectedColor %>&addToWishlistSize=<%=selectedSize %>"><i class="fa fa-heart"></i> Add to wishlist	</a></p>
+									</div>
+								</div>
+							<% } else { %>
+								<div class="input-group mb-4">
+									<span class="input-group-btn">
+										<button type="button" class="quantity-left-minus btn"  data-type="minus" data-field="">
+									<i class="icon-minus2"></i>
+										</button>
+										</span>
+									<input type="text" id="quantity" name="quantity" class="form-control input-number" value="1" min="1" readonly onfocusout="validateQuantity()">
+									<span class="input-group-btn ml-1">
+										<button type="button" class="quantity-right-plus btn" data-type="plus" data-field="">
+										<i class="icon-plus2"></i>
 									</button>
 									</span>
-								<input type="text" id="quantity" name="quantity" class="form-control input-number" value="1" min="1" readonly onfocusout="validateQuantity()">
-								<span class="input-group-btn ml-1">
-									<button type="button" class="quantity-right-plus btn" data-type="plus" data-field="">
-									<i class="icon-plus2"></i>
-								</button>
-								</span>
-							</div>
-
-							<div class="row">
-								<div class="col-sm-12 text-center">
-									<p class="addtocart"><button type="submit" class="btn btn-primary btn-addtocart"><span><i class="icon-shopping-cart"></i></span> Add to Cart</button> </p>
-									<p class="text-left"><a href="ProductDetailsController?addToWishlistProduct=<%=productColors.get(0).getProductID() %>&addToWishlistColor=<%=selectedColor %>&addToWishlistSize=<%=selectedSize %>"><i class="fa fa-heart"></i></a> Add to wishlist</p>
 								</div>
-							</div>
+	
+								<div class="row">
+									<div class="col-sm-12 text-center">
+										<p class="addtocart"><button type="submit" class="btn btn-primary btn-addtocart"><span><i class="icon-shopping-cart"></i></span> Add to Cart</button> </p>
+										<p class="text-left"><a href="ProductDetailsController?addToWishlistProduct=<%=productColors.get(0).getProductID() %>&addToWishlistColor=<%=selectedColor %>&addToWishlistSize=<%=selectedSize %>"><i class="fa fa-heart"></i> Add to wishlist</a></p>
+									</div>
+								</div>
+							<% } %>
 
 						</div>
 

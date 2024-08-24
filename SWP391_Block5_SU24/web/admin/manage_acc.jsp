@@ -8,7 +8,7 @@
 
     <head>
         <meta charset="utf-8">
-        <title>DASHMIN - Bootstrap Admin Template</title>
+        <title>Admin Home</title>
         <meta content="width=device-width, initial-scale=1.0" name="viewport">
         <meta content="" name="keywords">
         <meta content="" name="description">
@@ -78,13 +78,8 @@
                         <h3 class="text-primary"><i class="fa fa-hashtag me-2"></i>DASHMIN</h3>
                     </a>
                     <div class="d-flex align-items-center ms-4 mb-4">
-                        <div class="position-relative">
-                            <img class="rounded-circle" src="${pageContext.request.contextPath}/images/user.jpg" alt="" style="width: 40px; height: 40px;">
-                            <div class="bg-success rounded-circle border border-2 border-white position-absolute end-0 bottom-0 p-1"></div>
-                        </div>
                         <div class="ms-3">
-                            <h6 class="mb-0">John Doe</h6>
-                            <span>Admin</span>
+                            <h4 class="mb-0">Welcome Admin</h4>
                         </div>
                     </div>
                     <div class="navbar-nav w-100">
@@ -110,71 +105,31 @@
                     <a href="#" class="sidebar-toggler flex-shrink-0">
                         <i class="fa fa-bars"></i>
                     </a>
-                    <form class="d-none d-md-flex ms-4">
-                        <input class="form-control border-0" type="search" placeholder="Search">
-                    </form>
                     <div class="navbar-nav align-items-center ms-auto">
                         <div class="nav-item dropdown">
-                            <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown">
-                                <i class="fa fa-envelope me-lg-2"></i>
-                                <span class="d-none d-lg-inline-flex">Message</span>
-                            </a>
                             <div class="dropdown-menu dropdown-menu-end bg-light border-0 rounded-0 rounded-bottom m-0">
                                 <a href="#" class="dropdown-item">
                                     <div class="d-flex align-items-center">
                                         <img class="rounded-circle" src="images/user.jpg" alt="" style="width: 40px; height: 40px;">
-                                        <div class="ms-2">
-                                            <h6 class="fw-normal mb-0">John sent you a message</h6>
-                                            <small>15 minutes ago</small>
-                                        </div>
+                                        
                                     </div>
                                 </a>
                                 <hr class="dropdown-divider">
                                 <a href="#" class="dropdown-item">
                                     <div class="d-flex align-items-center">
                                         <img class="rounded-circle" src="images/user.jpg" alt="" style="width: 40px; height: 40px;">
-                                        <div class="ms-2">
-                                            <h6 class="fw-normal mb-0">John sent you a message</h6>
-                                            <small>15 minutes ago</small>
-                                        </div>
+                                        
                                     </div>
                                 </a>
-                                <hr class="dropdown-divider">
-                                <a href="#" class="dropdown-item text-center">See all messages</a>
-                            </div>
+                                
                         </div>
-                        <div class="nav-item dropdown">
-                            <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown">
-                                <i class="fa fa-bell me-lg-2"></i>
-                                <span class="d-none d-lg-inline-flex">Notification</span>
-                            </a>
-                            <div class="dropdown-menu dropdown-menu-end bg-light border-0 rounded-0 rounded-bottom m-0">
-                                <a href="#" class="dropdown-item">
-                                    <h6 class="fw-normal mb-0">Profile updated</h6>
-                                    <small>15 minutes ago</small>
-                                </a>
-                                <hr class="dropdown-divider">
-                                <a href="#" class="dropdown-item">
-                                    <h6 class="fw-normal mb-0">New user added</h6>
-                                    <small>15 minutes ago</small>
-                                </a>
-                                <hr class="dropdown-divider">
-                                <a href="#" class="dropdown-item">
-                                    <h6 class="fw-normal mb-0">Password changed</h6>
-                                    <small>15 minutes ago</small>
-                                </a>
-                                <hr class="dropdown-divider">
-                                <a href="#" class="dropdown-item text-center">See all notifications</a>
-                            </div>
-                        </div>
+                        
                         <div class="nav-item dropdown">
                             <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown">
                                 <img class="rounded-circle me-lg-2" src="${pageContext.request.contextPath}/images/user.jpg" alt="" style="width: 40px; height: 40px;">
-                                <span class="d-none d-lg-inline-flex">John Doe</span>
+                                <span class="d-none d-lg-inline-flex">Admin</span>
                             </a>
                             <div class="dropdown-menu dropdown-menu-end bg-light border-0 rounded-0 rounded-bottom m-0">
-                                <a href="#" class="dropdown-item">My Profile</a>
-                                <a href="#" class="dropdown-item">Settings</a>
                                 <a href="${pageContext.request.contextPath}/LogoutController" class="dropdown-item">Log Out</a>
                             </div>
                         </div>
@@ -238,18 +193,18 @@
                                         <tbody>
                                             <!-- Account rows based on role -->
                                             <% 
-        AccountDAO accountDAO = new AccountDAO();
-        List<Account> accounts;
-        String selectedRole = request.getParameter("role");
+                                                AccountDAO accountDAO = new AccountDAO();
+                                                List<Account> accounts;
+                                                String selectedRole = request.getParameter("role");
 
-        if (selectedRole == null || selectedRole.equals("all")) {
-            accounts = accountDAO.getAccounts(); // Assuming this method exists
-        } else {
-            int role = Integer.parseInt(selectedRole);
-            accounts = accountDAO.getAccountsByRole(role);
-        }
+                                                if (selectedRole == null || selectedRole.equals("all")) {
+                                                    accounts = accountDAO.getAccounts(); // Assuming this method exists
+                                                } else {
+                                                    int role = Integer.parseInt(selectedRole);
+                                                    accounts = accountDAO.getAccountsByRole(role);
+                                                }
 
-        for (Account account : accounts) {
+                                                for (Account account : accounts) {
                                             %>
                                             <tr>
                                                 <td><%= account.getAccountID() %></td>
@@ -372,7 +327,7 @@
 
 
             <!-- Back to Top -->
-            <a href="#" class="btn btn-lg btn-primary btn-lg-square back-to-top"><i class="bi bi-arrow-up"></i></a>
+       
         </div>
 
         <!-- JavaScript Libraries -->

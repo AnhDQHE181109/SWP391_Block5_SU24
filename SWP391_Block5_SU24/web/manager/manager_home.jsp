@@ -9,13 +9,14 @@
 <%@ page import="entity.Product" %>
 <%@ page import="model.WishlistDAO" %>
 <%@ page import="model.ProductDetailsDAO" %>
+<%@ page import="model.RevenueDAO" %>
 <!DOCTYPE html>
 <html lang="en">
 
     <head>
 
         <meta charset="utf-8">
-        <title>DASHMIN - Bootstrap Admin Template</title>
+        <title>Manager Home</title>
         <meta content="width=device-width, initial-scale=1.0" name="viewport">
         <meta content="" name="keywords">
         <meta content="" name="description">
@@ -110,13 +111,8 @@
                         <h3 class="text-primary"></i>Manager Site</h3>
                     </a>
                     <div class="d-flex align-items-center ms-4 mb-4">
-                        <div class="position-relative">
-                            <img class="rounded-circle" src="${pageContext.request.contextPath}/images/user.jpg" alt="" style="width: 40px; height: 40px;">
-                            <div class="bg-success rounded-circle border border-2 border-white position-absolute end-0 bottom-0 p-1"></div>
-                        </div>
                         <div class="ms-3">
-                            <h6 class="mb-0">Jhon Doe</h6>
-                            <span>Admin</span>
+                            <h5 class="mb-0">Welcome Manager</h5>
                         </div>
                     </div>
                     <div class="navbar-nav w-100">
@@ -150,107 +146,84 @@
                     <a href="#" class="sidebar-toggler flex-shrink-0">
                         <i class="fa fa-bars"></i>
                     </a>
-                    <form class="d-none d-md-flex ms-4">
-                        <input class="form-control border-0" type="search" placeholder="Search">
-                    </form>
                     <div class="navbar-nav align-items-center ms-auto">
                         <div class="nav-item dropdown">
-                            <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown">
-                                <i class="fa fa-envelope me-lg-2"></i>
-                                <span class="d-none d-lg-inline-flex">Message</span>
-                            </a>
                             <div class="dropdown-menu dropdown-menu-end bg-light border-0 rounded-0 rounded-bottom m-0">
                                 <a href="#" class="dropdown-item">
                                     <div class="d-flex align-items-center">
                                         <img class="rounded-circle" src="images/user.jpg" alt="" style="width: 40px; height: 40px;">
-                                        <div class="ms-2">
-                                            <h6 class="fw-normal mb-0">Jhon send you a message</h6>
-                                            <small>15 minutes ago</small>
-                                        </div>
+
                                     </div>
                                 </a>
                                 <hr class="dropdown-divider">
                                 <a href="#" class="dropdown-item">
                                     <div class="d-flex align-items-center">
                                         <img class="rounded-circle" src="images/user.jpg" alt="" style="width: 40px; height: 40px;">
-                                        <div class="ms-2">
-                                            <h6 class="fw-normal mb-0">Jhon send you a message</h6>
-                                            <small>15 minutes ago</small>
-                                        </div>
+
                                     </div>
                                 </a>
-                                <hr class="dropdown-divider">
-                                <a href="#" class="dropdown-item">
-                                    <div class="d-flex align-items-center">
-                                        <img class="rounded-circle" src="images/user.jpg" alt="" style="width: 40px; height: 40px;">
-                                        <div class="ms-2">
-                                            <h6 class="fw-normal mb-0">Jhon send you a message</h6>
-                                            <small>15 minutes ago</small>
-                                        </div>
-                                    </div>
+
+                            </div>
+
+                            <div class="nav-item dropdown">
+                                <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown">
+                                    <img class="rounded-circle me-lg-2" src="${pageContext.request.contextPath}/images/user.jpg" alt="" style="width: 40px; height: 40px;">
+                                    <span class="d-none d-lg-inline-flex">Admin</span>
                                 </a>
-                                <hr class="dropdown-divider">
-                                <a href="#" class="dropdown-item text-center">See all message</a>
+                                <div class="dropdown-menu dropdown-menu-end bg-light border-0 rounded-0 rounded-bottom m-0">
+                                    <a href="${pageContext.request.contextPath}/LogoutController" class="dropdown-item">Log Out</a>
+                                </div>
                             </div>
                         </div>
-                        <div class="nav-item dropdown">
-                            <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown">
-                                <i class="fa fa-bell me-lg-2"></i>
-                                <span class="d-none d-lg-inline-flex">Notificatin</span>
-                            </a>
-                            <div class="dropdown-menu dropdown-menu-end bg-light border-0 rounded-0 rounded-bottom m-0">
-                                <a href="#" class="dropdown-item">
-                                    <h6 class="fw-normal mb-0">Profile updated</h6>
-                                    <small>15 minutes ago</small>
-                                </a>
-                                <hr class="dropdown-divider">
-                                <a href="#" class="dropdown-item">
-                                    <h6 class="fw-normal mb-0">New user added</h6>
-                                    <small>15 minutes ago</small>
-                                </a>
-                                <hr class="dropdown-divider">
-                                <a href="#" class="dropdown-item">
-                                    <h6 class="fw-normal mb-0">Password changed</h6>
-                                    <small>15 minutes ago</small>
-                                </a>
-                                <hr class="dropdown-divider">
-                                <a href="#" class="dropdown-item text-center">See all notifications</a>
-                            </div>
-                        </div>
-                        <div class="nav-item dropdown">
-                            <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown">
-                                <img class="rounded-circle me-lg-2" src="images/user.jpg" alt="" style="width: 40px; height: 40px;">
-                                <span class="d-none d-lg-inline-flex">John Doe</span>
-                            </a>
-                            <div class="dropdown-menu dropdown-menu-end bg-light border-0 rounded-0 rounded-bottom m-0">
-                                <a href="#" class="dropdown-item">My Profile</a>
-                                <a href="#" class="dropdown-item">Settings</a>
-                                <a href="${pageContext.request.contextPath}/LogoutController" class="dropdown-item">Log Out</a>
-                            </div>
-                        </div>
-                    </div>
                 </nav>
                 <!-- Navbar End -->
 
 
+                <%
+    RevenueDAO revenueDAO = new RevenueDAO();
+    double totalRevenue = revenueDAO.getTotalRevenue();
+    double revenueLast4Months = revenueDAO.getRevenueForLastMonths(4);
+    double revenueLast8Months = revenueDAO.getRevenueForLastMonths(8);
+    double revenueLast12Months = revenueDAO.getRevenueForLastMonths(12);
+                %>
+
                 <!-- Sale & Revenue Start -->
                 <div class="container-fluid pt-4 px-4">
                     <div class="row g-4">
-                        <div class="col-sm-6 col-xl-3">
-                            <div class="bg-light rounded d-flex align-items-center justify-content-between p-4">
-                                <i class="fa fa-chart-bar fa-3x text-primary"></i>
-                                <div class="ms-3">
-                                    <p class="mb-2">Total Sale</p>
-                                    <h6 class="mb-0">$1234</h6>
-                                </div>
-                            </div>
-                        </div>
+
                         <div class="col-sm-6 col-xl-3">
                             <div class="bg-light rounded d-flex align-items-center justify-content-between p-4">
                                 <i class="fa fa-chart-pie fa-3x text-primary"></i>
                                 <div class="ms-3">
                                     <p class="mb-2">Total Revenue</p>
-                                    <h6 class="mb-0">$1234</h6>
+                                    <h6 class="mb-0">$<%= String.format("%.2f", totalRevenue) %></h6>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-sm-6 col-xl-3">
+                            <div class="bg-light rounded d-flex align-items-center justify-content-between p-4">
+                                <i class="fa fa-chart-bar fa-3x text-primary"></i>
+                                <div class="ms-3">
+                                    <p class="mb-2">Last 4 months revenue</p>
+                                    <h6 class="mb-0">$<%= String.format("%.2f", revenueLast4Months) %></h6>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-sm-6 col-xl-3">
+                            <div class="bg-light rounded d-flex align-items-center justify-content-between p-4">
+                                <i class="fa fa-chart-bar fa-3x text-primary"></i>
+                                <div class="ms-3">
+                                    <p class="mb-2">Last 8 months revenue</p>
+                                    <h6 class="mb-0">$<%= String.format("%.2f", revenueLast8Months) %></h6>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-sm-6 col-xl-3">
+                            <div class="bg-light rounded d-flex align-items-center justify-content-between p-4">
+                                <i class="fa fa-chart-bar fa-3x text-primary"></i>
+                                <div class="ms-3">
+                                    <p class="mb-2">Last 12 months revenue</p>
+                                    <h6 class="mb-0">$<%= String.format("%.2f", revenueLast12Months) %></h6>
                                 </div>
                             </div>
                         </div>
@@ -260,9 +233,9 @@
 
 
                 <%
-    // Retrieve best-sellers list
-    ProductDetailsDAO productDAO = new ProductDetailsDAO();
-    List<Product> bestSellers = productDAO.getBestSellers();
+            // Retrieve best-sellers list
+            ProductDetailsDAO productDAO = new ProductDetailsDAO();
+            List<Product> bestSellers = productDAO.getBestSeller(); 
                 %>
 
                 <!-- Best Seller Start -->
@@ -277,7 +250,8 @@
                                 <thead>
                                     <tr class="text-dark">
                                         <th scope="col">Product Details</th>
-                                        <th scope="col">Price</th>
+                                        <th scope="col">Size</th>
+                                        <th scope="col">Color</th>
                                         <th scope="col">Sold</th>
                                     </tr>
                                 </thead>
@@ -297,7 +271,8 @@
                                                 </div>
                                             </div>
                                         </td>
-                                        <td>$<%= product.getPrice() %></td>
+                                        <td><%= product.getSize() %></td>
+                                        <td><%= product.getColor() %></td>
                                         <td><%= product.getTotalQuantity() %> sold</td>
                                     </tr>
                                     <% 
@@ -358,26 +333,12 @@
 
 
                 <!-- Widgets Start -->
-                <div class="container-fluid pt-4 px-4">
-                    <div class="row g-4">
-                        
-                        <div class="col-sm-12 col-md-6 col-xl-4">
-                            <div class="h-100 bg-light rounded p-4">
-                                <div class="d-flex align-items-center justify-content-between mb-4">
-                                    <h6 class="mb-0">Calender</h6>
-                                    <a href="">Show All</a>
-                                </div>
-                                <div id="calender"></div>
-                            </div>
-                        </div>
-                        
-                    </div>
-                </div>
+                
                 <!-- Widgets End -->
 
 
                 <!-- Footer Start -->
-                
+
                 <!-- Footer End -->
             </div>
             <!-- Content End -->
