@@ -91,13 +91,7 @@ public class productStockImportController extends HttpServlet {
             sortOrder = "desc";
         }
 
-        // Thay đổi sortOrder nếu cần thiết
-        try {
-            // Lấy dữ liệu sắp xếp theo sortOrder
-            stockImports = daoProductStockImport.getAllProductStockImportssort(sortOrder.toUpperCase());
-        } catch (Exception e) {
-            throw new ServletException("Error during sort operation", e);
-        }
+
 
    // Phân trang
     int page = 1;
@@ -121,6 +115,8 @@ public class productStockImportController extends HttpServlet {
         request.setAttribute("accountUsernameMap", accountUsernameMap);
         request.setAttribute("currentPage", page);
         request.setAttribute("totalPages", totalPages);
+        
+        System.out.println("paginatedOrderList" + paginatedOrderList);
 
         // Forward to the JSP page
         request.getRequestDispatcher("staff/stockhistory.jsp").forward(request, response);
