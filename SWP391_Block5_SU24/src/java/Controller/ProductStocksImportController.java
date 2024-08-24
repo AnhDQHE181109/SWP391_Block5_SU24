@@ -96,17 +96,26 @@ public class ProductStocksImportController extends HttpServlet {
             productsList.remove(removeProduct - 1);
         }
         
-        String productName = request.getParameter("productName");
-        if (productName != null) {
-            int productID = psiDAO.getProductIDbyProductName(productName);
+        String selectedProductName = request.getParameter("selectedProductName");
+        String selectedColor = request.getParameter("selectedColor");
+        if (selectedProductName != null) {
+            int productID = psiDAO.getProductIDbyProductName(selectedProductName);
             
             //Debugging
-            System.out.println("Product ID fetched from productName: " + productID);
+            System.out.println("Product ID fetched from selectedProductName: " + productID);
             
             List<ProductStockImport> productColors = psiDAO.getProductColors(productID);
-            List<ProductStockImport> productSizes = psiDAO.getSizesByColorAndProductID(productID, productColors.get(0).getProductColor());
             
-            request.setAttribute("selectedColor", productColors.get(0).getProductColor());
+            if (selectedColor == null) {
+                selectedColor = productColors.get(0).getProductColor();
+            }
+            //Debugging
+            System.out.println("selectedColor: " + selectedColor);
+            
+            List<ProductStockImport> productSizes = psiDAO.getSizesByColorAndProductID(productID, selectedColor);
+            
+            request.setAttribute("selectedProductName", selectedProductName);
+            request.setAttribute("selectedColor", selectedColor);
             request.setAttribute("productColors", productColors);
             request.setAttribute("productSizes", productSizes);
         }   
@@ -118,7 +127,7 @@ public class ProductStocksImportController extends HttpServlet {
                 request.setAttribute("productsList", productsList);
                 request.getRequestDispatcher("staff/importProductStocks.jsp").forward(request, response);
                 return;
-            } else if (productsList.size() == 0) {
+            } else if (productsList.isEmpty()) {
                 request.setAttribute("errorMessage", "There is nothing on the list!");
                 request.setAttribute("productsList", productsList);
                 request.getRequestDispatcher("staff/importProductStocks.jsp").forward(request, response);
