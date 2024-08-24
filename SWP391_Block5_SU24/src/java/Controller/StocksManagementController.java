@@ -190,6 +190,11 @@ public class StocksManagementController extends HttpServlet {
         //Debugging
 //        request.setAttribute("openPopup", "popup_" + 1);
 //        request.setAttribute("productsList", productsList);
+        if ("true".equals(session.getAttribute("auth_error"))) {
+            session.setAttribute("auth_error", "false");
+            request.setAttribute("productsStocksList", productsStocksList);
+            request.getRequestDispatcher("staff/stocksManager.jsp?auth_error=true").forward(request, response);
+        }
         request.setAttribute("productsStocksList", productsStocksList);
         request.getRequestDispatcher("staff/stocksManager.jsp").forward(request, response);
     }
