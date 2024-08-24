@@ -588,10 +588,12 @@
                 var quantity = parseInt(document.getElementById(quantityBox).innerHTML);
 
                 // Increment
-                if (parseInt(document.getElementById(quantityBox).innerHTML) != 10) {
-                    document.getElementById(quantityBox).innerHTML = quantity + 1;
+                // if (parseInt(document.getElementById(quantityBox).innerHTML) != 10) {
+                    
+                // }
+
+                document.getElementById(quantityBox).innerHTML = quantity + 1;
                     location.href = "shoppingCart?quantityUpdateFor=" + incrementButton + "&quantityAmount=" + document.getElementById(quantityBox).innerHTML;
-                }
 
 
 

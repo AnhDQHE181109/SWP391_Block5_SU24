@@ -223,7 +223,7 @@
 								<i class="icon-minus2"></i>
 									</button>
 									</span>
-								<input type="text" id="quantity" name="quantity" class="form-control input-number" value="1" min="1" max="10" readonly onfocusout="validateQuantity()">
+								<input type="text" id="quantity" name="quantity" class="form-control input-number" value="1" min="1" readonly onfocusout="validateQuantity()">
 								<span class="input-group-btn ml-1">
 									<button type="button" class="quantity-right-plus btn" data-type="plus" data-field="">
 									<i class="icon-plus2"></i>
@@ -546,9 +546,10 @@ Copyright &copy;<script>document.write(new Date().getFullYear());</script> All r
 		        
 		        // If is not undefined
 		            
-					if ($('#quantity').val() != 10) {
-						$('#quantity').val(quantity + 1);
-					}
+					// if ($('#quantity').val() != 10) {
+					// 	$('#quantity').val(quantity + 1);
+					// }
+					$('#quantity').val(quantity + 1);
 		            
 		          
 		            // Increment
