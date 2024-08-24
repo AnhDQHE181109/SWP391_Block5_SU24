@@ -68,14 +68,7 @@ public class StocksManagementController extends HttpServlet {
 
         HttpSession session = request.getSession();
         Account account = (Account) session.getAttribute("account");
-        if (account == null) {
-            response.sendError(HttpServletResponse.SC_FORBIDDEN, "You do not have permission to access this page.");
-            return;
-        }
-        if (account.getRole() == 1) {
-            response.sendError(HttpServletResponse.SC_FORBIDDEN, "You do not have permission to access this page.");
-            return;
-        }
+        
         int accountID = account.getAccountID();
 
         StocksManagementDAO smDAO = new StocksManagementDAO();
@@ -217,14 +210,7 @@ public class StocksManagementController extends HttpServlet {
 
         HttpSession session = request.getSession();
         Account account = (Account) session.getAttribute("account");
-        if (account == null) {
-            response.sendError(HttpServletResponse.SC_FORBIDDEN, "You do not have permission to access this page.");
-            return;
-        }
-        if (account.getRole() == 1) {
-            response.sendError(HttpServletResponse.SC_FORBIDDEN, "You do not have permission to access this page.");
-            return;
-        }
+        
         int accountID = account.getAccountID();
 
         StocksManagementDAO smDAO = new StocksManagementDAO();

@@ -226,12 +226,17 @@
                                                                         <th scope="row"><%=i %></th>
                                                                         <td><%=productStocks.getSize() %></td>
                                                                         <td><%=productStocks.getColor() %></td>
-                                                                        <td><input type="number" class="form-control" 
+                                                                        <!-- <td><input type="number" class="form-control" 
                                                                                    name="<%=productStocks.getStockID()%>_quantity"
                                                                                    id="<%=productStocks.getStockID()%>_quantity" 
                                                                                    value="<%=productStocks.getTotalQuantity() %>" required min="0" max="99" onkeypress="return event.charCode >= 48 && event.charCode <= 57"
                                                                                    onfocusout="checkIfFieldEmpty('<%=productStocks.getStockID()%>_quantity', '<%=productStocks.getTotalQuantity() %>')"
-                                                                                   readonly></td>
+                                                                                   readonly></td> -->
+                                                                        <td><input type="number" class="form-control" 
+                                                                                    name="<%=productStocks.getStockID()%>_quantity"
+                                                                                    id="<%=productStocks.getStockID()%>_quantity" 
+                                                                                    value="<%=productStocks.getTotalQuantity() %>" required min="0" max="99" onkeypress="return event.charCode >= 48 && event.charCode <= 57"
+                                                                                    readonly></td>
                                                                     </tr>
                                                                     <%      i++;
                                                                             }

@@ -141,9 +141,13 @@
                                         <!-- <a class="btn btn-add btn-sm" href="product_manage?action=insert" title="Thêm">
                                             <i class="fas fa-plus"></i> Add a new product
                                         </a> -->
+                                        <% String selectedProductName = (String) request.getAttribute("selectedProductName");
+                                           if (selectedProductName == null) {
+                                            selectedProductName = "";
+                                         } %>
                                         <label for="productName">Product: </label>
                                         <input type="text" id="productName" name="productName" class="form-control" placeholder="Product's name" style="margin-right: 5px;"
-                                        required>
+                                        required value="<%=selectedProductName %>">
                                         <div id="searchResults" class="dropdown-menu" style="display: none; position: absolute; width: 100%;"></div>
                                     </div> 
 
@@ -154,16 +158,43 @@
                                         </button> -->
                                         <label for="productColor">Color: </label>
                                         
+                                        <% List<ProductStockImport> productColors = (List<ProductStockImport>) request.getAttribute("productColors");
+                                           String selectedColor = (String) request.getAttribute("selectedColor");
+                                           if (productColors == null) { %>
+                                            <input type="text" id="productColor" name="productColor" class="form-control" placeholder="Color" style="margin-right: 5px;"
+                                                readonly>
+                                        <% } else { %>
+                                            <select id="colorSelect" name="productColor" class="form-control" onchange="filterSizesByColor(this)">
+                                                <% for (ProductStockImport productColor : productColors) {
+                                                    if (selectedColor.equalsIgnoreCase(productColor.getProductColor())) { %>
+                                                        <option value="<%=productColor.getProductColor() %>" selected><%=productColor.getProductColor() %></option>
+                                                <%  } else { %>
+                                                        <option value="<%=productColor.getProductColor() %>"><%=productColor.getProductColor() %></option>
+                                                <% }
+                                                   } %>
+                                            </select>
+                                        <% } %>
 
-                                        <input type="text" id="productColor" name="productColor" class="form-control" placeholder="Color" style="margin-right: 5px;"
-                                                required>
+                                        
                                         
                                     </div>
 
                                     <div class="col-md-2" style="justify-content: center; align-items: center;">
                                         <label for="productSize">Size: </label>
-                                        <input type="text" id="productSize" name="productSize" class="form-control" placeholder="Size" style="margin-right: 5px;"
-                                        onkeypress="return event.charCode >= 48 && event.charCode <= 57" required>
+
+                                        <% List<ProductStockImport> productSizes = (List<ProductStockImport>) request.getAttribute("productSizes");
+                                            if (productSizes == null) { %>
+                                                <input type="text" id="productSize" name="productSize" class="form-control" placeholder="Size" style="margin-right: 5px;"
+                                                readonly>
+                                        <%  } else { %>
+                                            <select name="productSize" class="form-control">
+                                                <% for (ProductStockImport productSize : productSizes) { %>
+                                                    <option value="<%=productSize.getProductSize() %>"><%=productSize.getProductSize() %></option>
+                                                <% } %>
+                                            </select>
+                                        <% } %>
+
+                                        
                                     </div>
 
                                     <div class="col-md-2" style="justify-content: center; align-items: center;">
@@ -579,6 +610,11 @@
                 }
             }
 
+            function filterSizesByColor(selectObject) {
+                var value = selectObject.value;
+                location.href = "importProductStocks?selectedProductName=<%=selectedProductName %>&selectedColor=" + value;
+            }
+
         </script>
         <script>
             function confirmDelete(bookID) {
@@ -642,8 +678,8 @@
                                 suggestionsBox.querySelectorAll('.dropdown-item').forEach(item => {
                                     item.addEventListener('click', function () {
                                         document.getElementById('productName').value = this.innerText.trim();
-                                        // location.href="importProductStocks?productName=" + document.getElementById('productName').value;
                                         suggestionsBox.style.display = 'none';
+                                        location.href="importProductStocks?selectedProductName=" + document.getElementById('productName').value;
                                     });
                                 });
                             } else {
