@@ -124,7 +124,7 @@ public class ProductDetailsDAO extends DBConnect {
     }
 
     public boolean updateProduct(Product product) {
-        String sql = "UPDATE Products SET productName = ?, origin = ?, material = ?, price = ?, brandId = ?, categoryId = ? WHERE productId = ?";
+        String sql = "UPDATE Products SET productName = ?, origin = ?, material = ?, price = ?, brandId = ?, categoryId = ? , [ProductStatus] = ? WHERE productId = ?";
         try (
                 PreparedStatement ps = conn.prepareStatement(sql)) {
 
@@ -134,7 +134,8 @@ public class ProductDetailsDAO extends DBConnect {
             ps.setDouble(4, product.getPrice());
             ps.setInt(5, product.getBrandId());
             ps.setInt(6, product.getCategoryId());
-            ps.setInt(7, product.getProductId());
+            ps.setInt(7, product.getProductStatus());
+            ps.setInt(8, product.getProductId());
 
             int rowsUpdated = ps.executeUpdate();
             return rowsUpdated > 0;

@@ -98,7 +98,6 @@
 
                 <input type="hidden" name="productId" value="<%= product.getProductId() %>">
 
-
                 <div class="form-group">
                     <label for="productName">Product Name:</label>
                     <input type="text" name="productName" value="<%= product.getProductName() %>">
@@ -136,6 +135,26 @@
                         <% } %>
                     </select>
                 </div>
+                    
+                <div class="form-group">
+                    <label for="productStatus">Product Status:</label>
+                    <select name="productStatus">
+                        <% 
+                            int currentStatus = product.getProductStatus(); 
+                            if (currentStatus == 1) { 
+                        %>
+                            <option value="1" selected>Active</option>
+                            <option value="0">Inactive</option>
+                        <% 
+                            } else { 
+                        %>
+                            <option value="1">Active</option>
+                            <option value="0" selected>Inactive</option>
+                        <% 
+                            } 
+                        %>
+                    </select>
+                </div>
 
                 <button type="submit" class="btn">Save Changes</button>
             </form>
@@ -144,11 +163,14 @@
     </body>
     <script>
         function validateForm() {
-            const productName = document.forms["editProductForm"]["productName"].value.trim();
-            const origin = document.forms["editProductForm"]["origin"].value.trim();
-            const material = document.forms["editProductForm"]["material"].value.trim();
-            const price = document.forms["editProductForm"]["price"].value.trim();
+            const form = document.forms["editProductForm"];
+            const productName = form["productName"].value.trim();
+            const origin = form["origin"].value.trim();
+            const material = form["material"].value.trim();
+            const price = form["price"].value.trim();
             const priceValue = parseFloat(price);
+            const currentStatus = <%= product.getProductStatus() %>;
+            const newStatus = form["productStatus"].value;
 
             if (!productName || !origin || !material || !price) {
                 alert("All fields must be filled out.");
@@ -160,8 +182,12 @@
                 return false;
             }
 
+            // Check if status has changed
+            if (currentStatus != newStatus) {
+                return confirm("Changing the product status will affect its visibility. Are you sure you want to proceed?");
+            }
+
             return true;
         }
     </script>
 </html>
-
