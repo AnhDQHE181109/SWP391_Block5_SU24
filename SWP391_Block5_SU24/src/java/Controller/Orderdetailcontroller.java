@@ -98,29 +98,57 @@ protected void doPost(HttpServletRequest request, HttpServletResponse response)
     String orderIdParam = request.getParameter("orderId");
     String newStatus = request.getParameter("newStatus");
     NotificationAlertDAO notidao = new NotificationAlertDAO();
+    
     if (orderIdParam != null && !orderIdParam.isEmpty() && newStatus != null && !newStatus.isEmpty()) {
         int orderId = Integer.parseInt(orderIdParam);
         
-        // Create an instance of DAOOrderDetail to call updateOrderStatus
+        // Get the account ID from the session
+        HttpSession session = request.getSession();
+        Account account = (Account) session.getAttribute("account");
+        if (account == null) {
+            response.sendError(HttpServletResponse.SC_FORBIDDEN, "You do not have permission to perform this action.");
+            return;
+        }
+        
+        int accountId = account.getAccountID();  // Assuming getId() returns the account ID
+        String notiMessage = "";
+        String notiPath = request.getContextPath() + "/customer/order_list.jsp";  // Set the default notification path
+
+        // Determine the notification message based on newStatus
+        if ("1".equals(newStatus)) {
+            notiMessage = "Order " + orderId + " status has changed from pending to processing.";
+        } else if ("2".equals(newStatus)) {
+            notiMessage = "Order " + orderId + " status has changed from processing to shipping.";
+        } else {
+            // Handle invalid status
+            request.setAttribute("errorMessage", "Invalid order status.");
+            doGet(request, response); // Reuse doGet to show the page again
+            return;
+        }
+        
+        // Create an instance of DAOOrder to call updateOrderStatus
         DAOOrder daoOrder = new DAOOrder();
-        OrderDAO odao = new OrderDAO();
         int updateResult = daoOrder.updateOrderStatus(orderId, newStatus); // Call the instance method
         
-        
         if (updateResult > 0) {
-            // Successfully updated the order status, redirect or forward to a confirmation page or reload
-            response.sendRedirect("Ordercontroller"); // Redirect to order list after confirming
+            // Successfully updated the order status
+            // Send a notification
+            notidao.send(accountId, notiMessage, notiPath);
+            
+            // Redirect to order list after confirming
+            response.sendRedirect("Ordercontroller");
         } else {
             // Handle the error, e.g., show an error message on the same page
             request.setAttribute("errorMessage", "Unable to update order status. Please try again.");
             doGet(request, response); // Reuse doGet to show the page again
         }
-    } else {
+    } else {    
         // Handle the missing orderId or newStatus
         request.setAttribute("errorMessage", "Invalid order ID or status.");
         doGet(request, response); // Reuse doGet to show the page again
     }
 }
-
-
 }
+
+
+
