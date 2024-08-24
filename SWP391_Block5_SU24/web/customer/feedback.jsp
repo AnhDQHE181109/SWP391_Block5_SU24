@@ -35,7 +35,7 @@
     <head>
         <title>Feedback</title>
         <style>
-            /* Main container styling */
+
             .main-bar {
                 margin: 20px;
                 padding: 20px;
@@ -47,7 +47,7 @@
                 margin-right: auto;
             }
 
-            /* Feedback form container */
+
             .feedback-form {
                 width: 100%;
                 padding: 20px;
@@ -56,7 +56,7 @@
                 box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
             }
 
-            /* Feedback form title */
+
             .feedback-form h2 {
                 font-size: 24px;
                 color: #333;
@@ -65,12 +65,12 @@
                 font-weight: 600;
             }
 
-            /* Form group styling */
+
             .feedback-form .form-group {
                 margin-bottom: 20px;
             }
 
-            /* Form label styling */
+
             .feedback-form label {
                 font-weight: 600;
                 color: #555;
@@ -78,7 +78,6 @@
                 margin-bottom: 8px;
             }
 
-            /* Input, select, and textarea styling */
             .feedback-form input[type="text"],
             .feedback-form input[type="number"],
             .feedback-form select,
@@ -105,12 +104,11 @@
                 text-align: center;
             }
 
-            /* Button hover effect */
+
             .feedback-form button:hover {
                 background-color: #c72535;
             }
 
-            /* Responsive design */
             @media (max-width: 768px) {
                 .main-bar {
                     width: 95%;
@@ -120,6 +118,20 @@
                     padding: 15px;
                 }
             }
+            .product-img img {
+                width: 100px; 
+                height: auto; 
+                object-fit: cover; 
+                border-radius: 5px; 
+                border: 1px solid #ddd;
+                padding: 5px; 
+            }
+
+            .product-details img {
+                width: 150px; 
+                height: auto; 
+                object-fit: cover; 
+            }
 
         </style>
     </head>
@@ -127,6 +139,14 @@
         <div class="main-bar">
             <div class="feedback-form">
                 <h2>Leave Your Feedback</h2>
+                <div class="product-details d-flex">
+                    <img src="${pageContext.request.contextPath}/<%= order.getImageUrl() %>" alt="<%= order.getProductName() %>">
+                    <div>
+                        <h3><%= order.getProductName() %></h3>
+                        <p>Quantity: <%= order.getQuantity() %></p>
+                        <p>Price: $<%= order.getSalePrice() %></p>
+                    </div>
+                </div>
                 <form action="${pageContext.request.contextPath}/SubmitFeedbackController" method="post">
                     <input type="hidden" name="orderId" value="<%= order.getOrderID() %>">
                     <input type="hidden" name="accountId" value="<%= loggedInUser.getAccountID() %>">
