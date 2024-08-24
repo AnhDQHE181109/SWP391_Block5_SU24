@@ -28,7 +28,7 @@ public class MyDAO extends DBConnect {
    // Phương thức lấy tên sản phẩm theo ID sản phẩm
     public String getProductNameById(int productId) {
         String productName = null;
-        xSql = "SELECT product_name FROM Products WHERE product_id = ?";
+        xSql = "SELECT [ProductName] FROM Products WHERE [ProductID] = ?";
 
         try {
             ps = con.prepareStatement(xSql);
@@ -36,7 +36,7 @@ public class MyDAO extends DBConnect {
             rs = ps.executeQuery();
 
             if (rs.next()) {
-                productName = rs.getString("product_name");
+                productName = rs.getString("ProductName");
             }
         } catch (Exception e) {
             e.printStackTrace();
