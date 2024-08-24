@@ -45,10 +45,58 @@
             th {
                 cursor: pointer;
             }
+            .alert {
+                padding: 20px;
+                background-color: #f44336;
+                color: white;
+                margin-bottom: 15px;
+                position: fixed;
+
+                width:100%;
+                z-index: 9999;
+            }
+
+            .closebtn {
+                margin-left: 15px;
+                color: white;
+                font-weight: bold;
+                float: right;
+                font-size: 22px;
+                line-height: 20px;
+                cursor: pointer;
+                transition: 0.3s;
+            }
+
+            .closebtn:hover {
+                color: black;
+            }
+            .alert-timer {
+                height: 5px;
+                background-color: #f1f1f1;
+                position: absolute;
+                bottom: 0;
+                left: 0;
+                width: 100%;
+            }
+
+            .alert-timer-fill {
+                height: 100%;
+                background-color: orange; /* Green */
+                width: 100%;
+                transition: width 5s linear;
+            }
         </style>
 
     </head>
-
+<%if("true".equals(request.getParameter("auth_error"))){%>
+        <div class="alert" id="alertDiv">
+            <span class="closebtn" onclick="this.parentElement.style.display = 'none';">&times;</span>
+            You do not have permission to access this pages.
+            <div class="alert-timer">
+                <div class="alert-timer-fill" id="timerFill"></div>
+            </div>
+        </div>
+        <%}%>
     <body onload="time()" class="app sidebar-mini rtl">
         <div class="app-sidebar__overlay" data-toggle="sidebar"></div>
         <aside class="app-sidebar">
@@ -230,10 +278,10 @@
                                                                                    onfocusout="checkIfFieldEmpty('<%=productStocks.getStockID()%>_quantity', '<%=productStocks.getTotalQuantity() %>')"
                                                                                    readonly></td> -->
                                                                         <td><input type="number" class="form-control" 
-                                                                                    name="<%=productStocks.getStockID()%>_quantity"
-                                                                                    id="<%=productStocks.getStockID()%>_quantity" 
-                                                                                    value="<%=productStocks.getTotalQuantity() %>" required min="0" max="99" onkeypress="return event.charCode >= 48 && event.charCode <= 57"
-                                                                                    readonly></td>
+                                                                                   name="<%=productStocks.getStockID()%>_quantity"
+                                                                                   id="<%=productStocks.getStockID()%>_quantity" 
+                                                                                   value="<%=productStocks.getTotalQuantity() %>" required min="0" max="99" onkeypress="return event.charCode >= 48 && event.charCode <= 57"
+                                                                                   readonly></td>
                                                                     </tr>
                                                                     <%      i++;
                                                                             }
@@ -651,6 +699,54 @@ if (alertMessage != null) { %>
         <% } %>
 
     </body>
+    <script>
+        function startAlertTimer() {
+            const timerFill = document.getElementById('timerFill');
+            const alertBox = document.getElementById('alertDiv');
 
+            // Start the timer
+            setTimeout(function () {
+                alertBox.style.display = 'none'; // Hide the alert
+            }, 5000);
+
+            // Start the progress bar animation
+            timerFill.style.width = '0%';
+        }
+
+        // Start the timer when the page loads
+        window.onload = startAlertTimer;
+        document.getElementById('search-bar').addEventListener('input', function () {
+            let query = this.value;
+            if (query.length > 0) {
+                fetchSuggestions(query);
+            } else {
+                document.getElementById('alertDiv').style.display = 'none';
+            }
+        });
+
+        function fetchSuggestions(query) {
+            fetch('SearchSuggestionsServlet?query=' + encodeURIComponent(query))
+                    .then(response => response.text())
+                    .then(data => {
+                        let suggestionsBox = document.getElementById('suggestions');
+                        suggestionsBox.innerHTML = data;
+                        if (data.trim().length > 0) {
+                            suggestionsBox.style.display = 'block';
+                            // Add click event to each suggestion
+                            suggestionsBox.querySelectorAll('.dropdown-item').forEach(item => {
+                                item.addEventListener('click', function () {
+                                    document.getElementById('search-bar').value = this.innerText.trim();
+                                    suggestionsBox.style.display = 'none';
+                                });
+                            });
+                        } else {
+                            suggestionsBox.style.display = 'none';
+                        }
+                    })
+                    .catch(error => {
+                        console.error('Error fetching suggestions:', error);
+                    });
+        }
+    </script>
 </html>
 

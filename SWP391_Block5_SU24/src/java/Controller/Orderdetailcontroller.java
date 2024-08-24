@@ -112,7 +112,7 @@ protected void doPost(HttpServletRequest request, HttpServletResponse response)
         }
 
         String notiMessage = "";
-        String notiPath = request.getContextPath() + "/customer/order_list.jsp";  // Set the default notification path
+        String notiPath = "customer/order_list?status=" + newStatus;  // Set the default notification path
 
         // Determine the notification message based on newStatus
         switch (newStatus) {

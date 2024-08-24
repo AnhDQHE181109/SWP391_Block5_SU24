@@ -138,7 +138,7 @@ public class CustomerFilterController implements Filter {
                 case 2: {
                     session.setAttribute("auth_error", "true");
                     String contextPath = httpRequest.getContextPath();
-                    httpResponse.sendRedirect(contextPath + "/Ordercontroller");
+                    httpResponse.sendRedirect(contextPath + "/stocksManager");
                     break;
                 }
                 case 3: {
