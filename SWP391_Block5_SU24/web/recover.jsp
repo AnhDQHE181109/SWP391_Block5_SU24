@@ -3,11 +3,36 @@
     Created on : Aug 5, 2024, 11:28:46 AM
     Author     : Long
 --%>
-
+<%@ page import="java.util.*" %>
+<%@ page import="entity.*" %>
+<%@ page import="model.*" %>
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <!DOCTYPE html>
 <html>
-    <%if(session.getAttribute("auth")==null||!session.getAttribute("auth").equals("true")){response.sendRedirect("login.jsp?error=You do not have permission to access the page!");}%>
+    <%
+    if(session.getAttribute("auth")==null||!session.getAttribute("auth").equals("true")){
+    if(session.getAttribute("account")!=null){
+    Account account = (Account) session.getAttribute("account");
+    switch (account.getRole()){
+    case 1: {
+                    response.sendRedirect("index.jsp?auth_error=true");
+                    break;
+                }
+                case 2: {
+                session.setAttribute("auth_error", "true");
+                    response.sendRedirect("Ordercontroller");
+                    break;
+                }
+                case 3: {
+                    response.sendRedirect("manager/manager_home.jsp?auth_error=true");
+                    break;
+                }
+                case 4: {
+                    response.sendRedirect("admin/manage_acc.jsp?auth_error=true");
+                    break;
+                }
+        }
+    }else{response.sendRedirect("login.jsp?error=You do not have permission to access the page!");}}%>
     <head>
         <title>Footwear - Free Bootstrap 4 Template by Colorlib</title>
         <meta charset="utf-8">

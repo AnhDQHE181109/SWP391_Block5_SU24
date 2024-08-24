@@ -109,6 +109,10 @@ public class RecoverController extends HttpServlet {
                 request.setAttribute("error_recover_role", "true");
                 request.getRequestDispatcher("login.jsp?error_recover=true").forward(request, response);
                 return;         
+        }else if (adao.getAccountbyEmail(re).getRole() == 3) {
+                request.setAttribute("error_recover_role", "true");
+                request.getRequestDispatcher("login.jsp?error_recover=true").forward(request, response);
+                return;         
         }
         Random rand = new Random();
         int recode = rand.nextInt(9999 - 1000 + 1) + 1000;

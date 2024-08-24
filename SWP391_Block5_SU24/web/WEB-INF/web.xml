@@ -110,6 +110,14 @@
         <servlet-name>UpdateAccountController</servlet-name>
         <servlet-class>Controller.UpdateAccountController</servlet-class>
     </servlet>
+    <servlet>
+        <servlet-name>ChangeController</servlet-name>
+        <servlet-class>Controller.ChangeController</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>ChangeCustomerController</servlet-name>
+        <servlet-class>Controller.ChangeCustomerController</servlet-class>
+    </servlet>
     <servlet-mapping>
         <servlet-name>LoginController</servlet-name>
         <url-pattern>/LoginController</url-pattern>
@@ -243,5 +251,13 @@
         <url-pattern>/BuyAgainController</url-pattern>
         <servlet-name>UpdateAccountController</servlet-name>
         <url-pattern>/UpdateAccountController</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>ChangeController</servlet-name>
+        <url-pattern>/ChangeController</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>ChangeCustomerController</servlet-name>
+        <url-pattern>/ChangeCustomerController</url-pattern>
     </servlet-mapping>
 </web-app>

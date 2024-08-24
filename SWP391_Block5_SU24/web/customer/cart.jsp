@@ -4,6 +4,7 @@
 <%@page import = "java.util.*" %>
 
 <!DOCTYPE HTML>
+<%Account account = (Account)session.getAttribute("account");%> 
 <html>
     <head>
         <title>Shopping cart</title>
@@ -45,9 +46,9 @@
     <body>
 
         <% if (request.getHeader("referer") == null) { %>
-            <script type="text/javascript">
+        <script type="text/javascript">
             window.history.go(-1);
-            </script>
+        </script>
         <%    return;
         } %>
 
@@ -91,8 +92,11 @@
                                         <%
                                                 Integer cartItemsCount = (Integer) request.getAttribute("cartItemsCount");
                                         %>
-                                    <li class="cart"><a href="shoppingCart"><i class="icon-shopping-cart"></i> Cart [<%=cartItemsCount %>]</a></li>
+                                    <li class="cart"><i class="fa-regular fa-user"></i> <a href="${pageContext.request.contextPath}/customer/customer_profile.jsp"><%= ((Account) session.getAttribute("account")).getUsername() %></a></li>
                                     <li class="cart"><a href="customer/wishlist.jsp"><i class="fa fa-heart"></i> Wishlist</a></li>
+                                    <li class="cart"><a href="shoppingCart"><i class="icon-shopping-cart"></i> Cart [<%=cartItemsCount %>]</a></li>
+
+
                                 </ul>
                             </div>
                         </div>
@@ -186,8 +190,8 @@
                                 </div>
                             </div>
 
-                            
-							<% for (ShoppingCartItem cartItem : cartItems) { %>
+
+                            <% for (ShoppingCartItem cartItem : cartItems) { %>
                             <div class="product-cart d-flex">
 
                                 <div class="one-forth">
@@ -339,7 +343,7 @@
                                             </div>
                                     </div>
                             </div> -->
-                            
+
                         </div>
                     </div>
 
@@ -364,17 +368,17 @@
                                                 <h5>Please select a type of shipping:</h5>
                                             </div>
                                             <div class="col-sm-3">
-                                                <% String shippingType = (String) request.getAttribute("shippingType");
+                                        <% String shippingType = (String) request.getAttribute("shippingType");
 											   //if (shippingType.equalsIgnoreCase("ecoRadioBox")) { %>
-                                                <p style="width: 1000px;" onclick="selectAndSendShippingType('ecoRadioBox')"> <input id="ecoRadioBox" type="radio" value="eco" name="shippingMethod" checked> <b>Eco</b>: Free shipping but may take longer to delivery to you (8-10 days)</p>
-                                                <p style="width: 1000px;" onclick="selectAndSendShippingType('fastRadioBox')"> <input id="fastRadioBox" type="radio" value="fast" name="shippingMethod"> <b>Fast shipping</b>: Express shipping, should take (1-2 days) </p>
-                                                    <% //} else { %>
-                                                <p style="width: 1000px;" onclick="selectAndSendShippingType('ecoRadioBox')"> <input id="ecoRadioBox" type="radio" value="eco" name="shippingMethod"> <b>Eco</b>: Free shipping but may take longer to delivery to you (8-10 days)</p>
-                                                <p style="width: 1000px;" onclick="selectAndSendShippingType('fastRadioBox')"> <input id="fastRadioBox" type="radio" value="fast" name="shippingMethod" checked> <b>Fast shipping</b>: Express shipping, should take (1-2 days) </p>
-                                                    <% //} %>
+                                        <p style="width: 1000px;" onclick="selectAndSendShippingType('ecoRadioBox')"> <input id="ecoRadioBox" type="radio" value="eco" name="shippingMethod" checked> <b>Eco</b>: Free shipping but may take longer to delivery to you (8-10 days)</p>
+                                        <p style="width: 1000px;" onclick="selectAndSendShippingType('fastRadioBox')"> <input id="fastRadioBox" type="radio" value="fast" name="shippingMethod"> <b>Fast shipping</b>: Express shipping, should take (1-2 days) </p>
+                                        <% //} else { %>
+                                    <p style="width: 1000px;" onclick="selectAndSendShippingType('ecoRadioBox')"> <input id="ecoRadioBox" type="radio" value="eco" name="shippingMethod"> <b>Eco</b>: Free shipping but may take longer to delivery to you (8-10 days)</p>
+                                    <p style="width: 1000px;" onclick="selectAndSendShippingType('fastRadioBox')"> <input id="fastRadioBox" type="radio" value="fast" name="shippingMethod" checked> <b>Fast shipping</b>: Express shipping, should take (1-2 days) </p>
+                                        <% //} %>
 
-                                            </div>
-                                        </div> -->
+                                </div>
+                            </div> -->
                                     </div>
                                     <div class="col-sm-4 text-center">
                                         <div class="total">
@@ -394,7 +398,7 @@
                                         </div>
                                         <div style="padding: 10px">
                                             <!-- <button onclick="location.href='CheckoutController?shippingFee=<%=shippingFee %>'" class="btn btn-success">Continue</button> -->
-                                            <button onclick="location.href='CheckoutController'" class="btn btn-success">Continue</button>
+                                            <button onclick="location.href = 'CheckoutController'" class="btn btn-success">Continue</button>
                                         </div>
                                     </div>
                                 </div>
@@ -403,9 +407,9 @@
                     </div>
 
                     <% } else { %>
-                        <div class="d-flex">
-                            <h1>There are no products in your shopping cart yet, come back later when you add one into it!</h1>
-                        </div>
+                    <div class="d-flex">
+                        <h1>There are no products in your shopping cart yet, come back later when you add one into it!</h1>
+                    </div>
                     <% }
                     } %>
 

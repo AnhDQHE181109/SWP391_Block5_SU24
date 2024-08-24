@@ -30,7 +30,7 @@
         <title>Footwear - Wishlist</title>
         <meta charset="utf-8">
         <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-
+        <script src="https://kit.fontawesome.com/c630e9f862.js" crossorigin="anonymous"></script>
         <!-- Include existing CSS files -->
         <link href="https://fonts.googleapis.com/css?family=Montserrat:300,400,500,600,700" rel="stylesheet">
         <link href="https://fonts.googleapis.com/css?family=Rokkitt:100,300,400,700" rel="stylesheet">
@@ -99,7 +99,11 @@
                                     <li><a href="${pageContext.request.contextPath}/products.jsp">Products</a></li>
                                     <li><a href="${pageContext.request.contextPath}/about.html">About</a></li>
                                     <li><a href="${pageContext.request.contextPath}/contact.html">Contact</a></li>
+                                    <li class="cart"><i class="fa-regular fa-user"></i> <a href="${pageContext.request.contextPath}/customer/customer_profile.jsp"><%= ((Account) session.getAttribute("account")).getUsername() %></a></li>
+                                    
                                     <li class="cart"><a href="${pageContext.request.contextPath}/shoppingCart"><i class="icon-shopping-cart"></i> Cart [0]</a></li>
+                                    <li class="cart"><a href="wishlist.jsp"><i class="fa fa-heart"></i> Wishlist</a></li>
+                                    
                                 </ul>
                             </div>
                         </div>

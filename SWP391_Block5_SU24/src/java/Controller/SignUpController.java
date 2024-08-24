@@ -119,6 +119,9 @@ public class SignUpController extends HttpServlet {
         } else if (username.length() > 20) {
             hasErrors = true;
             request.setAttribute("error_username_length", "true");
+        } else if (!isValidUName(username)) {
+            hasErrors = true;
+            request.setAttribute("error_username_invalid", "true");
         } else {
             for (char c : username.toCharArray()) {
                 if (Character.isWhitespace(c)) {
@@ -181,12 +184,20 @@ public class SignUpController extends HttpServlet {
             }
             adao.addAccount(username, hashedPassword, pnum, email, address, 1, salt, name);
             request.setAttribute("signup_success", "true");
+            request.setAttribute("username", username);
             request.getRequestDispatcher("login.jsp").forward(request, response);
         }
     }
+
     public static boolean isValidName(String name) {
         String regex = "^[a-zA-Z\\s]+$";
         return name.matches(regex);
+    }
+
+    public static boolean isValidUName(String input) {
+        String regex = "^[^/\\\\<>&$#%\"()!?\'|]+$";
+
+        return input.matches(regex);
     }
 
     /**
