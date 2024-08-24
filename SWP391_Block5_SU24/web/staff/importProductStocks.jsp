@@ -109,6 +109,27 @@
                 <div class="col-md-12">
                     <div class="tile">
                         <div class="tile-body">
+
+                          <!-- <form action="importProductStocks" method="get">
+
+                                <div class="form-group position-relative">
+                                    <a class="btn btn-add btn-sm" href="product_manage?action=insert" title="Thêm">
+                                        <i class="fas fa-plus"></i> Add a new product
+                                    </a>
+                                    <label for="productName">Product search: </label>
+                                    <input type="text" id="productSearch" name="productSearch" class="form-control" placeholder="Product's name" style="margin-right: 5px;"
+                                    required>
+
+                                    
+
+                                </div> 
+
+                                <div class="col-md-4" style=" justify-content: flex-start; align-items: center;">
+                                    
+                                </div> 
+
+                          </form> -->
+
                           <form action="importProductStocks" method="post">
 
                             <div class="row element-button">
@@ -120,6 +141,7 @@
                                         <label for="productName">Product: </label>
                                         <input type="text" id="productName" name="productName" class="form-control" placeholder="Product's name" style="margin-right: 5px;"
                                         required>
+                                        <div id="searchResults" class="dropdown-menu" style="display: none; position: absolute; width: 100%;"></div>
                                     </div> 
 
                                     <div class="col-md-2" style="justify-content: center; align-items: center;">
@@ -148,7 +170,7 @@
                                         <label for="productQuantity">Quantity: </label>
                                         <input type="text" id="productQuantity" name="productQuantity" class="form-control" placeholder="Quantity" style="margin-right: 5px;"
                                         onkeypress="return event.charCode >= 48 && event.charCode <= 57" required>
-                                    </div>
+                                    </div>  
 
                                     <div class="col-md-2" style="display: flex; justify-content: center; align-items: center;">
                                         <button type="submit" class="btn btn-success btn-sm" id="sortButton">
@@ -241,7 +263,7 @@
                                             for (ProductStockImport productStock : productsList) { %>
                                         <tr>
                                             <td><%=count %></td>
-                                            <td><img style="width: 60px; height: 60px;" src="<%=productStock.getImageURL() %>"></td>
+                                            <td><img style="width: 60px; height: 60px;" src="${pageContext.request.contextPath}/<%=productStock.getImageURL() %>"></td>
                                             <td><%=productStock.getProductName() %></td>
                                             <td><%=productStock.getProductColor() %></td>
                                             <td><%=productStock.getProductSize() %></td>
@@ -297,7 +319,7 @@
                                     </div>
 
                                     <div class="col-sm">
-                                        <button class="btn btn-info">Import</button>
+                                        <button class="btn btn-info" onclick="location.href='importProductStocks?saveChanges=1'">Import</button>
                                     </div>
 
                                     <div class="col-sm">
@@ -576,15 +598,56 @@
 
         </script>
 
+        <script>
+            document.getElementById('productName').addEventListener('input', function () {
+                let query = this.value;
+                if (query.length > 0) {
+                    fetchSuggestions(query);
+                } else {
+                    document.getElementById('searchResults').style.display = 'none';
+                }
+            });
+
+            function fetchSuggestions(query) {
+                fetch('importProductStocks?search=' + encodeURIComponent(query))
+                        .then(response => response.text())
+                        .then(data => {
+                            let suggestionsBox = document.getElementById('searchResults');
+                            suggestionsBox.innerHTML = data;
+                            if (data.trim().length > 0) {
+                                suggestionsBox.style.display = 'block';
+                                // Add click event to each suggestion
+                                suggestionsBox.querySelectorAll('.dropdown-item').forEach(item => {
+                                    item.addEventListener('click', function () {
+                                        document.getElementById('productName').value = this.innerText.trim();
+                                        suggestionsBox.style.display = 'none';
+                                    });
+                                });
+                            } else {
+                                suggestionsBox.style.display = 'none';
+                            }
+                        })
+                        .catch(error => {
+                            console.error('Error fetching suggestions:', error);
+                        });
+            }
+
+        </script>
+
 <% String openPopup = (String) request.getAttribute("openPopup");
 if (openPopup != null) { %>
     <script>openPopup('<%=openPopup %>')</script>
 <% } %>
 
-<% String alertMessage = (String) request.getAttribute("alertMessage");
-if (alertMessage != null) { %>
-    <script>alert('<%=alertMessage %>')</script>
+<% String errorMessage = (String) request.getAttribute("errorMessage");
+if (errorMessage != null) { %>
+    <script>alert('<%=errorMessage %>')</script>
     <% } %>
+
+<% String displayMessage = (String) request.getAttribute("displayMessage");
+if (displayMessage != null) { %>
+    <script>alert('<%=displayMessage %>')</script>
+<% } %>
 
     </body>
 
