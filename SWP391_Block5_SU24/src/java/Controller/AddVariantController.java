@@ -2,6 +2,7 @@ package Controller;
 
 import entity.ProductImage;
 import entity.Stock;
+import entity.Discount; // Ensure this class exists
 import java.io.IOException;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServlet;
@@ -11,18 +12,21 @@ import java.util.List;
 import model.DAOProduct;
 import model.DAOProductImages;
 import model.DAOStock;
+import model.DAODiscount; // Import DAODiscount
 
 public class AddVariantController extends HttpServlet {
 
     private DAOStock daoStock;
     private DAOProductImages daoProductImages;
     private DAOProduct daoProduct;
+    private DAODiscount daoDiscount; // Add DAODiscount instance
 
     @Override
     public void init() {
         daoStock = new DAOStock();
         daoProductImages = new DAOProductImages();
         daoProduct = new DAOProduct();
+        daoDiscount = new DAODiscount(); // Initialize DAODiscount
     }
 
     @Override
@@ -80,6 +84,23 @@ public class AddVariantController extends HttpServlet {
                     }
                 }
             }
+
+            // Chỉ thêm bản ghi giảm giá nếu nút "Create Add Variant" được nhấn
+            String action = request.getParameter("action");
+            if ("create".equals(action)) {
+                Discount discount = new Discount();
+                discount.setProductID(productID);
+                discount.setDiscountAmount(0.0); // Đặt discountAmount = 0
+                boolean discountAdded = daoDiscount.addDiscount(discount);
+                
+                System.out.println("productID :" +productID);
+
+                if (!discountAdded) {
+                    throw new Exception("Failed to add the discount.");
+                }
+            }
+            
+            
 
             response.sendRedirect("variantSuccess.jsp");
         } catch (Exception e) {

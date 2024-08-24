@@ -17,7 +17,7 @@ public class DAODiscount extends MyDAO {
     public boolean addDiscount(Discount discount) {
         boolean isSuccess = false;
         try {
-            String sql = "INSERT INTO Discounts (productID, discountAmount) VALUES (?, ?)";
+            String sql = "INSERT INTO Discounts ([product_id], [discount_amount]) VALUES (?, ?)";
             ps = con.prepareStatement(sql);
             ps.setInt(1, discount.getProductID());
             ps.setDouble(2, discount.getDiscountAmount());

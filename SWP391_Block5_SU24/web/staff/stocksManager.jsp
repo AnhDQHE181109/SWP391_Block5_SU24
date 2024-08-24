@@ -239,7 +239,7 @@
                                                     </form>
                                                     <div id="submit-type" class="col-md-12">
                                                         <button type="button" class="btn btn-danger col-md-3" onclick="closePopup('popup_<%=product.getProductId() %>')">Close</button>
-                                                        <!-- <button type="button" onclick="document.getElementById( & quot; stocksForm_<%=product.getProductName() %> & quot; ).submit()" class="btn btn-primary col-md-3">Update</button> -->
+                                                         <!-- <button type="button" onclick="document.getElementById( & quot; stocksForm_<%=product.getProductName() %> & quot; ).submit()" class="btn btn-primary col-md-3">Update</button> -->
                                                         <!-- <button type="button" class="btn btn-success col-md-6" onclick="openPopup('popupAddNewVariantForm_<%=product.getProductId() %>')">Add a new variant</button> -->
                                                     </div>
 

@@ -13,6 +13,11 @@
     List<Product> bestSellers = pDAO.getBestSellers();
 %>
 <%Account account = (Account)session.getAttribute("account");%> 
+<%
+if(!"true".equals(request.getAttribute("autho"))){
+    request.getRequestDispatcher("customer/customer_profile.jsp").forward(request, response);
+    }
+%>
 <html>
     <head>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
@@ -356,7 +361,7 @@
                                             <% } %>
                                         </td>
                                     </tr>
-                                    <tr><td style="width:150px; text-align: right;padding-top: 25px; padding-right: 3%;">New Password</td><td style='padding-top: 25px'><input required class="protbox" id="psw" type="text" name='password' pattern="(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{8,}"></td></tr>
+                                    <tr><td style="width:150px; text-align: right;padding-top: 25px; padding-right: 3%;">New Password</td><td style='padding-top: 25px'><input required class="protbox" id="psw" type="password" name='password' pattern="(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{8,}"></td></tr>
                                     <tr><td></td><td><div id="message">          
                                                 <b>Password must contain: </b>
                                                 <p id="letter" class="invalid">A <b>lowercase</b> letter</p>
@@ -364,7 +369,7 @@
                                                 <p id="number" class="invalid">A <b>number</b></p>
                                                 <p id="length" class="invalid">Minimum <b>8 characters</b></p>
                                             </div></td></tr>
-                                    <tr><td style="width:150px; text-align: right;padding-top: 25px; padding-right: 3%;">Repeat Password</td><td style='padding-top: 25px'><input required class="protbox" id="psw2" type="text" name='repassword' pattern="(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{8,}"></td></tr>
+                                    <tr><td style="width:150px; text-align: right;padding-top: 25px; padding-right: 3%;">Repeat Password</td><td style='padding-top: 25px'><input required class="protbox" id="psw2" type="password" name='repassword' pattern="(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{8,}"></td></tr>
                                     <tr><td></td><td><div id="message2">          
                                                 <b>Password must contain: </b>
                                                 <p id="letter2" class="invalid2">A <b>lowercase</b> letter</p>

@@ -265,7 +265,7 @@ public class ProductDetailsDAO extends DBConnect {
         String sql = "select ProductID, ProductName, Origin, Material, Price, TotalQuantity, CategoryName, BrandName, discount_amount, ProductStatus\n"
                 + "from Products p, Categories cat, Brand b, Discounts dis\n"
                 + "where p.CategoryID = cat.CategoryID and p.BrandID = b.BrandID and "
-                + "p.ProductID = dis.discount_id and p.ProductID = ?";
+                + "p.ProductID = dis.product_id and p.ProductID = ?";
 
         ProductDetails productDetails = null;
 

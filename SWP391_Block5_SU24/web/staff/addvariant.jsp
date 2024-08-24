@@ -58,6 +58,9 @@
     <form action="AddVariantController" method="post" onsubmit="return validateForm();">
         <input type="hidden" name="productID" value="${productID}">
         
+        <!-- Add a hidden input to specify the action -->
+        <input type="hidden" name="action" value="create">
+        
         <table>
             <tr>
                 <th>Color</th>
@@ -91,7 +94,5 @@
             window.location.href = 'AddVariantController?service=delete&productID=' + productID;
         }
     </script>
-        
-        
 </body>
 </html>

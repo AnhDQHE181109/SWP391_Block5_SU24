@@ -126,6 +126,8 @@ protected void doPost(HttpServletRequest request, HttpServletResponse response)
             return;
         }
         
+        System.out.println("newStatus : " +newStatus);
+        
         // Create an instance of DAOOrder to call updateOrderStatus
         DAOOrder daoOrder = new DAOOrder();
         int updateResult = daoOrder.updateOrderStatus(orderId, newStatus); // Call the instance method
