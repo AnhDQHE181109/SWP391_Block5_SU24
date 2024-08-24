@@ -189,9 +189,9 @@ GO
 CREATE TABLE NotificationAlert (
     notiID INT IDENTITY(0,1) PRIMARY KEY,
 	accountID INT,
-	notidate DATE,
+	notidate DATE DEFAULT GETDATE(),
 	noti_message TEXT,
-	noti_status BIT,
+	noti_status BIT DEFAULT 0,
 	noti_path TEXT,
 	FOREIGN KEY (accountID) REFERENCES Accounts(accountID)
 );
