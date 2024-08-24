@@ -110,8 +110,6 @@ public class ChangeController extends HttpServlet {
             throws ServletException, IOException {
         String re = request.getParameter("recover-email");
         String type = request.getParameter("type");
-        System.out.println(type);
-        System.out.println(re);
         Random rand = new Random();
         int recode = rand.nextInt(9999 - 1000 + 1) + 1000;
         AccountDAO adao = new AccountDAO();

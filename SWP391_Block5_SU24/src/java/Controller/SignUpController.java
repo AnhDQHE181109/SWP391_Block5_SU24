@@ -184,6 +184,7 @@ public class SignUpController extends HttpServlet {
             }
             adao.addAccount(username, hashedPassword, pnum, email, address, 1, salt, name);
             request.setAttribute("signup_success", "true");
+            request.setAttribute("username", username);
             request.getRequestDispatcher("login.jsp").forward(request, response);
         }
     }
