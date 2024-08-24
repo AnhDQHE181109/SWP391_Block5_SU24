@@ -190,6 +190,9 @@
                                         <td><%=product.getBrandName() %></td>
                                         <td><%=product.getProductName() %></td>
                                         <td><%=product.getCategoryName() %></td>
+                                        <td>
+                                            <a href="staff/editproduct.jsp?productId=<%=product.getProductId() %>" class="btn btn-primary">Edit</a>
+                                        </td>
                                         <% if (account.getRole() == 2) { %>
                                         <td class="col-1">
                                             <button class="btn btn-info" onclick="openPopup('popup_<%=product.getProductId() %>')">View variants</button>
@@ -414,9 +417,6 @@
             <a href="staff/addproduct.jsp" class="btn btn-add btn-sm">
                 <i class="fas fa-plus"></i> Add New Product
             </a>
-            <td>
-                <a href="editProduct.jsp?productId=${product.getProductId()}" class="btn btn-primary">Edit</a>
-            </td>
         </main>
 
         <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
