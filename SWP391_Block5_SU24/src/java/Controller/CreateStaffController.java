@@ -81,57 +81,72 @@ public class CreateStaffController extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
+    // Collect input parameters
+        String fullname = request.getParameter("fullname");
         String username = request.getParameter("username");
-    String password = request.getParameter("password");
-    String email = request.getParameter("email");
-    String phoneNumber = request.getParameter("phoneNumber");
-    String address = request.getParameter("address");
-    int role = 2; // Assuming role '2' is for staff
+        String password = request.getParameter("password");
+        String email = request.getParameter("email");
+        String phoneNumber = request.getParameter("phoneNumber");
+        String address = request.getParameter("address");
+        int role = 2; // Assuming role '2' is for staff
 
-    Validator validator = new Validator();
-    AccountDAO accountDAO = new AccountDAO();
+        Validator validator = new Validator();
+        AccountDAO accountDAO = new AccountDAO();
 
-    // Server-side validation
-    if (!validator.isValidUsername(username)) {
-        request.setAttribute("message", "Invalid username.");
-        request.getRequestDispatcher("addStaffAccount.jsp").forward(request, response);
-        return;
-    }
-
-    if (!validator.isValidPassword(password)) {
-        request.setAttribute("message", "Invalid password.");
-        request.getRequestDispatcher("addStaffAccount.jsp").forward(request, response);
-        return;
-    }
-
-    if (!validator.isValidEmail(email) || accountDAO.isEmailTaken(email)) {
-        request.setAttribute("message", "Invalid or duplicate email.");
-        request.getRequestDispatcher("addStaffAccount.jsp").forward(request, response);
-        return;
-    }
-
-    if (!validator.isValidPhoneNumber(phoneNumber) || accountDAO.isPhoneNumberTaken(phoneNumber)) {
-        request.setAttribute("message", "Invalid or duplicate phone number.");
-        request.getRequestDispatcher("addStaffAccount.jsp").forward(request, response);
-        return;
-    }
-
-    try {
-        String salt = EncryptionHelper.generateSalt();
-        String hashedPassword = EncryptionHelper.hashPassword(password, salt);
-
-        if (accountDAO.addAccount(username, hashedPassword, phoneNumber, email, address, role, salt)) {
-            request.setAttribute("message", "Account created successfully!");
-        } else {
-            request.setAttribute("message", "Failed to create account. Please try again.");
+        // Server-side validation
+        if (!validator.isValidUsername(username)) {
+            request.setAttribute("message", "Invalid username.");
+            request.getRequestDispatcher("admin/addStaffAccount.jsp").forward(request, response);
+            return;
         }
-    } catch (NoSuchAlgorithmException | InvalidKeySpecException e) {
-        e.printStackTrace();
-        request.setAttribute("message", "Error occurred during account creation.");
+
+        if (!validator.isValidPassword(password)) {
+            request.setAttribute("message", "Invalid password.");
+            request.getRequestDispatcher("admin/addStaffAccount.jsp").forward(request, response);
+            return;
+        }
+
+        if (!validator.isValidEmail(email) || accountDAO.isEmailTaken(email)) {
+            request.setAttribute("message", "Invalid or duplicate email.");
+            request.getRequestDispatcher("admin/addStaffAccount.jsp").forward(request, response);
+            return;
+        }
+
+        if (!validator.isValidPhoneNumber(phoneNumber) || accountDAO.isPhoneNumberTaken(phoneNumber)) {
+            request.setAttribute("message", "Invalid or duplicate phone number.");
+            request.getRequestDispatcher("admin/addStaffAccount.jsp").forward(request, response);
+            return;
+        }
+
+        try {
+            String salt = EncryptionHelper.generateSalt();
+            String hashedPassword = EncryptionHelper.hashPassword(password, salt);
+
+            // Add the account using the AccountDAO method provided
+            boolean accountCreated = accountDAO.addAccount(username, hashedPassword, phoneNumber, email, address, role, salt, fullname);
+
+            if (accountCreated) {
+                // Redirect to manage_acc.jsp after successful creation
+                response.sendRedirect("admin/manage_acc.jsp");
+                return; // Important to return after redirect to avoid further processing
+            } else {
+                request.setAttribute("message", "Failed to create account. Please try again.");
+            }
+        } catch (NoSuchAlgorithmException | InvalidKeySpecException e) {
+            e.printStackTrace();
+            request.setAttribute("message", "Error occurred during account creation.");
+        }
+
+        // If account creation failed, forward back to the form
+        request.getRequestDispatcher("admin/addStaffAccount.jsp").forward(request, response);
     }
 
-    request.getRequestDispatcher("addStaffAccount.jsp").forward(request, response);
-}
+    /**
+     * Returns a short description of the servlet.
+     *
+     * @return a String containing servlet description
+     */
+    
     
     
 

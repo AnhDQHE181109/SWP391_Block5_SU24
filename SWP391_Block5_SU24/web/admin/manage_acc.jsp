@@ -56,8 +56,8 @@
             function updateStatus(accountId, status) {
                 if (confirm("Are you sure you want to " + (status === 1 ? "activate" : "deactivate") + " this account?")) {
                     window.location.href = `${pageContext.request.contextPath}/UpdateAccountController?action=updateStatus&accountId=${accountId}&status=${status}`;
-                }
-            }
+                            }
+                        }
         </script>
     </head>
 
@@ -183,8 +183,9 @@
                 <!-- Navbar End -->
 
                 <!-- Error message display -->
+
                 <%
-                    String error = request.getParameter("error");
+                    String error = (String) request.getAttribute("error");
                     if (error != null) {
                 %>
                 <div class="alert alert-danger">
@@ -269,7 +270,7 @@
                                                                             '<%= account.getAddress() %>'
                                                                             )">Edit</button>
                                                     <% } %>
-                                                    
+
                                                 </td>
                                             </tr>
                                             <% } %>
@@ -344,18 +345,7 @@
                 <!-- Edit Account Modal End -->
 
                 <!-- Footer Start -->
-                <div class="container-fluid pt-4 px-4">
-                    <div class="bg-light rounded-top p-4">
-                        <div class="row">
-                            <div class="col-12 col-sm-6 text-center text-sm-start">
-                                &copy; <a href="#">Your Site Name</a>, All Right Reserved. 
-                            </div>
-                            <div class="col-12 col-sm-6 text-center text-sm-end">
-                                Designed By <a href="https://htmlcodex.com">HTML Codex</a>
-                            </div>
-                        </div>
-                    </div>
-                </div>
+               
                 <!-- Footer End -->
             </div>
             <!-- Content End -->
