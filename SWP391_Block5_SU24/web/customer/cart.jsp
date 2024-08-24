@@ -593,7 +593,7 @@
                 // }
 
                 document.getElementById(quantityBox).innerHTML = quantity + 1;
-                    location.href = "shoppingCart?quantityUpdateFor=" + incrementButton + "&quantityAmount=" + document.getElementById(quantityBox).innerHTML;
+                location.href = "shoppingCart?quantityUpdateFor=" + incrementButton + "&quantityAmount=" + document.getElementById(quantityBox).innerHTML;
 
 
 

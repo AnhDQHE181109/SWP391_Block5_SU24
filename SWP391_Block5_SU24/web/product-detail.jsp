@@ -545,11 +545,18 @@ Copyright &copy;<script>document.write(new Date().getFullYear());</script> All r
 		        var quantity = parseInt($('#quantity').val());
 		        
 		        // If is not undefined
+
+				<% int maxAmount = 0;
+				for (ProductStockDetails productSize : productSizes) {
+									if (Integer.parseInt(selectedSize) == productSize.getSize()) {
+										maxAmount = productSize.getStockQuantity();
+				}
+				} %>
 		            
-					// if ($('#quantity').val() != 10) {
-					// 	$('#quantity').val(quantity + 1);
-					// }
-					$('#quantity').val(quantity + 1);
+					if ($('#quantity').val() != <%=maxAmount %>) {
+						$('#quantity').val(quantity + 1);
+					}
+					// $('#quantity').val(quantity + 1);
 		            
 		          
 		            // Increment
