@@ -73,31 +73,49 @@ public class EditProductController extends HttpServlet {
             throws ServletException, IOException {
         try {
             int productId = Integer.parseInt(request.getParameter("productId"));
-            String productName = request.getParameter("productName");
-            String origin = request.getParameter("origin");
-            String material = request.getParameter("material");
-            double price = Double.parseDouble(request.getParameter("price"));
-            int brandId = Integer.parseInt(request.getParameter("brandId"));
-            int categoryId = Integer.parseInt(request.getParameter("categoryId"));
+            String productName = request.getParameter("productName").trim();
+            String origin = request.getParameter("origin").trim();
+            String material = request.getParameter("material").trim();
+            String priceStr = request.getParameter("price").trim();
 
-            Product product = new Product(productId, productName, origin, material, price, categoryId, brandId);
+            double price = 0;
+
+            if (productName.isEmpty() || origin.isEmpty() || material.isEmpty() || priceStr.isEmpty()) {
+                response.sendRedirect("staff/editproduct.jsp?error=All fields are required.");
+                return;
+            }
+
+            try {
+                price = Double.parseDouble(priceStr);
+                if (price <= 0 || price > 100000000) {
+                    response.sendRedirect("staff/editproduct.jsp?error=Price must be between 0 and 100,000,000 VND.");
+                    return;
+                }
+            } catch (NumberFormatException e) {
+                response.sendRedirect("staff/editproduct.jsp?error=Invalid price format.");
+                return;
+            }
+
             ProductDetailsDAO pDAO = new ProductDetailsDAO();
+
+            if (pDAO.isProductNameExists(productName, productId)) {
+                response.sendRedirect("staff/editproduct.jsp?error=Product name already exists.");
+                return;
+            }
+
+            Product product = new Product(productId, productName, origin, material, price, Integer.parseInt(request.getParameter("categoryId")), Integer.parseInt(request.getParameter("brandId")));
 
             boolean updateSuccess = pDAO.updateProduct(product);
 
             if (updateSuccess) {
-
-                // Redirect to StocksManagementController to fetch updated data and display in stocksManager.jsp
                 response.sendRedirect("stocksManager");
             } else {
-                response.sendRedirect("stocksManager?status=error");
-
+                response.sendRedirect("staff/editproduct.jsp?error=Failed to update product.");
             }
 
         } catch (Exception e) {
             e.printStackTrace();
-            response.sendRedirect("stocksManager?status=error");
-
+            response.sendRedirect("staff/editproduct.jsp?error=An unexpected error occurred.");
         }
 
     }
