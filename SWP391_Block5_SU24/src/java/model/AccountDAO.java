@@ -18,30 +18,31 @@ import java.sql.SQLException;
 public class AccountDAO extends MyDAO {
 
     public List<Account> getAccounts() {
-        String sql = "SELECT * FROM Accounts";
-        List<Account> accountList = new ArrayList<>();
-        try {
-            ps = con.prepareStatement(sql);
-            rs = ps.executeQuery();
-            while (rs.next()) {
-                int accountID = rs.getInt("AccountID");
-                String username = rs.getString("Username");
-                String fullname = rs.getString("Name");
-                String hash = rs.getString("Hash");
-                String phoneNumber = rs.getString("PhoneNumber");
-                String email = rs.getString("Email");
-                String address = rs.getString("Address");
-                int role = rs.getInt("Role");
-                String salt = rs.getString("Salt");
-                Boolean status = rs.getBoolean("Status");
-                Account account = new Account(accountID, username, hash, phoneNumber, email, address, salt, role, status, fullname);
-                accountList.add(account);
-            }
-        } catch (Exception e) {
-            e.printStackTrace();
+    String sql = "SELECT * FROM Accounts";
+    List<Account> accountList = new ArrayList<>();
+    try {
+        ps = con.prepareStatement(sql);
+        rs = ps.executeQuery();
+        while (rs.next()) {
+            int accountID = rs.getInt("AccountID");
+            String username = rs.getString("Username");
+            String fullname = rs.getString("Name");
+            String hash = rs.getString("Hash");
+            String phoneNumber = rs.getString("PhoneNumber");
+            String email = rs.getString("Email");
+            String address = rs.getString("Address");
+            int role = rs.getInt("Role");
+            String salt = rs.getString("Salt");
+            Boolean status = rs.getBoolean("Status");
+            Account account = new Account(accountID, username, hash, phoneNumber, email, address, salt, role, status, fullname);
+            account.setName(fullname);  // Explicitly set the name field
+            accountList.add(account);
         }
-        return accountList;
+    } catch (Exception e) {
+        e.printStackTrace();
     }
+    return accountList;
+}
     public void changeEmail(String email, int id){
          String sql = "UPDATE Accounts SET Email = ? WHERE AccountID = ?";
           try {
@@ -78,30 +79,31 @@ public class AccountDAO extends MyDAO {
     }
 
     public List<Account> getAccountsByRole(int role) {
-        String sql = "SELECT * FROM Accounts WHERE Role = ?";
-        List<Account> accountList = new ArrayList<>();
-        try {
-            ps = con.prepareStatement(sql);
-            ps.setInt(1, role);
-            rs = ps.executeQuery();
-            while (rs.next()) {
-                int accountID = rs.getInt("AccountID");
-                String username = rs.getString("Username");
-                String hash = rs.getString("Hash");
-                String phoneNumber = rs.getString("PhoneNumber");
-                String email = rs.getString("Email");
-                String address = rs.getString("Address");
-                String salt = rs.getString("Salt");
-                boolean status = rs.getBoolean("Status");
-                String fullname = rs.getString("Name");
-                Account account = new Account(accountID, username, hash, phoneNumber, email, address, salt, role, status, fullname);
-                accountList.add(account);
-            }
-        } catch (Exception e) {
-            e.printStackTrace();
+    String sql = "SELECT * FROM Accounts WHERE Role = ?";
+    List<Account> accountList = new ArrayList<>();
+    try {
+        ps = con.prepareStatement(sql);
+        ps.setInt(1, role);
+        rs = ps.executeQuery();
+        while (rs.next()) {
+            int accountID = rs.getInt("AccountID");
+            String username = rs.getString("Username");
+            String fullname = rs.getString("Name");
+            String hash = rs.getString("Hash");
+            String phoneNumber = rs.getString("PhoneNumber");
+            String email = rs.getString("Email");
+            String address = rs.getString("Address");
+            String salt = rs.getString("Salt");
+            boolean status = rs.getBoolean("Status");
+            Account account = new Account(accountID, username, hash, phoneNumber, email, address, salt, role, status, fullname);
+            account.setName(fullname);  // Explicitly set the name field
+            accountList.add(account);
         }
-        return accountList;
+    } catch (Exception e) {
+        e.printStackTrace();
     }
+    return accountList;
+}
 
     public Account getAccount(String username) {
         String sql = "SELECT * FROM Accounts WHERE Username = ?";
@@ -455,40 +457,42 @@ public class AccountDAO extends MyDAO {
     }
 
     public Account getAccountById(int accountId) {
-        String sql = "SELECT * FROM Accounts WHERE AccountID = ?";
-        Account account = null;
+    String sql = "SELECT * FROM Accounts WHERE AccountID = ?";
+    Account account = null;
+    try {
+        ps = con.prepareStatement(sql);
+        ps.setInt(1, accountId);
+        rs = ps.executeQuery();
+        if (rs.next()) {
+            int accountID = rs.getInt("AccountID");
+            String username = rs.getString("Username");
+            String fullname = rs.getString("Name");
+            String hash = rs.getString("Hash");
+            String phoneNumber = rs.getString("PhoneNumber");
+            String email = rs.getString("Email");
+            String address = rs.getString("Address");
+            String salt = rs.getString("Salt");
+            int role = rs.getInt("Role");
+            Boolean status = rs.getBoolean("Status");
+            account = new Account(accountID, username, hash, phoneNumber, email, address, salt, role, status, fullname);
+            account.setName(fullname);  // Explicitly set the name field
+        }
+    } catch (Exception e) {
+        e.printStackTrace();
+    } finally {
         try {
-            ps = con.prepareStatement(sql);
-            ps.setInt(1, accountId);
-            rs = ps.executeQuery();
-            if (rs.next()) {
-                String username = rs.getString("Username");
-                String hash = rs.getString("Hash");
-                String phoneNumber = rs.getString("PhoneNumber");
-                String email = rs.getString("Email");
-                String address = rs.getString("Address");
-                String salt = rs.getString("Salt");
-                int role = rs.getInt("Role");
-                Boolean status = rs.getBoolean("Status");
-                String fullname = rs.getString("Name");
-                account = new Account(accountId, username, hash, phoneNumber, email, address, salt, role, status, fullname);
+            if (rs != null) {
+                rs.close();
+            }
+            if (ps != null) {
+                ps.close();
             }
         } catch (Exception e) {
             e.printStackTrace();
-        } finally {
-            try {
-                if (rs != null) {
-                    rs.close();
-                }
-                if (ps != null) {
-                    ps.close();
-                }
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
         }
-        return account;
     }
+    return account;
+}
 
     public boolean updateAccountDetails(int accountId, String name, String email, String phoneNumber, String address) {
         String sql = "UPDATE Accounts SET Name = ?, Email = ?, PhoneNumber = ?, Address = ? WHERE AccountID = ?";
