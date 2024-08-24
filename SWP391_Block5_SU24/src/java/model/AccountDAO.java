@@ -53,6 +53,17 @@ public class AccountDAO extends MyDAO {
             e.printStackTrace();
         }
     }
+    public void changePhone(String pnum, int id){
+         String sql = "UPDATE Accounts SET PhoneNumber = ? WHERE AccountID = ?";
+          try {
+            ps = con.prepareStatement(sql);
+            ps.setString(1, pnum);       
+            ps.setInt(2, id);
+            ps.executeUpdate();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
     public void updateAccount(String name, String address, int uid) {
         String sql = "UPDATE Accounts SET Name = ?, Address = ? WHERE AccountID = ?";
         try {

@@ -91,7 +91,7 @@ public class ChangeController extends HttpServlet {
                 return;
             } else {
                 request.setAttribute("autho", "true");
-                request.getRequestDispatcher(request.getContextPath()+"/customer/change2.jsp").forward(request, response);
+                request.getRequestDispatcher("customer/change2.jsp").forward(request, response);
                 return;
             }
         }
