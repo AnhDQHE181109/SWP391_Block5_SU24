@@ -9,6 +9,9 @@
 <%@ page import="entity.Product" %>
 <%@ page import="entity.Account" %>
 <%@ page import="model.ProductDetailsDAO" %>
+<%@ page import="java.text.SimpleDateFormat" %>
+<%@ page import="java.util.Date" %>
+<%@ page import="java.util.concurrent.TimeUnit" %>
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <!DOCTYPE html>
 <%
@@ -18,8 +21,6 @@
     }
     ProductDetailsDAO pDAO = new ProductDetailsDAO();
     List<Product> bestSellers = pDAO.getBestSellers();
-    // Retrieve the sorting parameter from the request
-    String sort = request.getParameter("sort");
 
     // Initialize the orderItems variable
     List<Order> orderItems = new ArrayList<>();
@@ -364,6 +365,7 @@
                             <% if (orderItems != null && !orderItems.isEmpty()) { 
                                 int currentOrderId = -1;
                                 double totalOrderAmount = 0;
+                                Date currentDate = new Date();
         
                                 for (Order order : orderItems) {
                                     if (order.getOrderID() != currentOrderId) {
@@ -384,6 +386,19 @@
                                             <button type="submit" class="btn btn-success">Buy Again</button>
                                         </form>
                                     <% } %>
+                                  <% } else if (order.getStatus().equals("3") && diffDays <= 15) { %>
+                                <!-- Request Return Button for Orders Done within 15 days -->
+                                <div class="one-eight text-center">
+                                    <div class="display-tc">
+                                        <form method="get" action="return_product.jsp">
+                                            <input type="hidden" name="orderId" value="<%= order.getOrderID() %>">
+                                            <input type="hidden" name="quantity" value="<%= order.getQuantity() %>">
+                                            <input type="hidden" name="price" value="<%= order.getSalePrice() %>">
+                                            <button type="submit" class="btn btn-warning">Request Return</button>
+                                        </form>
+                                    </div>
+                                </div>
+                                <% } %>
                                 </div>
                             </div>
                             <% out.println("</div>");
@@ -394,6 +409,10 @@
                                         out.println("<div class='order-products'>");
                                     }
                                     totalOrderAmount += order.getProducttotal();
+
+                                    Date orderCompletionDate = order.getOrderDate(); // Assuming getOrderDate() returns the completion date
+                                    long diffInMillies = Math.abs(currentDate.getTime() - orderCompletionDate.getTime());
+                                    long diffDays = TimeUnit.DAYS.convert(diffInMillies, TimeUnit.MILLISECONDS);
                             %>
                             <div class="product-cart d-flex">
                                 <div class="one-eight text-center">
@@ -438,7 +457,6 @@
                                         </span>
                                     </div>
                                 </div>
-
                             </div>
                             <% 
                                 } // End of the orderItems loop

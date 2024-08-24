@@ -202,7 +202,7 @@
                                         <td><%= status %></td>
                                         <td>
                                             <form method="post" action="${pageContext.request.contextPath}/ManageRequestController">
-                                                <input type="hidden" name="requestId" value="<%= requestId %>">
+                                                <input type="hidden" name="orderId" value="<%= orderId %>">
                                                 <button type="submit" name="action" value="approve" class="btn btn-success btn-sm">Approve</button>
                                                 <button type="submit" name="action" value="reject" class="btn btn-danger btn-sm">Reject</button>
                                             </form>
