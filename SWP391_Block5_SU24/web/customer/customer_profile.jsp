@@ -304,7 +304,7 @@
                                         </a>
                                         <div class="dropdown-menu dropdown-menu-right" aria-labelledby="userDropdown">
                                             <a class="dropdown-item" href="customer/customer_profile.jsp">Profile</a>
-                                            <a class="dropdown-item" href="LogoutController">Logout</a>
+                                            <a class="dropdown-item" href="${pageContext.request.contextPath}/LogoutController">Logout</a>
                                         </div>
                                     </li>
                                     <li class="cart"><a href="wishlist.jsp"><i class="fa fa-heart"></i> Wishlist</a></li>
@@ -317,7 +317,7 @@
                                         int cartItemsCount = pDAO.getCartItemsCount(accountID);
                                         %>
                                     <li class="cart"><a href="${pageContext.request.contextPath}/shoppingCart"><i class="icon-shopping-cart"></i> Cart [<%=cartItemsCount %>]</a></li>
-                                    <li class="cart"><a href="${pageContext.request.contextPath}/LogoutController">Logout</a></li>
+                                    
                                         <% } else { %>
                                     <li class="cart"><a href="signup.jsp">Sign Up</a></li>
                                     <li class="cart"><a href="login.jsp">Login</a></li>
