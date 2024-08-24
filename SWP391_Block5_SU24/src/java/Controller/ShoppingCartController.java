@@ -87,9 +87,18 @@ public class ShoppingCartController extends HttpServlet {
             int updatedStockID = Integer.parseInt(quantityUpdateFor);
             int quantityAmount = Integer.parseInt(quantityAmountIn);
 
+            int quantityInDB = scDAO.getStockQuantityOfStockID(updatedStockID);
+
             if (quantityAmount == 0) {
                 removalConfirmation = "confirmRemoval_" + updatedStockID;
             } else {
+                if (quantityAmount > quantityInDB) {
+                    out.println("<script type=\"text/javascript\">");
+                    out.println("alert(\"You've achieved the maximum amount for ordering such variant!\")");
+                    out.println("location.href='shoppingCart';");
+                    out.println("</script>");
+                    return;
+                }
                 scDAO.setCartQuantity(quantityAmount, accountID, updatedStockID);
             }
 
@@ -115,7 +124,6 @@ public class ShoppingCartController extends HttpServlet {
 //        } else {
 //            shippingType = "ecoRadioBox";
 //        }
-
         List<ShoppingCartItem> cartItems = scDAO.getCartItemsByAccountID(accountID);
 
         request.setAttribute("cartItemsCount", cartItemsCount);
@@ -167,19 +175,30 @@ public class ShoppingCartController extends HttpServlet {
 
         if (quantity > scDAO.getStockQuantityOfStockID(stockID)) {
             out.println("<script type=\"text/javascript\">");
-            out.println("alert(\"You've achieved the maximum amount for ordering such variant, please contact us if you want to order more!\")");
+            out.println("alert(\"You've achieved the maximum amount for ordering such variant!\")");
             out.println("window.history.go(-1);");
             out.println("</script>");
             return;
         }
 
         int quantityInCart = scDAO.getCartQuantityOfStockID(accountID, stockID);
+
+        int quantityInDB = scDAO.getStockQuantityOfStockID(stockID);
+
         //Debugging
         System.out.println("quantityInCart: " + quantityInCart);
-        
+
         if (quantityInCart < 1) {
             scDAO.addProductToCart(accountID, stockID, quantity, productID);
         } else {
+            if ((quantityInCart + quantity) > quantityInDB) {
+                out.println("<script type=\"text/javascript\">");
+                out.println("alert(\"You've achieved the maximum amount for ordering such variant!\")");
+                out.println("window.history.go(-1);");
+                out.println("</script>");
+                return;
+            }
+
             scDAO.setCartQuantity(quantityInCart + quantity, accountID, stockID);
         }
 
@@ -201,7 +220,6 @@ public class ShoppingCartController extends HttpServlet {
 //            out.println("</script>");
 //            return;
 //        }
-
         out.println("<script type=\"text/javascript\">");
         out.println("alert('Added to your cart!')");
         out.println("location.href=\"shoppingCart\"");

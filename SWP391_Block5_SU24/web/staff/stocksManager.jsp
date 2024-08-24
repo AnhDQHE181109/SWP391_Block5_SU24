@@ -14,11 +14,11 @@
         <meta name="viewport" content="width=device-width, initial-scale=1">
         <!-- Main CSS-->
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-        <link rel="stylesheet" href="staff/css/customer_m.css">
-        <link rel="stylesheet" type="text/css" href="staff/css/main.css">
+        <link rel="stylesheet" href="${pageContext.request.contextPath}/staff/css/customer_m.css">
+        <link rel="stylesheet" type="text/css" href="${pageContext.request.contextPath}/staff/css/main.css">
         <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/boxicons@latest/css/boxicons.min.css">
-        <link rel="stylesheet" href="staff/font/themify-icons/themify-icons.css">
-        <link rel="stylesheet" href="staff/css/review_m.css" />
+        <link rel="stylesheet" href="${pageContext.request.contextPath}/staff/font/themify-icons/themify-icons.css">
+        <link rel="stylesheet" href="${pageContext.request.contextPath}/staff/css/review_m.css" />
         <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/boxicons@latest/css/boxicons.min.css">
         <!-- or -->
         <link rel="stylesheet" href="https://unpkg.com/boxicons@latest/css/boxicons.min.css">
