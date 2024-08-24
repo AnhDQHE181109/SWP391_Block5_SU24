@@ -190,6 +190,7 @@
                                         <td><%=product.getBrandName() %></td>
                                         <td><%=product.getProductName() %></td>
                                         <td><%=product.getCategoryName() %></td>
+                                        <td><%=product.getProductStatus() %></td>
                                         <td>
                                             <a href="staff/editproduct.jsp?productId=<%=product.getProductId() %>" class="btn btn-primary">Edit</a>
                                         </td>

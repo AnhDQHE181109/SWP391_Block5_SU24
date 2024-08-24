@@ -91,6 +91,7 @@ public class Product {
         this.price = price;
         this.categoryId = categoryId;
         this.brandId = brandId;
+        this.productstatus = productstatus;
     }
     public Product(String productName, String origin, String material, double price, String categoryName, String brandName){
         this.productName = productName;
