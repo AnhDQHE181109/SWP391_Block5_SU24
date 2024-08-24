@@ -111,21 +111,6 @@ public class ProductStocksImportController extends HttpServlet {
             request.setAttribute("productSizes", productSizes);
         }
 
-        String productName = request.getParameter("productName");
-        if (productName != null) {
-            int productID = psiDAO.getProductIDbyProductName(productName);
-
-            //Debugging
-            System.out.println("Product ID fetched from productName: " + productID);
-
-            List<ProductStockImport> productColors = psiDAO.getProductColors(productID);
-            List<ProductStockImport> productSizes = psiDAO.getSizesByColorAndProductID(productID, productColors.get(0).getProductColor());
-
-            request.setAttribute("selectedColor", productColors.get(0).getProductColor());
-            request.setAttribute("productColors", productColors);
-            request.setAttribute("productSizes", productSizes);
-        }
-
         String saveChanges = request.getParameter("saveChanges");
         if (saveChanges != null) {
             if (productsList == null) {
