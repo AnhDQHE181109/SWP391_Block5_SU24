@@ -176,25 +176,31 @@ public class ShoppingCartController extends HttpServlet {
         int quantityInCart = scDAO.getCartQuantityOfStockID(accountID, stockID);
         //Debugging
         System.out.println("quantityInCart: " + quantityInCart);
-
+        
         if (quantityInCart < 1) {
             scDAO.addProductToCart(accountID, stockID, quantity, productID);
-        } else if (quantityInCart >= 1 && quantityInCart < 10) {
-            if ((quantityInCart + quantity) > 10) {
-                out.println("<script type=\"text/javascript\">");
-                out.println("alert(\"You've achieved the maximum amount for ordering such variant, please contact us if you want to order more than 10!\")");
-                out.println("window.history.go(-1);");
-                out.println("</script>");
-                return;
-            }
+        } else {
             scDAO.setCartQuantity(quantityInCart + quantity, accountID, stockID);
-        } else if (quantityInCart >= 10) {
-            out.println("<script type=\"text/javascript\">");
-            out.println("alert(\"You've achieved the maximum amount for ordering such variant, please contact us if you want to order more than 10!\")");
-            out.println("window.history.go(-1);");
-            out.println("</script>");
-            return;
         }
+
+//        if (quantityInCart < 1) {
+//            scDAO.addProductToCart(accountID, stockID, quantity, productID);
+//        } else if (quantityInCart >= 1 && quantityInCart < 10) {
+//            if ((quantityInCart + quantity) > 10) {
+//                out.println("<script type=\"text/javascript\">");
+//                out.println("alert(\"You've achieved the maximum amount for ordering such variant, please contact us if you want to order more than 10!\")");
+//                out.println("window.history.go(-1);");
+//                out.println("</script>");
+//                return;
+//            }
+//            scDAO.setCartQuantity(quantityInCart + quantity, accountID, stockID);
+//        } else if (quantityInCart >= 10) {
+//            out.println("<script type=\"text/javascript\">");
+//            out.println("alert(\"You've achieved the maximum amount for ordering such variant, please contact us if you want to order more than 10!\")");
+//            out.println("window.history.go(-1);");
+//            out.println("</script>");
+//            return;
+//        }
 
         out.println("<script type=\"text/javascript\">");
         out.println("alert('Added to your cart!')");
