@@ -19,6 +19,16 @@ import java.util.List;
  * @author ASUS
  */
 public class ProductStocksImportDAO extends DBConnect {
+    
+    public static void main(String[] args) {
+        ProductStocksImportDAO psiDAO = new ProductStocksImportDAO();
+        
+        List<ProductStockImport> productColors = psiDAO.getProductColors(1);
+        
+        for (ProductStockImport productStock : productColors) {
+            System.out.println(productStock);
+        }
+    }
 
     public int getProductStockQuantityByStockID(int stockID) {
 
@@ -252,6 +262,8 @@ public class ProductStocksImportDAO extends DBConnect {
             while (rs.next()) {
                 String color = rs.getString("Color");
                 String imageURL = rs.getString("ImageURL");
+                
+                productColor = new ProductStockImport();
 
                 productColor.setProductID(productID);
                 productColor.setProductColor(color);
