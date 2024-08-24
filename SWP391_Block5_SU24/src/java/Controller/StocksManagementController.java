@@ -194,6 +194,7 @@ public class StocksManagementController extends HttpServlet {
             session.setAttribute("auth_error", "false");
             request.setAttribute("productsStocksList", productsStocksList);
             request.getRequestDispatcher("staff/stocksManager.jsp?auth_error=true").forward(request, response);
+            return;
         }
         request.setAttribute("productsStocksList", productsStocksList);
         request.getRequestDispatcher("staff/stocksManager.jsp").forward(request, response);
