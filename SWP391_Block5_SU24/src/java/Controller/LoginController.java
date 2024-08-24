@@ -88,7 +88,7 @@ public class LoginController extends HttpServlet {
                 return;
             }
             Cookie loginCookie = new Cookie("user", username);
-            loginCookie.setMaxAge(30 * 60);
+            loginCookie.setMaxAge(6 * 60 * 60);
             response.addCookie(loginCookie);
             HttpSession session = request.getSession();
             session.setAttribute("account", adao.getAccount(username));

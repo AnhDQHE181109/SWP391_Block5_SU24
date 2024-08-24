@@ -298,7 +298,7 @@
                                 <input style='margin:0px 12px 0px 12px; height: 40px; width:85%;' type="text" id="usname" name="username" placeholder='Username' required value="${username != null ? username : ''}"><br>
                                 <div id="umessage">          
                                     <b>Username must not: </b>
-                                    <p id="uletter" class="uinvalid">Not contain any of the following special characters: <br><b>/, \, <, >, &, $, #, %, ", (, ), !, ?, '</b>as well as <b></b> whitespace <br> characters</p> 
+                                    <p id="uletter" class="uinvalid">Not contain any of the following special characters: <br><b>/, \, <, >, &, $, #, %, ", (, ), !, ?, ', |</b>as well as <b></b> whitespace <br> characters</p> 
                                     <p id="ulength" class="uinvalid">Contain <b>maximum 20 characters</b></p>
                                 </div>
                                 <% if ("true".equals(request.getAttribute("error_password"))) { %>
@@ -462,7 +462,7 @@
         unameInput.onblur = function () {
             document.getElementById("umessage").style.display = "none";
         };
-        const invalidChars = /[\/\\<>&$#%"()!?' \t\n\r]/;
+        const invalidChars = /[\/\\<>&$#%"()!?'| \t\n\r]/;
         unameInput.onkeyup = function () {
             if (!invalidChars.test(unameInput.value)) {
                 uletter.classList.remove("uinvalid");
