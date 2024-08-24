@@ -83,7 +83,7 @@
             position: absolute;
             bottom: 0;
             left: 0;
-            width: 100%;           
+            width: 100%;
         }
 
         .alert-timer-fill {
@@ -132,8 +132,7 @@
                                     <li><a class="active" href="products.jsp">Products</a></li>
                                     <li><a href="about.html">About</a></li>
                                     <li><a href="contact.html">Contact</a></li>
-                     <% if (session.getAttribute("account") != null) { %>
-                                        <li class="cart"><a href="customer/wishlist.jsp"><i class="fa fa-heart"></i> Wishlist</a></li>
+                                        <% if (session.getAttribute("account") != null) { %>
                                         <%
                                         int accountID = 0;
                                         Account account = (Account)session.getAttribute("account");
@@ -141,15 +140,17 @@
                                             accountID = account.getAccountID();
                                         }
                                         int cartItemsCount = pDAO.getCartItemsCount(accountID);
-								    %>
-                                        <li class="cart"><a href="shoppingCart"><i class="icon-shopping-cart"></i> Cart [<%=cartItemsCount %>]</a></li>
-                                        <li class="cart"><a href="LogoutController">Logout</a></li>
-                                        <li class="cart"><i class="fa-regular fa-user"></i> <a href="customer/customer_profile.jsp"><%= ((Account) session.getAttribute("account")).getUsername() %></a></li>
-                                    <% } else { %>
-                                        <li class="cart"><a href="signup.jsp">Sign Up</a></li>
-                                        <li class="cart"><a href="login.jsp">Login</a></li>
-                                        <li class="cart"><a href="shoppingCart"><i class="icon-shopping-cart"></i> Cart [0]</a></li>
-                                    <% } %>
+                                        %>
+                                    <li class="cart"><i class="fa-regular fa-user"></i> <a href="customer/customer_profile.jsp"><%= ((Account) session.getAttribute("account")).getUsername() %></a></li>
+                                    <li class="cart"><a href="customer/wishlist.jsp"><i class="fa fa-heart"></i> Wishlist</a></li>
+
+                                    <li class="cart"><a href="shoppingCart"><i class="icon-shopping-cart"></i> Cart [<%=cartItemsCount %>]</a></li>
+                                    <li class="cart"><a href="LogoutController">Logout</a></li>
+                                        <% } else { %>
+                                    <li class="cart"><a href="signup.jsp">Sign Up</a></li>
+                                    <li class="cart"><a href="login.jsp">Login</a></li>
+                                    <li class="cart"><a href="shoppingCart"><i class="icon-shopping-cart"></i> Cart [0]</a></li>
+                                        <% } %>
 
                                 </ul>
                             </div>

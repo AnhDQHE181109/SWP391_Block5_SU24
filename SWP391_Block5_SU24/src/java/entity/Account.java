@@ -145,6 +145,9 @@ public class Account {
     public String toString() {
         return "Account{" + "accountID=" + accountID + ", username=" + username + ", hash=" + hash + ", phoneNumber=" + phoneNumber + ", email=" + email + ", address=" + address + ", salt=" + salt + ", role=" + role + ", status=" + status + ", fullname=" + fullname + '}';
     }
-    
-    
+    public String displayPnum(){
+    int length = this.phoneNumber.length();
+    String maskedNumber = "*".repeat(length - 2) + this.phoneNumber.substring(length - 2);
+    return maskedNumber;
+    }
 }

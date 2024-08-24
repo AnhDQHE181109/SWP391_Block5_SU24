@@ -1,4 +1,4 @@
- /*
+/*
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
  */
@@ -39,6 +39,19 @@ public class AccountDAO extends MyDAO {
             e.printStackTrace();
         }
         return accountList;
+    }
+
+    public void updateAccount(String name, String address, int uid) {
+        String sql = "UPDATE Accounts SET Name = ?, Address = ? WHERE AccountID = ?";
+        try{
+        ps = con.prepareStatement(sql);
+        ps.setString(1, name);
+        ps.setString(2, address);
+        ps.setInt(3, uid);
+        ps.executeUpdate();
+        }catch(Exception e){
+        e.printStackTrace();
+        }
     }
 
     public List<Account> getAccountsByRole(int role) {
@@ -109,7 +122,7 @@ public class AccountDAO extends MyDAO {
                 String salt = rs.getString("Salt");
                 Boolean status = rs.getBoolean("Status");
                 String fullname = rs.getString("Name");
-                account = new Account(accountID, username, hash, phoneNumber, email, address, salt, role, status);
+                account = new Account(accountID, username, hash, phoneNumber, email, address, salt, role, status, fullname);
             }
         } catch (Exception e) {
             e.printStackTrace();
@@ -337,39 +350,43 @@ public class AccountDAO extends MyDAO {
         }
         return username;
     }
-    
+
     public List<Account> getAccountsByAccountID(int accountID) {
-    String sql = "SELECT * FROM Accounts WHERE AccountID = ?";
-    List<Account> accountList = new ArrayList<>();
-    try {
-        ps = con.prepareStatement(sql);
-        ps.setInt(1, accountID);
-        rs = ps.executeQuery();
-        while (rs.next()) {
-            int id = rs.getInt("AccountID");
-            String username = rs.getString("Username");
-            String hash = rs.getString("Hash");
-            String phoneNumber = rs.getString("PhoneNumber");
-            String email = rs.getString("Email");
-            String address = rs.getString("Address");
-            int role = rs.getInt("Role");
-            String salt = rs.getString("Salt");
-            boolean status = rs.getBoolean("Status");
-            String fullname = rs.getString("Name");
-            Account account = new Account(id, username, hash, phoneNumber, email, address, salt, role, status, fullname);
-            accountList.add(account);
-        }
-    } catch (Exception e) {
-        e.printStackTrace();
-    } finally {
+        String sql = "SELECT * FROM Accounts WHERE AccountID = ?";
+        List<Account> accountList = new ArrayList<>();
         try {
-            if (rs != null) rs.close();
-            if (ps != null) ps.close();
+            ps = con.prepareStatement(sql);
+            ps.setInt(1, accountID);
+            rs = ps.executeQuery();
+            while (rs.next()) {
+                int id = rs.getInt("AccountID");
+                String username = rs.getString("Username");
+                String hash = rs.getString("Hash");
+                String phoneNumber = rs.getString("PhoneNumber");
+                String email = rs.getString("Email");
+                String address = rs.getString("Address");
+                int role = rs.getInt("Role");
+                String salt = rs.getString("Salt");
+                boolean status = rs.getBoolean("Status");
+                String fullname = rs.getString("Name");
+                Account account = new Account(id, username, hash, phoneNumber, email, address, salt, role, status, fullname);
+                accountList.add(account);
+            }
         } catch (Exception e) {
             e.printStackTrace();
+        } finally {
+            try {
+                if (rs != null) {
+                    rs.close();
+                }
+                if (ps != null) {
+                    ps.close();
+                }
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
         }
+        return accountList;
     }
-    return accountList;
-}
 
 }

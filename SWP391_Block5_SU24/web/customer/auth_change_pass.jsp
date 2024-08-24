@@ -12,6 +12,7 @@
     ProductDetailsDAO pDAO = new ProductDetailsDAO();
     List<Product> bestSellers = pDAO.getBestSellers();
 %>
+<%Account account = (Account)session.getAttribute("account");%> 
 <html>
     <head>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
@@ -175,80 +176,7 @@
         }
             }catch(Exception e){}
         %>
-        <div id="popup-box" class="<%= showErrorModal ? "modal_error" : "modal" %>">
-            <div class="content">
-                <h3 style="color: black; text-align: center">
-                    To protect your account security, please verify your <br>identity using the registered email.
-                </h3>
-                <form class='proform' action="${pageContext.request.contextPath}/ChangeController" method="post" style='display: flex; flex-direction: column; align-items: center;'> <%Account account = (Account)session.getAttribute("account");%>                          
-                    <input type='hidden' id='ts' name='type'>
-                    <input style='margin:0px 12px 0px 12px; height: 40px; width:85%;' type="hidden" name="recover-email" value='<%= account.getEmail()%>' placeholder='Recover Email'><br>                   
-                    <button style='border:0px;margin-bottom:20px; text-align:center; background-color: #88c8bc;border-radius: 2px;display:flex;color:white;justify-content:center; width: 85%;' type="submit">Proceed</button>
-                </form>
-                <a href="${pageContext.request.contextPath}/customer/customer_profile.jsp" style="
-                   position: absolute;
-                   top: 10px;
-                   right: 10px;
-                   color: #fe0606;
-                   font-size: 30px;
-                   text-decoration: none;
-                   ">&times;</a>
-            </div>
-        </div>
-        <div id="auth_pass" class="<%= showErrorPass ? "modal_error" : "modal" %>">
-            <div class="content">
-                
-                <% if ("true".equals(request.getAttribute("error_auth_pass"))) { %>
-                <p style="color:red" class="error">Incorrect password!</p>
-                <% } %>
-                
-                <h3 style="color: black; text-align: center">
-                    To protect your account security, please verify your <br>identity by entering your password.
-                </h3>
-                <form action="${pageContext.request.contextPath}/ChangePassController" method="post" style='display: flex; flex-direction: column; align-items: center;'>                         
-                    <input style='margin:0px 12px 0px 12px; height: 40px; width:85%;' type="text" name="password" placeholder='Password'><br>                   
-                    <button style='border:0px;margin-bottom:20px; text-align:center; background-color: #88c8bc;border-radius: 2px;display:flex;color:white;justify-content:center; width: 85%;' type="submit">Proceed</button>
-                </form>
-                <a href="${pageContext.request.contextPath}/customer/customer_profile.jsp" style="
-                   position: absolute;
-                   top: 10px;
-                   right: 10px;
-                   color: #fe0606;
-                   font-size: 30px;
-                   text-decoration: none;
-                   ">&times;</a>
-            </div>
-        </div>
-        <% if (request.getAttribute("recode")!=null){%>
-        <div class="modal_error">
-            <div class="content">
-                <h1 style="color: black">
-                    Enter security code
-                </h1>
-                <% if ("true".equals(request.getAttribute("error_recover_code"))) { %>
-                <p style="color:red" class="error">Incorrect security code!</p>
-                <% } %>
-                <form action="ChangeController" method="get" id="rform" class="rform" style="font-size:30px; justify-content: center; text-align: center">
-                    <div class="digits">
-                        <input type="text" maxlength="1" name="i1" style="width:44px; height:48px; margin:12px">
-                        <input type="text" maxlength="1" name="i2" style="width:44px; height:48px; margin:12px">
-                        <input type="text" maxlength="1" name="i3" style="width:44px; height:48px; margin:12px">
-                        <input type="text" maxlength="1" name="i4" style="width:44px; height:48px; margin:12px 12px 30px 12px">                     
-                    </div>
-                    <input type="hidden" id="extraData" name="extraData">
-                </form>
-                <p id="timer"></p>
-                <a href="${pageContext.request.contextPath}/customer/customer_profile.jsp" style="
-                   position: absolute;
-                   top: 10px;
-                   right: 10px;
-                   color: #fe0606;
-                   font-size: 30px;
-                   text-decoration: none;
-                   ">&times;</a>
-            </div>
-        </div>
-        <%}%>
+        
         <div id="page">
             <nav class="colorlib-nav" role="navigation">
                 <div class="top-menu">
@@ -345,18 +273,7 @@
                     <div class="body-main-bar">
                         <div style="width:80%;height:80%; margin-left:50px;margin-top:30px;">
                             <form class="pform">
-                                <table>
-                                    <tr><th></th><th></th><th></th></tr>
-
-                                    <tr><td style="width:150px; text-align: right; padding-right: 3%">Username</td><td><input class='protbox' type="text" disabled value="<%= account.getUsername()%>"></td></tr>
-                                    <tr><td></td><td><span>Username can not be changed</span></td></tr>
-                                    <tr><td style="width:150px; text-align: right;padding-top: 15px; padding-right: 3%;">Name</td><td style='padding-top: 25px'><input class="protbox" type="text" name='name' required value='<%= account.getFullname()%>'></td></tr>
-                                    <tr><td></td><td><span>Name must not contain special characters</span></td></tr>
-                                    <tr><td style="width:150px; text-align: right;padding-top: 25px; padding-right: 3%;">Email</td><td style='padding-top: 25px'><span class="protbox" type="text" name='email'><%= account.getEmail()%></span> <a style='color:blue;text-decoration: underline' onclick='openSbox("email")'>Change</a></td></tr>
-                                    <tr><td style="width:150px; text-align: right;padding-top: 25px; padding-right: 3%;">Phone Number</td><td style='padding-top: 25px'><span class="protbox" type="text" name='email'><%= account.displayPnum()%></span> <a style='color:blue;text-decoration: underline' onclick='openSbox("phone number")'>Change</a></td></tr>
-                                    <tr><td style="width:150px; text-align: right;padding-top: 25px; padding-right: 3%;">Address</td><td style='padding-top: 25px'><input class="protbox" type="text" name='address' value='<%= account.getAddress()%>'></td></tr>
-                                    <tr><td></td><td style='padding-top:20px'><button class='sbtn'>SAVE</button></td></tr>
-                                </table>
+                                
                             </form>
                         </div>
                     </div>
@@ -386,81 +303,5 @@
     <script src="${pageContext.request.contextPath}/js/jquery.stellar.min.js"></script>
     <!-- Main -->
     <script src="${pageContext.request.contextPath}/js/main.js"></script>
-    <script>
-                                        const inputs = document.querySelectorAll('.digits input');
-
-                                        inputs.forEach((input, index) => {
-                                            input.dataset.index = index;
-                                            input.addEventListener("paste", handleOtpPaste);
-                                            input.addEventListener("keyup", handleOtp);
-                                        });
-
-                                        function handleOtpPaste(e) {
-                                            const data = e.clipboardData.getData("text");
-                                            const value = data.split("");
-                                            if (value.length === inputs.length) {
-                                                inputs.forEach((input, index) => (input.value = value[index]));
-                                                submit();
-                                            }
-                                        }
-
-                                        function handleOtp(e) {
-                                            const input = e.target;
-                                            let value = input.value;
-                                            input.value = ""; // Clear the input first
-                                            input.value = value ? value[0] : ""; // Set the first character only
-                                            let fieldIndex = input.dataset.index;
-
-                                            if (value.length > 0 && fieldIndex < inputs.length - 1) {
-                                                input.nextElementSibling.focus();
-                                            }
-
-                                            if (e.key === "Backspace" && fieldIndex > 0) {
-                                                input.previousElementSibling.focus();
-                                            }
-
-                                            if (Array.from(inputs).every(input => input.value.length === 1)) {
-                                                submit();
-                                            }
-                                        }
-
-                                        function submit() {
-                                            let otp = "";
-                                            inputs.forEach(input => {
-                                                otp += input.value;
-                                            });
-                                            document.getElementById('extraData').value = otp;
-                                            document.getElementById('rform').submit();
-                                        }
-                                        function openSbox(t) {
-                                            document.getElementById("ts").value = t;
-                                            window.location = "#popup-box";
-                                        }
-
-                                        let remainingTime = <%= remainingTime %>;
-
-                                        function startTimer() {
-                                            let timer = setInterval(function () {
-                                                if (remainingTime <= 0) {
-                                                    clearInterval(timer);
-                                                    document.getElementById("timer").innerHTML = "Code expired, please try again. ";
-                                                    const inputtemp = document.querySelectorAll('.digits input[type="text"]');
-
-                                                    inputtemp.forEach(input => {
-                                                        input.readOnly = true;
-                                                        input.style.backgroundColor = "#ededed";
-                                                        input.style.color = "white";
-                                                        input.style.borderColor = "darkgray";
-                                                    });
-                                                } else {
-                                                    remainingTime -= 1000;
-                                                    let minutes = Math.floor((remainingTime % (1000 * 60 * 60)) / (1000 * 60));
-                                                    let seconds = Math.floor((remainingTime % (1000 * 60)) / 1000);
-                                                    document.getElementById("timer").innerHTML = "Code is available for: " + minutes + "m " + seconds + "s ";
-                                                }
-                                            }, 1000);
-                                        }
-
-                                        window.onload = startTimer;
-    </script>
+    
 </html>
