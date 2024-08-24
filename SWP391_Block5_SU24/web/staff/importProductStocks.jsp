@@ -105,6 +105,9 @@
                     <li class="breadcrumb-item active"><a href="#"><b>Import product stocks</b></a></li>
                 </ul>
             </div>
+
+            <% List<ProductStockImport> productsList = (List<ProductStockImport>) request.getAttribute("productsList"); %>
+
             <div class="row">
                 <div class="col-md-12">
                     <div class="tile">
@@ -165,8 +168,17 @@
 
                                     <div class="col-md-2" style="justify-content: center; align-items: center;">
                                         <label for="supplierName">Supplier name: </label>
-                                        <input type="text" id="supplierName" name="supplierName" class="form-control" placeholder="Supplier name" style="margin-right: 5px;"
+                                        <% if (productsList == null) { %>
+                                            <input type="text" id="supplierName" name="supplierName" class="form-control" placeholder="Supplier name" style="margin-right: 5px;"
                                         required>
+                                        <% } else if (productsList.size() == 0) { %>
+                                            <input type="text" id="supplierName" name="supplierName" class="form-control" placeholder="Supplier name" style="margin-right: 5px;"
+                                        required>
+                                        <% } else { %>
+                                            <input type="text" id="supplierName" name="supplierName" class="form-control" placeholder="Supplier name" style="margin-right: 5px;"
+                                            readonly value="<%=productsList.get(0).getSupplierName() %>">
+                                        <% } %>
+                                        
                                     </div>
 
                                     <div class="col-md-2" style="justify-content: center; align-items: center;">
@@ -238,7 +250,7 @@
 
 
                             <%
-                                List<ProductStockImport> productsList = (List<ProductStockImport>) request.getAttribute("productsList");
+                                
                                 List<Product> productsStocksList = (List<Product>) request.getAttribute("productsStocksList");
                             %>
                             
