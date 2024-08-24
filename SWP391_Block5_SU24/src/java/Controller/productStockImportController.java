@@ -91,13 +91,6 @@ public class productStockImportController extends HttpServlet {
             sortOrder = "desc";
         }
 
-        // Thay đổi sortOrder nếu cần thiết
-        try {
-            // Lấy dữ liệu sắp xếp theo sortOrder
-            stockImports = daoProductStockImport.getAllProductStockImportssort(sortOrder.toUpperCase());
-        } catch (Exception e) {
-            throw new ServletException("Error during sort operation", e);
-        }
 
    // Phân trang
     int page = 1;

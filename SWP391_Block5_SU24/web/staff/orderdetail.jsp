@@ -223,13 +223,14 @@
                             <input type="hidden" name="orderID" value="<c:out value="${orderDetailList[0].orderID}"/>"/>
                             <button type="submit" class="btn btn-primary">Confirm</button>
                         </form>
-                            <form action="Orderdetailcontroller" method="post" class="form-inline justify-content-center">
+                       <form action="Orderdetailcontroller" method="post" class="form-inline justify-content-center">
                             <input type="hidden" name="orderId" value="<c:out value="${orderDetailList[0].orderID}"/>"/>
                             <input type="hidden" name="newStatus" value="4"/>
                             <button type="submit" class="btn btn-primary">Deny</button>
                         </form>
                         
                     </c:if>
+
 
 </c:forEach>
 

@@ -267,5 +267,25 @@ public int updateOrderStatus(int orderID, String newStatus) {
     return result;
 }
 
-        
+// Method to retrieve accountID by orderID
+public int getAccountIDByOrderID(int orderID) {
+    int accountID = -1; // Default value if no result is found
+    try {
+        xSql = "SELECT accountID FROM Orders WHERE orderID = ?";
+        ps = con.prepareStatement(xSql);
+        ps.setInt(1, orderID);
+        rs = ps.executeQuery();
+        if (rs.next()) {
+            accountID = rs.getInt("accountID");
+        }
+    } catch (SQLException e) {
+        e.printStackTrace();
+    } finally {
+        closeResources();
+    }
+    return accountID;
+}
+
+
+
 }
