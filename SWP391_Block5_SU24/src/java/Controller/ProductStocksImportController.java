@@ -95,6 +95,21 @@ public class ProductStocksImportController extends HttpServlet {
 
             productsList.remove(removeProduct - 1);
         }
+        
+        String productName = request.getParameter("productName");
+        if (productName != null) {
+            int productID = psiDAO.getProductIDbyProductName(productName);
+            
+            //Debugging
+            System.out.println("Product ID fetched from productName: " + productID);
+            
+            List<ProductStockImport> productColors = psiDAO.getProductColors(productID);
+            List<ProductStockImport> productSizes = psiDAO.getSizesByColorAndProductID(productID, productColors.get(0).getProductColor());
+            
+            request.setAttribute("selectedColor", productColors.get(0).getProductColor());
+            request.setAttribute("productColors", productColors);
+            request.setAttribute("productSizes", productSizes);
+        }
 
         String saveChanges = request.getParameter("saveChanges");
         if (saveChanges != null) {
@@ -195,6 +210,13 @@ public class ProductStocksImportController extends HttpServlet {
 
         int productID = psiDAO.getProductIDbyProductName(productName);
         String imageURL = psiDAO.getImageURLbyProductID(productID);
+        if (productID == 0) {
+            System.out.println("ERR: Product with such name doesnt exist!");
+            request.setAttribute("errorMessage", "Product with such name does not exist!");
+            request.setAttribute("productsList", productsList);
+            request.getRequestDispatcher("staff/importProductStocks.jsp").forward(request, response);
+            return;
+        }
         
         ProductStockImport productStock = new ProductStockImport(imageURL, supplierName, productName, productColor, productSize, productQuantity);
 

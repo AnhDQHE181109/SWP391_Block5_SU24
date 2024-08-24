@@ -20,6 +20,7 @@ import model.DAOOrder;
 import model.DAOOrderDetail;
 import model.DAOStock;
 import model.DAOProduct;
+import model.NotificationAlertDAO;
 
 public class Orderdetailcontroller extends HttpServlet {
 
@@ -96,14 +97,15 @@ protected void doPost(HttpServletRequest request, HttpServletResponse response)
         throws ServletException, IOException {
     String orderIdParam = request.getParameter("orderId");
     String newStatus = request.getParameter("newStatus");
-    
+    NotificationAlertDAO notidao = new NotificationAlertDAO();
     if (orderIdParam != null && !orderIdParam.isEmpty() && newStatus != null && !newStatus.isEmpty()) {
         int orderId = Integer.parseInt(orderIdParam);
         
         // Create an instance of DAOOrderDetail to call updateOrderStatus
         DAOOrder daoOrder = new DAOOrder();
-        
+        OrderDAO odao = new OrderDAO();
         int updateResult = daoOrder.updateOrderStatus(orderId, newStatus); // Call the instance method
+        
         
         if (updateResult > 0) {
             // Successfully updated the order status, redirect or forward to a confirmation page or reload

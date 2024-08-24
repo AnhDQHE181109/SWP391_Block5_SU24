@@ -5,6 +5,7 @@
 package model;
 
 import entity.Product;
+import entity.ProductStockDetails;
 import entity.ProductStockImport;
 import entity.ShoppingCartItem;
 import java.sql.PreparedStatement;
@@ -232,6 +233,82 @@ public class ProductStocksImportDAO extends DBConnect {
             System.out.println("incrementQuantityToStockID(): " + e);
         }
 
+    }
+
+    public List<ProductStockImport> getProductColors(int productID) {
+
+        String sql = "select distinct Color, s.ProductID, ImageURL\n"
+                + "from Stock s, ProductImages pi\n"
+                + "where s.StockID = pi.StockID and s.ProductID = ?";
+
+        ProductStockImport productColor = new ProductStockImport();
+        List<ProductStockImport> productColors = new ArrayList<>();
+
+        try {
+            PreparedStatement ps = conn.prepareStatement(sql);
+            ps.setInt(1, productID);
+
+            ResultSet rs = ps.executeQuery();
+            while (rs.next()) {
+                String color = rs.getString("Color");
+                String imageURL = rs.getString("ImageURL");
+
+                productColor.setProductID(productID);
+                productColor.setProductColor(color);
+                productColor.setImageURL(imageURL);
+
+                productColors.add(productColor);
+            }
+
+            if (rs != null) {
+                rs.close();
+            }
+            if (ps != null) {
+                ps.close();
+            }
+        } catch (SQLException e) {
+            System.out.println("getProductColors(): " + e);
+        }
+
+        return productColors;
+    }
+
+    public List<ProductStockImport> getSizesByColorAndProductID(int productID, String color) {
+
+        String sql = "select Size, StockQuantity\n"
+                + "from Stock s\n"
+                + "where Color = ? and s.ProductID = ?";
+
+        ProductStockImport productSize = new ProductStockImport();
+        List<ProductStockImport> productSizes = new ArrayList<>();
+
+        try {
+            PreparedStatement ps = conn.prepareStatement(sql);
+            ps.setString(1, color);
+            ps.setInt(2, productID);
+
+            ResultSet rs = ps.executeQuery();
+            while (rs.next()) {
+                int size = rs.getInt("Size");
+                int stockQuantity = rs.getInt("StockQuantity");
+
+                productSize.setProductSize(size);
+                productSize.setQuantity(stockQuantity);
+                
+                productSizes.add(productSize);
+            }
+
+            if (rs != null) {
+                rs.close();
+            }
+            if (ps != null) {
+                ps.close();
+            }
+        } catch (SQLException e) {
+            System.out.println("getSizesByColorAndProductID(): " + e);
+        }
+
+        return productSizes;
     }
 
     //User activity logging functions
