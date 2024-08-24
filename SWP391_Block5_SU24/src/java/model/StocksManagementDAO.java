@@ -34,7 +34,7 @@ public class StocksManagementDAO extends DBConnect {
 
     public List<Product> getAllProducts() {
 
-        String sql = "select p.ProductID, BrandName, ProductName, CategoryName, ImageURL\n"
+        String sql = "select p.ProductID, BrandName, ProductName, CategoryName, ImageURL, ProductStatus\n"
                 + "from Products p, ProductImages pi, Brand b, Categories c\n"
                 + "where p.ImageID = pi.ImageID and b.BrandID = p.BrandID and c.CategoryID = p.CategoryID";
 
@@ -46,8 +46,8 @@ public class StocksManagementDAO extends DBConnect {
 
             ResultSet rs = ps.executeQuery();
             while (rs.next()) {
-                product = new Product(rs.getInt(1), rs.getString(2), rs.getString(3), 
-                        rs.getString(4), rs.getString(5));
+                product = new Product(rs.getInt("ProductID"), rs.getString("BrandName"), rs.getString("ProductName"),
+                        rs.getString("CategoryName"), rs.getString("ImageURL"), rs.getInt("ProductStatus"));
                 list.add(product);
             }
 
