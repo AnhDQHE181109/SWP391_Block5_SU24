@@ -196,8 +196,7 @@
             </div>
         </div>
         <div id="auth_pass" class="<%= showErrorPass ? "modal_error" : "modal" %>">
-            <div class="content">
-                
+            <div class="content">               
                 <% if ("true".equals(request.getAttribute("error_auth_pass"))) { %>
                 <p style="color:red" class="error">Incorrect password!</p>
                 <% } %>
@@ -332,7 +331,7 @@
                             <tr style="color:black"><td><i style="padding-right:2px" class="fa-regular fa-user"></i></td><td>My Account</td></tr>
                             <tr><td></td><td style="padding-left:7px; padding-top:6px;color:red;"><a style='color:red;' href="${pageContext.request.contextPath}/customer/customer_profile.jsp">Profile</a></td></tr>
                             <tr><td></td><td style="padding-left:7px; padding-top:3px;padding-bottom:10px"><a href='#auth_pass'>Change Password</a></td></tr>
-                            <tr style="color:black"><td><i style="padding-right:2px" class="fa-regular fa-bell"></i></td><td>Notification</td></tr>
+                            <tr style="color:black"><td><i style="padding-right:2px" class="fa-regular fa-bell"></i></td><td><a href='${pageContext.request.contextPath}/LoadNotificationController'>Notification</a></td></tr>
                             <tr style="color:black">
                                 <td><i style="padding-right:2px" class="fa-regular fa-list-alt"></i></td>
                                 <td><a href="order_list.jsp" style="text-decoration: none; color: black;">My Orders</a></td>
@@ -344,18 +343,18 @@
                     <div class="top-main-bar"><span style="font-size:18px;font-weight: 500">My Profile</span><br>Manage and protect your account</div>
                     <div class="body-main-bar">
                         <div style="width:80%;height:80%; margin-left:50px;margin-top:30px;">
-                            <form class="pform">
+                            <form class="pform" action="${pageContext.request.contextPath}/ChangeCustomerController" method="post">
                                 <table>
                                     <tr><th></th><th></th><th></th></tr>
-
+                                    <%if("true".equals(request.getAttribute("suchange"))){%><tr><td></td><td style="color:#4ac421">Profile changed successful!</td></tr><%}%>
                                     <tr><td style="width:150px; text-align: right; padding-right: 3%">Username</td><td><input class='protbox' type="text" disabled value="<%= account.getUsername()%>"></td></tr>
                                     <tr><td></td><td><span>Username can not be changed</span></td></tr>
                                     <tr><td style="width:150px; text-align: right;padding-top: 15px; padding-right: 3%;">Name</td><td style='padding-top: 25px'><input class="protbox" type="text" name='name' required value='<%= account.getFullname()%>'></td></tr>
                                     <tr><td></td><td><span>Name must not contain special characters</span></td></tr>
                                     <tr><td style="width:150px; text-align: right;padding-top: 25px; padding-right: 3%;">Email</td><td style='padding-top: 25px'><span class="protbox" type="text" name='email'><%= account.getEmail()%></span> <a style='color:blue;text-decoration: underline' onclick='openSbox("email")'>Change</a></td></tr>
-                                    <tr><td style="width:150px; text-align: right;padding-top: 25px; padding-right: 3%;">Phone Number</td><td style='padding-top: 25px'><span class="protbox" type="text" name='email'><%= account.displayPnum()%></span> <a style='color:blue;text-decoration: underline' onclick='openSbox("phone number")'>Change</a></td></tr>
+                                    <tr><td style="width:150px; text-align: right;padding-top: 25px; padding-right: 3%;">Phone Number</td><td style='padding-top: 25px'><span class="protbox" type="text" name='pnum'><%= account.displayPnum()%></span> <a style='color:blue;text-decoration: underline' onclick='openSbox("phone number")'>Change</a></td></tr>
                                     <tr><td style="width:150px; text-align: right;padding-top: 25px; padding-right: 3%;">Address</td><td style='padding-top: 25px'><input class="protbox" type="text" name='address' value='<%= account.getAddress()%>'></td></tr>
-                                    <tr><td></td><td style='padding-top:20px'><button class='sbtn'>SAVE</button></td></tr>
+                                    <tr><td></td><td style='padding-top:20px'><button type="submit" class='sbtn'>SAVE</button></td></tr>
                                 </table>
                             </form>
                         </div>
