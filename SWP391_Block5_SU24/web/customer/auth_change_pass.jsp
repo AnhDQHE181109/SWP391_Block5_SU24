@@ -13,6 +13,11 @@
     List<Product> bestSellers = pDAO.getBestSellers();
 %>
 <%Account account = (Account)session.getAttribute("account");%> 
+<%
+if(!"true".equals(request.getAttribute("autho"))){
+    request.getRequestDispatcher("customer/customer_profile.jsp").forward(request, response);
+    }
+%>
 <html>
     <head>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
