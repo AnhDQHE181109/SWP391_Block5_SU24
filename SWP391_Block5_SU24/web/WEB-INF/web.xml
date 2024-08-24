@@ -145,6 +145,12 @@
         <servlet-class>Controller.ChangeEmailController</servlet-class>
     </servlet>
     <servlet>
+
+        <servlet-name>ChangePhoneNumberController</servlet-name>
+        <servlet-class>Controller.ChangePhoneNumberController</servlet-class>
+    </servlet>
+    <servlet>
+
         <servlet-name>OrderReceivedController</servlet-name>
         <servlet-class>Controller.OrderReceivedController</servlet-class>
     </servlet>
@@ -315,6 +321,10 @@
     <servlet-mapping>
         <servlet-name>ChangeEmailController</servlet-name>
         <url-pattern>/ChangeEmailController</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>ChangePhoneNumberController</servlet-name>
+        <url-pattern>/ChangePhoneNumberController</url-pattern>
     </servlet-mapping>
     <servlet-mapping>
         <servlet-name>OrderReceivedController</servlet-name>

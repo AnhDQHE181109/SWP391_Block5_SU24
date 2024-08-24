@@ -278,7 +278,7 @@
                                 <% if ("true".equals(request.getAttribute("error_name_invalid"))) { %>
                                 <p style="color:red" class="error">Invalid Name!</p>
                                 <% } %>
-                                <input style='margin:0px 12px 0px 12px; height: 40px; width:85%;' type="text" id="psw" name="name" placeholder='Name' required value="${name != null ? name : ''}"><br>    
+                                <input style='margin:0px 12px 0px 12px; height: 40px; width:85%;' type="text" id="Nname" name="name" placeholder='Name' required value="${name != null ? name : ''}"><br>    
                                 <div id="Nmessage">          
                                     <b>Name must not: </b>
                                     <p id="Nletter" class="Ninvalid">Not contain any <b>special characters</b> or <b>numbers</b></p> 

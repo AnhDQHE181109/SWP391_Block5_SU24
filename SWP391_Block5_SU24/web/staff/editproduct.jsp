@@ -93,6 +93,7 @@
     <form action="${pageContext.request.contextPath}/EditProductController" method="post">
         <input type="hidden" name="productId" value="<%= product.getProductId() %>">
 
+
         <div class="form-group">
             <label for="productName">Product Name:</label>
             <input type="text" name="productName" value="<%= product.getProductName() %>">
