@@ -2,9 +2,9 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/JSP_Servlet/Servlet.java to edit this template
  */
+
 package Controller;
 
-import entity.Product;
 import java.io.IOException;
 import java.io.PrintWriter;
 import jakarta.servlet.ServletException;
@@ -17,38 +17,35 @@ import model.ProductDetailsDAO;
  *
  * @author Admin
  */
-public class EditProductController extends HttpServlet {
-
-    /**
-     * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
-     * methods.
-     *
+public class OrderReceivedController extends HttpServlet {
+   
+    /** 
+     * Processes requests for both HTTP <code>GET</code> and <code>POST</code> methods.
      * @param request servlet request
      * @param response servlet response
      * @throws ServletException if a servlet-specific error occurs
      * @throws IOException if an I/O error occurs
      */
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
-            throws ServletException, IOException {
+    throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
         try (PrintWriter out = response.getWriter()) {
             /* TODO output your page here. You may use following sample code. */
             out.println("<!DOCTYPE html>");
             out.println("<html>");
             out.println("<head>");
-            out.println("<title>Servlet EditProduct</title>");
+            out.println("<title>Servlet OderReceivedController</title>");  
             out.println("</head>");
             out.println("<body>");
-            out.println("<h1>Servlet EditProduct at " + request.getContextPath() + "</h1>");
+            out.println("<h1>Servlet OderReceivedController at " + request.getContextPath () + "</h1>");
             out.println("</body>");
             out.println("</html>");
         }
-    }
+    } 
 
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
-    /**
+    /** 
      * Handles the HTTP <code>GET</code> method.
-     *
      * @param request servlet request
      * @param response servlet response
      * @throws ServletException if a servlet-specific error occurs
@@ -56,13 +53,12 @@ public class EditProductController extends HttpServlet {
      */
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
-            throws ServletException, IOException {
-        
-    }
+    throws ServletException, IOException {
+        processRequest(request, response);
+    } 
 
-    /**
+    /** 
      * Handles the HTTP <code>POST</code> method.
-     *
      * @param request servlet request
      * @param response servlet response
      * @throws ServletException if a servlet-specific error occurs
@@ -70,37 +66,17 @@ public class EditProductController extends HttpServlet {
      */
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
-            throws ServletException, IOException {
-        try {
-            int productId = Integer.parseInt(request.getParameter("productId"));
-            String productName = request.getParameter("productName");
-            String origin = request.getParameter("origin");
-            String material = request.getParameter("material");
-            double price = Double.parseDouble(request.getParameter("price"));
-            int brandId = Integer.parseInt(request.getParameter("brandId"));
-            int categoryId = Integer.parseInt(request.getParameter("categoryId"));
-
-            Product product = new Product(productId, productName, origin, material, price, categoryId, brandId);
-            ProductDetailsDAO pDAO = new ProductDetailsDAO();
-
-            boolean updateSuccess = pDAO.updateProduct(product);
-
-            if (updateSuccess) {
-                response.sendRedirect("staff/stockManage.jsp?status=updated");
-            } else {
-                response.sendRedirect("staff/stockManage.jsp?status=error");
-            }
-
-        } catch (Exception e) {
-            e.printStackTrace();
-            response.sendRedirect("staff/stockManage.jsp?status=error");
-        }
-
+    throws ServletException, IOException {
+        int orderId = Integer.parseInt(request.getParameter("orderId"));
+        
+        ProductDetailsDAO orderDAO = new ProductDetailsDAO();
+        orderDAO.updateOrderStatus(orderId, 3); // 3 = done
+        
+        response.sendRedirect("customer/customer_profile.jsp?status=2");
     }
 
-    /**
+    /** 
      * Returns a short description of the servlet.
-     *
      * @return a String containing servlet description
      */
     @Override

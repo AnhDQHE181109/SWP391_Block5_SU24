@@ -176,7 +176,7 @@
                                         required>
                                         <% } else { %>
                                             <input type="text" id="supplierName" name="supplierName" class="form-control" placeholder="Supplier name" style="margin-right: 5px;"
-                                            readonly value="<%=productsList.get(0).getSupplierName() %>">
+                                            readonly value="<%=productsList.get(0).getSupplierName( ) %>">
                                         <% } %>
                                         
                                     </div>

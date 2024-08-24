@@ -109,7 +109,9 @@
                                         if (account != null) {
                                             accountID = account.getAccountID();
                                         }
-                                        int cartItemsCount = pDAO.getCartItemsCount(accountID);
+                                        
+                                        Integer cartItemsCount = (Integer) request.getAttribute("cartItemsCount");
+                                        
                                         %>
                                     <li class="cart dropdown">
                                         <a href="#" class="dropdown-toggle" id="userDropdown" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
