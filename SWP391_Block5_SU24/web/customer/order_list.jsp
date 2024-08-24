@@ -37,6 +37,7 @@
         orderItems = orderDAO.getAllOrdersByCustomerId(accountId, status); // Pass the sort parameter
     }
 %>
+<%Account account = (Account)session.getAttribute("account");%> 
 <html>
     <head>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
@@ -223,15 +224,37 @@
             border-radius: 4px;
             font-weight: 500;
             font-size: 14px;
+            transition: color 0.3s;
         }
 
-        .filter-options a:hover,
-        .filter-options a.active {
-            background-color: #90ccbc;
-            color: #fff;
+        .filter-options a:hover {
+            color: #90ccbc;
         }
+
+        .filter-options a.active {
+            color: #90ccbc;
+            font-weight: 600; /* Optional: Makes the selected filter bold */
+        }
+
     </style>
     <body>
+        <%
+        String errorRecover = request.getParameter("error_recover");
+        boolean showErrorModal = "true".equals(errorRecover);
+        boolean showErrorPass = "true".equals(request.getParameter("error_auth_pass"));
+        long remainingTime = 100*6*60*1000;
+        try{
+        long endTime = (long) session.getAttribute("endTime");
+        long currentTime = System.currentTimeMillis();
+        remainingTime = endTime - currentTime;
+     
+        if (remainingTime <= 0) {
+        // Time's up, redirect back to the servlet
+        response.sendRedirect("customer_profile.jsp");
+        }
+            }catch(Exception e){}
+        %>
+
         <div id="page">
             <nav class="colorlib-nav" role="navigation">
                 <div class="top-menu">
@@ -255,27 +278,27 @@
                         <div class="row">
                             <div class="col-sm-12 text-left menu-1">
                                 <ul>
-                                    <li class="active"><a href="${pageContext.request.contextPath}/index.jsp">Home</a></li>
+                                    <li><a href="${pageContext.request.contextPath}/index.jsp">Home</a></li>
                                     <li><a class="active" href="${pageContext.request.contextPath}/products.jsp">Products</a></li>
                                     <li><a href="${pageContext.request.contextPath}/about.html">About</a></li>
                                     <li><a href="${pageContext.request.contextPath}/contact.html">Contact</a></li>
                                         <% if (session.getAttribute("account") != null) { %>
+                                    <li class="cart active"><i style='color:#9bcbbc' class="fa-regular fa-user"></i> <a href="${pageContext.request.contextPath}/customer/customer_profile.jsp"><%= ((Account) session.getAttribute("account")).getUsername() %></a></li>
                                     <li class="cart"><a href="wishlist.jsp"><i class="fa fa-heart"></i> Wishlist</a></li>
                                         <%
                                         int accountID = 0;
-                                        Account account = (Account)session.getAttribute("account");
+                                        
                                         if (account != null) {
                                             accountID = account.getAccountID();
                                         }
                                         int cartItemsCount = pDAO.getCartItemsCount(accountID);
                                         %>
-                                    <li class="cart"><a href="shoppingCart"><i class="icon-shopping-cart"></i> Cart [<%=cartItemsCount %>]</a></li>
-                                    <li class="cart"><a href="LogoutController">Logout</a></li>
-                                    <li class="cart"><i class="fa-regular fa-user"></i> <a href="customer_profile.jsp"><%= ((Account) session.getAttribute("account")).getUsername() %></a></li>
+                                    <li class="cart"><a href="${pageContext.request.contextPath}/shoppingCart"><i class="icon-shopping-cart"></i> Cart [<%=cartItemsCount %>]</a></li>
+                                    <li class="cart"><a href="${pageContext.request.contextPath}/LogoutController">Logout</a></li>
                                         <% } else { %>
                                     <li class="cart"><a href="signup.jsp">Sign Up</a></li>
                                     <li class="cart"><a href="login.jsp">Login</a></li>
-                                    <li class="cart"><a href="shoppingCart"><i class="icon-shopping-cart"></i> Cart [0]</a></li>
+                                    <li class="cart"><a href="${pageContext.request.contextPath}/shoppingCart"><i class="icon-shopping-cart"></i> Cart [0]</a></li>
                                         <% } %>
 
                                 </ul>
@@ -308,14 +331,14 @@
             </nav>
             <div class="profile_container">
                 <div class="side-bar" style="width:180px; height:546px;">
-                    <div class="side-bar-user"><div style="display:inline-block"><i style="font-size:48px;" class="fa-solid fa-user"></i></div><div style="display:inline-block; padding-left: 10px;"><span style="font-weight: 600">User</span><br><i style="margin-right:3px" class="fa-solid fa-pen"></i>Edit Profile</div></div>
+                    <div class="side-bar-user"><div style="display:inline-block"><i style="font-size:48px;" class="fa-solid fa-user"></i></div><div style="display:inline-block; padding-left: 10px;"><span style="font-weight: 600"><%= account.getUsername()%></span><br><a href="${pageContext.request.contextPath}/customer/customer_profile.jsp"><i style="margin-right:3px" class="fa-solid fa-pen"></i>Edit Profile</a></div></div>
                     <div class="side-bar-nav">
                         <table>
                             <tr><th></th><th></th></tr>
                             <tr style="color:black"><td><i style="padding-right:2px" class="fa-regular fa-user"></i></td><td>My Account</td></tr>
-                            <tr><td></td><td style="padding-left:7px; padding-top:6px;color:red;">Profile</td></tr>
-                            <tr><td></td><td style="padding-left:7px; padding-top:3px;padding-bottom:10px">Change Password</td></tr>
-                            <tr style="color:black"><td><i style="padding-right:2px" class="fa-regular fa-bell"></i></td><td>Notification</td></tr>
+                            <tr><td></td><td style="padding-left:7px; padding-top:6px;color:red;"><a style='color:red;' href="${pageContext.request.contextPath}/customer/customer_profile.jsp">Profile</a></td></tr>
+                            <tr><td></td><td style="padding-left:7px; padding-top:3px;padding-bottom:10px"><a href='#auth_pass'>Change Password</a></td></tr>
+                            <tr style="color:black"><td><i style="padding-right:2px" class="fa-regular fa-bell"></i></td><td><a href='${pageContext.request.contextPath}/LoadNotificationController'>Notification</a></td></tr>
                             <tr style="color:black">
                                 <td><i style="padding-right:2px" class="fa-regular fa-list-alt"></i></td>
                                 <td><a href="order_list.jsp" style="text-decoration: none; color: black;">My Orders</a></td>
@@ -327,15 +350,16 @@
                     <div class="body-main-bar">
                         <div class="order-filter-bar">
                             <ul class="filter-options">
-                                <a href="?status=all">All</a>
-                                <a href="?status=0">Pending</a>
-                                <a href="?status=1">Process</a>
-                                <a href="?status=2">Delivering</a>
-                                <a href="?status=3">Done</a>
-                                <a href="?status=4">Canceled</a>
-                                <a href="?status=5">Returned</a>
+                                <li><a href="?status=all" class="<%= "all".equals(status) ? "active" : "" %>">All</a></li>
+                                <li><a href="?status=0" class="<%= "0".equals(status) ? "active" : "" %>">Pending</a></li>
+                                <li><a href="?status=1" class="<%= "1".equals(status) ? "active" : "" %>">Process</a></li>
+                                <li><a href="?status=2" class="<%= "2".equals(status) ? "active" : "" %>">Delivering</a></li>
+                                <li><a href="?status=3" class="<%= "3".equals(status) ? "active" : "" %>">Done</a></li>
+                                <li><a href="?status=4" class="<%= "4".equals(status) ? "active" : "" %>">Canceled</a></li>
+                                <li><a href="?status=5" class="<%= "5".equals(status) ? "active" : "" %>">Returned</a></li>
                             </ul>
                         </div>
+
 
                         <div class="order-list">
                             <% if (orderItems != null && !orderItems.isEmpty()) { 
@@ -346,8 +370,38 @@
                                 for (Order order : orderItems) {
                                     if (order.getOrderID() != currentOrderId) {
                                         if (currentOrderId != -1) {
+                                            // Display total and buttons for the previous order
                                             out.println("<div><strong>Total Order Amount: $" + totalOrderAmount + "</strong></div>");
-                                            out.println("</div>");
+                            %>
+                            <div class="order-summary">
+                                <div class="actions">
+                                    <% if ("0".equals(order.getStatus())) { %>
+                                        <form action="${pageContext.request.contextPath}/CancelOrderController" method="post">
+                                            <input type="hidden" name="orderId" value="<%= currentOrderId %>" />
+                                            <button type="submit" class="btn btn-danger">Cancel Order</button>
+                                        </form>
+                                    <% } else if ("4".equals(order.getStatus())) { %>
+                                        <form action="${pageContext.request.contextPath}/BuyAgainController" method="post">
+                                            <input type="hidden" name="orderId" value="<%= currentOrderId %>" />
+                                            <button type="submit" class="btn btn-success">Buy Again</button>
+                                        </form>
+                                    <% } %>
+                                  <% } else if (order.getStatus().equals("3") && diffDays <= 15) { %>
+                                <!-- Request Return Button for Orders Done within 15 days -->
+                                <div class="one-eight text-center">
+                                    <div class="display-tc">
+                                        <form method="get" action="return_product.jsp">
+                                            <input type="hidden" name="orderId" value="<%= order.getOrderID() %>">
+                                            <input type="hidden" name="quantity" value="<%= order.getQuantity() %>">
+                                            <input type="hidden" name="price" value="<%= order.getSalePrice() %>">
+                                            <button type="submit" class="btn btn-warning">Request Return</button>
+                                        </form>
+                                    </div>
+                                </div>
+                                <% } %>
+                                </div>
+                            </div>
+                            <% out.println("</div>");
                                         }
                                         currentOrderId = order.getOrderID();
                                         totalOrderAmount = 0;
@@ -403,48 +457,30 @@
                                         </span>
                                     </div>
                                 </div>
-
-                                <% if (order.getStatus().equals("0")) { %>
-                                <!-- Cancel Order Button for Pending Orders -->
-                                <div class="one-eight text-center">
-                                    <div class="display-tc">
-                                        <form action="CancelOrderController" method="post">
-                                            <input type="hidden" name="orderId" value="<%= order.getOrderID() %>" />
-                                            <button type="submit" class="btn btn-danger">Cancel Order</button>
-                                        </form>
-                                    </div>
-                                </div>
-                                <% } else if (order.getStatus().equals("4")) { %>
-                                <!-- Buy Again Button for Canceled Orders -->
-                                <div class="one-eight text-center">
-                                    <div class="display-tc">
-                                        <form action="BuyAgainController" method="post">
-                                            <input type="hidden" name="orderId" value="<%= order.getOrderID() %>" />
-                                            <button type="submit" class="btn btn-success">Buy Again</button>
-                                        </form>
-                                    </div>
-                                </div>
-                                <% } else if (order.getStatus().equals("3") && diffDays <= 15) { %>
-                                <!-- Request Return Button for Orders Done within 15 days -->
-                                <div class="one-eight text-center">
-                                    <div class="display-tc">
-                                        <form method="get" action="return_product.jsp">
-                                            <input type="hidden" name="orderId" value="<%= order.getOrderID() %>">
-                                            <input type="hidden" name="quantity" value="<%= order.getQuantity() %>">
-                                            <input type="hidden" name="price" value="<%= order.getSalePrice() %>">
-                                            <button type="submit" class="btn btn-warning">Request Return</button>
-                                        </form>
-                                    </div>
-                                </div>
-                                <% } %>
                             </div>
                             <% 
                                 } // End of the orderItems loop
 
-                                // After the loop ends, output the total for the last order
+                                // Display total and buttons for the last order
                                 if (currentOrderId != -1) {
                                     out.println("<div><strong>Total Order Amount: $" + totalOrderAmount + "</strong></div>");
-                                    out.println("</div>");
+                            %>
+                            <div class="order-summary">
+                                <div class="actions">
+                                    <% if ("0".equals(orderItems.get(orderItems.size() - 1).getStatus())) { %>
+                                        <form action="${pageContext.request.contextPath}/CancelOrderController" method="post">
+                                            <input type="hidden" name="orderId" value="<%= currentOrderId %>" />
+                                            <button type="submit" class="btn btn-danger">Cancel Order</button>
+                                        </form>
+                                    <% } else if ("4".equals(orderItems.get(orderItems.size() - 1).getStatus())) { %>
+                                        <form action="${pageContext.request.contextPath}/BuyAgainController" method="post">
+                                            <input type="hidden" name="orderId" value="<%= currentOrderId %>" />
+                                            <button type="submit" class="btn btn-success">Buy Again</button>
+                                        </form>
+                                    <% } %>
+                                </div>
+                            </div>
+                            <% out.println("</div>");
                                 }
                             %>
                             <% } else { %>
