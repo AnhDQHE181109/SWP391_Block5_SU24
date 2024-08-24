@@ -54,6 +54,7 @@ public class AccountDAO extends MyDAO {
         } catch (Exception e) {
             e.printStackTrace();
         }
+    }
 
     public List<Account> getAccountsByRole(int role) {
         String sql = "SELECT * FROM Accounts WHERE Role = ?";
