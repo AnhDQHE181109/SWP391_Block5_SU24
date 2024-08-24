@@ -237,19 +237,19 @@
                                         </thead>
                                         <tbody>
                                             <!-- Account rows based on role -->
-                                            <%
-                                                AccountDAO accountDAO = new AccountDAO();
-                                                List<Account> accounts;
-                                                String selectedRole = request.getParameter("role");
+                                            <% 
+        AccountDAO accountDAO = new AccountDAO();
+        List<Account> accounts;
+        String selectedRole = request.getParameter("role");
 
-                                                if (selectedRole == null || selectedRole.equals("all")) {
-                                                    accounts = accountDAO.getAccounts(); // Assuming this method exists
-                                                } else {
-                                                    int role = Integer.parseInt(selectedRole);
-                                                    accounts = accountDAO.getAccountsByRole(role);
-                                                }
+        if (selectedRole == null || selectedRole.equals("all")) {
+            accounts = accountDAO.getAccounts(); // Assuming this method exists
+        } else {
+            int role = Integer.parseInt(selectedRole);
+            accounts = accountDAO.getAccountsByRole(role);
+        }
 
-                                                for (Account account : accounts) {
+        for (Account account : accounts) {
                                             %>
                                             <tr>
                                                 <td><%= account.getAccountID() %></td>
@@ -257,7 +257,28 @@
                                                 <td><%= account.getPhoneNumber() %></td>
                                                 <td><%= account.getEmail() %></td>
                                                 <td><%= account.getAddress() %></td>
-                                                <td><%= account.getRole() %></td>
+                                                <td>
+                                                    <% 
+                                                        String roleText;
+                                                        switch (account.getRole()) {
+                                                            case 1:
+                                                                roleText = "Customer";
+                                                                break;
+                                                            case 2:
+                                                                roleText = "Staff";
+                                                                break;
+                                                            case 3:
+                                                                roleText = "Manager";
+                                                                break;
+                                                            case 4:
+                                                                roleText = "Admin";
+                                                                break;
+                                                            default:
+                                                                roleText = "Unknown";
+                                                        }
+                                                    %>
+                                                    <%= roleText %>
+                                                </td>
                                                 <td>
                                                     <% if (account.getRole() != 1) { %>
                                                     <button class="btn btn-primary btn-sm" 
@@ -270,7 +291,6 @@
                                                                             '<%= account.getAddress() %>'
                                                                             )">Edit</button>
                                                     <% } %>
-
                                                 </td>
                                             </tr>
                                             <% } %>
@@ -322,7 +342,7 @@
                                     </div>
 
                                     <div class="mb-3">
-                                        <label for="address" class="form-label">Address (optional)</label>
+                                        <label for="address" class="form-label">Address</label>
                                         <input type="text" class="form-control" id="address" name="address">
                                     </div>
 
@@ -345,7 +365,7 @@
                 <!-- Edit Account Modal End -->
 
                 <!-- Footer Start -->
-               
+
                 <!-- Footer End -->
             </div>
             <!-- Content End -->
