@@ -225,7 +225,7 @@ GO
 -- Insert data into Accounts
 INSERT INTO Accounts (Username, Name, Hash, PhoneNumber, Email, Address, Role, Salt, Status)
 VALUES 
-('johndoe', 'John Doe', 'NqmCu0KLyfdegTojOpWmaAC8gODT1EfFxKtyJ9tfwUDneUmaWlo7TiaWJYzGnaWaYcWsUtytBL/iqltP+MLvVA==', '0984567890', 'johndoe@example.com', '123 Main St, Anytown, USA', 1, 'jMxFrhzK+pkZRnCz7jEkew==',1),
+('johndoe', 'John Doe', 'NqmCu0KLyfdegTojOpWmaAC8gODT1EfFxKtyJ9tfwUDneUmaWlo7TiaWJYzGnaWaYcWsUtytBL/iqltP+MLvVA==', '0984567890', 'plsnottakenpls@gmail.com', '123 Main St, Anytown, USA', 1, 'jMxFrhzK+pkZRnCz7jEkew==',1),
 ('janedoe', 'Jane Doe', 'NqmCu0KLyfdegTojOpWmaAC8gODT1EfFxKtyJ9tfwUDneUmaWlo7TiaWJYzGnaWaYcWsUtytBL/iqltP+MLvVA==', '0936543210', 'janedoe@example.com', '456 Elm St, Othertown, USA', 2, 'jMxFrhzK+pkZRnCz7jEkew==',1),
 ('alice', 'Alice Doe', 'NqmCu0KLyfdegTojOpWmaAC8gODT1EfFxKtyJ9tfwUDneUmaWlo7TiaWJYzGnaWaYcWsUtytBL/iqltP+MLvVA==', '0971234567', 'alice@example.com', '789 Maple St, Sometown, USA', 3, 'jMxFrhzK+pkZRnCz7jEkew==',1),
 ('long', 'Long Vu', 'NqmCu0KLyfdegTojOpWmaAC8gODT1EfFxKtyJ9tfwUDneUmaWlo7TiaWJYzGnaWaYcWsUtytBL/iqltP+MLvVA==', '0961234567', 'long@example.com', '789 Maple St, Sometown, USA', 4, 'jMxFrhzK+pkZRnCz7jEkew==',1);
@@ -320,6 +320,3 @@ VALUES
 (1, 2, GETDATE()),
 (2, 3, GETDATE());
 
-INSERT INTO ReturnRequests (OrderID, AccountID, Reason, Description, RefundAmount, Status)
-VALUES 
-(1, 1, 'Damaged Product', 'The product arrived with a defect in the sole, making it unusable.', 140.00, 'Pending');

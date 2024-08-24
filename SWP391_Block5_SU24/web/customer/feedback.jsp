@@ -127,7 +127,7 @@
         <div class="main-bar">
             <div class="feedback-form">
                 <h2>Leave Your Feedback</h2>
-                <form action="SubmitFeedbackController" method="post">
+                <form action="${pageContext.request.contextPath}/SubmitFeedbackController" method="post">
                     <input type="hidden" name="orderId" value="<%= order.getOrderID() %>">
                     <input type="hidden" name="accountId" value="<%= loggedInUser.getAccountID() %>">
 
