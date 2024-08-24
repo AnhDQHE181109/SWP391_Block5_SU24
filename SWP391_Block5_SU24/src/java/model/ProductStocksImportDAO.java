@@ -294,7 +294,7 @@ public class ProductStocksImportDAO extends DBConnect {
 
                 productSize.setProductSize(size);
                 productSize.setQuantity(stockQuantity);
-                
+
                 productSizes.add(productSize);
             }
 
@@ -309,6 +309,36 @@ public class ProductStocksImportDAO extends DBConnect {
         }
 
         return productSizes;
+    }
+
+    public Boolean checkIfStockExists(int productID, int size, String color) {
+
+        String sql = "select ProductID, Size, Color\n"
+                + "from Stock s\n"
+                + "where ProductID = ? and Size = ? and Color = ?";
+
+        try {
+            PreparedStatement ps = conn.prepareStatement(sql);
+            ps.setInt(1, productID);
+            ps.setInt(2, size);
+            ps.setString(3, color);
+
+            ResultSet rs = ps.executeQuery();
+            if (rs.next()) {
+                return true;
+            }
+
+            if (rs != null) {
+                rs.close();
+            }
+            if (ps != null) {
+                ps.close();
+            }
+        } catch (SQLException e) {
+            System.out.println("checkIfStockExists(): " + e);
+        }
+
+        return false;
     }
 
     //User activity logging functions

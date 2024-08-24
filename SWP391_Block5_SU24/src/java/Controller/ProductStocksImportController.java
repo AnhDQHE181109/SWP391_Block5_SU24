@@ -95,17 +95,17 @@ public class ProductStocksImportController extends HttpServlet {
 
             productsList.remove(removeProduct - 1);
         }
-        
+
         String productName = request.getParameter("productName");
         if (productName != null) {
             int productID = psiDAO.getProductIDbyProductName(productName);
-            
+
             //Debugging
             System.out.println("Product ID fetched from productName: " + productID);
-            
+
             List<ProductStockImport> productColors = psiDAO.getProductColors(productID);
             List<ProductStockImport> productSizes = psiDAO.getSizesByColorAndProductID(productID, productColors.get(0).getProductColor());
-            
+
             request.setAttribute("selectedColor", productColors.get(0).getProductColor());
             request.setAttribute("productColors", productColors);
             request.setAttribute("productSizes", productSizes);
@@ -113,16 +113,28 @@ public class ProductStocksImportController extends HttpServlet {
 
         String saveChanges = request.getParameter("saveChanges");
         if (saveChanges != null) {
+            if (productsList == null) {
+                request.setAttribute("errorMessage", "There is nothing on the list!");
+                request.setAttribute("productsList", productsList);
+                request.getRequestDispatcher("staff/importProductStocks.jsp").forward(request, response);
+                return;
+            } else if (productsList.size() == 0) {
+                request.setAttribute("errorMessage", "There is nothing on the list!");
+                request.setAttribute("productsList", productsList);
+                request.getRequestDispatcher("staff/importProductStocks.jsp").forward(request, response);
+                return;
+            }
+
             psiDAO.logUpdatedProducts(accountID, productsList.get(0).getSupplierName(), productsList);
-            
+
             for (ProductStockImport productStock : productsList) {
                 int productID = psiDAO.getProductIDbyProductName(productStock.getProductName());
-                int stockID = psiDAO.getStockIDbyColorSizeProductID(productStock.getProductColor(), 
+                int stockID = psiDAO.getStockIDbyColorSizeProductID(productStock.getProductColor(),
                         productStock.getProductSize(), productID);
-                
+
                 psiDAO.incrementQuantityToStockID(productStock.getQuantity(), stockID);
             }
-            
+
             request.setAttribute("displayMessage", "Written changes into the system!");
             productsList.clear();
         }
@@ -178,7 +190,7 @@ public class ProductStocksImportController extends HttpServlet {
             return;
         }
         int accountID = account.getAccountID();
-        
+
         ProductStocksImportDAO psiDAO = new ProductStocksImportDAO();
 
         String productName = request.getParameter("productName");
@@ -208,6 +220,20 @@ public class ProductStocksImportController extends HttpServlet {
             return;
         }
 
+        if (productSize < 38 || productSize > 42) {
+            request.setAttribute("errorMessage", "The product size must be between 38 and 42!");
+            request.setAttribute("productsList", productsList);
+            request.getRequestDispatcher("staff/importProductStocks.jsp").forward(request, response);
+            return;
+        }
+
+        if (productQuantity < 1 || productQuantity > 1000) {
+            request.setAttribute("errorMessage", "The product quantity must be between 1 and 1000!");
+            request.setAttribute("productsList", productsList);
+            request.getRequestDispatcher("staff/importProductStocks.jsp").forward(request, response);
+            return;
+        }
+
         int productID = psiDAO.getProductIDbyProductName(productName);
         String imageURL = psiDAO.getImageURLbyProductID(productID);
         if (productID == 0) {
@@ -217,7 +243,14 @@ public class ProductStocksImportController extends HttpServlet {
             request.getRequestDispatcher("staff/importProductStocks.jsp").forward(request, response);
             return;
         }
-        
+
+        if (!psiDAO.checkIfStockExists(productID, productSize, productColor)) {
+            request.setAttribute("errorMessage", "Product with such size and color does not exist!");
+            request.setAttribute("productsList", productsList);
+            request.getRequestDispatcher("staff/importProductStocks.jsp").forward(request, response);
+            return;
+        }
+
         ProductStockImport productStock = new ProductStockImport(imageURL, supplierName, productName, productColor, productSize, productQuantity);
 
         productsList.add(productStock);
