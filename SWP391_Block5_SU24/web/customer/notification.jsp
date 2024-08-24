@@ -350,7 +350,7 @@
                     </div>
                 </div>
                 <div class="main-bar">
-                    <div class="top-main-bar"><span style="font-size:18px;font-weight: 500">My Notification</span><br>View your notifiaction</div>
+                    <div class="top-main-bar"><span style="font-size:18px;font-weight: 500">My Notification</span><br>View your notification</div>
                     <div class="body-main-bar">
                         <div style="width:80%;height:80%; margin-left:50px;margin-top:30px;">
                             <% if(request.getAttribute("notilist")!=null){
