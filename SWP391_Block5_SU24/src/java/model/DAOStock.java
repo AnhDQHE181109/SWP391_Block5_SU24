@@ -13,18 +13,27 @@ import java.util.List;
 public class DAOStock extends MyDAO {
 
     // Add new stock
-    public boolean addStock(Stock stock) {
+    public List<Integer> addStock(Stock stock) {
+        List<Integer> generatedStockIDs = new ArrayList<>();
         String sql = "INSERT INTO stock (productID, size, color, stockQuantity) VALUES (?, ?, ?, ?)";
-        try (PreparedStatement ps = con.prepareStatement(sql)) {
+        try (PreparedStatement ps = con.prepareStatement(sql, PreparedStatement.RETURN_GENERATED_KEYS)) {
             ps.setInt(1, stock.getProductID());
             ps.setInt(2, stock.getSize());
             ps.setString(3, stock.getColor());
             ps.setInt(4, stock.getStockQuantity());
-            return ps.executeUpdate() > 0;
+
+            int rowsAffected = ps.executeUpdate();
+            if (rowsAffected > 0) {
+                try (ResultSet rs = ps.getGeneratedKeys()) {
+                    while (rs.next()) {
+                        generatedStockIDs.add(rs.getInt(1)); // Add generated stockID
+                    }
+                }
+            }
         } catch (SQLException e) {
             e.printStackTrace();
-            return false;
         }
+        return generatedStockIDs;
     }
 
     // Get stock by ID

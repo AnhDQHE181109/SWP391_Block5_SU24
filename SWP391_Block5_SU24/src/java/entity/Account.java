@@ -19,6 +19,7 @@ public class Account {
     private int role;
     private boolean status;
     private String fullname;
+    private String name;
 
     public String getFullname() {
         return fullname;
@@ -83,6 +84,13 @@ public class Account {
         this.salt = salt;
     }
 
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
     
 
     public int getAccountID() {
@@ -141,6 +149,11 @@ public class Account {
         this.role = role;
     }
 
+    
+    public void setStatus(Boolean status) {
+        this.status = status;
+    }
+    
     @Override
     public String toString() {
         return "Account{" + "accountID=" + accountID + ", username=" + username + ", hash=" + hash + ", phoneNumber=" + phoneNumber + ", email=" + email + ", address=" + address + ", salt=" + salt + ", role=" + role + ", status=" + status + ", fullname=" + fullname + '}';

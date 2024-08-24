@@ -1,15 +1,12 @@
-<%-- 
-    Document   : return_product
-    Created on : Aug 21, 2024, 11:05:48 PM
-    Author     : nobbe
---%>
-
 <%@ page import="java.sql.*" %>
 <%@ page import="entity.Account" %>
 <%@ page import="model.DBConnect" %>
 <%@ page contentType="text/html;charset=UTF-8" pageEncoding="UTF-8"%>
 <%
     int orderId = Integer.parseInt(request.getParameter("orderId"));
+    int quantity = Integer.parseInt(request.getParameter("quantity")); // Retrieve the quantity from the request
+    double price = Double.parseDouble(request.getParameter("price")); // Retrieve the price from the request
+
     Account loggedInUser = (Account) session.getAttribute("account");
     int accountId = loggedInUser.getAccountID();
     String userPhoneNumber = loggedInUser.getPhoneNumber();
@@ -19,7 +16,7 @@
     Connection conn = dbConnect.conn;
 
     // Query to get the product details and sale price associated with this order
-    String sql = "SELECT p.ProductName, s.Size, s.Color, o.OrderID, pi.ImageURL, od.SalePrice " +
+    String sql = "SELECT p.ProductName, s.Size, s.Color, o.OrderID, pi.ImageURL " +
                  "FROM OrderDetails od " +
                  "JOIN Stock s ON od.StockID = s.StockID " +
                  "JOIN Products p ON s.ProductID = p.ProductID " +
@@ -35,13 +32,11 @@
     int size = 0;
     String color = "";
     String imageUrl = "images/product-placeholder.png";  // Default image placeholder
-    double salePrice = 0.00;
 
     if (rs.next()) {
         productName = rs.getString("ProductName");
         size = rs.getInt("Size");
         color = rs.getString("Color");
-        salePrice = rs.getDouble("SalePrice");
         String fetchedImageUrl = rs.getString("ImageURL");
         if (fetchedImageUrl != null && !fetchedImageUrl.isEmpty()) {
             imageUrl = fetchedImageUrl;  // Use the actual product image if available
@@ -50,6 +45,8 @@
 
     rs.close();
     ps.close();
+
+    double refundAmount = quantity * price; // Calculate the refund amount based on quantity and price
 %>
 
 <!DOCTYPE HTML>
@@ -76,7 +73,6 @@
 
         <!-- Custom CSS for Return Product -->
         <style>
-            /* Your existing CSS styles here */
             .return-product-box {
                 background-color: #f9f9f9;
                 border: 1px solid #ddd;
@@ -213,7 +209,7 @@
                     <div class="return-product-box">
                         <div class="form-group">
                             <label for="refund-amount">Refund Amount:</label>
-                            <input type="text" id="refund-amount" name="refund_amount" class="form-control" value="<%= salePrice %>" readonly>
+                            <input type="text" id="refund-amount" name="refund_amount" class="form-control" value="<%= refundAmount %>" readonly>
                         </div>
 
                         <div class="form-group">

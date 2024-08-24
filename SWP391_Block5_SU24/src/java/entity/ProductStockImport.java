@@ -12,6 +12,7 @@ public class ProductStockImport {
     private int accountID;
     private Date importDate;
     private int ImportAction;
+    private int productID;
     private String SupplierName;
     private String imageURL;
     private String productName;
@@ -37,6 +38,20 @@ public class ProductStockImport {
         this.productColor = productColor;
         this.productSize = productSize;
         this.quantity = quantity;
+    }
+
+    public ProductStockImport(int productID, String imageURL, String productName) {
+        this.productID = productID;
+        this.imageURL = imageURL;
+        this.productName = productName;
+    }
+
+    public int getProductID() {
+        return productID;
+    }
+
+    public void setProductID(int productID) {
+        this.productID = productID;
     }
 
     public int getImportID() {
