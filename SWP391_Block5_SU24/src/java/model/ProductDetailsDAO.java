@@ -828,4 +828,16 @@ public class ProductDetailsDAO extends DBConnect {
             e.printStackTrace();
         }
     }
+    public void addToCart(int accountId, int stockId, int quantity) {
+        String sql = "INSERT INTO Cart (AccountID, StockID, quantity, DiscountID, date_added) " +
+                     "VALUES (?, ?, ?, NULL, GETDATE())";
+        try (PreparedStatement ps = conn.prepareStatement(sql)) {
+            ps.setInt(1, accountId);
+            ps.setInt(2, stockId);
+            ps.setInt(3, quantity);
+            ps.executeUpdate();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
 }
