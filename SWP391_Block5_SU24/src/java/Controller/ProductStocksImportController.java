@@ -109,7 +109,7 @@ public class ProductStocksImportController extends HttpServlet {
             request.setAttribute("selectedColor", productColors.get(0).getProductColor());
             request.setAttribute("productColors", productColors);
             request.setAttribute("productSizes", productSizes);
-        }
+        }   
 
         String saveChanges = request.getParameter("saveChanges");
         if (saveChanges != null) {

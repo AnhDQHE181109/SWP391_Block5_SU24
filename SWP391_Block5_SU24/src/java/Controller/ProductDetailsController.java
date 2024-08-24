@@ -109,7 +109,16 @@ public class ProductDetailsController extends HttpServlet {
                 }
             }
             List<ProductStockDetails> productSizes = pdDAO.getSizesByColorAndProductID(productID, selectedColor);
+            
+            int count = 0;
+            for (ProductStockDetails productSize : productSizes) {
+                if (productSize.getStockQuantity() == 0) {
+                    productSizes.remove(count);
+                }
+                count++;
+            }
 
+            
             if (selectedSize == null) {
                 selectedSize = productSizes.get(0).getSize() + "";
             }
