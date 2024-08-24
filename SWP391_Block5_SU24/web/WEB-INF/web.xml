@@ -107,6 +107,8 @@
     <servlet>
         <servlet-name>BuyAgainController</servlet-name>
         <servlet-class>Controller.BuyAgainController</servlet-class>
+        <servlet-name>UpdateAccountController</servlet-name>
+        <servlet-class>Controller.UpdateAccountController</servlet-class>
     </servlet>
     <servlet>
         <servlet-name>ChangeController</servlet-name>
@@ -247,6 +249,8 @@
     <servlet-mapping>
         <servlet-name>BuyAgainController</servlet-name>
         <url-pattern>/BuyAgainController</url-pattern>
+        <servlet-name>UpdateAccountController</servlet-name>
+        <url-pattern>/UpdateAccountController</url-pattern>
     </servlet-mapping>
     <servlet-mapping>
         <servlet-name>ChangeController</servlet-name>
