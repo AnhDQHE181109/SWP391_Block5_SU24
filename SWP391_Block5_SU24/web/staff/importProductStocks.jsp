@@ -150,8 +150,11 @@
                                             <i class="fas fa-sort-amount-down"></i> Sort by Name (Asc)
                                         </button> -->
                                         <label for="productColor">Color: </label>
+                                        
+
                                         <input type="text" id="productColor" name="productColor" class="form-control" placeholder="Color" style="margin-right: 5px;"
-                                        required>
+                                                required>
+                                        
                                     </div>
 
                                     <div class="col-md-2" style="justify-content: center; align-items: center;">
@@ -240,6 +243,18 @@
                             %>
                             
                             <table class="table table-hover table-bordered productsTable" id="productsTable">
+                                <%  if (productsList == null || productsList.isEmpty()) { %>
+                                <thead>
+                                    <tr>
+
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+
+                                    </tr>
+                                </tbody>
+                                <%  } else {  %>
                                 <thead>
                                     <tr>
                                         <th>#</th>
@@ -253,12 +268,7 @@
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    <%  if (productsList == null || productsList.isEmpty()) { %>
-                                        <tr>
-                                            
-                                        </tr>
-                                    <%
-                                        } else { 
+                                    <% 
                                             int count = 1;
                                             for (ProductStockImport productStock : productsList) { %>
                                         <tr>
@@ -620,6 +630,7 @@
                                 suggestionsBox.querySelectorAll('.dropdown-item').forEach(item => {
                                     item.addEventListener('click', function () {
                                         document.getElementById('productName').value = this.innerText.trim();
+                                        // location.href="importProductStocks?productName=" + document.getElementById('productName').value;
                                         suggestionsBox.style.display = 'none';
                                     });
                                 });
