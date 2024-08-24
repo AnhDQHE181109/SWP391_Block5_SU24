@@ -52,9 +52,6 @@
     <body onload="time()" class="app sidebar-mini rtl">
         <div class="app-sidebar__overlay" data-toggle="sidebar"></div>
         <aside class="app-sidebar">
-            <body onload="time()" class="app sidebar-mini rtl">
-                <div class="app-sidebar__overlay" data-toggle="sidebar"></div>
-                <aside class="app-sidebar">
                     <div class="app-sidebar__user"><img class="app-sidebar__user-avatar" src="https://thumbs.dreamstime.com/b/admin-sign-laptop-icon-stock-vector-166205404.jpg" width="50px"
                                                         alt="User Image">
 
@@ -172,9 +169,9 @@
                                         <th onclick="sortTableAscendingDescending(1)">Brand</th>
                                         <th onclick="sortTableAscendingDescending(2)">Name</th>
                                         <th onclick="sortTableAscendingDescending(3)">Category</th>
-                                            <% if (account.getRole() == 2) { %>
+                                        <th> Status </th>
                                         <th> </th>
-                                            <% } %>
+                                        <th> </th>
                                     </tr>
                                 </thead>
                                 <tbody>

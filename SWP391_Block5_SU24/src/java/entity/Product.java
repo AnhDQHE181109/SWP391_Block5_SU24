@@ -60,12 +60,13 @@ public class Product {
         this.price = price;
     }
 
-    public Product(int productId, String brandName, String productName, String categoryName, String imageURL) {
+    public Product(int productId, String brandName, String productName, String categoryName, String imageURL, int productstatus) {
         this.productId = productId;
         this.brandName = brandName;
         this.productName = productName;
         this.categoryName = categoryName;
         this.imageURL = imageURL;
+        this.productstatus = productstatus;
     }
 
     public Product(int stockID, int productID, String productName, int size, String color, int totalQuantity) {
