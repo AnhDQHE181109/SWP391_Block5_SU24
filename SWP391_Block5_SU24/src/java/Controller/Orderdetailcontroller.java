@@ -103,7 +103,6 @@ protected void doPost(HttpServletRequest request, HttpServletResponse response)
         
         // Create an instance of DAOOrderDetail to call updateOrderStatus
         DAOOrder daoOrder = new DAOOrder();
-        OrderDAO odao = new OrderDAO();
         int updateResult = daoOrder.updateOrderStatus(orderId, newStatus); // Call the instance method
         
         
