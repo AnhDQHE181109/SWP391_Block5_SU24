@@ -220,7 +220,12 @@
         }
         .noti{
             min-height: 50px;
-            
+            border-radius: 2px;
+            border: 2px solid gray;
+        }
+        .notir{
+            min-height: 50px;
+            background-color:gray;
             border-radius: 2px;
             border: 2px solid gray;
         }
@@ -350,9 +355,15 @@
                             <% if(request.getAttribute("notilist")!=null){
                                 List<NotificationAlert> notilist = (List<NotificationAlert>) request.getAttribute("notilist");%>
                             <%for(NotificationAlert n: notilist){%>
+                            <%if(!n.isNotiStatus()){%>
                             <div class='noti'>
-                                <div style='width:100%; margin:2px'><%= n.getNotiMessage()%></div><div style='width:100%; padding:5px; text-align: right'><%= n.getNotiDate()%></div> 
+                                <div style='width:100%; margin:6px'><%= n.getNotiMessage()%></div><div style='width:100%; padding:5px; text-align: right'><%= n.getNotiDate()%></div> 
                             </div>
+                            <%}else{%>
+                            <div class='notir'>
+                                <div style='width:100%; margin:6px'><%= n.getNotiMessage()%></div><div style='width:100%; padding:5px; text-align: right'><%= n.getNotiDate()%></div> 
+                            </div>
+                            <%}%>
                             <%}}%>
                         </div>
                     </div>
