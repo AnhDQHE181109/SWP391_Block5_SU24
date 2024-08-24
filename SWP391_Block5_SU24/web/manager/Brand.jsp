@@ -8,7 +8,7 @@
 
 <head>
     <meta charset="utf-8">
-    <title>Brand Management - Bootstrap Admin Template</title>
+    <title>Brand Management</title>
     <meta content="width=device-width, initial-scale=1.0" name="viewport">
     
     <!-- Favicon -->

@@ -269,6 +269,28 @@
             background-color:#88c8bc;
             color:white;
         }
+        .cart.dropdown .dropdown-menu {
+            position: absolute;
+            top: 100%;
+            left: 0;
+            right: 0;
+            display: none;
+            z-index: 1000;
+            min-width: 160px;
+            padding: 5px 0;
+            margin: 0;
+            font-size: 14px;
+            color: #333;
+            text-align: left;
+            background-color: #fff;
+            border: 1px solid rgba(0, 0, 0, 0.15);
+            border-radius: 4px;
+            box-shadow: 0 6px 12px rgba(0, 0, 0, 0.175);
+        }
+
+        .cart.dropdown:hover .dropdown-menu {
+            display: block;
+        }
     </style>
     <body>
         <%        
@@ -322,11 +344,17 @@
                                 <ul>
                                     <li><a href="${pageContext.request.contextPath}/index.jsp">Home</a></li>
                                     <li><a class="active" href="${pageContext.request.contextPath}/products.jsp">Products</a></li>
-                                    <li><a href="${pageContext.request.contextPath}/about.html">About</a></li>
-                                    <li><a href="${pageContext.request.contextPath}/contact.html">Contact</a></li>
+                                    
                                         <% if (session.getAttribute("account") != null) { %>
-                                    <li class="cart active"><i style='color:#9bcbbc' class="fa-regular fa-user"></i> <a href="${pageContext.request.contextPath}/customer/customer_profile.jsp"><%= ((Account) session.getAttribute("account")).getUsername() %></a></li>
-                                    <li class="cart"><a href="wishlist.jsp"><i class="fa fa-heart"></i> Wishlist</a></li>
+                                    <li class="cart dropdown">
+                                        <a href="#" class="dropdown-toggle" id="userDropdown" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                            <i class="fa-regular fa-user"></i> <%= ((Account) session.getAttribute("account")).getUsername() %>
+                                        </a>
+                                        <div class="dropdown-menu dropdown-menu-right" aria-labelledby="userDropdown">
+                                            <a class="dropdown-item" href="customer/customer_profile.jsp">Profile</a>
+                                            <a class="dropdown-item" href="${pageContext.request.contextPath}/LogoutController">Logout</a>
+                                        </div>
+                                    </li><li class="cart"><a href="customer/wishlist.jsp"><i class="fa fa-heart"></i> Wishlist</a></li>
                                         <%
                                         int accountID = 0;
                                         
@@ -336,7 +364,6 @@
                                         int cartItemsCount = pDAO.getCartItemsCount(accountID);
                                         %>
                                     <li class="cart"><a href="${pageContext.request.contextPath}/shoppingCart"><i class="icon-shopping-cart"></i> Cart [<%=cartItemsCount %>]</a></li>
-                                    <li class="cart"><a href="${pageContext.request.contextPath}/LogoutController">Logout</a></li>
                                         <% } else { %>
                                     <li class="cart"><a href="signup.jsp">Sign Up</a></li>
                                     <li class="cart"><a href="login.jsp">Login</a></li>
@@ -377,12 +404,12 @@
                         <table>
                             <tr><th></th><th></th></tr>
                             <tr style="color:black"><td><i style="padding-right:2px" class="fa-regular fa-user"></i></td><td>My Account</td></tr>
-                            <tr><td></td><td style="padding-left:7px; padding-top:6px;color:red;"><a href="${pageContext.request.contextPath}/customer/customer_profile.jsp">Profile</a></td></tr>
+                            <tr><td></td><td style="padding-left:7px; padding-top:6px;color:red;"><a style='color:red;' href="${pageContext.request.contextPath}/customer/customer_profile.jsp">Profile</a></td></tr>
                             <tr><td></td><td style="padding-left:7px; padding-top:3px;padding-bottom:10px"><a href='#auth_pass'>Change Password</a></td></tr>
                             <tr style="color:black"><td><i style="padding-right:2px" class="fa-regular fa-bell"></i></td><td><a href='${pageContext.request.contextPath}/LoadNotificationController'>Notification</a></td></tr>
                             <tr style="color:black">
                                 <td><i style="padding-right:2px" class="fa-regular fa-list-alt"></i></td>
-                                <td><a href="order_list.jsp" style="text-decoration: none; color: black;">My Orders</a></td>
+                                <td><a href="customer/order_list.jsp" style="text-decoration: none; color: black;">My Orders</a></td>
                             </tr>
                         </table>
                     </div>
@@ -478,5 +505,13 @@
                 estructure.classList.add("einvalid");
             }
         };
+        document.addEventListener('click', function (event) {
+            var isClickInside = document.getElementById('userDropdown').contains(event.target);
+
+            if (!isClickInside) {
+                // Close the dropdown
+                document.querySelector('.cart.dropdown .dropdown-menu').style.display = 'none';
+            }
+        });
     </script>
 </html>
