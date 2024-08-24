@@ -173,18 +173,28 @@ public class UpdateAccountController extends HttpServlet {
         account.setRole(Integer.parseInt(role));
 
         // Update the account in the database
-        accountDAO.updateAccount(account);
-        response.sendRedirect(request.getContextPath() + "/admin/manage_acc.jsp?success=Account updated successfully");
-}
-
+        boolean updateSuccess = accountDAO.updateAccount(account);
+        if (updateSuccess) {
+            response.sendRedirect(request.getContextPath() + "/admin/manage_acc.jsp?success=Account updated successfully");
+        } else {
+            request.setAttribute("error", "Failed to update account.");
+            request.setAttribute("account", account);
+            request.getRequestDispatcher("/admin/manage_acc.jsp").forward(request, response);
+        }
+    }
+    
     /**
      * Returns a short description of the servlet.
      *
      * @return a String containing servlet description
      */
+
     @Override
     public String getServletInfo() {
-        return "Short description";
-    }// </editor-fold>
+        return "UpdateAccountController handles updating account details";
+}
+
+
+
 
 }
