@@ -265,7 +265,14 @@ public class ProductStocksImportController extends HttpServlet {
             request.getRequestDispatcher("staff/importProductStocks.jsp").forward(request, response);
             return;
         }
-      
+
+        if (supplierName.trim().equalsIgnoreCase("")) {
+            request.setAttribute("errorMessage", "Invalid supplier name!");
+            request.setAttribute("productsList", productsList);
+            request.getRequestDispatcher("staff/importProductStocks.jsp").forward(request, response);
+            return;
+        }
+
         ProductStockImport productStock = new ProductStockImport(imageURL, supplierName, productName, productColor, productSize, productQuantity);
 
         productsList.add(productStock);
