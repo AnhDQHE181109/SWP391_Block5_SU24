@@ -37,7 +37,28 @@
     #suggestions .dropdown-item span {
         flex-grow: 1;
     }
+    .cart.dropdown .dropdown-menu {
+            position: absolute;
+            top: 100%;
+            left: 0;
+            right: 0;
+            display: none;
+            z-index: 1000;
+            min-width: 160px;
+            padding: 5px 0;
+            margin: 0;
+            font-size: 14px;
+            color: #333;
+            text-align: left;
+            background-color: #fff;
+            border: 1px solid rgba(0, 0, 0, 0.15);
+            border-radius: 4px;
+            box-shadow: 0 6px 12px rgba(0, 0, 0, 0.175);
+        }
 
+        .cart.dropdown:hover .dropdown-menu {
+            display: block;
+        }
 </style>
 <%
     ProductDetailsDAO pDAO = new ProductDetailsDAO();
@@ -123,7 +144,9 @@
                                     <div class="form-group position-relative">
                                         <input type="search" name="query" id="search-bar" class="form-control search" placeholder="Search for products...">
                                         <button class="btn btn-primary submit-search text-center" type="submit"><i class="icon-search"></i></button>
-                                        <div id="suggestions" class="dropdown-menu" style="display: none; position: absolute; width: 100%;"></div>
+                                        <div id="suggestions" class="dropdown-menu" style="display: none;
+                                             position: absolute;
+                                             width: 100%;"></div>
                                     </div>
                                 </form>
                             </div>
@@ -131,36 +154,37 @@
                         <div class="row">
                             <div class="col-sm-12 text-left menu-1">
                                 <ul>
-                                    <li><a href="index.jsp">Home</a></li>
-                                    <li class="has-dropdown">
-                                        <ul class="dropdown">
-                                            <li><a href="product-detail.html">Product Detail</a></li>
-                                            <li><a href="cart.html">Shopping Cart</a></li>
-                                            <li><a href="checkout.html">Checkout</a></li>
-                                            <li><a href="order-complete.html">Order Complete</a></li>
-                                            <li><a href="add-to-wishlist.html">Wishlist</a></li>
-                                        </ul>
-                                    </li>
-                                    <li class="active"><a href="products.jsp">Products</a></li>
+                                    <li class="active"><a href="index.jsp">Home</a></li>
+                                    <li><a class="active" href="products.jsp">Products</a></li>
                                     <li><a href="about.html">About</a></li>
                                     <li><a href="contact.html">Contact</a></li>
-                                        <%if(session.getAttribute("account")!=null){
-                                        Account account = (Account) session.getAttribute("account");
-                                        %>
-                                    <li class = "cart" id="lsbtn"><a href="LogoutController">Logout</a></li>
-                                    <li class = "cart"><i class="fa-regular fa-user"> </i> <%= account.getUsername()%></li>
-                                        <%}else{%>
-                                    <li class = "cart" id="lsbtn"><a href="signup.jsp">Sign Up</a></li>
-                                    <li class = "cart" id="lsbtn"><a href="login.jsp">Login</a></li><%}%>
-                                    <%
-                                        Account account = (Account) session.getAttribute("account");
+                                        <% if (session.getAttribute("account") != null) { %>
+                                        <%
                                         int accountID = 0;
+                                        Account account = (Account)session.getAttribute("account");
                                         if (account != null) {
                                             accountID = account.getAccountID();
                                         }
                                         int cartItemsCount = pDAO.getCartItemsCount(accountID);
-								    %>
+                                        %>
+                                    <li class="cart dropdown">
+                                        <a href="#" class="dropdown-toggle" id="userDropdown" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                            <i class="fa-regular fa-user"></i> <%= ((Account) session.getAttribute("account")).getUsername() %>
+                                        </a>
+                                        <div class="dropdown-menu dropdown-menu-right" aria-labelledby="userDropdown">
+                                            <a class="dropdown-item" href="customer/customer_profile.jsp">Profile</a>
+                                            <a class="dropdown-item" href="LogoutController">Logout</a>
+                                        </div>
+                                    </li>
+                                    <li class="cart"><a href="customer/wishlist.jsp"><i class="fa fa-heart"></i> Wishlist</a></li>
+
                                     <li class="cart"><a href="shoppingCart"><i class="icon-shopping-cart"></i> Cart [<%=cartItemsCount %>]</a></li>
+                                        <% } else { %>
+                                    <li class="cart"><a href="signup.jsp">Sign Up</a></li>
+                                    <li class="cart"><a href="login.jsp">Login</a></li>
+                                    <li class="cart"><a href="shoppingCart"><i class="icon-shopping-cart"></i> Cart [0]</a></li>
+                                        <% } %>
+
                                 </ul>
                             </div>
                         </div>
@@ -512,6 +536,16 @@
                                                 });
                                     }
 
+    </script>
+    <script>
+        document.addEventListener('click', function (event) {
+                var isClickInside = document.getElementById('userDropdown').contains(event.target);
+
+                if (!isClickInside) {
+                    // Close the dropdown
+                    document.querySelector('.cart.dropdown .dropdown-menu').style.display = 'none';
+                }
+            });
     </script>
 </body>
 </html>

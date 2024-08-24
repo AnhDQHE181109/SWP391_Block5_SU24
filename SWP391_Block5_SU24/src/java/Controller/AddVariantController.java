@@ -2,8 +2,8 @@ package Controller;
 
 import entity.ProductImage;
 import entity.Stock;
+import entity.Discount; // Ensure this class exists
 import java.io.IOException;
-import java.io.PrintWriter;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
@@ -12,115 +12,142 @@ import java.util.List;
 import model.DAOProduct;
 import model.DAOProductImages;
 import model.DAOStock;
+import model.DAODiscount; // Import DAODiscount
 
-/**
- *
- * @author asus
- */
 public class AddVariantController extends HttpServlet {
 
-  
- 
     private DAOStock daoStock;
     private DAOProductImages daoProductImages;
-    private DAOProduct daoProduct; // Add DAOProduct instance
+    private DAOProduct daoProduct;
+    private DAODiscount daoDiscount; // Add DAODiscount instance
 
+    @Override
     public void init() {
         daoStock = new DAOStock();
         daoProductImages = new DAOProductImages();
-        daoProduct = new DAOProduct(); // Initialize DAOProduct
+        daoProduct = new DAOProduct();
+        daoDiscount = new DAODiscount(); // Initialize DAODiscount
     }
 
-@Override
-protected void doPost(HttpServletRequest request, HttpServletResponse response)
-        throws ServletException, IOException {
-    try {
-        int productID = Integer.parseInt(request.getParameter("productID"));
-        String[] colors = request.getParameterValues("colors[]");
-        String[] imageURLs = request.getParameterValues("imageURLs[]");
+    @Override
+    protected void doPost(HttpServletRequest request, HttpServletResponse response)
+            throws ServletException, IOException {
+        try {
+            int productID = Integer.parseInt(request.getParameter("productID"));
+            String[] colors = request.getParameterValues("colors[]");
+            String[] imageURLs = request.getParameterValues("imageURLs[]");
 
-        if (colors == null || imageURLs == null || colors.length != 5 || imageURLs.length != 5) {
-            throw new IllegalArgumentException("You must provide exactly 5 colors and 5 image URLs.");
-        }
+            // Kiểm tra sự tồn tại của ProductID trong bảng Products
+            if (daoProduct.getProductById(productID) == null) {
+                throw new IllegalArgumentException("Product ID does not exist.");
+            }
 
-        for (int i = 0; i < colors.length; i++) {
-            String color = colors[i];
-            String imageURL = imageURLs[i];
+            // Kiểm tra nếu số lượng màu và URL ảnh hợp lệ
+            if (colors == null || imageURLs == null || colors.length != 5 || imageURLs.length != 5) {
+                throw new IllegalArgumentException("You must provide exactly 5 colors and 5 image URLs.");
+            }
 
-            // Create a stock object for each color
-            Stock stock = new Stock();
-            stock.setProductID(productID);
-            stock.setColor(color);
-            stock.setStockQuantity(0); // Default stock quantity
+            // Xử lý từng màu và URL ảnh
+            for (int i = 0; i < colors.length; i++) {
+                String color = colors[i];
+                String imageURL = imageURLs[i];
 
-            List<Integer> generatedStockIDs = daoStock.addStock(stock);
+                // Thêm tất cả các size (từ 35 đến 42) cho mỗi màu vào bảng Stock
+                for (int size = 35; size <= 42; size++) {
+                    Stock stock = new Stock();
+                    stock.setProductID(productID);
+                    stock.setColor(color);
+                    stock.setSize(size);
+                    stock.setStockQuantity(0); // Đặt số lượng stock mặc định là 0
 
-            if (!generatedStockIDs.isEmpty()) {
-                int stockID = generatedStockIDs.get(0);
+                    // Thêm bản ghi vào bảng Stock
+                    List<Integer> generatedStockIDs = daoStock.addStock(stock);
 
-                // Add product image
-                ProductImage productImage = new ProductImage();
-                productImage.setStockID(stockID);
-                productImage.setImageURL(imageURL);
+                    if (!generatedStockIDs.isEmpty()) {
+                        int stockID = generatedStockIDs.get(0);
 
-                int imageId = daoProductImages.addProductImage(productImage);
+                        // Thêm URL hình ảnh vào bảng ProductImages cho mỗi StockID
+                        ProductImage productImage = new ProductImage();
+                        productImage.setStockID(stockID);
+                        productImage.setImageURL(imageURL);
 
-                if (imageId != -1) {
-                    // Update the Products table with the new ImageID
-                    daoProduct.updateProductImage(productID, imageId);
+                        int imageId = daoProductImages.addProductImage(productImage);
 
-                    // Automatically add sizes from 35 to 42 for each color
-                    for (int size = 35; size <= 42; size++) {
-                        Stock sizeStock = new Stock();
-                        sizeStock.setProductID(productID);
-                        sizeStock.setColor(color);
-                        sizeStock.setSize(size);
-                        sizeStock.setStockQuantity(0); // Default stock quantity
-                        daoStock.addStock(sizeStock);
+                        if (imageId != -1) {
+                            // Cập nhật bảng Products với ImageID mới nếu cần
+                            daoProduct.updateProductImage(productID, imageId);
+                        } else {
+                            throw new Exception("Failed to add the product image.");
+                        }
+                    } else {
+                        throw new Exception("Failed to add the stock.");
                     }
-                } else {
-                    throw new Exception("Failed to add the product image.");
                 }
-            } else {
-                throw new Exception("Failed to add the stock.");
+            }
+
+            // Chỉ thêm bản ghi giảm giá nếu nút "Create Add Variant" được nhấn
+            String action = request.getParameter("action");
+            if ("create".equals(action)) {
+                Discount discount = new Discount();
+                discount.setProductID(productID);
+                discount.setDiscountAmount(0.0); // Đặt discountAmount = 0
+                boolean discountAdded = daoDiscount.addDiscount(discount);
+                
+                System.out.println("productID :" +productID);
+
+                if (!discountAdded) {
+                    throw new Exception("Failed to add the discount.");
+                }
+            }
+            
+            
+
+            response.sendRedirect("variantSuccess.jsp");
+        } catch (Exception e) {
+            e.printStackTrace();
+            request.setAttribute("error", "An error occurred while processing your request.");
+            request.getRequestDispatcher("addvariant.jsp").forward(request, response);
+        }
+    }
+
+    @Override
+    protected void doGet(HttpServletRequest request, HttpServletResponse response)
+            throws ServletException, IOException {
+        String service = request.getParameter("service");
+
+        if (service != null && service.equals("delete")) {
+            // Handle delete product request
+            try {
+                int productID = Integer.parseInt(request.getParameter("productID"));
+                daoProduct.deleteProduct(productID);
+                response.sendRedirect("stocksManager"); // Redirect to product list or a suitable page
+            } catch (Exception e) {
+                e.printStackTrace();
+                response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, "Failed to delete the product.");
+            }
+        } else {
+            // Default GET request handling
+            try {
+                String productIDStr = request.getParameter("productID");
+                if (productIDStr == null || productIDStr.isEmpty()) {
+                    throw new IllegalArgumentException("Product ID is missing");
+                }
+
+                int productID = Integer.parseInt(productIDStr);
+                request.setAttribute("productID", productID);
+                request.getRequestDispatcher("staff/addvariant.jsp").forward(request, response);
+            } catch (NumberFormatException e) {
+                e.printStackTrace();
+                response.sendError(HttpServletResponse.SC_BAD_REQUEST, "Invalid product ID format");
+            } catch (IllegalArgumentException e) {
+                e.printStackTrace();
+                response.sendError(HttpServletResponse.SC_BAD_REQUEST, e.getMessage());
+            } catch (Exception e) {
+                e.printStackTrace();
+                response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, "An unexpected error occurred");
             }
         }
-        response.sendRedirect("variantSuccess.jsp");
-    } catch (Exception e) {
-        e.printStackTrace();
-        request.setAttribute("error", "An error occurred while processing your request.");
-        request.getRequestDispatcher("addvariant.jsp").forward(request, response);
     }
-}
-
-    
-    @Override
-protected void doGet(HttpServletRequest request, HttpServletResponse response)
-        throws ServletException, IOException {
-    try {
-        // Get productID from request
-        String productIDStr = request.getParameter("productID");
-        if (productIDStr == null || productIDStr.isEmpty()) {
-            throw new IllegalArgumentException("Product ID is missing");
-        }
-
-        int productID = Integer.parseInt(productIDStr);
-
-        // Set productID as a request attribute and forward to addvariant.jsp
-        request.setAttribute("productID", productID);
-        request.getRequestDispatcher("staff/addvariant.jsp").forward(request, response);
-    } catch (NumberFormatException e) {
-        e.printStackTrace();
-        response.sendError(HttpServletResponse.SC_BAD_REQUEST, "Invalid product ID format");
-    } catch (IllegalArgumentException e) {
-        e.printStackTrace();
-        response.sendError(HttpServletResponse.SC_BAD_REQUEST, e.getMessage());
-    } catch (Exception e) {
-        e.printStackTrace();
-        response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, "An unexpected error occurred");
-    }
-}
-
 
     @Override
     public String getServletInfo() {

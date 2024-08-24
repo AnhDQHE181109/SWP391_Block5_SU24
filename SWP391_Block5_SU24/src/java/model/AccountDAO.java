@@ -42,7 +42,17 @@ public class AccountDAO extends MyDAO {
         }
         return accountList;
     }
-
+    public void changeEmail(String email, int id){
+         String sql = "UPDATE Accounts SET Email = ? WHERE AccountID = ?";
+          try {
+            ps = con.prepareStatement(sql);
+            ps.setString(1, email);       
+            ps.setInt(2, id);
+            ps.executeUpdate();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
     public void updateAccount(String name, String address, int uid) {
         String sql = "UPDATE Accounts SET Name = ?, Address = ? WHERE AccountID = ?";
         try {
@@ -150,7 +160,7 @@ public class AccountDAO extends MyDAO {
                 String salt = rs.getString("Salt");
                 Boolean status = rs.getBoolean("Status");
                 String fullname = rs.getString("Name");
-                account = new Account(accountID, username, hash, phoneNumber, email, address, salt, role, status);
+                account = new Account(accountID, username, hash, phoneNumber, email, address, salt, role, status, fullname);
             }
         } catch (Exception e) {
             e.printStackTrace();

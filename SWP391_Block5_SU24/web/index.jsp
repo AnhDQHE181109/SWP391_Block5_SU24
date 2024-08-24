@@ -92,6 +92,28 @@
             width: 100%;
             transition: width 5s linear;
         }
+        .cart.dropdown .dropdown-menu {
+            position: absolute;
+            top: 100%;
+            left: 0;
+            right: 0;
+            display: none;
+            z-index: 1000;
+            min-width: 160px;
+            padding: 5px 0;
+            margin: 0;
+            font-size: 14px;
+            color: #333;
+            text-align: left;
+            background-color: #fff;
+            border: 1px solid rgba(0, 0, 0, 0.15);
+            border-radius: 4px;
+            box-shadow: 0 6px 12px rgba(0, 0, 0, 0.175);
+        }
+
+        .cart.dropdown:hover .dropdown-menu {
+            display: block;
+        }
     </style>
     <body>
         <%if("true".equals(request.getParameter("auth_error"))){%>
@@ -141,11 +163,18 @@
                                         }
                                         int cartItemsCount = pDAO.getCartItemsCount(accountID);
                                         %>
-                                    <li class="cart"><i class="fa-regular fa-user"></i> <a href="customer/customer_profile.jsp"><%= ((Account) session.getAttribute("account")).getUsername() %></a></li>
+                                    <li class="cart dropdown">
+                                        <a href="#" class="dropdown-toggle" id="userDropdown" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                            <i class="fa-regular fa-user"></i> <%= ((Account) session.getAttribute("account")).getUsername() %>
+                                        </a>
+                                        <div class="dropdown-menu dropdown-menu-right" aria-labelledby="userDropdown">
+                                            <a class="dropdown-item" href="customer/customer_profile.jsp">Profile</a>
+                                            <a class="dropdown-item" href="LogoutController">Logout</a>
+                                        </div>
+                                    </li>
                                     <li class="cart"><a href="customer/wishlist.jsp"><i class="fa fa-heart"></i> Wishlist</a></li>
 
                                     <li class="cart"><a href="shoppingCart"><i class="icon-shopping-cart"></i> Cart [<%=cartItemsCount %>]</a></li>
-                                    <li class="cart"><a href="LogoutController">Logout</a></li>
                                         <% } else { %>
                                     <li class="cart"><a href="signup.jsp">Sign Up</a></li>
                                     <li class="cart"><a href="login.jsp">Login</a></li>
@@ -476,6 +505,16 @@
                                                         console.error('Error fetching suggestions:', error);
                                                     });
                                         }
+        </script>
+        <script>
+            document.addEventListener('click', function (event) {
+                var isClickInside = document.getElementById('userDropdown').contains(event.target);
+
+                if (!isClickInside) {
+                    // Close the dropdown
+                    document.querySelector('.cart.dropdown .dropdown-menu').style.display = 'none';
+                }
+            });
         </script>
     </body>
 </html>

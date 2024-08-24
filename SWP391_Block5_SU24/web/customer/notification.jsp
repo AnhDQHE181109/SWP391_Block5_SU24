@@ -13,11 +13,6 @@
     List<Product> bestSellers = pDAO.getBestSellers();
 %>
 <%Account account = (Account)session.getAttribute("account");%> 
-<%
-if(!"true".equals(request.getAttribute("autho"))){
-    request.getRequestDispatcher("customer/customer_profile.jsp").forward(request, response);
-    }
-%>
 <html>
     <head>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
@@ -223,25 +218,46 @@ if(!"true".equals(request.getAttribute("autho"))){
             padding: 0px 10px 10px 10px;
             margin-bottom: 5px;
         }
+        .noti{
+            min-height: 50px;
+            border-radius: 2px;
+            border: 2px solid gray;
+        }
+        .notir{
+            min-height: 50px;
+            background-color:gray;
+
+            border-radius: 2px;
+            border: 2px solid gray;
+        }
     </style>
     <body>
-        <%
-        String errorRecover = request.getParameter("error_recover");
-        boolean showErrorModal = "true".equals(errorRecover);
-        boolean showErrorPass = "true".equals(request.getParameter("error_auth_pass"));
-        long remainingTime = 100*6*60*1000;
-        try{
-        long endTime = (long) session.getAttribute("endTime");
-        long currentTime = System.currentTimeMillis();
-        remainingTime = endTime - currentTime;
-     
-        if (remainingTime <= 0) {
-        // Time's up, redirect back to the servlet
-        response.sendRedirect("customer_profile.jsp");
-        }
-            }catch(Exception e){}
+        <%        
+        boolean showErrorPass = "true".equals(request.getParameter("error_auth_pass"));     
         %>
-
+        <div id="auth_pass" class="<%= showErrorPass ? "modal_error" : "modal" %>">
+            <div class="content">                    
+                <h3 style="color: black; text-align: center">
+                    To protect your account security, please verify your <br>identity by entering your password.
+                </h3>
+                <% if ("true".equals(request.getAttribute("error_auth_pass"))) { %>
+                <p style="color:red;margin-left:7%;" class="error">Incorrect password!</p>
+                <% } %>
+                <form action="${pageContext.request.contextPath}/ChangePassController" method="post" style='display: flex; flex-direction: column; align-items: center;'>                         
+                    <input type="hidden" name="curuname" value="<%= account.getUsername()%>">
+                    <input style='margin:0px 12px 0px 12px; height: 40px; width:85%;' type="password" name="password" placeholder='Password'><br>                   
+                    <button style='border:0px;margin-bottom:20px; text-align:center; background-color: #88c8bc;border-radius: 2px;display:flex;color:white;justify-content:center; width: 85%;' type="submit">Proceed</button>
+                </form>
+                <a href="${pageContext.request.contextPath}/customer/customer_profile.jsp" style="
+                   position: absolute;
+                   top: 10px;
+                   right: 10px;
+                   color: #fe0606;
+                   font-size: 30px;
+                   text-decoration: none;
+                   ">&times;</a>
+            </div>
+        </div>
         <div id="page">
             <nav class="colorlib-nav" role="navigation">
                 <div class="top-menu">
@@ -324,7 +340,7 @@ if(!"true".equals(request.getAttribute("autho"))){
                             <tr><th></th><th></th></tr>
                             <tr style="color:black"><td><i style="padding-right:2px" class="fa-regular fa-user"></i></td><td>My Account</td></tr>
                             <tr><td></td><td style="padding-left:7px; padding-top:6px;color:red;"><a href="${pageContext.request.contextPath}/customer/customer_profile.jsp">Profile</a></td></tr>
-                            <tr><td></td><td style="padding-left:7px; padding-top:3px;padding-bottom:10px"><a style='color:red;'>Change Password</a></td></tr>
+                            <tr><td></td><td style="padding-left:7px; padding-top:3px;padding-bottom:10px"><a href='#auth_pass'>Change Password</a></td></tr>
                             <tr style="color:black"><td><i style="padding-right:2px" class="fa-regular fa-bell"></i></td><td><a href='${pageContext.request.contextPath}/LoadNotificationController'>Notification</a></td></tr>
                             <tr style="color:black">
                                 <td><i style="padding-right:2px" class="fa-regular fa-list-alt"></i></td>
@@ -334,52 +350,24 @@ if(!"true".equals(request.getAttribute("autho"))){
                     </div>
                 </div>
                 <div class="main-bar">
-                    <div class="top-main-bar"><span style="font-size:18px;font-weight: 500">My Profile</span><br>Manage and protect your account</div>
+                    <div class="top-main-bar"><span style="font-size:18px;font-weight: 500">My Notification</span><br>View your notification</div>
                     <div class="body-main-bar">
                         <div style="width:80%;height:80%; margin-left:50px;margin-top:30px;">
-                            <form class="pform" action="ChangePassController" method="get">
-                                <input type="hidden" name="email" value="<%= account.getEmail()%>">
-                                <table>
-                                    <tr><th></th><th></th><th></th></tr>
-                                    <tr>
-                                        <td></td>
-                                        <td>
-                                            <% if ("true".equals(request.getAttribute("error_password"))) { %>
-                                            <p style="color:red" class="error">Password must contain at least 1 digit, 1 uppercase character!</p>
-                                            <% } %>
-                                            <% if ("true".equals(request.getAttribute("error_password_short"))) { %>
-                                            <p style="color:red" class="error">Password must be at least 8 characters long!</p>
-                                            <% } %>
-                                            <% if ("true".equals(request.getAttribute("error_password_invalid"))) { %>
-                                            <p style="color:red" class="error">Invalid password!</p>
-                                            <% } %>
-                                            <% if ("true".equals(request.getAttribute("error_password_dupe"))) { %>
-                                            <p style="color:red" class="error">Password doesn't match</p>
-                                            <% } %>
-                                            <% if ("true".equals(request.getAttribute("error_password_match"))) { %>
-                                            <p style="color:red" class="error">New password can't be the same as old password</p>
-                                            <% } %>
-                                        </td>
-                                    </tr>
-                                    <tr><td style="width:150px; text-align: right;padding-top: 25px; padding-right: 3%;">New Password</td><td style='padding-top: 25px'><input required class="protbox" id="psw" type="password" name='password' pattern="(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{8,}"></td></tr>
-                                    <tr><td></td><td><div id="message">          
-                                                <b>Password must contain: </b>
-                                                <p id="letter" class="invalid">A <b>lowercase</b> letter</p>
-                                                <p id="capital" class="invalid">A <b>capital (uppercase)</b> letter</p>
-                                                <p id="number" class="invalid">A <b>number</b></p>
-                                                <p id="length" class="invalid">Minimum <b>8 characters</b></p>
-                                            </div></td></tr>
-                                    <tr><td style="width:150px; text-align: right;padding-top: 25px; padding-right: 3%;">Repeat Password</td><td style='padding-top: 25px'><input required class="protbox" id="psw2" type="password" name='repassword' pattern="(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{8,}"></td></tr>
-                                    <tr><td></td><td><div id="message2">          
-                                                <b>Password must contain: </b>
-                                                <p id="letter2" class="invalid2">A <b>lowercase</b> letter</p>
-                                                <p id="capital2" class="invalid2">A <b>capital (uppercase)</b> letter</p>
-                                                <p id="number2" class="invalid2">A <b>number</b></p>
-                                                <p id="length2" class="invalid2">Minimum <b>8 characters</b></p>
-                                            </div></td></tr>
-                                    <tr><td></td><td style='padding-top:20px;padding-bottom:10px;'><button type="submit" class='sbtn'>SAVE</button></td></tr>                              
-                                </table>
-                            </form>
+                            <% if(request.getAttribute("notilist")!=null){
+                                List<NotificationAlert> notilist = (List<NotificationAlert>) request.getAttribute("notilist");%>
+                            <%for(NotificationAlert n: notilist){%>
+
+                            <%if(!n.isNotiStatus()){%>
+                            <div class='noti'>
+                                <div style='width:100%; margin:6px'><%= n.getNotiMessage()%></div><div style='width:100%; padding:5px; text-align: right'><%= n.getNotiDate()%></div> 
+                            </div>
+                            <%}else{%>
+                            <div class='notir'>
+                                <div style='width:100%; margin:6px'><%= n.getNotiMessage()%></div><div style='width:100%; padding:5px; text-align: right'><%= n.getNotiDate()%></div> 
+                            </div>
+                            <%}%>
+
+                            <%}}%>
                         </div>
                     </div>
                 </div>
@@ -409,139 +397,9 @@ if(!"true".equals(request.getAttribute("autho"))){
     <!-- Main -->
     <script src="${pageContext.request.contextPath}/js/main.js"></script>
     <script>
-        var myInput = document.getElementById("psw");
-        var letter = document.getElementById("letter");
-        var capital = document.getElementById("capital");
-        var number = document.getElementById("number");
-        var length = document.getElementById("length");
-
-// When the user clicks on the password field, show the message box
-        myInput.onfocus = function () {
-            document.getElementById("message").style.display = "block";
-        };
-
-// When the user clicks outside of the password field, hide the message box
-        myInput.onblur = function () {
-            document.getElementById("message").style.display = "none";
-        };
-
-// When the user starts to type something inside the password field
-        myInput.onkeyup = function () {
-            // Validate lowercase letters
-            var lowerCaseLetters = /[a-z]/g;
-            if (myInput.value.match(lowerCaseLetters)) {
-                letter.classList.remove("invalid");
-                letter.classList.add("valid");
-            } else {
-                letter.classList.remove("valid");
-                letter.classList.add("invalid");
-            }
-
-            // Validate capital letters
-            var upperCaseLetters = /[A-Z]/g;
-            if (myInput.value.match(upperCaseLetters)) {
-                capital.classList.remove("invalid");
-                capital.classList.add("valid");
-            } else {
-                capital.classList.remove("valid");
-                capital.classList.add("invalid");
-            }
-
-            // Validate numbers
-            var numbers = /[0-9]/g;
-            if (myInput.value.match(numbers)) {
-                number.classList.remove("invalid");
-                number.classList.add("valid");
-            } else {
-                number.classList.remove("valid");
-                number.classList.add("invalid");
-            }
-
-            // Validate length
-            if (myInput.value.length >= 8) {
-                length.classList.remove("invalid");
-                length.classList.add("valid");
-            } else {
-                length.classList.remove("valid");
-                length.classList.add("invalid");
-            }
-            if (myInput.value === "") {
-                letter.classList.remove("valid");
-                letter.classList.add("invalid");
-                capital.classList.remove("valid");
-                capital.classList.add("invalid");
-                number.classList.remove("valid");
-                number.classList.add("invalid");
-                length.classList.remove("valid");
-                length.classList.add("invalid");
-            }
-        };
-        var myInput2 = document.getElementById("psw2");
-        var letter2 = document.getElementById("letter2");
-        var capital2 = document.getElementById("capital2");
-        var number2 = document.getElementById("number2");
-        var length2 = document.getElementById("length2");
-
-// When the user clicks on the password field, show the message box
-        myInput2.onfocus = function () {
-            document.getElementById("message2").style.display = "block";
-        };
-
-// When the user clicks outside of the password field, hide the message box
-        myInput2.onblur = function () {
-            document.getElementById("message2").style.display = "none";
-        };
-
-// When the user starts to type something inside the password field
-        myInput2.onkeyup = function () {
-            // Validate lowercase letters
-            var lowerCaseLetters = /[a-z]/g;
-            if (myInput2.value.match(lowerCaseLetters)) {
-                letter2.classList.remove("invalid2");
-                letter2.classList.add("valid2");
-            } else {
-                letter2.classList.remove("valid2");
-                letter2.classList.add("invalid2");
-            }
-
-            // Validate capital letters
-            var upperCaseLetters = /[A-Z]/g;
-            if (myInput2.value.match(upperCaseLetters)) {
-                capital2.classList.remove("invalid2");
-                capital2.classList.add("valid2");
-            } else {
-                capital2.classList.remove("valid2");
-                capital2.classList.add("invalid2");
-            }
-
-            // Validate numbers
-            var numbers = /[0-9]/g;
-            if (myInput2.value.match(numbers)) {
-                number2.classList.remove("invalid2");
-                number2.classList.add("valid2");
-            } else {
-                number2.classList.remove("valid2");
-                number2.classList.add("invalid2");
-            }
-
-            // Validate length
-            if (myInput2.value.length >= 8) {
-                length2.classList.remove("invalid2");
-                length2.classList.add("valid2");
-            } else {
-                length2.classList.remove("valid2");
-                length2.classList.add("invalid2");
-            }
-            if (myInput2.value === "") {
-                letter2.classList.remove("valid");
-                letter2.classList.add("invalid");
-                capital2.classList.remove("valid");
-                capital2.classList.add("invalid");
-                number2.classList.remove("valid");
-                number2.classList.add("invalid");
-                length2.classList.remove("valid");
-                length2.classList.add("invalid");
-            }
-        };
+        function openSbox(t) {
+            document.getElementById("ts").value = t;
+            window.location = "#popup-box";
+        }
     </script>
 </html>

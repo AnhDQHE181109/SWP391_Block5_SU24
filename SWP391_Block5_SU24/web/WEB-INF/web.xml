@@ -132,6 +132,14 @@
         <servlet-name>ChangePassController</servlet-name>
         <servlet-class>Controller.ChangePassController</servlet-class>
     </servlet>
+    <servlet>
+        <servlet-name>LoadNotificationController</servlet-name>
+        <servlet-class>Controller.LoadNotificationController</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>ChangeEmailController</servlet-name>
+        <servlet-class>Controller.ChangeEmailController</servlet-class>
+    </servlet>
     <servlet-mapping>
         <servlet-name>LoginController</servlet-name>
         <url-pattern>/LoginController</url-pattern>
@@ -287,5 +295,13 @@
     <servlet-mapping>
         <servlet-name>ChangePassController</servlet-name>
         <url-pattern>/ChangePassController</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>LoadNotificationController</servlet-name>
+        <url-pattern>/LoadNotificationController</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>ChangeEmailController</servlet-name>
+        <url-pattern>/ChangeEmailController</url-pattern>
     </servlet-mapping>
 </web-app>

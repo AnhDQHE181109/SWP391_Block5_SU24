@@ -105,6 +105,9 @@
                     <li class="breadcrumb-item active"><a href="#"><b>Import product stocks</b></a></li>
                 </ul>
             </div>
+
+            <% List<ProductStockImport> productsList = (List<ProductStockImport>) request.getAttribute("productsList"); %>
+
             <div class="row">
                 <div class="col-md-12">
                     <div class="tile">
@@ -150,20 +153,32 @@
                                             <i class="fas fa-sort-amount-down"></i> Sort by Name (Asc)
                                         </button> -->
                                         <label for="productColor">Color: </label>
+                                        
+
                                         <input type="text" id="productColor" name="productColor" class="form-control" placeholder="Color" style="margin-right: 5px;"
-                                        required>
+                                                required>
+                                        
                                     </div>
 
                                     <div class="col-md-2" style="justify-content: center; align-items: center;">
                                         <label for="productSize">Size: </label>
                                         <input type="text" id="productSize" name="productSize" class="form-control" placeholder="Size" style="margin-right: 5px;"
-                                        required>
+                                        onkeypress="return event.charCode >= 48 && event.charCode <= 57" required>
                                     </div>
 
                                     <div class="col-md-2" style="justify-content: center; align-items: center;">
                                         <label for="supplierName">Supplier name: </label>
-                                        <input type="text" id="supplierName" name="supplierName" class="form-control" placeholder="Supplier name" style="margin-right: 5px;"
+                                        <% if (productsList == null) { %>
+                                            <input type="text" id="supplierName" name="supplierName" class="form-control" placeholder="Supplier name" style="margin-right: 5px;"
                                         required>
+                                        <% } else if (productsList.size() == 0) { %>
+                                            <input type="text" id="supplierName" name="supplierName" class="form-control" placeholder="Supplier name" style="margin-right: 5px;"
+                                        required>
+                                        <% } else { %>
+                                            <input type="text" id="supplierName" name="supplierName" class="form-control" placeholder="Supplier name" style="margin-right: 5px;"
+                                            readonly value="<%=productsList.get(0).getSupplierName() %>">
+                                        <% } %>
+                                        
                                     </div>
 
                                     <div class="col-md-2" style="justify-content: center; align-items: center;">
@@ -235,11 +250,23 @@
 
 
                             <%
-                                List<ProductStockImport> productsList = (List<ProductStockImport>) request.getAttribute("productsList");
+                                
                                 List<Product> productsStocksList = (List<Product>) request.getAttribute("productsStocksList");
                             %>
                             
                             <table class="table table-hover table-bordered productsTable" id="productsTable">
+                                <%  if (productsList == null || productsList.isEmpty()) { %>
+                                <thead>
+                                    <tr>
+
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+
+                                    </tr>
+                                </tbody>
+                                <%  } else {  %>
                                 <thead>
                                     <tr>
                                         <th>#</th>
@@ -253,12 +280,7 @@
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    <%  if (productsList == null || productsList.isEmpty()) { %>
-                                        <tr>
-                                            
-                                        </tr>
-                                    <%
-                                        } else { 
+                                    <% 
                                             int count = 1;
                                             for (ProductStockImport productStock : productsList) { %>
                                         <tr>
@@ -620,6 +642,7 @@
                                 suggestionsBox.querySelectorAll('.dropdown-item').forEach(item => {
                                     item.addEventListener('click', function () {
                                         document.getElementById('productName').value = this.innerText.trim();
+                                        // location.href="importProductStocks?productName=" + document.getElementById('productName').value;
                                         suggestionsBox.style.display = 'none';
                                     });
                                 });
