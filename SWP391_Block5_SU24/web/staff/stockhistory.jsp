@@ -172,17 +172,15 @@
                                 </form>
                                     
                                     
-                                        <form action="productStockImport" method="get">
-                                    <input type="hidden" name="sortOrder" value="<%= "asc".equals(request.getParameter("sortOrder")) ? "desc" : "asc" %>">
-                                    <button type="submit">
-                                        Sort by Import Date 
-                                        <% if ("asc".equals(request.getParameter("sortOrder"))) { %>
-                                            Descending
-                                        <% } else { %>
-                                            Ascending
-                                        <% } %>
-                                    </button>
-                                </form>
+<form action="productStockImport" method="get">
+    <!-- Các trường tìm kiếm khác -->
+    <label for="sortOrder">Sắp xếp theo Ngày Nhập:</label>
+    <select name="sortOrder" id="sortOrder">
+        <option value="ASC">Tăng dần</option>
+        <option value="DESC">Giảm dần</option>
+    </select>
+    <button type="submit">Áp dụng bộ lọc</button>
+</form>
 
 
                                     <table class="table table-bordered">
@@ -224,17 +222,15 @@
                         </div>
 
                                     <div>
-    <c:if test="${currentPage > 1}">
-        <a href="productStockImport?page=${currentPage - 1}">Previous</a>
-    </c:if>
 
-    <c:forEach begin="1" end="${totalPages}" var="i">
-        <a href="productStockImport?page=${i}">${i}</a>
+
+<!-- Hiển thị phân trang -->
+<div>
+    <c:forEach var="i" begin="1" end="${totalPages}">
+        <a href="productStockImportController?page=${i}&sortOrder=${param.sortOrder}">${i}</a>
     </c:forEach>
+</div>
 
-    <c:if test="${currentPage < totalPages}">
-        <a href="productStockImport?page=${currentPage + 1}">Next</a>
-    </c:if>
 </div>
 
                                     

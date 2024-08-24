@@ -40,7 +40,7 @@ public class DAOProductStockImport extends MyDAO {
     // Method to retrieve all ProductStockImport records
     public List<ProductStockImport> getAllProductStockImports() {
         List<ProductStockImport> stockImports = new ArrayList<>();
-        xSql = "SELECT * FROM ProductStockImport ORDER BY ImportDate DESC";
+        xSql = "SELECT * FROM ProductStockImport ORDER BY [ImportID] DESC";
         
         try {
             ps = con.prepareStatement(xSql);
