@@ -107,6 +107,8 @@
     <servlet>
         <servlet-name>BuyAgainController</servlet-name>
         <servlet-class>Controller.BuyAgainController</servlet-class>
+    </servlet>
+    <servlet>
         <servlet-name>UpdateAccountController</servlet-name>
         <servlet-class>Controller.UpdateAccountController</servlet-class>
     </servlet>
@@ -125,6 +127,10 @@
     <servlet>
         <servlet-name>UploadImageController</servlet-name>
         <servlet-class>Controller.UploadImageController</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>ChangePassController</servlet-name>
+        <servlet-class>Controller.ChangePassController</servlet-class>
     </servlet>
     <servlet-mapping>
         <servlet-name>LoginController</servlet-name>
@@ -257,6 +263,8 @@
     <servlet-mapping>
         <servlet-name>BuyAgainController</servlet-name>
         <url-pattern>/BuyAgainController</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
         <servlet-name>UpdateAccountController</servlet-name>
         <url-pattern>/UpdateAccountController</url-pattern>
     </servlet-mapping>
@@ -275,5 +283,9 @@
     <servlet-mapping>
         <servlet-name>UploadImageController</servlet-name>
         <url-pattern>/UploadImageController</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>ChangePassController</servlet-name>
+        <url-pattern>/ChangePassController</url-pattern>
     </servlet-mapping>
 </web-app>

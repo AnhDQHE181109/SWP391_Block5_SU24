@@ -67,7 +67,7 @@
             background-color:white;
             box-shadow: 20px 16px #88c8bc;
             width:993px;
-            height:546px;
+            min-height:546px;
         }
         .side-bar-user{
             margin:10px;
@@ -171,7 +171,7 @@
      
         if (remainingTime <= 0) {
         // Time's up, redirect back to the servlet
-        response.sendRedirect("customer_profile.jsp");
+        response.sendRedirect("${pageContext.request.contextPath}/customer/customer_profile.jsp");
         }
             }catch(Exception e){}
         %>
@@ -196,16 +196,16 @@
             </div>
         </div>
         <div id="auth_pass" class="<%= showErrorPass ? "modal_error" : "modal" %>">
-            <div class="content">               
-                <% if ("true".equals(request.getAttribute("error_auth_pass"))) { %>
-                <p style="color:red" class="error">Incorrect password!</p>
-                <% } %>
-                
+            <div class="content">                    
                 <h3 style="color: black; text-align: center">
                     To protect your account security, please verify your <br>identity by entering your password.
                 </h3>
+                <% if ("true".equals(request.getAttribute("error_auth_pass"))) { %>
+                <p style="color:red;margin-left:7%;" class="error">Incorrect password!</p>
+                <% } %>
                 <form action="${pageContext.request.contextPath}/ChangePassController" method="post" style='display: flex; flex-direction: column; align-items: center;'>                         
-                    <input style='margin:0px 12px 0px 12px; height: 40px; width:85%;' type="text" name="password" placeholder='Password'><br>                   
+                    <input type="hidden" name="curuname" value="<%= account.getUsername()%>">
+                    <input style='margin:0px 12px 0px 12px; height: 40px; width:85%;' type="password" name="password" placeholder='Password'><br>                   
                     <button style='border:0px;margin-bottom:20px; text-align:center; background-color: #88c8bc;border-radius: 2px;display:flex;color:white;justify-content:center; width: 85%;' type="submit">Proceed</button>
                 </form>
                 <a href="${pageContext.request.contextPath}/customer/customer_profile.jsp" style="
@@ -334,7 +334,7 @@
                             <tr style="color:black"><td><i style="padding-right:2px" class="fa-regular fa-bell"></i></td><td><a href='${pageContext.request.contextPath}/LoadNotificationController'>Notification</a></td></tr>
                             <tr style="color:black">
                                 <td><i style="padding-right:2px" class="fa-regular fa-list-alt"></i></td>
-                                <td><a href="order_list.jsp" style="text-decoration: none; color: black;">My Orders</a></td>
+                                <td><a href="${pageContext.request.contextPath}/customer/order_list.jsp" style="text-decoration: none; color: black;">My Orders</a></td>
                             </tr>
                         </table>
                     </div>
@@ -347,14 +347,15 @@
                                 <table>
                                     <tr><th></th><th></th><th></th></tr>
                                     <%if("true".equals(request.getAttribute("suchange"))){%><tr><td></td><td style="color:#4ac421">Profile changed successful!</td></tr><%}%>
-                                    <tr><td style="width:150px; text-align: right; padding-right: 3%">Username</td><td><input class='protbox' type="text" disabled value="<%= account.getUsername()%>"></td></tr>
+                                    <tr><td style="width:150px;padding-bottom: 15px; text-align: right; padding-right: 3%">Username</td><td><input class='protbox' type="text" disabled value="<%= account.getUsername()%>"></td></tr>
                                     <tr><td></td><td><span>Username can not be changed</span></td></tr>
-                                    <tr><td style="width:150px; text-align: right;padding-top: 15px; padding-right: 3%;">Name</td><td style='padding-top: 25px'><input class="protbox" type="text" name='name' required value='<%= account.getFullname()%>'></td></tr>
+                                     <%if("true".equals(request.getAttribute("name_error"))){%><tr><td></td><td style="color:red">Invalid name!</td></tr><%}%>                                   
+                                    <tr><td style="width:150px; text-align: right; padding-right: 3%;">Name</td><td style='padding-top: 25px'><input class="protbox" type="text" name='name' required value='<%= account.getFullname()%>'></td></tr>
                                     <tr><td></td><td><span>Name must not contain special characters</span></td></tr>
                                     <tr><td style="width:150px; text-align: right;padding-top: 25px; padding-right: 3%;">Email</td><td style='padding-top: 25px'><span class="protbox" type="text" name='email'><%= account.getEmail()%></span> <a style='color:blue;text-decoration: underline' onclick='openSbox("email")'>Change</a></td></tr>
                                     <tr><td style="width:150px; text-align: right;padding-top: 25px; padding-right: 3%;">Phone Number</td><td style='padding-top: 25px'><span class="protbox" type="text" name='pnum'><%= account.displayPnum()%></span> <a style='color:blue;text-decoration: underline' onclick='openSbox("phone number")'>Change</a></td></tr>
-                                    <tr><td style="width:150px; text-align: right;padding-top: 25px; padding-right: 3%;">Address</td><td style='padding-top: 25px'><input class="protbox" type="text" name='address' value='<%= account.getAddress()%>'></td></tr>
-                                    <tr><td></td><td style='padding-top:20px'><button type="submit" class='sbtn'>SAVE</button></td></tr>
+                                    <tr><td style="width:150px; text-align: right;padding-top: 25px; padding-right: 3%;">Address</td><td style='padding-top: 25px'><input required class="protbox" type="text" name='address' value='<%= account.getAddress()%>'></td></tr>
+                                    <tr><td></td><td style='padding-top:20px;padding-bottom:10px;'><button type="submit" class='sbtn'>SAVE</button></td></tr>
                                 </table>
                             </form>
                         </div>

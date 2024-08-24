@@ -235,7 +235,6 @@
             color: #90ccbc;
             font-weight: 600; /* Optional: Makes the selected filter bold */
         }
-
     </style>
     <body>
         <%
@@ -360,7 +359,6 @@
                             </ul>
                         </div>
 
-
                         <div class="order-list">
                             <% if (orderItems != null && !orderItems.isEmpty()) { 
                                 int currentOrderId = -1;
@@ -370,38 +368,8 @@
                                 for (Order order : orderItems) {
                                     if (order.getOrderID() != currentOrderId) {
                                         if (currentOrderId != -1) {
-                                            // Display total and buttons for the previous order
                                             out.println("<div><strong>Total Order Amount: $" + totalOrderAmount + "</strong></div>");
-                            %>
-                            <div class="order-summary">
-                                <div class="actions">
-                                    <% if ("0".equals(order.getStatus())) { %>
-                                        <form action="${pageContext.request.contextPath}/CancelOrderController" method="post">
-                                            <input type="hidden" name="orderId" value="<%= currentOrderId %>" />
-                                            <button type="submit" class="btn btn-danger">Cancel Order</button>
-                                        </form>
-                                    <% } else if ("4".equals(order.getStatus())) { %>
-                                        <form action="${pageContext.request.contextPath}/BuyAgainController" method="post">
-                                            <input type="hidden" name="orderId" value="<%= currentOrderId %>" />
-                                            <button type="submit" class="btn btn-success">Buy Again</button>
-                                        </form>
-                                    <% } %>
-                                  <% } else if (order.getStatus().equals("3") && diffDays <= 15) { %>
-                                <!-- Request Return Button for Orders Done within 15 days -->
-                                <div class="one-eight text-center">
-                                    <div class="display-tc">
-                                        <form method="get" action="return_product.jsp">
-                                            <input type="hidden" name="orderId" value="<%= order.getOrderID() %>">
-                                            <input type="hidden" name="quantity" value="<%= order.getQuantity() %>">
-                                            <input type="hidden" name="price" value="<%= order.getSalePrice() %>">
-                                            <button type="submit" class="btn btn-warning">Request Return</button>
-                                        </form>
-                                    </div>
-                                </div>
-                                <% } %>
-                                </div>
-                            </div>
-                            <% out.println("</div>");
+                                            out.println("</div>");
                                         }
                                         currentOrderId = order.getOrderID();
                                         totalOrderAmount = 0;
@@ -457,30 +425,48 @@
                                         </span>
                                     </div>
                                 </div>
+
+                                <% if (order.getStatus().equals("0")) { %>
+                                <!-- Cancel Order Button for Pending Orders -->
+                                <div class="one-eight text-center">
+                                    <div class="display-tc">
+                                        <form action="${pageContext.request.contextPath}/CancelOrderController" method="post">
+                                            <input type="hidden" name="orderId" value="<%= order.getOrderID() %>" />
+                                            <button type="submit" class="btn btn-danger">Cancel Order</button>
+                                        </form>
+                                    </div>
+                                </div>
+                                <% } else if (order.getStatus().equals("4")) { %>
+                                <!-- Buy Again Button for Canceled Orders -->
+                                <div class="one-eight text-center">
+                                    <div class="display-tc">
+                                        <form action="${pageContext.request.contextPath}/BuyAgainController" method="post">
+                                            <input type="hidden" name="orderId" value="<%= order.getOrderID() %>" />
+                                            <button type="submit" class="btn btn-success">Buy Again</button>
+                                        </form>
+                                    </div>
+                                </div>
+                                <% } else if (order.getStatus().equals("3") && diffDays <= 15) { %>
+                                <!-- Request Return Button for Orders Done within 15 days -->
+                                <div class="one-eight text-center">
+                                    <div class="display-tc">
+                                        <form method="get" action="return_product.jsp">
+                                            <input type="hidden" name="orderId" value="<%= order.getOrderID() %>">
+                                            <input type="hidden" name="quantity" value="<%= order.getQuantity() %>">
+                                            <input type="hidden" name="price" value="<%= order.getSalePrice() %>">
+                                            <button type="submit" class="btn btn-warning">Request Return</button>
+                                        </form>
+                                    </div>
+                                </div>
+                                <% } %>
                             </div>
                             <% 
                                 } // End of the orderItems loop
 
-                                // Display total and buttons for the last order
+                                // After the loop ends, output the total for the last order
                                 if (currentOrderId != -1) {
                                     out.println("<div><strong>Total Order Amount: $" + totalOrderAmount + "</strong></div>");
-                            %>
-                            <div class="order-summary">
-                                <div class="actions">
-                                    <% if ("0".equals(orderItems.get(orderItems.size() - 1).getStatus())) { %>
-                                        <form action="${pageContext.request.contextPath}/CancelOrderController" method="post">
-                                            <input type="hidden" name="orderId" value="<%= currentOrderId %>" />
-                                            <button type="submit" class="btn btn-danger">Cancel Order</button>
-                                        </form>
-                                    <% } else if ("4".equals(orderItems.get(orderItems.size() - 1).getStatus())) { %>
-                                        <form action="${pageContext.request.contextPath}/BuyAgainController" method="post">
-                                            <input type="hidden" name="orderId" value="<%= currentOrderId %>" />
-                                            <button type="submit" class="btn btn-success">Buy Again</button>
-                                        </form>
-                                    <% } %>
-                                </div>
-                            </div>
-                            <% out.println("</div>");
+                                    out.println("</div>");
                                 }
                             %>
                             <% } else { %>

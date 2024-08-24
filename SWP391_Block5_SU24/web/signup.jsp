@@ -278,10 +278,10 @@
                                 <% if ("true".equals(request.getAttribute("error_name_invalid"))) { %>
                                 <p style="color:red" class="error">Invalid Name!</p>
                                 <% } %>
-                                <input style='margin:0px 12px 0px 12px; height: 40px; width:85%;' type="text" id="Nname" name="name" placeholder='Name' required value="${name != null ? name : ''}"><br>    
+                                <input style='margin:0px 12px 0px 12px; height: 40px; width:85%;' type="text" id="psw" name="name" placeholder='Name' required value="${name != null ? name : ''}"><br>    
                                 <div id="Nmessage">          
                                     <b>Name must not: </b>
-                                    <p id="Nletter" class="Ninvalid">Not contain any <b>special characters</b></p> 
+                                    <p id="Nletter" class="Ninvalid">Not contain any <b>special characters</b> or <b>numbers</b></p> 
                                 </div>
                                 <% if ("true".equals(request.getAttribute("error_username_invalid"))) { %>
                                 <p style="color:red" class="error">Invalid username!</p>
@@ -313,6 +313,7 @@
                                 <% if ("true".equals(request.getAttribute("error_password_dupe"))) { %>
                                 <p style="color:red" class="error">Password doesn't match</p>
                                 <% } %>
+                                
                                 <input style='margin:0px 12px 0px 12px; height: 40px; width:85%;' id="psw" type="password" pattern="(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{8,}" name="password" required placeholder='Password'><br>
                                 <div id="message">          
                                     <b>Password must contain: </b>
