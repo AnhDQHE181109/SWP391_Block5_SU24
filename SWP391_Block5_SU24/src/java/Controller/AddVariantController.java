@@ -53,7 +53,7 @@ public class AddVariantController extends HttpServlet {
                 String imageURL = imageURLs[i];
 
                 // Thêm tất cả các size (từ 35 đến 42) cho mỗi màu vào bảng Stock
-                for (int size = 35; size <= 42; size++) {
+                for (int size = 38; size <= 42; size++) {
                     Stock stock = new Stock();
                     stock.setProductID(productID);
                     stock.setColor(color);
@@ -102,7 +102,7 @@ public class AddVariantController extends HttpServlet {
             
             
 
-            response.sendRedirect("variantSuccess.jsp");
+            response.sendRedirect("stocksManager");
         } catch (Exception e) {
             e.printStackTrace();
             request.setAttribute("error", "An error occurred while processing your request.");
