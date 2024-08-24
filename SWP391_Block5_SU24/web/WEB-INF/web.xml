@@ -136,6 +136,10 @@
         <servlet-name>LoadNotificationController</servlet-name>
         <servlet-class>Controller.LoadNotificationController</servlet-class>
     </servlet>
+    <servlet>
+        <servlet-name>SubmitFeedbackController</servlet-name>
+        <servlet-class>Controller.SubmitFeedbackController</servlet-class>
+    </servlet>
     <servlet-mapping>
         <servlet-name>LoginController</servlet-name>
         <url-pattern>/LoginController</url-pattern>
@@ -295,5 +299,9 @@
     <servlet-mapping>
         <servlet-name>LoadNotificationController</servlet-name>
         <url-pattern>/LoadNotificationController</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>SubmitFeedbackController</servlet-name>
+        <url-pattern>/SubmitFeedbackController</url-pattern>
     </servlet-mapping>
 </web-app>

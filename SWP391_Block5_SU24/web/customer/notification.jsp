@@ -367,12 +367,12 @@
                         <table>
                             <tr><th></th><th></th></tr>
                             <tr style="color:black"><td><i style="padding-right:2px" class="fa-regular fa-user"></i></td><td>My Account</td></tr>
-                            <tr><td></td><td style="padding-left:7px; padding-top:6px;color:red;"><a href="${pageContext.request.contextPath}/customer_profile.jsp">Profile</a></td></tr>
+                            <tr><td></td><td style="padding-left:7px; padding-top:6px;color:red;"><a href="${pageContext.request.contextPath}/customer/customer_profile.jsp">Profile</a></td></tr>
                             <tr><td></td><td style="padding-left:7px; padding-top:3px;padding-bottom:10px"><a href='#auth_pass'>Change Password</a></td></tr>
                             <tr style="color:black"><td><i style="padding-right:2px" class="fa-regular fa-bell"></i></td><td><a href='${pageContext.request.contextPath}/LoadNotificationController'>Notification</a></td></tr>
                             <tr style="color:black">
                                 <td><i style="padding-right:2px" class="fa-regular fa-list-alt"></i></td>
-                                <td><a href="order_list.jsp" style="text-decoration: none; color: black;">My Orders</a></td>
+                                <td><a href="${pageContext.request.contextPath}/customer/order_list.jsp" style="text-decoration: none; color: black;">My Orders</a></td>
                             </tr>
                         </table>
                     </div>
