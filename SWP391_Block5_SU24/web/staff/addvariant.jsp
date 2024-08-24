@@ -1,51 +1,97 @@
+<%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <!DOCTYPE html>
-<html lang="en">
+<html>
 <head>
-    <meta charset="UTF-8">
-    <title>Add Variant</title>
+    <title>Add Product Variant</title>
+    <script>
+        function validateForm() {
+            const colorInputs = document.querySelectorAll('input[name="colors[]"]');
+            const imageURLInputs = document.querySelectorAll('input[name="imageURLs[]"]');
+
+            // Regular expression to check for special characters and multiple spaces
+            const specialCharRegex = /[!@#$%^&*(),.?":{}|<>]/g;
+            const multipleSpacesRegex = /\s{2,}/g;
+            const colorSet = new Set();
+
+            for (let i = 0; i < colorInputs.length; i++) {
+                const color = colorInputs[i].value.trim();
+
+                // Kiểm tra rỗng
+                if (color === "") {
+                    alert("Color field cannot be empty.");
+                    return false;
+                }
+
+                // Kiểm tra ký tự đặc biệt
+                if (specialCharRegex.test(color)) {
+                    alert("Color field cannot contain special characters.");
+                    return false;
+                }
+
+                // Kiểm tra khoảng trắng liên tục
+                if (multipleSpacesRegex.test(color)) {
+                    alert("Color field cannot contain consecutive spaces.");
+                    return false;
+                }
+
+                // Kiểm tra trùng màu
+                if (colorSet.has(color.toLowerCase())) {
+                    alert("Duplicate colors are not allowed.");
+                    return false;
+                }
+                colorSet.add(color.toLowerCase());
+
+                // Kiểm tra URL hình ảnh
+                const imageURL = imageURLInputs[i].value.trim();
+                if (imageURL === "") {
+                    alert("Image URL cannot be empty.");
+                    return false;
+                }
+            }
+
+            return true;
+        }
+    </script>
 </head>
 <body>
-    <h2>Add Variant</h2>
-
-    <form action="AddVariantController" method="post">
-        <input type="text" name="productID" value="${param.productID}" />
-
-        <!-- Container for color and image URL fields -->
-        <div id="color-container">
-            <!-- 5 fixed color and image URL fields -->
-            <div>
-                <label for="color0">Color 1:</label>
-                <input type="text" name="colors[]" id="color0" required />
-                <label for="imageURL0">Image URL 1:</label>
-                <input type="text" name="imageURLs[]" id="imageURL0" required />
-            </div>
-            <div>
-                <label for="color1">Color 2:</label>
-                <input type="text" name="colors[]" id="color1" required />
-                <label for="imageURL1">Image URL 2:</label>
-                <input type="text" name="imageURLs[]" id="imageURL1" required />
-            </div>
-            <div>
-                <label for="color2">Color 3:</label>
-                <input type="text" name="colors[]" id="color2" required />
-                <label for="imageURL2">Image URL 3:</label>
-                <input type="text" name="imageURLs[]" id="imageURL2" required />
-            </div>
-            <div>
-                <label for="color3">Color 4:</label>
-                <input type="text" name="colors[]" id="color3" required />
-                <label for="imageURL3">Image URL 4:</label>
-                <input type="text" name="imageURLs[]" id="imageURL3" required />
-            </div>
-            <div>
-                <label for="color4">Color 5:</label>
-                <input type="text" name="colors[]" id="color4" required />
-                <label for="imageURL4">Image URL 5:</label>
-                <input type="text" name="imageURLs[]" id="imageURL4" required />
-            </div>
-        </div>
-
-        <input type="submit" value="Add Variant" />
+    <h2>Add Product Variants</h2>
+    <form action="AddVariantController" method="post" onsubmit="return validateForm();">
+        <input type="hidden" name="productID" value="${productID}">
+        
+        <table>
+            <tr>
+                <th>Color</th>
+                <th>Image URL</th>
+            </tr>
+            <%-- Loop to create 5 rows for color and image URL inputs --%>
+            <%
+                for (int i = 0; i < 5; i++) {
+            %>
+            <tr>
+                <td>
+                    <input type="text" name="colors[]" placeholder="Enter color" required>
+                </td>
+                <td>
+                    <input type="text" name="imageURLs[]" placeholder="Enter image URL" required>
+                </td>
+            </tr>
+            <%
+                }
+            %>
+        </table>
+        <br>
+        <input type="submit" value="Add Variants">
+        <!-- Return button -->
+        <button type="button" onclick="returnProduct()">Return</button>
     </form>
+
+    <script>
+        function returnProduct() {
+            var productID = document.querySelector('input[name="productID"]').value;
+            window.location.href = 'AddVariantController?service=delete&productID=' + productID;
+        }
+    </script>
+        
+        
 </body>
 </html>

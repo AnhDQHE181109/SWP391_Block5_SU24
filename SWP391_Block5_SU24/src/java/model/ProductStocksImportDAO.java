@@ -294,7 +294,7 @@ public class ProductStocksImportDAO extends DBConnect {
 
                 productSize.setProductSize(size);
                 productSize.setQuantity(stockQuantity);
-
+              
                 productSizes.add(productSize);
             }
 
