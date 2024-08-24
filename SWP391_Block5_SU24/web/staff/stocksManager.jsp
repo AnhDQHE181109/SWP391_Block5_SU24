@@ -69,7 +69,7 @@
                                     class='app-menu__icon bx bx-purchase-tag-alt'></i><span class="app-menu__label">Products</span></a>
                         </li>
                         <li><a class="app-menu__item" href="importProductStocks"><i
-                            class='app-menu__icon bx bx-purchase-tag-alt'></i><span class="app-menu__label">Import product variants</span></a>
+                                    class='app-menu__icon bx bx-purchase-tag-alt'></i><span class="app-menu__label">Import product variants</span></a>
                         </li>
                         <li><a class="app-menu__item" href="Ordercontroller"><i class='app-menu__icon bx bx-task'></i><span
                                     class="app-menu__label">Orders</span></a></li>
@@ -185,18 +185,18 @@
                                     <%
                                         } else { 
                                             for (Product product : productsList) { %>
-                                        <tr>
-                                            <td><img style="width: 60px; height: 60px;" src="<%=product.getImageURL() %>"></td>
-                                            <td><%=product.getBrandName() %></td>
-                                            <td><%=product.getProductName() %></td>
-                                            <td><%=product.getCategoryName() %></td>
-                                            <% if (account.getRole() == 2) { %>
-                                            <td class="col-1">
-                                                <button class="btn btn-info" onclick="openPopup('popup_<%=product.getProductId() %>')">View variants</button>
-                                                <div id="popup_<%=product.getProductId() %>" class="popup" style="display: none;">
-                                                    <!-- Popup content for each order -->
-                                                    <div class="popup-content">
-                                                      <form id="stocksForm_<%=product.getProductName() %>" action="stocksManager" method="post">
+                                    <tr>
+                                        <td><img style="width: 60px; height: 60px;" src="<%=product.getImageURL() %>"></td>
+                                        <td><%=product.getBrandName() %></td>
+                                        <td><%=product.getProductName() %></td>
+                                        <td><%=product.getCategoryName() %></td>
+                                        <% if (account.getRole() == 2) { %>
+                                        <td class="col-1">
+                                            <button class="btn btn-info" onclick="openPopup('popup_<%=product.getProductId() %>')">View variants</button>
+                                            <div id="popup_<%=product.getProductId() %>" class="popup" style="display: none;">
+                                                <!-- Popup content for each order -->
+                                                <div class="popup-content">
+                                                    <form id="stocksForm_<%=product.getProductName() %>" action="stocksManager" method="post">
                                                         <div class="row">
                                                             <p class="h2">Stocks available for <%=product.getProductName() %></p>
                                                             <table class="table">
@@ -414,6 +414,9 @@
             <a href="staff/addproduct.jsp" class="btn btn-add btn-sm">
                 <i class="fas fa-plus"></i> Add New Product
             </a>
+            <td>
+                <a href="editProduct.jsp?productId=${product.getProductId()}" class="btn btn-primary">Edit</a>
+            </td>
         </main>
 
         <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
@@ -421,150 +424,150 @@
         <script>
                                                                 var ascDescStat = 1;
                                                                 function sortTableAscendingDescending(column) {
-                                                                //Debugging
-                                                                console.log('Executed sort function');
-                                                                var table, rows, switching, i, x, y, shouldSwitch, dir, switchCount = 0;
-                                                                table = document.getElementById("sampleTable");
-                                                                switching = true;
-                                                                // Set the sorting direction to ascending:
-                                                                dir = "asc";
-                                                                /* Make a loop that will continue until
-                                                                 no switching has been done: */
-                                                                while (switching) {
-                                                                switching = false;
-                                                                rows = table.rows;
-                                                                for (i = 1; i < (rows.length - 1); i++) {
-                                                                shouldSwitch = false;
-                                                                x = rows[i].getElementsByTagName("td")[column]; // Column index for Name (change if needed)
-                                                                y = rows[i + 1].getElementsByTagName("td")[column]; // Column index for Name (change if needed)
-                                                                if (dir == "asc") {
-                                                                if (x.innerHTML > y.innerHTML) {
-                                                                shouldSwitch = true;
-                                                                break;
-                                                                }
-                                                                } else if (dir == "desc") {
-                                                                if (x.innerHTML < y.innerHTML) {
-                                                                shouldSwitch = true;
-                                                                break;
-                                                                }
-                                                                }
+                                                                    //Debugging
+                                                                    console.log('Executed sort function');
+                                                                    var table, rows, switching, i, x, y, shouldSwitch, dir, switchCount = 0;
+                                                                    table = document.getElementById("sampleTable");
+                                                                    switching = true;
+                                                                    // Set the sorting direction to ascending:
+                                                                    dir = "asc";
+                                                                    /* Make a loop that will continue until
+                                                                     no switching has been done: */
+                                                                    while (switching) {
+                                                                        switching = false;
+                                                                        rows = table.rows;
+                                                                        for (i = 1; i < (rows.length - 1); i++) {
+                                                                            shouldSwitch = false;
+                                                                            x = rows[i].getElementsByTagName("td")[column]; // Column index for Name (change if needed)
+                                                                            y = rows[i + 1].getElementsByTagName("td")[column]; // Column index for Name (change if needed)
+                                                                            if (dir == "asc") {
+                                                                                if (x.innerHTML > y.innerHTML) {
+                                                                                    shouldSwitch = true;
+                                                                                    break;
+                                                                                }
+                                                                            } else if (dir == "desc") {
+                                                                                if (x.innerHTML < y.innerHTML) {
+                                                                                    shouldSwitch = true;
+                                                                                    break;
+                                                                                }
+                                                                            }
 
-                                                                }
-                                                                if (shouldSwitch) {
-                                                                /* If a switch has been marked, make the switch
-                                                                 and mark that a switch has been done: */
-                                                                rows[i].parentNode.insertBefore(rows[i + 1], rows[i]);
-                                                                switching = true;
-                                                                //Each time a switch is done, switchCount is incremented
-                                                                switchCount++;
-                                                                } else {
-                                                                /* If no switching has been done AND the direction is "asc",
-                                                                 set the direction to "desc" and run the while loop again. */
-                                                                if (dir == "asc" && switchCount == 0) {
-                                                                dir = "desc";
-                                                                switching = true;
-                                                                }
-                                                                }
-                                                                }
-                                                                // if (ascDescStat == 1) {
-                                                                //     ascDescStat = 0;
-                                                                //     document.querySelector('#sortButton').innerHTML = '<i class="fas fa-sort-amount-down"></i> Sort by Name (Asc)';
-                                                                // } else {
-                                                                //     ascDescStat = 1;
-                                                                //     document.querySelector('#sortButton').innerHTML = '<i class="fas fa-sort-amount-up"></i> Sort by Name (Desc)';
-                                                                // }
+                                                                        }
+                                                                        if (shouldSwitch) {
+                                                                            /* If a switch has been marked, make the switch
+                                                                             and mark that a switch has been done: */
+                                                                            rows[i].parentNode.insertBefore(rows[i + 1], rows[i]);
+                                                                            switching = true;
+                                                                            //Each time a switch is done, switchCount is incremented
+                                                                            switchCount++;
+                                                                        } else {
+                                                                            /* If no switching has been done AND the direction is "asc",
+                                                                             set the direction to "desc" and run the while loop again. */
+                                                                            if (dir == "asc" && switchCount == 0) {
+                                                                                dir = "desc";
+                                                                                switching = true;
+                                                                            }
+                                                                        }
+                                                                    }
+                                                                    // if (ascDescStat == 1) {
+                                                                    //     ascDescStat = 0;
+                                                                    //     document.querySelector('#sortButton').innerHTML = '<i class="fas fa-sort-amount-down"></i> Sort by Name (Asc)';
+                                                                    // } else {
+                                                                    //     ascDescStat = 1;
+                                                                    //     document.querySelector('#sortButton').innerHTML = '<i class="fas fa-sort-amount-up"></i> Sort by Name (Desc)';
+                                                                    // }
                                                                 }
 
                                                                 function showUpdateForm(bookID, bookName, authorName, publisherName, publisherDate, price, quantity, detailbook, img_1, img_2, img_3, img_4) {
-                                                                // Hide all other update forms first
-                                                                jQuery("form[id^='updateForm']").hide();
-                                                                // Show the form for this product
-                                                                var formID = "updateForm" + bookID;
-                                                                var form = document.getElementById(formID);
-                                                                // Pre-fill the form with current product details
-                                                                form.elements["bookName"].value = decodeURIComponent(bookName);
-                                                                form.elements["authorName"].value = authorName;
-                                                                form.elements["publisherName"].value = publisherName;
-                                                                form.elements["publisherDate"].value = publisherDate;
-                                                                form.elements["price"].value = price;
-                                                                form.elements["quantity"].value = quantity;
-                                                                form.elements["detailbook"].value = detailbook;
-                                                                form.elements["image1"].value = img_1;
-                                                                form.elements["image2"].value = img_2;
-                                                                form.elements["image3"].value = img_3;
-                                                                form.elements["image4"].value = img_4;
-                                                                // Show the form
-                                                                jQuery("#" + formID).show();
+                                                                    // Hide all other update forms first
+                                                                    jQuery("form[id^='updateForm']").hide();
+                                                                    // Show the form for this product
+                                                                    var formID = "updateForm" + bookID;
+                                                                    var form = document.getElementById(formID);
+                                                                    // Pre-fill the form with current product details
+                                                                    form.elements["bookName"].value = decodeURIComponent(bookName);
+                                                                    form.elements["authorName"].value = authorName;
+                                                                    form.elements["publisherName"].value = publisherName;
+                                                                    form.elements["publisherDate"].value = publisherDate;
+                                                                    form.elements["price"].value = price;
+                                                                    form.elements["quantity"].value = quantity;
+                                                                    form.elements["detailbook"].value = detailbook;
+                                                                    form.elements["image1"].value = img_1;
+                                                                    form.elements["image2"].value = img_2;
+                                                                    form.elements["image3"].value = img_3;
+                                                                    form.elements["image4"].value = img_4;
+                                                                    // Show the form
+                                                                    jQuery("#" + formID).show();
                                                                 }
         </script>
 
         <script>
             function showLogoutBox() {
-            document.getElementById('logoutBox').style.display = 'block';
+                document.getElementById('logoutBox').style.display = 'block';
             }
 
             function logout() {
-            window.location.href = 'LogoutController';
+                window.location.href = 'LogoutController';
             }
 
             function cancelLogout() {
-            window.location.href = 'stocksManager';
+                window.location.href = 'stocksManager';
             }
 
             function openPopup(popupID) {
-            // Display the popup
-            document.getElementById(popupID).style.display = "block";
+                // Display the popup
+                document.getElementById(popupID).style.display = "block";
             }
 
             function closePopup(popupID) {
-            // Hide the popup
-            document.getElementById(popupID).style.display = "none";
+                // Hide the popup
+                document.getElementById(popupID).style.display = "none";
             }
 
             function searchProductsByName() {
-            var input, filter, table, tr, td, i, txtValue;
-            input = document.getElementById("searchInput");
-            filter = input.value.toUpperCase();
-            table = document.getElementById("sampleTable");
-            tr = table.getElementsByTagName("tr");
-            if (/[\/\\<>&$#%"()!?|`~]/.test(filter)) {
-            alert('The search term cannot contain special characters!')
-            } else {
-            if (filter.trim() == '') {
-            input.value = '';
-            filter = '';
-            }
-            // Loop through all table rows, and hide those that don't match the search query
-            for (i = 0; i < tr.length; i++) {
-            td = tr[i].getElementsByTagName("td")[2]; // Column index for book name, change if needed
+                var input, filter, table, tr, td, i, txtValue;
+                input = document.getElementById("searchInput");
+                filter = input.value.toUpperCase();
+                table = document.getElementById("sampleTable");
+                tr = table.getElementsByTagName("tr");
+                if (/[\/\\<>&$#%"()!?|`~]/.test(filter)) {
+                    alert('The search term cannot contain special characters!')
+                } else {
+                    if (filter.trim() == '') {
+                        input.value = '';
+                        filter = '';
+                    }
+                    // Loop through all table rows, and hide those that don't match the search query
+                    for (i = 0; i < tr.length; i++) {
+                        td = tr[i].getElementsByTagName("td")[2]; // Column index for book name, change if needed
 
-            if (td) {
-            txtValue = td.textContent || td.innerText;
-            if (txtValue.toUpperCase().indexOf(filter) > - 1) {
-            tr[i].style.display = "";
-            } else {
-            tr[i].style.display = "none";
-            }
-            }
-            }
-            }
+                        if (td) {
+                            txtValue = td.textContent || td.innerText;
+                            if (txtValue.toUpperCase().indexOf(filter) > -1) {
+                                tr[i].style.display = "";
+                            } else {
+                                tr[i].style.display = "none";
+                            }
+                        }
+                    }
+                }
             }
 
             function checkIfFieldEmpty(fieldID, initialValue) {
-            //document.getElementById(fieldID).value = document.getElementById(fieldID).value.trim();
-            // if (document.getElementById(fieldID).value == "") {
-            //     alert("One or more quantities is empty!");
-            // }
-            if ($('#' + fieldID).val() == '') {
-            alert("One or more quantities is empty!");
-            document.getElementById(fieldID).value = initialValue;
-            } else if ($('#' + fieldID).val() < 0) {
-            alert("One or more quantities cannot be less than 0!");
-            document.getElementById(fieldID).value = initialValue;
-            } else if ($('#' + fieldID).val() > 99) {
-            alert("One or more quantities cannot be more than 99!");
-            document.getElementById(fieldID).value = initialValue;
-            }
+                //document.getElementById(fieldID).value = document.getElementById(fieldID).value.trim();
+                // if (document.getElementById(fieldID).value == "") {
+                //     alert("One or more quantities is empty!");
+                // }
+                if ($('#' + fieldID).val() == '') {
+                    alert("One or more quantities is empty!");
+                    document.getElementById(fieldID).value = initialValue;
+                } else if ($('#' + fieldID).val() < 0) {
+                    alert("One or more quantities cannot be less than 0!");
+                    document.getElementById(fieldID).value = initialValue;
+                } else if ($('#' + fieldID).val() > 99) {
+                    alert("One or more quantities cannot be more than 99!");
+                    document.getElementById(fieldID).value = initialValue;
+                }
             }
 
             // function checkIfFieldEmpty(fieldID, type) {
@@ -579,58 +582,58 @@
             // }
 
             function validateQuantity(fieldID) {
-            var quantity = parseInt($('#' + fieldID).val());
-            if (isNaN(quantity)) {
-            document.getElementById(fieldID).value = 1;
-            alert("Invalid quantity!");
-            } else if (quantity <= 0) {
-            document.getElementById(fieldID).value = 1;
-            alert("Quantity can't be less than or equal to 0!");
-            } else if (quantity > 100) {
-            document.getElementById(fieldID).value = 100;
-            alert("Quantity can't be more than the stock available!");
-            }
+                var quantity = parseInt($('#' + fieldID).val());
+                if (isNaN(quantity)) {
+                    document.getElementById(fieldID).value = 1;
+                    alert("Invalid quantity!");
+                } else if (quantity <= 0) {
+                    document.getElementById(fieldID).value = 1;
+                    alert("Quantity can't be less than or equal to 0!");
+                } else if (quantity > 100) {
+                    document.getElementById(fieldID).value = 100;
+                    alert("Quantity can't be more than the stock available!");
+                }
             }
 
             function validateQuantityInput(fieldID, initialValue) {
-            checkIfFieldEmpty(fieldID, initialValue);
-            validateQuantity(fieldID);
+                checkIfFieldEmpty(fieldID, initialValue);
+                validateQuantity(fieldID);
             }
 
             function validateEmptyMinMax(fieldID, min, max, type) {
-            // var value = parseInt($('#' + fieldID).val());
-            var value = document.getElementById(fieldID).value;
-            if (value.trim() == '') {
-            document.getElementById(fieldID).value = '';
-            alert("Invalid " + type + "!");
-            } else if (value < min) {
-            document.getElementById(fieldID).value = min;
-            alert(type + " can't be less than " + min + "!");
-            } else if (value > max) {
-            document.getElementById(fieldID).value = max;
-            alert(type + " can't be more than " + max + "!");
-            }
+                // var value = parseInt($('#' + fieldID).val());
+                var value = document.getElementById(fieldID).value;
+                if (value.trim() == '') {
+                    document.getElementById(fieldID).value = '';
+                    alert("Invalid " + type + "!");
+                } else if (value < min) {
+                    document.getElementById(fieldID).value = min;
+                    alert(type + " can't be less than " + min + "!");
+                } else if (value > max) {
+                    document.getElementById(fieldID).value = max;
+                    alert(type + " can't be more than " + max + "!");
+                }
             }
 
         </script>
         <script>
             function confirmDelete(bookID) {
-            var result = window.confirm("Are you sure you want to delete this product?");
-            if (result) {
-            // Submit the form to delete the product
-            document.getElementById("deleteForm" + bookID).submit();
-            }
+                var result = window.confirm("Are you sure you want to delete this product?");
+                if (result) {
+                    // Submit the form to delete the product
+                    document.getElementById("deleteForm" + bookID).submit();
+                }
             }
         </script>
         <script>
             var myApp = new function () {
-            this.printTable = function () {
-            var tab = document.getElementById('sampleTable');
-            var win = window.open('', '', 'height=700,width=700');
-            win.document.write(tab.outerHTML);
-            win.document.close();
-            win.print();
-            }
+                this.printTable = function () {
+                    var tab = document.getElementById('sampleTable');
+                    var win = window.open('', '', 'height=700,width=700');
+                    win.document.write(tab.outerHTML);
+                    win.document.close();
+                    win.print();
+                }
             }
         </script>
 

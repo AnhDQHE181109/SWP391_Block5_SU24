@@ -137,6 +137,10 @@
         <servlet-class>Controller.LoadNotificationController</servlet-class>
     </servlet>
     <servlet>
+        <servlet-name>SubmitFeedbackController</servlet-name>
+        <servlet-class>Controller.SubmitFeedbackController</servlet-class>
+    </servlet>
+    <servlet>
         <servlet-name>ChangeEmailController</servlet-name>
         <servlet-class>Controller.ChangeEmailController</servlet-class>
     </servlet>
@@ -301,7 +305,13 @@
         <url-pattern>/LoadNotificationController</url-pattern>
     </servlet-mapping>
     <servlet-mapping>
+
+        <servlet-name>SubmitFeedbackController</servlet-name>
+        <url-pattern>/SubmitFeedbackController</url-pattern>
+   </servlet-mapping>
+      <servlet-mapping>
         <servlet-name>ChangeEmailController</servlet-name>
         <url-pattern>/ChangeEmailController</url-pattern>
+
     </servlet-mapping>
 </web-app>
