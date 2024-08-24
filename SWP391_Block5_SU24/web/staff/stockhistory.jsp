@@ -128,6 +128,9 @@
                         <li><a class="app-menu__item" href="stocksManager"><i
                                     class='app-menu__icon bx bx-purchase-tag-alt'></i><span class="app-menu__label">Products</span></a>
                         </li>
+                        <li><a class="app-menu__item" href="importProductStocks"><i
+                                    class='app-menu__icon bx bx-purchase-tag-alt'></i><span class="app-menu__label">Import product variants</span></a>
+                        </li>
                         <li><a class="app-menu__item" href="Ordercontroller"><i class='app-menu__icon bx bx-task'></i><span
                                     class="app-menu__label">Orders</span></a></li>
                         <li><a class="app-menu__item" href="productStockImport"><i class='app-menu__icon bx bx-task'></i><span
@@ -248,7 +251,7 @@
             }
 
             function logout() {
-                window.location.href = 'logout'; // URL của servlet xử lý đăng xuất
+                window.location.href = 'LogoutController'; // URL của servlet xử lý đăng xuất
             }
 
             function cancelLogout() {

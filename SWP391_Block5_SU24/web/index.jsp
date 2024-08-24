@@ -16,7 +16,7 @@
 %>
 <html>
     <head>
-        <title>Footwear - Free Bootstrap 4 Template by Colorlib</title>
+        <title>Home Screen</title>
         <script src="https://kit.fontawesome.com/c630e9f862.js" crossorigin="anonymous"></script>
         <meta charset="utf-8">
         <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
@@ -153,8 +153,7 @@
                                 <ul>
                                     <li class="active"><a href="index.jsp">Home</a></li>
                                     <li><a class="active" href="products.jsp">Products</a></li>
-                                    <li><a href="about.html">About</a></li>
-                                    <li><a href="contact.html">Contact</a></li>
+                                    
                                         <% if (session.getAttribute("account") != null) { %>
                                         <%
                                         int accountID = 0;

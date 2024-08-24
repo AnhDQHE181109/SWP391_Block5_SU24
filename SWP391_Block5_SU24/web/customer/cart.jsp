@@ -110,8 +110,7 @@
                                     </li> -->
                                     <li class="active"><a href="products.jsp">Products</a></li>
                                     <!-- <li><a href="women.html">Women</a></li> -->
-                                    <li><a href="about.html">About</a></li>
-                                    <li><a href="contact.html">Contact</a></li>
+                                    
                                         <%
                                                 Integer cartItemsCount = (Integer) request.getAttribute("cartItemsCount");
                                         %>

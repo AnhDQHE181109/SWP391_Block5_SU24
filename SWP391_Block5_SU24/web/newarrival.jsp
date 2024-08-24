@@ -117,8 +117,7 @@
                                         </ul>
                                     </li>
                                     <li class="active"><a href="products.jsp">Products</a></li>
-                                    <li><a href="about.html">About</a></li>
-                                    <li><a href="contact.html">Contact</a></li>
+                                    
                                         <%if(session.getAttribute("account")!=null){
                                         Account account = (Account) session.getAttribute("account");
                                         %>
