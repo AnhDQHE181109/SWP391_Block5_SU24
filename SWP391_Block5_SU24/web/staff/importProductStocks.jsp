@@ -368,7 +368,7 @@
                                 <div class="row">
 
                                     <div class="col-sm">
-                                        <p>Employee: <b><%=account.getUsername() %></b></p>
+                                        <p>Staff: <b><%=account.getUsername() %></b></p>
                                     </div>
 
                                     <div class="col-sm">
