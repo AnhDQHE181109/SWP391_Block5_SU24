@@ -294,11 +294,20 @@ public class DiscountServlet extends HttpServlet {
 
 private void filterByCategory(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
     try {
-        int categoryId = Integer.parseInt(request.getParameter("categoryId"));
+        // Kiểm tra xem người dùng đã chọn "All Category" hay chưa
+        String categoryIdStr = request.getParameter("categoryId");
+        List<Discount> allDiscounts;
+        
+        if (categoryIdStr == null || categoryIdStr.equals("all") || categoryIdStr.isEmpty()) {
+            // Nếu người dùng chọn "All Category" hoặc không chọn gì, lấy toàn bộ giảm giá
+            allDiscounts = daoDiscount.getAllDiscounts();
+        } else {
+            // Nếu người dùng chọn một category cụ thể, lấy giảm giá theo categoryId
+            int categoryId = Integer.parseInt(categoryIdStr);
+            allDiscounts = daoDiscount.getDiscountsByCategoryID(categoryId);
+        }
 
-        // Lấy toàn bộ danh sách giảm giá cho categoryId
-        List<Discount> allDiscounts = daoDiscount.getDiscountsByCategoryID(categoryId);
-
+        // Xử lý phân trang
         int page = 1;
         String pageStr = request.getParameter("page");
         if (pageStr != null && !pageStr.isEmpty()) {
@@ -316,6 +325,7 @@ private void filterByCategory(HttpServletRequest request, HttpServletResponse re
         // Lấy danh sách giảm giá cho trang hiện tại
         List<Discount> paginatedDiscounts = allDiscounts.subList(startIndex, endIndex);
 
+        // Lấy thông tin sản phẩm dựa trên giảm giá
         Map<Integer, Product> productMap = new HashMap<>();
         Set<Integer> productIds = new HashSet<>();
         for (Discount discount : paginatedDiscounts) {
@@ -329,11 +339,13 @@ private void filterByCategory(HttpServletRequest request, HttpServletResponse re
             }
         }
 
+        // Đặt các thuộc tính để chuyển tiếp đến trang JSP
         request.setAttribute("discountList", paginatedDiscounts);
         request.setAttribute("productMap", productMap);
         request.setAttribute("currentPage", page);
         request.setAttribute("totalPages", totalPages);
 
+        // Lấy danh sách các thương hiệu và danh mục
         List<Brand> brands = DAOBrand.getAllBrandbystatus(0);
         List<Category> categories = DAOCategory.getAllbystatus(0);
 
@@ -346,59 +358,72 @@ private void filterByCategory(HttpServletRequest request, HttpServletResponse re
     }
 }
 
-    private void filterByBrandID(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        try {
-            int brandId = Integer.parseInt(request.getParameter("brandId"));
 
-            // Get the list of discounts for the selected brand
-            List<Discount> allDiscounts = daoDiscount.filterByBrandID(brandId);
+private void filterByBrandID(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+    try {
+        // Kiểm tra xem người dùng đã chọn "All Brand" hay không
+        String brandIdStr = request.getParameter("brandId");
+        List<Discount> allDiscounts;
 
-            int page = 1;
-            String pageStr = request.getParameter("page");
-            if (pageStr != null && !pageStr.isEmpty()) {
-                page = Integer.parseInt(pageStr);
-            }
-
-            int pageSize = 10; // Number of items per page
-            int totalItems = allDiscounts.size(); // Total number of items
-            int totalPages = (int) Math.ceil((double) totalItems / pageSize);
-
-            // Calculate start and end index for current page
-            int startIndex = (page - 1) * pageSize;
-            int endIndex = Math.min(startIndex + pageSize, totalItems);
-
-            // Get the sublist for the current page
-            List<Discount> paginatedDiscounts = allDiscounts.subList(startIndex, endIndex);
-
-            Map<Integer, Product> productMap = new HashMap<>();
-            Set<Integer> productIds = new HashSet<>();
-            for (Discount discount : paginatedDiscounts) {
-                productIds.add(discount.getProductID());
-            }
-
-            for (Integer productId : productIds) {
-                Product product = daoProducts.getProductById(productId);
-                if (product != null) {
-                    productMap.put(productId, product);
-                }
-            }
-
-            request.setAttribute("discountList", paginatedDiscounts);
-            request.setAttribute("productMap", productMap);
-            request.setAttribute("currentPage", page);
-            request.setAttribute("totalPages", totalPages);
-
-            List<Brand> brands = DAOBrand.getAllBrandbystatus(0);
-            List<Category> categories = DAOCategory.getAllbystatus(0);
-
-            request.setAttribute("brands", brands);
-            request.setAttribute("categories", categories);
-            request.getRequestDispatcher("manager/Discount.jsp").forward(request, response);
-        } catch (Exception e) {
-            e.printStackTrace();
-            response.sendRedirect("errorfilterByBrandID.jsp");
+        if (brandIdStr == null || brandIdStr.equals("all") || brandIdStr.isEmpty()) {
+            // Nếu người dùng chọn "All Brand" hoặc không chọn gì, lấy toàn bộ giảm giá
+            allDiscounts = daoDiscount.getAllDiscounts();
+        } else {
+            // Nếu người dùng chọn một thương hiệu cụ thể, lấy giảm giá theo brandId
+            int brandId = Integer.parseInt(brandIdStr);
+            allDiscounts = daoDiscount.filterByBrandID(brandId);
         }
+
+        // Xử lý phân trang
+        int page = 1;
+        String pageStr = request.getParameter("page");
+        if (pageStr != null && !pageStr.isEmpty()) {
+            page = Integer.parseInt(pageStr);
+        }
+
+        int pageSize = 10; // Số lượng mục trên mỗi trang
+        int totalItems = allDiscounts.size(); // Tổng số mục
+        int totalPages = (int) Math.ceil((double) totalItems / pageSize);
+
+        // Tính toán vị trí bắt đầu và kết thúc của trang hiện tại
+        int startIndex = (page - 1) * pageSize;
+        int endIndex = Math.min(startIndex + pageSize, totalItems);
+
+        // Lấy danh sách giảm giá cho trang hiện tại
+        List<Discount> paginatedDiscounts = allDiscounts.subList(startIndex, endIndex);
+
+        // Lấy thông tin sản phẩm dựa trên giảm giá
+        Map<Integer, Product> productMap = new HashMap<>();
+        Set<Integer> productIds = new HashSet<>();
+        for (Discount discount : paginatedDiscounts) {
+            productIds.add(discount.getProductID());
+        }
+
+        for (Integer productId : productIds) {
+            Product product = daoProducts.getProductById(productId);
+            if (product != null) {
+                productMap.put(productId, product);
+            }
+        }
+
+        // Đặt các thuộc tính để chuyển tiếp đến trang JSP
+        request.setAttribute("discountList", paginatedDiscounts);
+        request.setAttribute("productMap", productMap);
+        request.setAttribute("currentPage", page);
+        request.setAttribute("totalPages", totalPages);
+
+        // Lấy danh sách các thương hiệu và danh mục
+        List<Brand> brands = DAOBrand.getAllBrandbystatus(0);
+        List<Category> categories = DAOCategory.getAllbystatus(0);
+
+        request.setAttribute("brands", brands);
+        request.setAttribute("categories", categories);
+        request.getRequestDispatcher("manager/Discount.jsp").forward(request, response);
+    } catch (Exception e) {
+        e.printStackTrace();
+        response.sendRedirect("errorfilterByBrandID.jsp");
     }
+}
 
  private void showaddform(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
             try {
