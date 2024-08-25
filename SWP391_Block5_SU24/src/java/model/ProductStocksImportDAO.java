@@ -444,7 +444,7 @@ public class ProductStocksImportDAO extends DBConnect {
 
             int stockQuantity = getStockQuantityByColorSizeProductID(color, size, productID);
 
-            logUserUpdateActivity(stockID, importID, stockQuantity + productStock.getQuantity());
+            logUserUpdateActivity(stockID, importID, productStock.getQuantity());
         }
     }
 
@@ -461,7 +461,7 @@ public class ProductStocksImportDAO extends DBConnect {
 
             int stockQuantity = getStockQuantityByColorSizeProductID(color, size, productID);
 
-            logUserUpdateActivity(stockID, importID, stockQuantity + productStock.getQuantity());
+            logUserUpdateActivity(stockID, importID, productStock.getQuantity());
         }
     }
 
