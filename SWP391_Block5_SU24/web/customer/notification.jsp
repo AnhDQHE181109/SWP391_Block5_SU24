@@ -247,11 +247,13 @@
             
         }
         .notir{
+            opacity:0.7;
             min-height: 50px;
             background-color:gray;
             margin:10px;
             border-radius: 2px;
             border: 2px solid gray;
+            color:white;
         }
     </style>
     <body>
