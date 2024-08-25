@@ -392,11 +392,11 @@
 
                             <%if(!n.isNotiStatus()){%>
                             <div class='noti'>
-                                <div onclick='window.location="<%=n.getNotiPath()%>"' style='width:100%; margin:6px'><%= n.getNotiMessage()%></div><div style='width:100%; padding:5px; text-align: right'><%= n.getNotiDate()%></div> 
+                                <div style='width:100%; margin:6px'><%= n.getNotiMessage()%></div><div style='width:100%; padding:5px; text-align: right'><%= n.getNotiDate()%></div> 
                             </div>
                             <%}else{%>
                             <div class='notir'>
-                                <div onclick='window.location="<%=n.getNotiPath()%>"' style='width:100%; margin:6px'><%= n.getNotiMessage()%></div><div style='width:100%; padding:5px; text-align: right'><%= n.getNotiDate()%></div> 
+                                <div style='width:100%; margin:6px'><%= n.getNotiMessage()%></div><div style='width:100%; padding:5px; text-align: right'><%= n.getNotiDate()%></div> 
                             </div>
                             <%}%>
 
