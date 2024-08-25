@@ -46,9 +46,16 @@
             color: white;
             background-color: #007bff;
             font-size: 16px;
+            margin-bottom: 10px;
         }
         .btn:hover {
             background-color: #0056b3;
+        }
+        .btn-cancel {
+            background-color: #6c757d;
+        }
+        .btn-cancel:hover {
+            background-color: #5a6268;
         }
     </style>
 </head>
@@ -75,9 +82,7 @@
                 <label for="price">Price:</label>
                 <input type="number" step="0.01" id="price" name="price" required>
             </div>
-            
 
-            
             <div class="form-group">
                 <label for="brand">Brand:</label>
                 <select id="brand" name="brandId" required>
@@ -109,7 +114,6 @@
                 </select>
             </div>
             
-            
             <div class="form-group">
                 <label for="productStatus">Product Status:</label>
                 <select id="productStatus" name="productStatus">
@@ -119,7 +123,14 @@
             </div>
             
             <button type="submit" class="btn">Add Product</button>
+            <button type="button" class="btn btn-cancel" onclick="cancel()">Cancel</button>
         </form>
     </div>
+
+    <script>
+        function cancel() {
+            window.location.href = '${pageContext.request.contextPath}/stocksManager';
+        }
+    </script>
 </body>
 </html>
