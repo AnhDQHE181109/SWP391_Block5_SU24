@@ -288,19 +288,19 @@ VALUES
 INSERT INTO Stock (ProductID, Size, Color, StockQuantity, ImportID)
 VALUES 
 (1, 42, 'Red', 50, 1),
-(1, 43, 'Blue', 30, 2),
+(1, 42, 'Blue', 30, 2),
 (2, 42, 'White', 100, 3),
-(2, 44, 'Black', 60, 3),
+(2, 40, 'Black', 60, 3),
 (3, 40, 'Black', 75, 4),
 (3, 41, 'Green', 20, 5),
 (4, 39, 'Yellow', 80, 5),
 (4, 38, 'Blue', 40, 6),
-(5, 45, 'Pink', 90, 7),
+(5, 42, 'Pink', 90, 7),
 (5, 40, 'Gray', 25, 8),
-(6, 37, 'Brown', 100, 9),
-(7, 46, 'Orange', 50, 10),
+(6, 38, 'Brown', 100, 9),
+(7, 42, 'Orange', 50, 10),
 (8, 42, 'Purple', 15, 11),
-(9, 44, 'White', 70, 12),
+(9, 40, 'White', 70, 12),
 (10, 39, 'Red', 45, 13);
 
 
