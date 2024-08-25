@@ -382,18 +382,21 @@
                 <div class="main-bar">
                     <div class="top-main-bar"><span style="font-size:18px;font-weight: 500">My Notification</span><br>View your notification</div>
                     <div class="body-main-bar">
+                        
                         <div style="width:80%;height:80%; margin-left:50px;margin-top:30px;">
+                            <a href="${pageContext.request.contextPath}/NotificationController?action=markAllRead">Mark All as Read</a> | 
+                            <a href="${pageContext.request.contextPath}/NotificationController?action=deleteRead">Delete Read Notifications</a>
                             <% if(request.getAttribute("notilist")!=null){
                                 List<NotificationAlert> notilist = (List<NotificationAlert>) request.getAttribute("notilist");%>
                             <%for(NotificationAlert n: notilist){%>
 
                             <%if(!n.isNotiStatus()){%>
                             <div class='noti'>
-                                <div onclick='window.location="<%=n.getNotiPath()%>"' style='width:100%; margin:6px'><%= n.getNotiMessage()%></div><div style='width:100%; padding:5px; text-align: right'><%= n.getNotiDate()%></div> 
+                                <div style='width:100%; margin:6px'><%= n.getNotiMessage()%></div><div style='width:100%; padding:5px; text-align: right'><%= n.getNotiDate()%></div> 
                             </div>
                             <%}else{%>
                             <div class='notir'>
-                                <div onclick='window.location="<%=n.getNotiPath()%>"' style='width:100%; margin:6px'><%= n.getNotiMessage()%></div><div style='width:100%; padding:5px; text-align: right'><%= n.getNotiDate()%></div> 
+                                <div style='width:100%; margin:6px'><%= n.getNotiMessage()%></div><div style='width:100%; padding:5px; text-align: right'><%= n.getNotiDate()%></div> 
                             </div>
                             <%}%>
 

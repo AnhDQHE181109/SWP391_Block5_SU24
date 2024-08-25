@@ -179,8 +179,57 @@
         .cart.dropdown:hover .dropdown-menu {
             display: block;
         }
+         .alert {
+            padding: 20px;
+            background-color: #f44336;
+            color: white;
+            margin-bottom: 15px;
+            position: fixed;
+
+            width:100%;
+            z-index: 9999;
+        }
+
+        .closebtn {
+            margin-left: 15px;
+            color: white;
+            font-weight: bold;
+            float: right;
+            font-size: 22px;
+            line-height: 20px;
+            cursor: pointer;
+            transition: 0.3s;
+        }
+
+        .closebtn:hover {
+            color: black;
+        }
+        .alert-timer {
+            height: 5px;
+            background-color: #f1f1f1;
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+        }
+
+        .alert-timer-fill {
+            height: 100%;
+            background-color: orange; /* Green */
+            width: 100%;
+            transition: width 5s linear;
+        }
     </style>
     <body>
+        <%if("true".equals(request.getParameter("auth_error"))){%>
+        <div class="alert" id="alertDiv">
+            <span class="closebtn" onclick="this.parentElement.style.display = 'none';">&times;</span>
+            You do not have permission to access this pages.
+            <div class="alert-timer">
+                <div class="alert-timer-fill" id="timerFill"></div>
+            </div>
+        </div>
+        <%}%>
         <%
         String errorRecover = request.getParameter("error_recover");
         boolean showErrorModal = "true".equals(errorRecover);
@@ -302,7 +351,7 @@
                                             <i class="fa-regular fa-user"></i> <%= ((Account) session.getAttribute("account")).getUsername() %>
                                         </a>
                                         <div class="dropdown-menu dropdown-menu-right" aria-labelledby="userDropdown">
-                                            <a class="dropdown-item" href="customer/customer_profile.jsp">Profile</a>
+                                            <a class="dropdown-item" href="${pageContext.request.contextPath}/customer/customer_profile.jsp">Profile</a>
                                             <a class="dropdown-item" href="${pageContext.request.contextPath}/LogoutController">Logout</a>
                                         </div>
                                     </li>
@@ -492,6 +541,55 @@
 
                                         window.onload = startTimer;
     </script>
+    <script>
+                                        function startAlertTimer() {
+                                            const timerFill = document.getElementById('timerFill');
+                                            const alertBox = document.getElementById('alertDiv');
+
+                                            // Start the timer
+                                            setTimeout(function () {
+                                                alertBox.style.display = 'none'; // Hide the alert
+                                            }, 5000);
+
+                                            // Start the progress bar animation
+                                            timerFill.style.width = '0%';
+                                        }
+
+                                        // Start the timer when the page loads
+                                        window.onload = startAlertTimer;
+                                        document.getElementById('search-bar').addEventListener('input', function () {
+                                            let query = this.value;
+                                            if (query.length > 0) {
+                                                fetchSuggestions(query);
+                                            } else {
+                                                document.getElementById('alertDiv').style.display = 'none';
+                                            }
+                                        });
+
+                                        function fetchSuggestions(query) {
+                                            fetch('SearchSuggestionsServlet?query=' + encodeURIComponent(query))
+                                                    .then(response => response.text())
+                                                    .then(data => {
+                                                        let suggestionsBox = document.getElementById('suggestions');
+                                                        suggestionsBox.innerHTML = data;
+                                                        if (data.trim().length > 0) {
+                                                            suggestionsBox.style.display = 'block';
+                                                            // Add click event to each suggestion
+                                                            suggestionsBox.querySelectorAll('.dropdown-item').forEach(item => {
+                                                                item.addEventListener('click', function () {
+                                                                    document.getElementById('search-bar').value = this.innerText.trim();
+                                                                    suggestionsBox.style.display = 'none';
+                                                                });
+                                                            });
+                                                        } else {
+                                                            suggestionsBox.style.display = 'none';
+                                                        }
+                                                    })
+                                                    .catch(error => {
+                                                        console.error('Error fetching suggestions:', error);
+                                                    });
+                                        }
+        </script>
     <script>
         document.addEventListener('click', function (event) {
             var isClickInside = document.getElementById('userDropdown').contains(event.target);

@@ -11,6 +11,10 @@
 <%
     ProductDetailsDAO pDAO = new ProductDetailsDAO();
     List<Product> bestSellers = pDAO.getBestSellers();
+    if(!"true".equals(request.getAttribute("autho"))){
+     response.sendRedirect(request.getContextPath() + "/customer/customer_profile.jsp?auth_error=true");
+        return;
+    }
 %>
 <%Account account = (Account)session.getAttribute("account");%> 
 <html>

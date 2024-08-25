@@ -339,6 +339,9 @@
                                 <% if ("true".equals(request.getAttribute("error_phone_number_length"))) { %>
                                 <p style="color:red" class="error">Invalid phone number!</p>
                                 <% } %>
+                                <% if ("true".equals(request.getAttribute("error_phone_number_prefix"))) { %>
+                                <p style="color:red" class="error">Phone number prefix must match '03', '05', '07', '08', or '09'!</p>
+                                <% } %>
                                 <input style='margin:0px 12px 0px 12px; height: 40px; width:85%;' type="number" id="pnum" name="pnum" required placeholder='Phone Number' value="${pnum != null ? pnum : ''}"><br>
                                 <div id="pmessage">          
                                     <b>Phone number must contain: </b>

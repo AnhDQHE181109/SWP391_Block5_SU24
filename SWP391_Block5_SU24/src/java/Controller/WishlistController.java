@@ -18,6 +18,7 @@ import model.WishlistDAO;  // Adjust the package name based on your project stru
 import entity.Account;      // Adjust the package name based on your project structure
 import entity.Product;      // Adjust the package name based on your project structure
 import java.io.PrintWriter;
+import model.ShoppingCartDAO;
 
 /**
  *
@@ -72,6 +73,9 @@ public class WishlistController extends HttpServlet {
             String search = request.getParameter("search");
             String sort = request.getParameter("sort"); // Get the sort parameter
             List<Product> wishlistItems;
+            
+            ShoppingCartDAO scDAO = new ShoppingCartDAO();
+            int cartItemsCount = scDAO.getCartItemsByAccountID(account.getAccountID()).size();
 
             if (search != null && !search.trim().isEmpty()) {
                 wishlistItems = wishlistDAO.searchWishlistItemsByName(account.getAccountID(), search);
@@ -80,6 +84,7 @@ public class WishlistController extends HttpServlet {
             }
 
             request.setAttribute("wishlistItems", wishlistItems);
+            request.setAttribute("cartItemsCount", cartItemsCount);
             RequestDispatcher dispatcher = request.getRequestDispatcher("customer/wishlist.jsp");
             dispatcher.forward(request, response);
         } else {

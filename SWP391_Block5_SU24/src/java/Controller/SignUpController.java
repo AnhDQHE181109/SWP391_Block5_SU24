@@ -164,9 +164,12 @@ public class SignUpController extends HttpServlet {
         } else if (adao.isPhoneNumberTaken(pnum)) {
             hasErrors = true;
             request.setAttribute("error_phone_number_dupe", "true");
-        } else if (pnum.length() < 9 || pnum.length() > 11 || !pnum.matches("^(03|05|07|08|09).*")) {
+        } else if (pnum.length() < 9 || pnum.length() > 11) {
             hasErrors = true;
             request.setAttribute("error_phone_number", "true");
+        } else if (!pnum.matches("^(03|05|07|08|09).*")) {
+            hasErrors = true;
+            request.setAttribute("error_phone_number_prefix", "true");
         }
         if (hasErrors) {
             request.setAttribute("username", username);
