@@ -72,7 +72,7 @@ public class OrderReceivedController extends HttpServlet {
         ProductDetailsDAO orderDAO = new ProductDetailsDAO();
         orderDAO.updateOrderStatus(orderId, 3); // 3 = done
         
-        response.sendRedirect("customer/customer_profile.jsp?status=2");
+        response.sendRedirect("customer/order_list.jsp?status=3");
     }
 
     /** 

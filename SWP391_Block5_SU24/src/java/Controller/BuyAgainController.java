@@ -72,7 +72,7 @@ public class BuyAgainController extends HttpServlet {
         ProductDetailsDAO orderDAO = new ProductDetailsDAO();
         orderDAO.updateOrderStatus(orderId, 0); // 0 = pending
         
-        response.sendRedirect("customer/customer_profile.jsp?status=4");
+        response.sendRedirect("customer/order_list.jsp?status=0");
     }
 
     /** 
