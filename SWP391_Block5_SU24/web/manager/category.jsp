@@ -167,7 +167,6 @@
                                 <tr>
                                     <th>ID</th>
                                     <th>Name</th>
-                                    <th>Status</th>
                                     <th>Actions</th>
                                 </tr>
                             </thead>
@@ -176,7 +175,7 @@
                                     <tr>
                                         <td>${category.categoryId}</td>
                                         <td>${category.categoryName}</td>
-                                        <td>${category.categoryStatus == 0 ? 'Active' : 'Deactive'}</td>
+  
                                         <td>
                                             <!-- Form to update category -->
                                             <form action="CategoryController" method="get" style="display:inline;">
