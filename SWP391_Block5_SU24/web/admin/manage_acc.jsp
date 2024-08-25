@@ -60,7 +60,7 @@
                         }
         </script>
         <style>
-            .alert {
+            .alertt {
                 padding: 20px;
                 background-color: #f44336;
                 color: white;
@@ -71,7 +71,7 @@
                 z-index: 9999;
             }
 
-            .closebtn {
+            .closebtna {
                 margin-left: 15px;
                 color: white;
                 font-weight: bold;
@@ -82,10 +82,10 @@
                 transition: 0.3s;
             }
 
-            .closebtn:hover {
+            .closebtna:hover {
                 color: black;
             }
-            .alert-timer {
+            .alertt-timer {
                 height: 5px;
                 background-color: #f1f1f1;
                 position: absolute;
@@ -94,7 +94,7 @@
                 width: 100%;
             }
 
-            .alert-timer-fill {
+            .alertt-timer-fill {
                 height: 100%;
                 background-color: orange; /* Green */
                 width: 100%;
@@ -105,11 +105,11 @@
 
     <body>
         <%if("true".equals(request.getParameter("auth_error"))){%>
-        <div class="alert" id="alertDiv">
-            <span class="closebtn" onclick="this.parentElement.style.display = 'none';">&times;</span>
+        <div class="alertt" id="alertDiv">
+            <span class="closebtna" onclick="this.parentElement.style.display = 'none';">&times;</span>
             You do not have permission to access this pages.
-            <div class="alert-timer">
-                <div class="alert-timer-fill" id="timerFill"></div>
+            <div class="alertt-timer">
+                <div class="alertt-timer-fill" id="timerFill"></div>
             </div>
         </div>
         <%}%>

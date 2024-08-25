@@ -369,7 +369,7 @@
                             window.location.href = 'LogoutController';
                         }
                         function cancelLogout() {
-                            window.location.href = 'productinsert';
+                            window.location.href = 'stocksManager';
                         }
                     </script>
 
