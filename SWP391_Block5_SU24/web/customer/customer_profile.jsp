@@ -179,7 +179,7 @@
         .cart.dropdown:hover .dropdown-menu {
             display: block;
         }
-         .alert {
+        .alert {
             padding: 20px;
             background-color: #f44336;
             color: white;
@@ -344,8 +344,8 @@
                                 <ul>
                                     <li><a href="${pageContext.request.contextPath}/index.jsp">Home</a></li>
                                     <li><a class="active" href="${pageContext.request.contextPath}/products.jsp">Products</a></li>
-                                    
-                                        <% if (session.getAttribute("account") != null) { %>
+
+                                    <% if (session.getAttribute("account") != null) { %>
                                     <li class="cart dropdown">
                                         <a href="#" class="dropdown-toggle" id="userDropdown" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                                             <i class="fa-regular fa-user"></i> <%= ((Account) session.getAttribute("account")).getUsername() %>
@@ -365,8 +365,8 @@
                                         int cartItemsCount = pDAO.getCartItemsCount(accountID);
                                         %>
                                     <li class="cart"><a href="${pageContext.request.contextPath}/shoppingCart"><i class="icon-shopping-cart"></i> Cart [<%=cartItemsCount %>]</a></li>
-                                    
-                                        <% } else { %>
+
+                                    <% } else { %>
                                     <li class="cart"><a href="signup.jsp">Sign Up</a></li>
                                     <li class="cart"><a href="login.jsp">Login</a></li>
                                     <li class="cart"><a href="${pageContext.request.contextPath}/shoppingCart"><i class="icon-shopping-cart"></i> Cart [0]</a></li>
@@ -539,57 +539,60 @@
                                             }, 1000);
                                         }
 
-                                        window.onload = startTimer;
+                                        window.onload = function () {
+                                            startTimer();
+                                            startAlertTimer();
+                                        };
     </script>
     <script>
-                                        function startAlertTimer() {
-                                            const timerFill = document.getElementById('timerFill');
-                                            const alertBox = document.getElementById('alertDiv');
+        function startAlertTimer() {
+            const timerFill = document.getElementById('timerFill');
+            const alertBox = document.getElementById('alertDiv');
 
-                                            // Start the timer
-                                            setTimeout(function () {
-                                                alertBox.style.display = 'none'; // Hide the alert
-                                            }, 5000);
+            // Start the timer
+            setTimeout(function () {
+                alertBox.style.display = 'none'; // Hide the alert
+            }, 5000);
 
-                                            // Start the progress bar animation
-                                            timerFill.style.width = '0%';
-                                        }
+            // Start the progress bar animation
+            timerFill.style.width = '0%';
+        }
 
-                                        // Start the timer when the page loads
-                                        window.onload = startAlertTimer;
-                                        document.getElementById('search-bar').addEventListener('input', function () {
-                                            let query = this.value;
-                                            if (query.length > 0) {
-                                                fetchSuggestions(query);
-                                            } else {
-                                                document.getElementById('alertDiv').style.display = 'none';
-                                            }
-                                        });
+        // Start the timer when the page loads
 
-                                        function fetchSuggestions(query) {
-                                            fetch('SearchSuggestionsServlet?query=' + encodeURIComponent(query))
-                                                    .then(response => response.text())
-                                                    .then(data => {
-                                                        let suggestionsBox = document.getElementById('suggestions');
-                                                        suggestionsBox.innerHTML = data;
-                                                        if (data.trim().length > 0) {
-                                                            suggestionsBox.style.display = 'block';
-                                                            // Add click event to each suggestion
-                                                            suggestionsBox.querySelectorAll('.dropdown-item').forEach(item => {
-                                                                item.addEventListener('click', function () {
-                                                                    document.getElementById('search-bar').value = this.innerText.trim();
-                                                                    suggestionsBox.style.display = 'none';
-                                                                });
-                                                            });
-                                                        } else {
-                                                            suggestionsBox.style.display = 'none';
-                                                        }
-                                                    })
-                                                    .catch(error => {
-                                                        console.error('Error fetching suggestions:', error);
-                                                    });
-                                        }
-        </script>
+        document.getElementById('search-bar').addEventListener('input', function () {
+            let query = this.value;
+            if (query.length > 0) {
+                fetchSuggestions(query);
+            } else {
+                document.getElementById('alertDiv').style.display = 'none';
+            }
+        });
+
+        function fetchSuggestions(query) {
+            fetch('SearchSuggestionsServlet?query=' + encodeURIComponent(query))
+                    .then(response => response.text())
+                    .then(data => {
+                        let suggestionsBox = document.getElementById('suggestions');
+                        suggestionsBox.innerHTML = data;
+                        if (data.trim().length > 0) {
+                            suggestionsBox.style.display = 'block';
+                            // Add click event to each suggestion
+                            suggestionsBox.querySelectorAll('.dropdown-item').forEach(item => {
+                                item.addEventListener('click', function () {
+                                    document.getElementById('search-bar').value = this.innerText.trim();
+                                    suggestionsBox.style.display = 'none';
+                                });
+                            });
+                        } else {
+                            suggestionsBox.style.display = 'none';
+                        }
+                    })
+                    .catch(error => {
+                        console.error('Error fetching suggestions:', error);
+                    });
+        }
+    </script>
     <script>
         document.addEventListener('click', function (event) {
             var isClickInside = document.getElementById('userDropdown').contains(event.target);
