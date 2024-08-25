@@ -504,7 +504,7 @@
             }
 
             function cancelLogout() {
-                window.location.href = 'stocksManager';
+                window.location.href = 'importProductStocks';
             }
 
             function openPopup(popupID) {
