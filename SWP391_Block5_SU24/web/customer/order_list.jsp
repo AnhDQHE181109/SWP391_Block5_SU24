@@ -466,8 +466,7 @@
                                             <button type="submit" class="btn btn-warning">Request Return</button>
                                         </form>
                                     </div>
-                                </div>                            
-                                <% } } %>
+                                </div>  
                                 <div class="one-eight text-center">
                                     <div class="display-tc">
                                         <form method="get" action="feedback.jsp">
@@ -476,51 +475,54 @@
                                         </form>
                                     </div>
                                 </div>
-                            </div>
-                            <% 
-                                } // End of for loop
+                                <% } } %>
+                                
+
+                                </div>
+                                <% 
+                                    } // End of for loop
             
-                                // After the loop ends, output the total and buttons for the last order
-                                if (currentOrderId != -1) {
-                                    out.println("<div><strong>Total Order Amount: $" + totalOrderAmount + "</strong></div>");
+                                    // After the loop ends, output the total and buttons for the last order
+                                    if (currentOrderId != -1) {
+                                        out.println("<div><strong>Total Order Amount: $" + totalOrderAmount + "</strong></div>");
                 
-                                    if ("0".equals(lastOrder.getStatus())) { %>
-                            <div class="order-actions text-center">
-                                <form action="${pageContext.request.contextPath}/CancelOrderController" method="post">
-                                    <input type="hidden" name="orderId" value="<%= currentOrderId %>" />
-                                    <button type="submit" class="btn btn-danger">Cancel Order</button>
-                                </form>
+                                        if ("0".equals(lastOrder.getStatus())) { %>
+                                <div class="order-actions text-center">
+                                    <form action="${pageContext.request.contextPath}/CancelOrderController" method="post">
+                                        <input type="hidden" name="orderId" value="<%= currentOrderId %>" />
+                                        <button type="submit" class="btn btn-danger">Cancel Order</button>
+                                    </form>
+                                </div>
+                                <% } else if ("4".equals(lastOrder.getStatus())) { %>
+                                <div class="order-actions text-center">
+                                    <form action="${pageContext.request.contextPath}/BuyAgainController" method="post">
+                                        <input type="hidden" name="orderId" value="<%= currentOrderId %>" />
+                                        <button type="submit" class="btn btn-success">Buy Again</button>
+                                    </form>
+                                </div>
+                                <% } else if ("2".equals(lastOrder.getStatus())) { %>
+                                <div class="order-actions text-center">
+                                    <form action="${pageContext.request.contextPath}/OrderReceivedController" method="post">
+                                        <input type="hidden" name="orderId" value="<%= currentOrderId %>" />
+                                        <button type="submit" class="btn btn-primary">Order Received</button>
+                                    </form>
+                                </div>
+                                <% }
+                                out.println("</div>"); // End of order div
+                            }
+                                %>
+                                <% } else { %>
+                                <div>No orders found.</div>
+                                <% } %>
                             </div>
-                            <% } else if ("4".equals(lastOrder.getStatus())) { %>
-                            <div class="order-actions text-center">
-                                <form action="${pageContext.request.contextPath}/BuyAgainController" method="post">
-                                    <input type="hidden" name="orderId" value="<%= currentOrderId %>" />
-                                    <button type="submit" class="btn btn-success">Buy Again</button>
-                                </form>
-                            </div>
-                            <% } else if ("2".equals(lastOrder.getStatus())) { %>
-                            <div class="order-actions text-center">
-                                <form action="${pageContext.request.contextPath}/OrderReceivedController" method="post">
-                                    <input type="hidden" name="orderId" value="<%= currentOrderId %>" />
-                                    <button type="submit" class="btn btn-primary">Order Received</button>
-                                </form>
-                            </div>
-                            <% }
-                            out.println("</div>"); // End of order div
-                        }
-                            %>
-                            <% } else { %>
-                            <div>No orders found.</div>
-                            <% } %>
                         </div>
+
+
+
+
                     </div>
-
-
-
-
                 </div>
             </div>
-        </div>
     </body>
     <script src="${pageContext.request.contextPath}/js/jquery.min.js"></script>
     <!-- popper -->

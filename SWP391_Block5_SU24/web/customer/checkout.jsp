@@ -9,7 +9,7 @@
         <title>Cart checkout</title>
         <meta charset="utf-8">
         <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-
+        <script src="https://kit.fontawesome.com/c630e9f862.js" crossorigin="anonymous"></script>
         <link href="https://fonts.googleapis.com/css?family=Montserrat:300,400,500,600,700" rel="stylesheet">
         <link href="https://fonts.googleapis.com/css?family=Rokkitt:100,300,400,700" rel="stylesheet">
 
@@ -41,27 +41,27 @@
         <link rel="stylesheet" href="${pageContext.request.contextPath}/css/style.css">
         <style>
             .cart.dropdown .dropdown-menu {
-            position: absolute;
-            top: 100%;
-            left: 0;
-            right: 0;
-            display: none;
-            z-index: 1000;
-            min-width: 160px;
-            padding: 5px 0;
-            margin: 0;
-            font-size: 14px;
-            color: #333;
-            text-align: left;
-            background-color: #fff;
-            border: 1px solid rgba(0, 0, 0, 0.15);
-            border-radius: 4px;
-            box-shadow: 0 6px 12px rgba(0, 0, 0, 0.175);
-        }
+                position: absolute;
+                top: 100%;
+                left: 0;
+                right: 0;
+                display: none;
+                z-index: 1000;
+                min-width: 160px;
+                padding: 5px 0;
+                margin: 0;
+                font-size: 14px;
+                color: #333;
+                text-align: left;
+                background-color: #fff;
+                border: 1px solid rgba(0, 0, 0, 0.15);
+                border-radius: 4px;
+                box-shadow: 0 6px 12px rgba(0, 0, 0, 0.175);
+            }
 
-        .cart.dropdown:hover .dropdown-menu {
-            display: block;
-        }
+            .cart.dropdown:hover .dropdown-menu {
+                display: block;
+            }
         </style>
     </head>
     <body>
@@ -502,15 +502,15 @@
         <!-- Main -->
         <script src="${pageContext.request.contextPath}/js/main.js"></script>
         <script>
-        document.addEventListener('click', function (event) {
-                var isClickInside = document.getElementById('userDropdown').contains(event.target);
+                                        document.addEventListener('click', function (event) {
+                                            var isClickInside = document.getElementById('userDropdown').contains(event.target);
 
-                if (!isClickInside) {
-                    // Close the dropdown
-                    document.querySelector('.cart.dropdown .dropdown-menu').style.display = 'none';
-                }
-            });
-    </script>
+                                            if (!isClickInside) {
+                                                // Close the dropdown
+                                                document.querySelector('.cart.dropdown .dropdown-menu').style.display = 'none';
+                                            }
+                                        });
+        </script>
     </body>
 </html>
 

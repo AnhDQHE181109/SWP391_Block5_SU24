@@ -90,7 +90,7 @@ public class UpdateAccountController extends HttpServlet {
         AccountDAO accountDAO = new AccountDAO();
         Validator validator = new Validator();
         Account account = accountDAO.getAccountById(Integer.parseInt(accountId));
-
+        
         // Validate input
         if (name == null || name.isEmpty()) {
             request.setAttribute("error", "Name cannot be empty.");
@@ -173,6 +173,7 @@ public class UpdateAccountController extends HttpServlet {
         account.setRole(Integer.parseInt(role));
 
         // Update the account in the database
+        System.out.println(account.getName());
         boolean updateSuccess = accountDAO.updateAccount(account);
         if (updateSuccess) {
             response.sendRedirect(request.getContextPath() + "/admin/manage_acc.jsp?success=Account updated successfully");

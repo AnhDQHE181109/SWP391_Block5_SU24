@@ -24,7 +24,7 @@ import jakarta.servlet.http.HttpSession;
  *
  * @author Long
  */
-@WebFilter(filterName = "StaffFilterController", urlPatterns = {"/staff/*", "/Ordercontroller","/Orderdetailcontroller", "/stockupdateDetails", "/stocksManager"})
+@WebFilter(filterName = "StaffFilterController", urlPatterns = {"/staff/*","/EditProductController", "/Ordercontroller","/Orderdetailcontroller", "/stockupdateDetails", "/stocksManager", "/AddProductController", "/AddVariantController", "/ConfirmOrderController", "/productStockImport", "/stockupdateDetails", "/stocksManager", "/productStockImport"})
 public class StaffFilterController implements Filter {
 
     private static final boolean debug = true;
