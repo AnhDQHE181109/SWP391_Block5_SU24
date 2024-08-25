@@ -124,15 +124,19 @@
         <!-- Navbar-->
 
         <div class="app-sidebar__overlay" data-toggle="sidebar"></div>
-        <aside class="app-sidebar">
+            <aside class="app-sidebar">
             <div class="app-sidebar__user"><img class="app-sidebar__user-avatar" src="https://thumbs.dreamstime.com/b/admin-sign-laptop-icon-stock-vector-166205404.jpg" width="50px"
                                                 alt="User Image">
 
             </div>
             <hr>
                     <ul class="app-menu">
+
                         <li><a class="app-menu__item" href="stocksManager"><i
                                     class='app-menu__icon bx bx-purchase-tag-alt'></i><span class="app-menu__label">Products</span></a>
+                        </li>
+                        <li><a class="app-menu__item" href="importProductStocks"><i
+                                    class='app-menu__icon bx bx-purchase-tag-alt'></i><span class="app-menu__label">Import product variants</span></a>
                         </li>
                         <li><a class="app-menu__item" href="Ordercontroller"><i class='app-menu__icon bx bx-task'></i><span
                                     class="app-menu__label">Orders</span></a></li>
@@ -164,6 +168,8 @@
                 <h3 class="tile-title">Order Details</h3>
                 <div><div<th>Adress : </th> <td><c:out value="${adress}"/></td> </div>
                 <div>  <th>phone number  : </th> <c:out value="${phone}"/></td></div>
+                                <div>  <th>user name  : </th> <c:out value="${user}"/></td></div>
+
                 
                
                 <table border="1" class="table table-bordered">
@@ -233,6 +239,16 @@
 
 
 </c:forEach>
+                    
+                    
+                    <%-- Display error message if available --%>
+<c:if test="${not empty errorMessage}">
+    <div class="alert alert-danger">
+        <c:out value="${errorMessage}"/>
+    </div>
+</c:if>
+                    
+                    
 
                     <!-- Back Button -->
                     <div class="mt-3">

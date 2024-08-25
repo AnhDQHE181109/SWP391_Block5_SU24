@@ -241,8 +241,8 @@
                         <input type="date" id="endDate" name="endDate" />
                         
                            <select name="sortOrder">
-                        <option value="desc">Ngày đặt hàng giảm dần</option>
-                        <option value="asc">Ngày đặt hàng tăng dần</option>
+                        <option value="desc">order date desc</option>
+                        <option value="asc">order date asc</option>
                     </select>
 
 
@@ -296,6 +296,7 @@
                                          <input type="hidden" name="phone" value="${phoneMap[order.accountID]}" />
                                         <input type="hidden" name="status" value="${order.status}" />
                                         <input type="hidden" name="id" value="${order.orderID}" />
+                                        <input type="hidden" name="user" value="${usernameMap[order.accountID]}" />
                                         <input type="hidden" name="service" value="detailService" />
                                         <button type="submit">Detail</button>
                                     </form>

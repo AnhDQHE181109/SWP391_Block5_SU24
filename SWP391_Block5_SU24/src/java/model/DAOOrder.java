@@ -88,7 +88,7 @@ public class DAOOrder extends MyDAO {
     }
 
     // Method to retrieve all orders
-        public List<Order> getAllOrders(String sortOrder) {
+        public List<Order> getAllOrdersbysortdate(String sortOrder) {
             List<Order> orders = new ArrayList<>();
             String orderBy = sortOrder != null && sortOrder.equalsIgnoreCase("asc") ? "ASC" : "DESC";
             try {
@@ -109,6 +109,32 @@ public class DAOOrder extends MyDAO {
             }
             return orders;
         }
+        
+        
+                public List<Order> getAllOrders(String sortOrder) {
+            List<Order> orders = new ArrayList<>();
+            try {
+                xSql = "SELECT * FROM Orders ORDER BY [OrderID] desc " ;
+                ps = con.prepareStatement(xSql);
+                rs = ps.executeQuery();
+                while (rs.next()) {
+                    int orderID = rs.getInt("orderID");
+                    int accountID = rs.getInt("accountID");
+                    Date orderDate = rs.getDate("orderDate");
+                    String status = rs.getString("status");
+                    orders.add(new Order(orderID, accountID, orderDate, status));
+                }
+            } catch (SQLException e) {
+                e.printStackTrace();
+            } finally {
+                closeResources();
+            }
+            return orders;
+        }
+        
+        
+        
+        
             public List<Order> getOrdersByUsername(String username, String sortOrder) {
                 List<Order> orders = new ArrayList<>();
                 String orderBy = sortOrder != null && sortOrder.equalsIgnoreCase("asc") ? "ASC" : "DESC";
