@@ -78,7 +78,6 @@ public class ChangeController extends HttpServlet {
             request.getRequestDispatcher("customer/customer_profile.jsp").forward(request, response);
             return;
         }
-
         if (cinputi != recodei) {
             request.setAttribute("recode", "true");
             request.setAttribute("error_recover_code", "true");

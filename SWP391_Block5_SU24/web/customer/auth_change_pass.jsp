@@ -15,7 +15,8 @@
 <%Account account = (Account)session.getAttribute("account");%> 
 <%
 if(!"true".equals(request.getAttribute("autho"))){
-    request.getRequestDispatcher("customer/customer_profile.jsp").forward(request, response);
+     response.sendRedirect(request.getContextPath() + "/customer/customer_profile.jsp?auth_error=true");
+        return;
     }
 %>
 <html>
