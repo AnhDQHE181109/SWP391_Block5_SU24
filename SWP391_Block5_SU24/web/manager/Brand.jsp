@@ -129,7 +129,7 @@
             <tr>
                 <th>ID</th>
                 <th>Name</th>
-                <th>Status</th>
+
                 <th>Actions</th>
             </tr>
         </thead>
@@ -138,7 +138,7 @@
                 <tr>
                     <td>${brand.brandId}</td>
                     <td>${brand.brandName}</td>
-                    <td>${brand.brandstatus == 0 ? 'Active' : 'Deactive'}</td>
+  
                     <td>
                         <div class="btn-group" role="group">
                             <!-- Edit Form -->

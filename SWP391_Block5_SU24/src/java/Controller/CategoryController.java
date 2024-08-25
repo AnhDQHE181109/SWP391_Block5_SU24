@@ -131,7 +131,7 @@ public class CategoryController extends HttpServlet {
             throws ServletException, IOException {
         int categoryId = Integer.parseInt(request.getParameter("categoryId"));
         String categoryName = request.getParameter("categoryName");
-        int categoryStatus = Integer.parseInt(request.getParameter("categoryStatus"));
+        int categoryStatus = Integer.parseInt("1");
         
         Category category = new Category(categoryId, categoryName, categoryStatus);
         

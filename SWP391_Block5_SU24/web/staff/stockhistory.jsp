@@ -230,7 +230,7 @@
 <!-- Hiển thị phân trang -->
 <div>
     <c:forEach var="i" begin="1" end="${totalPages}">
-        <a href="productStockImportController?page=${i}&sortOrder=${param.sortOrder}">${i}</a>
+        <a href="productStockImport?page=${i}&sortOrder=${param.sortOrder}">${i}</a>
     </c:forEach>
 </div>
 
