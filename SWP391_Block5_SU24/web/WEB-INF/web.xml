@@ -77,10 +77,6 @@
         <servlet-class>Controller.AddProductController</servlet-class>
     </servlet>
     <servlet>
-        <servlet-name>OrderListController</servlet-name>
-        <servlet-class>Controller.OrderListController</servlet-class>
-    </servlet>
-    <servlet>
         <servlet-name>FeedbackController</servlet-name>
         <servlet-class>Controller.FeedbackController</servlet-class>
     </servlet>
@@ -145,14 +141,16 @@
         <servlet-class>Controller.ChangeEmailController</servlet-class>
     </servlet>
     <servlet>
-
         <servlet-name>ChangePhoneNumberController</servlet-name>
         <servlet-class>Controller.ChangePhoneNumberController</servlet-class>
     </servlet>
     <servlet>
-
         <servlet-name>OrderReceivedController</servlet-name>
         <servlet-class>Controller.OrderReceivedController</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>NotificationController</servlet-name>
+        <servlet-class>Controller.NotificationController</servlet-class>
     </servlet>
     <servlet-mapping>
         <servlet-name>LoginController</servlet-name>
@@ -255,10 +253,6 @@
         <url-pattern>/AddProductController</url-pattern>
     </servlet-mapping>
     <servlet-mapping>
-        <servlet-name>OrderListController</servlet-name>
-        <url-pattern>/OrderListController</url-pattern>
-    </servlet-mapping>
-    <servlet-mapping>
         <servlet-name>FeedbackController</servlet-name>
         <url-pattern>/FeedbackController</url-pattern>
     </servlet-mapping>
@@ -329,5 +323,9 @@
     <servlet-mapping>
         <servlet-name>OrderReceivedController</servlet-name>
         <url-pattern>/OrderReceivedController</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>NotificationController</servlet-name>
+        <url-pattern>/NotificationController</url-pattern>
     </servlet-mapping>
 </web-app>
