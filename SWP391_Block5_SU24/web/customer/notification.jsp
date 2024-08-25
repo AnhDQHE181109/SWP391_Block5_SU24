@@ -382,7 +382,10 @@
                 <div class="main-bar">
                     <div class="top-main-bar"><span style="font-size:18px;font-weight: 500">My Notification</span><br>View your notification</div>
                     <div class="body-main-bar">
+                        
                         <div style="width:80%;height:80%; margin-left:50px;margin-top:30px;">
+                            <a href="${pageContext.request.contextPath}/NotificationController?action=markAllRead">Mark All as Read</a> | 
+                            <a href="${pageContext.request.contextPath}/NotificationController?action=deleteRead">Delete Read Notifications</a>
                             <% if(request.getAttribute("notilist")!=null){
                                 List<NotificationAlert> notilist = (List<NotificationAlert>) request.getAttribute("notilist");%>
                             <%for(NotificationAlert n: notilist){%>
