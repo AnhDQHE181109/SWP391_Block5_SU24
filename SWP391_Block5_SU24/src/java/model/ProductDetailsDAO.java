@@ -24,6 +24,16 @@ import java.util.stream.Collectors;
  * @author ASUS
  */
 public class ProductDetailsDAO extends DBConnect {
+    
+    public static void main(String[] args) {
+        ProductDetailsDAO pdDAO = new ProductDetailsDAO();
+        
+        List<ProductStockDetails> productColors = pdDAO.getProductColors(3);
+        
+        for (ProductStockDetails product : productColors) {
+            System.out.println(product);
+        }
+    }
 
     public List<Product> getAllProducts() {
         List<Product> products = new ArrayList<>();
