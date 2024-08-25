@@ -11,6 +11,10 @@
 <%
     ProductDetailsDAO pDAO = new ProductDetailsDAO();
     List<Product> bestSellers = pDAO.getBestSellers();
+    if(!"true".equals(request.getAttribute("autho"))){
+     response.sendRedirect(request.getContextPath() + "/customer/customer_profile.jsp?auth_error=true");
+        return;
+    }
 %>
 <%Account account = (Account)session.getAttribute("account");%> 
 <html>
@@ -344,8 +348,8 @@
                                 <ul>
                                     <li><a href="${pageContext.request.contextPath}/index.jsp">Home</a></li>
                                     <li><a class="active" href="${pageContext.request.contextPath}/products.jsp">Products</a></li>
-                                    
-                                        <% if (session.getAttribute("account") != null) { %>
+
+                                    <% if (session.getAttribute("account") != null) { %>
                                     <li class="cart dropdown">
                                         <a href="#" class="dropdown-toggle" id="userDropdown" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                                             <i class="fa-regular fa-user"></i> <%= ((Account) session.getAttribute("account")).getUsername() %>
