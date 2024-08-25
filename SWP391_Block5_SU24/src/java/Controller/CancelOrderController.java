@@ -72,7 +72,7 @@ public class CancelOrderController extends HttpServlet {
         ProductDetailsDAO orderDAO = new ProductDetailsDAO();
         orderDAO.updateOrderStatus(orderId, 4); // 4 = canceled
         
-        response.sendRedirect("customer/customer_profile.jsp?status=0");
+        response.sendRedirect("customer/order_list.jsp?status=4");
     }
 
     /** 
